@@ -1,0 +1,369 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:maraka/logic/products_logic.dart';
+import 'package:maraka/logic/user_logic.dart';
+import 'package:maraka/models/product.dart';
+import 'package:maraka/logic/constants.dart';
+import 'package:maraka/themes/color.dart';
+import 'package:maraka/themes/sideClipDesign.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
+
+import 'homePage.dart';
+
+class CreateAd extends StatefulWidget {
+  User owner;
+  CreateAd({Key? key, required this.owner}) : super(key: key);
+
+  @override
+  _CreateAdState createState() => _CreateAdState();
+}
+
+class _CreateAdState extends State<CreateAd> {
+  //V EDIT
+  final ImagePicker imagePicker = ImagePicker();
+  List<XFile>? imageFileList = [];
+  bool isBtnDisabled = false;
+  void selectImages() async {
+    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
+    if (selectedImages!.isNotEmpty) {
+      //
+      //imageFileList = selectedImages.map<File>((XFile(path)) => File(XFile.path)).toList();
+      imageFileList!.addAll(selectedImages);
+    }
+    // imageFileList = imageFileList!.sublist(0, 2);
+    print("=========================================================");
+    print("Image List Length:" + imageFileList!.length.toString());
+    print(
+        "======================================================================================================");
+    setState(() {});
+  }
+  //V EDIT
+
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  List<String> _pageCategories = [];
+  var uuid = Uuid();
+  var _error = '';
+  var _image = "assets/271237223_975273653197121_7777506664250916614_n.jpg";
+  var _dropdownValue;
+  @override
+  void initState() {
+    categories.forEach((key, value) {
+      _pageCategories.add(key);
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).copyWith().size.width;
+    final height = MediaQuery.of(context).copyWith().size.height;
+    return Scaffold(
+      floatingActionButton: SingleChildScrollView(
+        child: FloatingActionButton(
+            tooltip: 'Save',
+            backgroundColor: MyColors.blue2,
+            foregroundColor: MyColors.gold,
+            child: const Icon(Icons.done),
+            onPressed: isBtnDisabled
+                ? null
+                : () async {
+                    if (_formKey.currentState!.validate()) {
+                      if (_dropdownValue != null) {
+                        ProductLogic productLogic = new ProductLogic();
+                        var res;
+                        List<int> imagesUrls = [];
+                        int index = 0;
+                        for (var img in imageFileList!) {
+                          if (index >= 3) break;
+                          res = await productLogic.postImages(img);
+                          if (res.statusCode == 200) {
+                            imagesUrls.add(jsonDecode(res.body)[0]['id']);
+                            print(imagesUrls);
+                          }
+                          index++;
+                        }
+                        Product product = Product(
+                            images: null,
+                            seller: null,
+                            expiryDate: DateTime.now(),
+                            isLiked: false,
+                            id2: this.uuid.v4(),
+                            title: _nameController.text,
+                            description: _descriptionController.text,
+                            price:
+                                double.parse(_priceController.text.toString()),
+                            category: _dropdownValue,
+                            imageUrls: imagesUrls);
+                        await productLogic.postProduct(product, widget.owner);
+                        print(productLogic.response.statusCode);
+                        if (productLogic.response.statusCode != null) {
+                          if (productLogic.response.statusCode == 200)
+                            Navigator.pop(context);
+
+                          // Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => HomePage1(
+                          //               owner: widget.owner,
+                          //             )));
+                        }
+                      } else {
+                        setState(() {
+                          _error = "Please Choose Category";
+                        });
+                      }
+                    }
+                    ;
+                  }),
+      ),
+      body: Stack(
+        children: <Widget>[
+          CustomPaint(
+            painter: TopRightClip1(),
+            child: Container(),
+          ),
+          CustomPaint(
+            painter: TopRightClip2(),
+            child: Container(),
+          ),
+          SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  imageFileList!.isNotEmpty
+                      ? Padding(
+                          padding: EdgeInsets.only(
+                              left: width * 0.1, top: height * 0.19),
+                          child: Container(
+                            // if ()
+                            child: ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20)),
+                              child: CarouselSlider.builder(
+                                itemCount: imageFileList!.length,
+                                itemBuilder: (BuildContext context, int index,
+                                    int pageViewIndex) {
+                                  return Image.file(
+                                    File(imageFileList![index].path),
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                                options: CarouselOptions(height: 300),
+                              ),
+                            ),
+                            width: width * 0.35,
+                            height: height * 0.2,
+                          ),
+                        )
+                      : Padding(
+                          padding: EdgeInsets.only(
+                              left: width * 0.1, top: height * 0.19),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20)),
+                            ),
+                            // if ()
+                            child: SvgPicture.asset(
+                              "assets/undraw_uploading_re_okvh (1).svg",
+                              semanticsLabel: "Profile Image",
+                              fit: BoxFit.scaleDown,
+                              width: width * 0.35,
+                              height: height * 0.25,
+                            ),
+                            width: width * 0.35,
+                            height: height * 0.2,
+                          ),
+                        ),
+                  Positioned(
+                    top: width * 0.02,
+                    child: Padding(
+                        padding: EdgeInsets.only(
+                            left: width * 0.25, top: height * 0.001),
+                        child: IconButton(
+                          onPressed: () => selectImages(),
+                          icon: const Icon(
+                            Icons.upload_file,
+                            color: MyColors.goldenBrown,
+                            size: 30,
+                          ),
+                        )),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: height * 0.03),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).copyWith().size.width *
+                              0.1),
+                      child: SizedBox(
+                        width:
+                            MediaQuery.of(context).copyWith().size.width * 0.8,
+                        child: TextFormField(
+                          controller: _nameController,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(
+                              Icons.title,
+                              color: MyColors.brown2,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: MyColors.blue2, width: 2.0),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            labelStyle: const TextStyle(color: MyColors.brown3),
+                            labelText: 'Name',
+                          ),
+                          validator: (String? value) {
+                            return value == null || value.isEmpty
+                                ? 'Name Cannot be empty'
+                                : null;
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: height * 0.05),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).copyWith().size.width *
+                              0.1),
+                      child: SizedBox(
+                        width:
+                            MediaQuery.of(context).copyWith().size.width * 0.8,
+                        child: TextFormField(
+                          controller: _priceController,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true),
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(
+                              Icons.amp_stories,
+                              color: MyColors.brown2,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: MyColors.blue2, width: 2.0),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            labelStyle: const TextStyle(color: MyColors.brown3),
+                            labelText: 'Price',
+                            hintText: "M",
+                          ),
+                          validator: (String? value) {
+                            return value == null || value.isEmpty
+                                ? 'Price Cannot be empty'
+                                : null;
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: height * 0.05),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).copyWith().size.width *
+                              0.1),
+                      child: SizedBox(
+                        width:
+                            MediaQuery.of(context).copyWith().size.width * 0.8,
+                        child: TextFormField(
+                          controller: _descriptionController,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(
+                              Icons.description,
+                              color: MyColors.brown2,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: MyColors.blue2, width: 2.0),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            labelStyle: const TextStyle(color: MyColors.brown3),
+                            labelText: 'Description',
+                          ),
+                          validator: (String? value) {
+                            return value == null || value.isEmpty
+                                ? 'Name Cannot be empty'
+                                : null;
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.only(top: height * 0.03, bottom: height * 0),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).copyWith().size.width *
+                              0.1),
+                      child: SizedBox(
+                          width: MediaQuery.of(context).copyWith().size.width *
+                              0.51,
+                          child: DropdownButton(
+                            value: _dropdownValue,
+                            hint: const Text("Choose an Categories"),
+                            // Down Arrow Icon
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            items:
+                                _pageCategories.sublist(1).map((String items) {
+                              return DropdownMenuItem(
+                                value: items,
+                                child: Text(items),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _dropdownValue = value;
+                              });
+                            },
+                          )),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.only(top: height * 0.0, left: width * 0.1),
+                    child: Text(
+                      _error,
+                      style: const TextStyle(color: MyColors.red2),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              FocusScope.of(context).requestFocus(new FocusNode());
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).copyWith().size.height * 0.07,
+                left: MediaQuery.of(context).copyWith().size.width * 0.03,
+              ),
+              child: const Icon(
+                Icons.arrow_back,
+                color: MyColors.blue3,
+                size: 40,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
