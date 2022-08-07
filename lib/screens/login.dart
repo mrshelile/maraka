@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/screens/Registration.dart';
@@ -9,13 +8,13 @@ import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:email_validator/email_validator.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginState createState() => _LoginState();
 }
 
@@ -178,7 +177,7 @@ class _LoginState extends State<Login> {
                               });
                               try {
                                 await user.login().timeout(
-                                    Duration(seconds: 10),
+                                    const Duration(seconds: 10),
                                     onTimeout: () => throw TimeoutException(
                                         'Can\'t connect to internet'));
                                 setState(() {
@@ -188,7 +187,8 @@ class _LoginState extends State<Login> {
                                 if (user.response.statusCode != null) {
                                   if (user.response.statusCode == 200) {
                                     if (user.is_confirmed) {
-                                      print(user.is_confirmed);
+                                      // print(user.is_confirmed);
+                                      // ignore: use_build_context_synchronously
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
@@ -290,7 +290,7 @@ class _LoginState extends State<Login> {
             ),
           GestureDetector(
             onTap: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
+              FocusScope.of(context).requestFocus( FocusNode());
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

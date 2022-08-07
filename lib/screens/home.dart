@@ -29,9 +29,9 @@ class _HomeState extends State<Home> {
       HomePage1(
         owner: widget.user,
       ),
-      FavouritesPage(
-        owner: widget.user,
-      ),
+      // FavouritesPage(
+      //   owner: widget.user,
+      // ),
       MyAds(
         owner: widget.user,
       ),
@@ -65,7 +65,7 @@ class _HomeState extends State<Home> {
           // await widget.user.retrieveEmail();
           // print(widget.user.email);
 
-          if (index == 1 || index == 2 || index == 3) {
+          if (index == 1 || index == 2 ) {
             if (widget.user.email == null) {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => const Login()));
@@ -88,12 +88,12 @@ class _HomeState extends State<Home> {
             activeColor: MyColors.blue2,
             textAlign: TextAlign.center,
           ),
-          BottomNavyBarItem(
-            icon: const Icon(Icons.favorite),
-            title: const Text('Favourites'),
-            activeColor: MyColors.blue4,
-            textAlign: TextAlign.center,
-          ),
+          // BottomNavyBarItem(
+          //   icon: const Icon(Icons.favorite),
+          //   title: const Text('Favourites'),
+          //   activeColor: MyColors.blue4,
+          //   textAlign: TextAlign.center,
+          // ),
           BottomNavyBarItem(
             icon: const Icon(Icons.collections_bookmark_outlined),
             title: const Text(

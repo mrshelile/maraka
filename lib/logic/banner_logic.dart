@@ -6,15 +6,15 @@ import 'package:maraka/models/banner.dart';
 import 'package:maraka/logic/constants.dart';
 
 class BannerLogic {
-  String _banner = "/api/banners";
-  String _bannerBottom = "/api/bottom-banners";
+  final String _banner = "/api/banners";
+  final String _bannerBottom = "/api/bottom-banners";
   var response;
   List<Banner> bannersSplashScreen = [];
   List<Banner> bannersHomeScreen = [];
   List<Banner> bannersBottom = [];
   Future getSplashscreen() async {
     response = await http.get(
-      Uri.parse(server + _banner + "?populate=*"),
+      Uri.parse("$server$_banner?populate=*"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -24,7 +24,7 @@ class BannerLogic {
       var data = jsonDecode(response.body)['data'];
 
       for (var item in data) {
-        Banner ad = new Banner(
+        Banner ad = Banner(
           id: item['id'],
           url: item['attributes']['url'],
           owner: item['attributes']['owner'],
@@ -46,7 +46,7 @@ class BannerLogic {
 
   Future getHomeScreenTop() async {
     response = await http.get(
-      Uri.parse(server + _banner + "?populate=*"),
+      Uri.parse("$server$_banner?populate=*"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -56,7 +56,7 @@ class BannerLogic {
       var data = jsonDecode(response.body)['data'];
 
       for (var item in data) {
-        Banner ad = new Banner(
+        Banner ad =  Banner(
           id: item['id'],
           url: item['attributes']['url'],
           owner: item['attributes']['owner'],
@@ -77,7 +77,7 @@ class BannerLogic {
 
   Future getBottomBanner() async {
     response = await http.get(
-      Uri.parse(server + _bannerBottom + "?populate=*"),
+      Uri.parse("$server$_bannerBottom?populate=*"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -87,7 +87,7 @@ class BannerLogic {
       var data = jsonDecode(response.body)['data'];
 
       for (var item in data) {
-        Banner ad = new Banner(
+        Banner ad =  Banner(
           id: item['id'],
           url: item['attributes']['url'],
           owner: item['attributes']['owner'],
