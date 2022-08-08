@@ -12,7 +12,7 @@ final Map<dynamic, dynamic> categories = {
   // "rental": "Rental",
   // "jobs": "Jobs"
 };
-var server = "http://192.168.43.203:3203";
+var server = "http://192.168.8.128:84";
 
 class Constants {
   Constants._();

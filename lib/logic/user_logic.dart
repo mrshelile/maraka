@@ -138,8 +138,13 @@ class User {
       // isValidatedAcc = jsonDecode(response.body)['user']['validated'];
       jwt = jsonDecode(response.body)['jwt'];
       name = jsonDecode(response.body)['user']['full_name'];
-      phone1 = jsonDecode(response.body)['user']['phone1'];
-      phone2 = jsonDecode(response.body)['user']['phone2'];
+      
+      if(jsonDecode(response.body)['user']['phone1']!=null) {
+        phone1 = int.parse(jsonDecode(response.body)['user']['phone1']);
+      }
+      if(jsonDecode(response.body)['user']['phone2']!=null) {
+        phone2 = int.parse(jsonDecode(response.body)['user']['phone2']);
+      }
       subscription =
           jsonDecode(response.body)['user']['subscription_end'] != null
               ? DateTime.parse(
@@ -147,7 +152,7 @@ class User {
               : null;
       is_blocked = jsonDecode(response.body)['user']['blocked'];
       is_confirmed = jsonDecode(response.body)['user']['validated'];
-      this.id = jsonDecode(response.body)['user']['id'];
+      id = jsonDecode(response.body)['user']['id'];
       password = null;
       await _storeToken(jsonDecode(response.body)['jwt']);
       await _storeEmail(email.toString());
