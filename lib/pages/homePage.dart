@@ -38,8 +38,8 @@ class _HomePageState extends State<HomePage1> {
   var selected_category = "All";
   List<String> _pageCategories = [];
   List<dynamic> bottomImgs = [
-    {"image": AssetImage("assets/alldata.png"), "url": server},
-    {"image": AssetImage("assets/payment.png"), "url": server}
+    {"image": const AssetImage("assets/alldata.png"), "url": server},
+    {"image": const AssetImage("assets/payment.png"), "url": server}
   ];
   Widget imageCarousel = Carousel(
     boxFit: BoxFit.fill,
@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage1> {
         if (resp2 != null) {
           if (resp2.statusCode == 200) {
             var resp = await makeProductList();
-            this.products = resp;
+            products = resp;
 
             return resp;
           }
@@ -83,7 +83,6 @@ class _HomePageState extends State<HomePage1> {
       bottomImgs = [];
       if (logic.response.statusCode == 200) {
         for (var item in logic.bannersBottom) {
-          bool skip = false;
           if (item.display != null) {
             if (item.display['data'] != null) {
               if (item.display['data']['attributes'] != null) {
