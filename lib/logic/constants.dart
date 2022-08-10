@@ -12,7 +12,7 @@ final Map<dynamic, dynamic> categories = {
   // "rental": "Rental",
   // "jobs": "Jobs"
 };
-var server = "http://192.168.8.128:84";
+var server = "https://quiet-fortress-43376.herokuapp.com";
 
 class Constants {
   Constants._();
