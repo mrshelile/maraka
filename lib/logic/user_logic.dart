@@ -29,6 +29,7 @@ class User {
   final _login = "/api/auth/local/";
   final _register = "/api/auth/local/register";
   final _userUrl = "/api/users/";
+  final _updatePasswordUrl="/api/marakapasswordreset";
   User(
       {this.name,
       this.email,
@@ -99,6 +100,7 @@ class User {
     var value = await prefs.getString('email') ?? null;
 
     jsonEncode(value).toString().isEmpty ||
+            // ignore: unrelated_type_equality_checks
             jsonEncode(value) == 0 ||
             email == null
         ? email = null
@@ -117,7 +119,7 @@ class User {
 
   Future updateDetails() async {
     Map data = {'phone1': phone1, 'phone2': phone2};
-    response = await http.put(Uri.parse(server + _userUrl + "" + id.toString()),
+    response = await http.put(Uri.parse("$server$_userUrl$id"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -163,11 +165,11 @@ class User {
   }
 
   Future resetPassword() async {
-    var filter = "filters[email][\$eq]=" + email.toString();
+    var filter = "filters[email][\$eq]=$email";
     otp = OTP.generateTOTPCodeString(
         'JBSWY3DPEHPK3PXP', DateTime.now().millisecondsSinceEpoch);
     response = await http.get(
-      Uri.parse(server + _userUrl + "?" + filter),
+      Uri.parse("$server$_userUrl?$filter"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -179,15 +181,18 @@ class User {
         await updateOTP(id, int.parse(otp)).whenComplete(() async =>
             await sendOTP(email.toString(), int.parse(otp))
                 .whenComplete(() => canUpdatePassword = true));
-      } else
+      } else {
         canUpdatePassword = false;
+      }
     }
+    // ignore: avoid_print
     print(canUpdatePassword);
   }
 
-  Future updatePassword(id, Newpassword) async {
-    var data = {"password": Newpassword.toString()};
-    var respose = await http.put(Uri.parse(server + _userUrl + id.toString()),
+  // ignore: non_constant_identifier_names
+  Future updatePassword(Newpassword,int OTP,email) async {
+    var data = {"password": Newpassword.toString(),"confirmPassword":Newpassword.toString(),"OTP":OTP,"email":email,};
+    var respose = await http.post(Uri.parse(server + _updatePasswordUrl),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

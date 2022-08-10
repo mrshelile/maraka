@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
+
 import 'package:maraka/logic/email.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/screens/updatePassword.dart';
@@ -7,6 +9,7 @@ import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+// ignore: must_be_immutable
 class OTP extends StatefulWidget {
   User user;
   bool isRegister;
@@ -20,12 +23,11 @@ class OTP extends StatefulWidget {
 class _OTPState extends State<OTP> {
   final _formKey = GlobalKey<FormState>();
   final _otpController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  final _passwordController = TextEditingController();
+
   var _errorMessage = "";
-  bool _isobscure = true;
-  bool _isobscure1 = true;
-  String _buttonText = "Verify";
+  final bool _isobscure = true;
+  final bool _isobscure1 = true;
+  final String _buttonText = "Verify";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +51,7 @@ class _OTPState extends State<OTP> {
                                 0.05,
                             top: MediaQuery.of(context).copyWith().size.height *
                                 0.2),
-                        child: Container(
+                        child: SizedBox(
                           height:
                               MediaQuery.of(context).copyWith().size.height *
                                   0.3,
@@ -63,7 +65,7 @@ class _OTPState extends State<OTP> {
                         padding: EdgeInsets.only(
                             left: MediaQuery.of(context).copyWith().size.width *
                                 0.1),
-                        child: Container(
+                        child: SizedBox(
                           width: MediaQuery.of(context).copyWith().size.width *
                               0.8,
                           child: TextFormField(
@@ -95,8 +97,8 @@ class _OTPState extends State<OTP> {
                         top: MediaQuery.of(context).copyWith().size.height *
                             0.01),
                     child: Text(
-                      "$_errorMessage",
-                      style: TextStyle(color: Colors.red),
+                      _errorMessage,
+                      style:const TextStyle(color: Colors.red),
                     ),
                   ),
                   Padding(
@@ -115,7 +117,7 @@ class _OTPState extends State<OTP> {
                                   color: Colors.grey.withOpacity(0.6),
                                   spreadRadius: 2,
                                   blurRadius: 5,
-                                  offset: Offset(0, 5))
+                                  offset: const Offset(0, 5))
                             ],
                             border: Border.all(color: MyColors.blue2),
                             borderRadius: BorderRadius.circular(10)),
@@ -132,34 +134,38 @@ class _OTPState extends State<OTP> {
                                 setState(() {
                                   _errorMessage = "";
                                 });
-                                if (res.statusCode==200)
+                                if (res.statusCode==200) {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Login()));
+                                          builder: (context) => const Login()));
+                                }
                               } else {
+                                // ignore: duplicate_ignore
                                 if (isvalid) {
                                   setState(() {
                                     _errorMessage = "";
                                   });
+                   
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => UpdatePassword(
                                                 user: widget.user,
+                                                OTP: _otpController.text,
                                               )));
-                                } else
+                                } else {
                                   setState(() {
                                     _errorMessage = "OTP is incorrect";
                                   });
+                                }
                               }
-                              // Navigator.push(context,
-                              //     MaterialPageRoute(builder: (context) => Login()));
+                   
                             }
                           },
                           child: Text(
-                            "$_buttonText",
-                            style: TextStyle(color: Colors.white, fontSize: 15),
+                            _buttonText,
+                            style: const TextStyle(color: Colors.white, fontSize: 15),
                           ),
                         ),
                       )),
@@ -171,7 +177,7 @@ class _OTPState extends State<OTP> {
                             0.01),
                     child: Row(
                       children: <Widget>[
-                        Text(
+                        const Text(
                           "Back To Login",
                           style: TextStyle(color: MyColors.brown3),
                         ),
@@ -181,7 +187,7 @@ class _OTPState extends State<OTP> {
                                   MediaQuery.of(context).copyWith().size.width *
                                       0.01),
                           child: TextButton(
-                            child: Text(
+                            child: const Text(
                               "Login",
                               style: TextStyle(color: MyColors.blue3),
                             ),
@@ -189,7 +195,7 @@ class _OTPState extends State<OTP> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Login()));
+                                      builder: (context) => const Login()));
                             },
                           ),
                         )

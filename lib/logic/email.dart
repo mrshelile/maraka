@@ -6,9 +6,9 @@ import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 
-final username = 'mrdavertzshelile@outlook.com';
-final password = 'S1helile@com';
-final _userUrl = "/api/users/";
+const username = 'mrdavertzshelile@outlook.com';
+const password = 'S1helile@com';
+const _userUrl = "/api/users/";
 bool isvalid = false;
 final smtpServer = SmtpServer(
   'smtp-mail.outlook.com',
@@ -21,7 +21,7 @@ Future verifyOTP(user, otp) async {
 
   var filter =
       "filters[email][\$eq]=" + user.email + "&filters[otp][\$eq]=" + otp;
-  var response = await http.get(Uri.parse(server + _userUrl + "?" + filter));
+  var response = await http.get(Uri.parse("$server$_userUrl?$filter"));
   if (response.statusCode == 200) {
     if (jsonDecode(response.body).isNotEmpty) {
       isvalid = true;
@@ -35,10 +35,11 @@ Future verifyOTP(user, otp) async {
 
 Future activateAcc(user) async {
   var filter = "filters[email][\$eq]=" + user.email;
-  var response = await http.get(Uri.parse(server + _userUrl + "?" + filter));
+  var response = await http.get(Uri.parse("$server$_userUrl?$filter"));
   if (response.statusCode == 200) {
-    if (jsonDecode(response.body).isNotEmpty)
+    if (jsonDecode(response.body).isNotEmpty) {
       response = await http.put(
+          // ignore: prefer_interpolation_to_compose_strings
           Uri.parse(server +
               _userUrl +
               "" +
@@ -48,8 +49,10 @@ Future activateAcc(user) async {
           },
           body: jsonEncode({"validated": true}),
           encoding: Encoding.getByName("utf-8"));
+    }
     return response;
   } else {
+    // ignore: avoid_print
     print("failed");
     isvalid = false;
     return response;
