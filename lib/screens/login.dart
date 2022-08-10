@@ -177,7 +177,7 @@ class _LoginState extends State<Login> {
                               });
                               try {
                                 await user.login().timeout(
-                                    const Duration(seconds: 10),
+                                    const Duration(seconds: 25),
                                     onTimeout: () => throw TimeoutException(
                                         'Can\'t connect to internet'));
                                 setState(() {

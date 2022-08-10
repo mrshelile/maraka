@@ -283,7 +283,7 @@ class _RegistrationState extends State<Registration> {
                               if (_passwordController.text
                                   .endsWith(_rePasswordController.text)) {
                                 // int phone1 = int.parse(_phoneNumberController.text);
-                                User user = new User(
+                                User user = User(
                                     name: _fullNamesController.text,
                                     email: _emailController.text,
                                     phone1:
@@ -294,7 +294,7 @@ class _RegistrationState extends State<Registration> {
                                 });
                                 try {
                                   await user.register().timeout(
-                                      Duration(seconds: 15),
+                                      const Duration(seconds: 25),
                                       onTimeout: () => throw TimeoutException(
                                           'Can\'t connect to internet'));
                                   setState(() {
@@ -302,12 +302,13 @@ class _RegistrationState extends State<Registration> {
                                     _loading = false;
                                   });
                                   if (user.response.statusCode != null) {
-                                    if (user.response.statusCode == 400)
+                                    if (user.response.statusCode == 400) {
                                       setState(() {
                                         _errorMessage = jsonDecode(
                                                 user.response.body)['error']
                                             ['message'];
                                       });
+                                    }
                                     // print(user.response.statusCode);
                                     setState(() {
                                       _loading = false;
@@ -316,6 +317,7 @@ class _RegistrationState extends State<Registration> {
                                       setState(() {
                                         _errorMessage = "";
                                       });
+                                      // ignore: use_build_context_synchronously
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
@@ -328,7 +330,7 @@ class _RegistrationState extends State<Registration> {
                                 } catch (error) {
                                   setState(() {
                                     _errorMessage =
-                                        "Can\'t connect to internet";
+                                        "Can't connect to internet";
                                     _loading = false;
                                   });
                                 } finally {}

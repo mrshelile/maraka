@@ -119,7 +119,7 @@ class _AccountState extends State<Account> {
                       ),
                       child: SingleChildScrollView(
                         child: Container(
-                          decoration: new BoxDecoration(
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             // border: Border(top: BorderSide(color: MyColors.blue2)),
                             color: Colors.white,
@@ -138,43 +138,41 @@ class _AccountState extends State<Account> {
                                     Padding(
                                       padding:
                                           EdgeInsets.only(left: width * 0.3),
-                                      child: Text(
+                                      child: const Text(
                                         "Personal Information",
                                         style: TextStyle(fontSize: 15),
                                       ),
                                     ),
-                                    Container(
-                                      child: TextButton(
-                                        child: Text(
-                                          "Sign Out",
-                                          style:
-                                              TextStyle(color: MyColors.blue3),
-                                        ),
-                                        onPressed: () {
-                                          widget.user.removeAll();
-                                          print(widget.user.jwt);
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => Home(
-                                                        currentIndex: 0,
-                                                        user: widget.user,
-                                                      )));
-                                        },
+                                    TextButton(
+                                      child: const Text(
+                                        "Sign Out",
+                                        style:
+                                            TextStyle(color: MyColors.blue3),
                                       ),
+                                      onPressed: () {
+                                        widget.user.removeAll();
+                                        print(widget.user.jwt);
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => Home(
+                                                      currentIndex: 0,
+                                                      user: widget.user,
+                                                    )));
+                                      },
                                     ),
                                   ],
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: width * 0.1),
-                                  child: Container(
+                                  child: SizedBox(
                                     width: width,
                                     height: height * 0.08,
                                     child: TextFormField(
                                       controller: _phone1Controller,
                                       keyboardType: TextInputType.phone,
                                       decoration: InputDecoration(
-                                        prefixIcon: Icon(
+                                        prefixIcon: const Icon(
                                           Icons.phone_rounded,
                                           color: MyColors.brown3,
                                         ),
@@ -191,7 +189,7 @@ class _AccountState extends State<Account> {
                                         //   ),
                                         // ),
                                         labelStyle:
-                                            TextStyle(color: MyColors.blue3),
+                                            const TextStyle(color: MyColors.blue3),
                                         hintText: "Phone Numbers",
                                         labelText:
                                             widget.user.phone1.toString(),
@@ -208,20 +206,20 @@ class _AccountState extends State<Account> {
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: width * 0.1),
-                                  child: Container(
+                                  child: SizedBox(
                                     width: width,
                                     height: height * 0.08,
                                     child: TextFormField(
                                       controller: _phone2Controller,
                                       keyboardType: TextInputType.phone,
                                       decoration: InputDecoration(
-                                        prefixIcon: Icon(
+                                        prefixIcon: const Icon(
                                           Icons.phone_rounded,
                                           color: MyColors.brown3,
                                         ),
                                         labelStyle: isSecondNumber
-                                            ? TextStyle(color: MyColors.blue3)
-                                            : TextStyle(color: Colors.brown),
+                                            ? const TextStyle(color: MyColors.blue3)
+                                            : const TextStyle(color: Colors.brown),
                                         hintText: "Phone Numbers",
                                         labelText: widget.user.phone2
                                                     .toString()
@@ -242,18 +240,18 @@ class _AccountState extends State<Account> {
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: width * 0.1),
-                                  child: Container(
+                                  child: SizedBox(
                                     width: width,
                                     height: height * 0.08,
                                     child: TextFormField(
                                       controller: _emailController,
                                       decoration: InputDecoration(
-                                        prefixIcon: Icon(
+                                        prefixIcon: const Icon(
                                           Icons.email,
                                           color: MyColors.brown3,
                                         ),
                                         labelStyle:
-                                            TextStyle(color: MyColors.blue3),
+                                            const TextStyle(color: MyColors.blue3),
                                         hintText: "Email Address",
                                         labelText: widget.user.email,
                                         enabled: false,
@@ -268,7 +266,7 @@ class _AccountState extends State<Account> {
                                     ),
                                   ),
                                 ),
-                                Divider(
+                                const Divider(
                                   color: MyColors.brown2,
                                 ),
                                 
@@ -284,32 +282,32 @@ class _AccountState extends State<Account> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // Navigator.push(
-          //     context, MaterialPageRoute(builder: (context) => CreateAds()));
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () async {
+      //     // Navigator.push(
+      //     //     context, MaterialPageRoute(builder: (context) => CreateAds()));
 
-          setState(() {
-            _isProfileBtnSave = !_isProfileBtnSave;
-            _isenabled = !_isenabled;
-            if (_phone1Controller.text.isNotEmpty)
-              widget.user.phone1 = int.parse(_phone1Controller.text);
-            if (_phone2Controller.text.isNotEmpty)
-              widget.user.phone2 = int.parse(_phone2Controller.text);
-            if (!_isProfileBtnSave) {
-              _phone2Controller.clear();
-              _phone1Controller.clear();
-            }
-          });
-          var res = await widget.user.updateDetails();
-        },
-        tooltip: 'edit Profile',
-        backgroundColor: MyColors.blue3,
-        foregroundColor: MyColors.brown3,
-        child: _isProfileBtnSave
-            ? Icon(Icons.done_rounded)
-            : Icon(Icons.create_outlined),
-      ),
+      //     setState(() {
+      //       _isProfileBtnSave = !_isProfileBtnSave;
+      //       _isenabled = !_isenabled;
+      //       if (_phone1Controller.text.isNotEmpty)
+      //         widget.user.phone1 = int.parse(_phone1Controller.text);
+      //       if (_phone2Controller.text.isNotEmpty)
+      //         widget.user.phone2 = int.parse(_phone2Controller.text);
+      //       if (!_isProfileBtnSave) {
+      //         _phone2Controller.clear();
+      //         _phone1Controller.clear();
+      //       }
+      //     });
+      //     var res = await widget.user.updateDetails();
+      //   },
+      //   tooltip: 'edit Profile',
+      //   backgroundColor: MyColors.blue3,
+      //   foregroundColor: MyColors.brown3,
+      //   child: _isProfileBtnSave
+      //       ? Icon(Icons.done_rounded)
+      //       : Icon(Icons.create_outlined),
+      // ),
     );
   }
 }

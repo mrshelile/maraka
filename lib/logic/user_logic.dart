@@ -26,7 +26,7 @@ class User {
   // ignore: prefer_typing_uninitialized_variables
   var response;
 
-  final _login = "/api/auth/local/";
+  final _login = "/api/auth/local";
   final _register = "/api/auth/local/register";
   final _userUrl = "/api/users/";
   final _updatePasswordUrl="/api/marakapasswordreset";
@@ -130,30 +130,37 @@ class User {
 
   Future login() async {
     Map data = {'identifier': email, 'password': password};
+    
     response = await http.post(Uri.parse(server + _login),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
+   
     if (response.statusCode == 200) {
       // isValidatedAcc = jsonDecode(response.body)['user']['validated'];
+      
       jwt = jsonDecode(response.body)['jwt'];
       name = jsonDecode(response.body)['user']['full_name'];
       
       if(jsonDecode(response.body)['user']['phone1']!=null) {
-        phone1 = int.parse(jsonDecode(response.body)['user']['phone1']);
+        phone1 = int.parse(jsonDecode(response.body)['user']['phone1'],radix:16);
+          
       }
-      if(jsonDecode(response.body)['user']['phone2']!=null) {
-        phone2 = int.parse(jsonDecode(response.body)['user']['phone2']);
-      }
-      subscription =
-          jsonDecode(response.body)['user']['subscription_end'] != null
-              ? DateTime.parse(
-                  jsonDecode(response.body)['user']['subscription_end'])
-              : null;
-      is_blocked = jsonDecode(response.body)['user']['blocked'];
-      is_confirmed = jsonDecode(response.body)['user']['validated'];
+      
+      // if(jsonDecode(response.body)['user']['phone2']!=null) {
+      //  print(jsonDecode(response.body)['user']['phone2']);
+      //   phone2 = int.parse(jsonDecode(response.body)['user']['phone2'],radix: 16);     
+      // }
+     
+      // subscription =
+      //     jsonDecode(response.body)['user']['subscription_end'] != null
+      //         ? DateTime.parse(
+      //             jsonDecode(response.body)['user']['subscription_end'])
+      //         : null;
+      is_blocked = jsonDecode(response.body)['user']['blocked']??false;
+      is_confirmed = jsonDecode(response.body)['user']['validated']??false;
       id = jsonDecode(response.body)['user']['id'];
       password = null;
       await _storeToken(jsonDecode(response.body)['jwt']);
@@ -209,8 +216,8 @@ class User {
       'email': email,
       'identifier': email,
       "username": email,
-      "phone1": phone1,
-      "phone2": phone2,
+      "phone1": phone1.toString(),
+      "phone2": phone2.toString(),
       "otp": otp,
       "full_name": name,
       "validated": false,
