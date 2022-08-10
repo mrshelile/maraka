@@ -28,7 +28,7 @@ class _RegistrationState extends State<Registration> {
   bool _isobscure = true;
   var _errorMessage = "";
   bool _loading = false;
-  final _loader = SpinKitFoldingCube(
+  final _loader = const SpinKitFoldingCube(
     color: MyColors.blue3,
     size: 80,
     // duration: Duration(milliseconds: 1000),
@@ -54,7 +54,7 @@ class _RegistrationState extends State<Registration> {
                             MediaQuery.of(context).copyWith().size.width * 0.05,
                         top: MediaQuery.of(context).copyWith().size.height *
                             0.2),
-                    child: Container(
+                    child: SizedBox(
                       height:
                           MediaQuery.of(context).copyWith().size.height * 0.3,
                       width: MediaQuery.of(context).copyWith().size.width * 0.6,
@@ -81,7 +81,7 @@ class _RegistrationState extends State<Registration> {
                           labelText: 'Full Names',
                         ),
                         validator: (String? value) {
-                          return value == null || value.isEmpty
+                          return value == null || value.trim().isEmpty
                               ? 'Enter Your Full Names'
                               : null;
                         },
@@ -92,7 +92,7 @@ class _RegistrationState extends State<Registration> {
                     padding: EdgeInsets.only(
                         left:
                             MediaQuery.of(context).copyWith().size.width * 0.1),
-                    child: Container(
+                    child: SizedBox(
                       width: MediaQuery.of(context).copyWith().size.width * 0.8,
                       child: TextFormField(
                         controller: _emailController,
@@ -122,12 +122,13 @@ class _RegistrationState extends State<Registration> {
                           //   return 'Email Address Cannot be empty';
                           // else
                           //   return null;
-                          if (value == null || value.isEmpty)
+                          if (value == null || value.trim().isEmpty) {
                             return "Email Address is empty";
-                          else if (!EmailValidator.validate(value))
+                          } else if (!EmailValidator.validate(value.trim())) {
                             return "Invalid Email Format";
-                          else
+                          } else {
                             return null;
+                          }
                         },
                       ),
                     ),
@@ -136,7 +137,7 @@ class _RegistrationState extends State<Registration> {
                     padding: EdgeInsets.only(
                         left:
                             MediaQuery.of(context).copyWith().size.width * 0.1),
-                    child: Container(
+                    child: SizedBox(
                       width: MediaQuery.of(context).copyWith().size.width * 0.8,
                       child: TextFormField(
                         controller: _phoneNumberController,
@@ -152,7 +153,7 @@ class _RegistrationState extends State<Registration> {
                         ),
                         keyboardType: TextInputType.phone,
                         validator: (String? value) {
-                          return value == null || value.isEmpty
+                          return value == null || value.trim().isEmpty
                               ? 'Phone Number Cannot be empty'
                               : null;
                         },
@@ -170,7 +171,7 @@ class _RegistrationState extends State<Registration> {
                         textInputAction: TextInputAction.next,
                         obscureText: _isobscure,
                         decoration: InputDecoration(
-                          prefixIcon: Icon(
+                          prefixIcon: const Icon(
                             Icons.lock_outline,
                             color: MyColors.brown2,
                           ),
@@ -187,8 +188,8 @@ class _RegistrationState extends State<Registration> {
                               });
                             },
                           ),
-                          labelStyle: TextStyle(color: MyColors.brown3),
-                          border: UnderlineInputBorder(),
+                          labelStyle: const TextStyle(color: MyColors.brown3),
+                          border: const UnderlineInputBorder(),
                           labelText: 'Password',
                         ),
                         validator: (String? value) {
@@ -198,7 +199,7 @@ class _RegistrationState extends State<Registration> {
 
                           // if (value.isEmpty && !passValid)
                           //   return 'Password strength is to weak';
-                          return value == null || value.isEmpty
+                          return value == null || value.trim().isEmpty
                               ? 'Password Cannot be empty'
                               : null;
                         },
@@ -209,14 +210,14 @@ class _RegistrationState extends State<Registration> {
                     padding: EdgeInsets.only(
                         left:
                             MediaQuery.of(context).copyWith().size.width * 0.1),
-                    child: Container(
+                    child: SizedBox(
                       width: MediaQuery.of(context).copyWith().size.width * 0.8,
                       child: TextFormField(
                         controller: _rePasswordController,
                         textInputAction: TextInputAction.next,
                         obscureText: _isobscure,
                         decoration: InputDecoration(
-                          prefixIcon: Icon(
+                          prefixIcon: const Icon(
                             Icons.lock_outline,
                             color: MyColors.brown2,
                           ),
@@ -233,12 +234,12 @@ class _RegistrationState extends State<Registration> {
                               });
                             },
                           ),
-                          labelStyle: TextStyle(color: MyColors.brown3),
-                          border: UnderlineInputBorder(),
+                          labelStyle: const TextStyle(color: MyColors.brown3),
+                          border: const UnderlineInputBorder(),
                           labelText: 'Confirm Password',
                         ),
                         validator: (String? value) {
-                          return value == null || value.isEmpty
+                          return value == null || value.trim().isEmpty
                               ? 'Password Cannot be empty'
                               : null;
                         },
@@ -253,7 +254,7 @@ class _RegistrationState extends State<Registration> {
                             0.01),
                     child: Text(
                       _errorMessage,
-                      style: TextStyle(color: MyColors.red1),
+                      style: const TextStyle(color: MyColors.red1),
                     ),
                   ),
                   Padding(
@@ -272,23 +273,22 @@ class _RegistrationState extends State<Registration> {
                                   color: Colors.grey.withOpacity(0.6),
                                   spreadRadius: 2,
                                   blurRadius: 5,
-                                  offset: Offset(0, 5))
+                                  offset: const Offset(0, 5))
                             ],
                             border: Border.all(color: MyColors.blue2),
                             borderRadius: BorderRadius.circular(10)),
                         child: TextButton(
                           onPressed: () async {
-                            User user = new User();
                             if (_formKey.currentState!.validate()) {
                               if (_passwordController.text
                                   .endsWith(_rePasswordController.text)) {
                                 // int phone1 = int.parse(_phoneNumberController.text);
                                 User user = User(
-                                    name: _fullNamesController.text,
-                                    email: _emailController.text,
+                                    name: _fullNamesController.text.trim(),
+                                    email: _emailController.text.trim(),
                                     phone1:
-                                        int.parse(_phoneNumberController.text),
-                                    password: _passwordController.text);
+                                        int.parse(_phoneNumberController.text.trim()),
+                                    password: _passwordController.text.trim());
                                 setState(() {
                                   _loading = true;
                                 });
@@ -339,7 +339,7 @@ class _RegistrationState extends State<Registration> {
                               }
                             }
                           },
-                          child: Text(
+                          child: const Text(
                             "Register",
                             style: TextStyle(color: Colors.white, fontSize: 15),
                           ),

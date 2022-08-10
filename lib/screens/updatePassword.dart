@@ -117,11 +117,11 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 ),
                                 keyboardType: TextInputType.text,
                                 validator: (String? value) {
-                                  if (value!.isEmpty) {
+                                  if (value!.trim().isEmpty) {
                                     return 'Password Cannot Be Empty';
                                   } 
                                   else {
-                                  bool result = validatePassword(value);
+                                  bool result = validatePassword(value.trim());
                                   if(result){
                                     // create account event
                                   return null;
@@ -167,11 +167,11 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 ),
                                 keyboardType: TextInputType.text,
                                 validator: (String? value) {
-                                  if (value!.isEmpty) {
+                                  if (value!.trim().isEmpty) {
                                     return 'Confirm Password Cannot Be Empty';
                                   } 
                                   else {
-                                  bool result = validatePassword(value);
+                                  bool result = validatePassword(value.trim());
                                   if(result){
                                     // create account event
                                   return null;
@@ -218,15 +218,15 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                             child: TextButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  if (_passwordController.text
-                                      .endsWith(_confirmPasswordController.text)) {
+                                  if (_passwordController.text.trim()
+                                      .endsWith(_confirmPasswordController.text.trim())) {
                                     setState(() {
                                       _errorMessage = "";
                                       _loading = true;
                                     });
                                     try {
                                  
-                                    var res = await widget.user.updatePassword(_confirmPasswordController.text,
+                                    var res = await widget.user.updatePassword(_confirmPasswordController.text.trim(),
                                     int.parse(widget.OTP),widget.user.email).timeout(const Duration(seconds: 10),
                                             onTimeout: () => throw TimeoutException(
                                                 'Internet may not be available'));

@@ -84,9 +84,9 @@ class _LoginState extends State<Login> {
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         validator: (String? value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null || value.trim().isEmpty) {
                             return "Email Address is empty";
-                          } else if (!EmailValidator.validate(value)) {
+                          } else if (!EmailValidator.validate(value.trim())) {
                             return "Invalid Email Format";
                           } else {
                             return null;
@@ -127,7 +127,7 @@ class _LoginState extends State<Login> {
                           labelText: 'Password',
                         ),
                         validator: (String? value) {
-                          return value == null || value.isEmpty
+                          return value == null || value.trim().isEmpty
                               ? 'Password Cannot be empty'
                               : null;
                         },
@@ -169,8 +169,8 @@ class _LoginState extends State<Login> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               user = User(
-                                  email: _emailController.text,
-                                  password: _passwordController.text);
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text.trim());
                               // CircularProgressIndicator();
                               setState(() {
                                 _loading = true;
@@ -209,6 +209,7 @@ class _LoginState extends State<Login> {
                                   }
                                 }
                               } catch (error) {
+                                // ignore: avoid_print
                                 print(error.toString());
                                 setState(() {
                                   _errorMessage =
