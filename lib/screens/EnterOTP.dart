@@ -25,8 +25,6 @@ class _OTPState extends State<OTP> {
   final _otpController = TextEditingController();
 
   var _errorMessage = "";
-  final bool _isobscure = true;
-  final bool _isobscure1 = true;
   final String _buttonText = "Verify";
   @override
   Widget build(BuildContext context) {

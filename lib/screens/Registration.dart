@@ -33,6 +33,15 @@ class _RegistrationState extends State<Registration> {
     size: 80,
     // duration: Duration(milliseconds: 1000),
   );
+RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
+  bool validatePassword(String pass){
+    String password = pass.trim();
+    if(pass_valid.hasMatch(password)){
+      return true;
+    }else{
+      return false;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,7 +173,7 @@ class _RegistrationState extends State<Registration> {
                     padding: EdgeInsets.only(
                         left:
                             MediaQuery.of(context).copyWith().size.width * 0.1),
-                    child: Container(
+                    child: SizedBox(
                       width: MediaQuery.of(context).copyWith().size.width * 0.8,
                       child: TextFormField(
                         controller: _passwordController,
@@ -193,15 +202,18 @@ class _RegistrationState extends State<Registration> {
                           labelText: 'Password',
                         ),
                         validator: (String? value) {
-                          // bool passValid = RegExp(
-                          //         "^(?=.{8,32}\$)(?=.*[A-Z])(?=.*[a-z](?=.*[0-9])(?=.*[!@#\$%^&*(),.?:{}|<>]).*")
-                          //     .hasMatch(value!);
-
-                          // if (value.isEmpty && !passValid)
-                          //   return 'Password strength is to weak';
-                          return value == null || value.trim().isEmpty
-                              ? 'Password Cannot be empty'
-                              : null;
+                          if (value!.trim().isEmpty) {
+                            return 'Password Cannot Be Empty';
+                          } 
+                          else {
+                          bool result = validatePassword(value.trim());
+                          if(result){
+                            // create account event
+                          return null;
+                          }else{
+                            return "Password not strong enough";
+                          }
+                          }
                         },
                       ),
                     ),
@@ -239,9 +251,18 @@ class _RegistrationState extends State<Registration> {
                           labelText: 'Confirm Password',
                         ),
                         validator: (String? value) {
-                          return value == null || value.trim().isEmpty
-                              ? 'Password Cannot be empty'
-                              : null;
+                          if (value!.trim().isEmpty) {
+                            return 'Confirm Password Cannot Be Empty';
+                          } 
+                          else {
+                          bool result = validatePassword(value.trim());
+                          if(result){
+                            // create account event
+                          return null;
+                          }else{
+                            return "Confirm Password not strong enough";
+                          }
+                          }
                         },
                       ),
                     ),

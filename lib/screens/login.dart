@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:maraka/logic/user_logic.dart';
+import 'package:maraka/screens/EnterOTP.dart';
 import 'package:maraka/screens/Registration.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/forgotPassword.dart';
@@ -199,7 +200,12 @@ class _LoginState extends State<Login> {
                                     } else {
                                       _errorMessage =
                                           "Your Account is not validated";
-                                      user = null;
+                                        // ignore: use_build_context_synchronously
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => OTP(user: user, isRegister: true)));
+                                      // user = null;
                                     }
                                   } else {
                                     setState(() {

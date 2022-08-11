@@ -235,7 +235,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                       _errorMessage = "";
                                       _loading = false;
                                     });
-                                      Navigator.push(
+                                      Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => const Login()));
