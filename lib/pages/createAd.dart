@@ -13,13 +13,14 @@ import 'package:maraka/themes/sideClipDesign.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
-import 'homePage.dart';
 
+// ignore: must_be_immutable
 class CreateAd extends StatefulWidget {
   User owner;
   CreateAd({Key? key, required this.owner}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _CreateAdState createState() => _CreateAdState();
 }
 
@@ -48,10 +49,10 @@ class _CreateAdState extends State<CreateAd> {
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
   final _descriptionController = TextEditingController();
-  List<String> _pageCategories = [];
-  var uuid = Uuid();
+  final List<String> _pageCategories = [];
+  var uuid = const Uuid();
   var _error = '';
-  var _image = "assets/271237223_975273653197121_7777506664250916614_n.jpg";
+  // ignore: prefer_typing_uninitialized_variables
   var _dropdownValue;
   @override
   void initState() {
@@ -71,13 +72,13 @@ class _CreateAdState extends State<CreateAd> {
             tooltip: 'Save',
             backgroundColor: MyColors.blue2,
             foregroundColor: MyColors.gold,
-            child: const Icon(Icons.done),
             onPressed: isBtnDisabled
                 ? null
                 : () async {
                     if (_formKey.currentState!.validate()) {
                       if (_dropdownValue != null) {
-                        ProductLogic productLogic = new ProductLogic();
+                        ProductLogic productLogic = ProductLogic();
+                        // ignore: prefer_typing_uninitialized_variables
                         var res;
                         List<int> imagesUrls = [];
                         int index = 0;
@@ -86,7 +87,7 @@ class _CreateAdState extends State<CreateAd> {
                           res = await productLogic.postImages(img);
                           if (res.statusCode == 200) {
                             imagesUrls.add(jsonDecode(res.body)[0]['id']);
-                            print(imagesUrls);
+                            // print(imagesUrls);
                           }
                           index++;
                         }
@@ -103,17 +104,14 @@ class _CreateAdState extends State<CreateAd> {
                             category: _dropdownValue,
                             imageUrls: imagesUrls);
                         await productLogic.postProduct(product, widget.owner);
-                        print(productLogic.response.statusCode);
+                        // print(productLogic.response.statusCode);
                         if (productLogic.response.statusCode != null) {
-                          if (productLogic.response.statusCode == 200)
+                          if (productLogic.response.statusCode == 200) {
+                            // ignore: use_build_context_synchronously
                             Navigator.pop(context);
+                          }
 
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => HomePage1(
-                          //               owner: widget.owner,
-                          //             )));
+                      
                         }
                       } else {
                         setState(() {
@@ -121,8 +119,9 @@ class _CreateAdState extends State<CreateAd> {
                         });
                       }
                     }
-                    ;
-                  }),
+                    
+                  },
+            child: const Icon(Icons.done)),
       ),
       body: Stack(
         children: <Widget>[
@@ -144,7 +143,10 @@ class _CreateAdState extends State<CreateAd> {
                       ? Padding(
                           padding: EdgeInsets.only(
                               left: width * 0.1, top: height * 0.19),
-                          child: Container(
+                          child: SizedBox(
+                            // if ()
+                            width: width * 0.35,
+                            height: height * 0.2,
                             // if ()
                             child: ClipRRect(
                               borderRadius:
@@ -161,44 +163,39 @@ class _CreateAdState extends State<CreateAd> {
                                 options: CarouselOptions(height: 300),
                               ),
                             ),
-                            width: width * 0.35,
-                            height: height * 0.2,
                           ),
                         )
                       : Padding(
                           padding: EdgeInsets.only(
                               left: width * 0.1, top: height * 0.19),
                           child: Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(20)),
+                                  BorderRadius.all(Radius.circular(20)),
                             ),
+                            width: width * 0.35,
+                            height: height * 0.2,
                             // if ()
                             child: SvgPicture.asset(
-                              "assets/undraw_uploading_re_okvh (1).svg",
+                              "assets/upload.svg",
                               semanticsLabel: "Profile Image",
                               fit: BoxFit.scaleDown,
                               width: width * 0.35,
                               height: height * 0.25,
                             ),
-                            width: width * 0.35,
-                            height: height * 0.2,
                           ),
                         ),
-                  Positioned(
-                    top: width * 0.02,
-                    child: Padding(
-                        padding: EdgeInsets.only(
-                            left: width * 0.25, top: height * 0.001),
-                        child: IconButton(
-                          onPressed: () => selectImages(),
-                          icon: const Icon(
-                            Icons.upload_file,
-                            color: MyColors.goldenBrown,
-                            size: 30,
-                          ),
-                        )),
-                  ),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          left: width * 0.25, top: height * 0.001),
+                      child: IconButton(
+                        onPressed: () => selectImages(),
+                        icon: const Icon(
+                          Icons.upload_file,
+                          color: MyColors.goldenBrown,
+                          size: 30,
+                        ),
+                      )),
                   Padding(
                     padding: EdgeInsets.only(top: height * 0.03),
                     child: Padding(
@@ -347,7 +344,7 @@ class _CreateAdState extends State<CreateAd> {
           ),
           GestureDetector(
             onTap: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
+              FocusScope.of(context).requestFocus(FocusNode());
               Navigator.pop(context);
             },
             child: Padding(

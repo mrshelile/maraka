@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ class CreateAds extends StatefulWidget {
   const CreateAds({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _CreateAdsState createState() => _CreateAdsState();
 }
 

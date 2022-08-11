@@ -1,10 +1,8 @@
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/models/ImageStrapi.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/models/products.dart';
 import 'package:maraka/pages/createAd.dart';
-import 'package:maraka/screens/componets/productPreview.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/componets/widget/products_item.dart';
 import 'package:maraka/themes/color.dart';
@@ -16,6 +14,7 @@ class MyAds extends StatefulWidget {
   MyAds({Key? key, required this.owner}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _MyAdsState createState() => _MyAdsState();
 }
 
@@ -24,7 +23,7 @@ class _MyAdsState extends State<MyAds> {
   Future<List<Product>> myAdsList() async {
     var logic = ProductLogic();
     List<Product> ad = await logic.getMyAds(widget.owner);
-    this.myads = ad;
+    myads = ad;
     return ad;
   }
 
@@ -82,8 +81,9 @@ class _MyAdsState extends State<MyAds> {
                                 recents: Recents.generateMyAds(myads)[index],
                               )),
                     );
-                  } else
-                    return Text("");
+                  } else {
+                    return const Text("");
+                  }
                 },
               ),
             ],

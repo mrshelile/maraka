@@ -192,7 +192,7 @@ class _OTPState extends State<OTP> {
                               style: TextStyle(color: MyColors.blue3),
                             ),
                             onPressed: () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => const Login()));
