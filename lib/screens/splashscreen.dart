@@ -104,88 +104,90 @@ class _SplashcreenState extends State<Splashcreen> {
               future: makeBanners(),
               builder: (context, AsyncSnapshot<String> snapshot) {
                 if (snapshot.hasData) {
-                  return Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: MediaQuery.of(context).copyWith().size.height *
-                            0.05,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(
-                            width:
-                                MediaQuery.of(context).copyWith().size.width *
-                                    0.1,
-                          ),
-                          SizedBox(
-                              height: MediaQuery.of(context)
-                                      .copyWith()
-                                      .size
-                                      .height *
-                                  0.2,
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: MediaQuery.of(context).copyWith().size.height *
+                              0.05,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(
                               width:
                                   MediaQuery.of(context).copyWith().size.width *
-                                      0.3,
-                              child: Image.asset(
-                                "assets/maraka.png",
-                              )),
-                        ],
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).copyWith().size.height *
-                            0.07,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).copyWith().size.width *
-                                0.14,
-                            bottom:
-                                MediaQuery.of(context).copyWith().size.height *
-                                    0.05),
-                        child: const Text(
-                          "Shopping made easy, buy and/sell anything, anytime",
-                          style:
-                              TextStyle(color: MyColors.brown3, fontSize: 20),
+                                      0.1,
+                            ),
+                            SizedBox(
+                                height: MediaQuery.of(context)
+                                        .copyWith()
+                                        .size
+                                        .height *
+                                    0.2,
+                                width:
+                                    MediaQuery.of(context).copyWith().size.width *
+                                        0.3,
+                                child: Image.asset(
+                                  "assets/maraka.png",
+                                )),
+                          ],
                         ),
-                      ),
-                      Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50)),
+                        SizedBox(
+                          height: MediaQuery.of(context).copyWith().size.height *
+                              0.07,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: MediaQuery.of(context).copyWith().size.width *
+                                  0.14,
+                              bottom:
+                                  MediaQuery.of(context).copyWith().size.height *
+                                      0.05),
+                          child: const Text(
+                            "Shopping made easy, buy and/sell anything, anytime",
+                            style:
+                                TextStyle(color: MyColors.brown3, fontSize: 20),
+                          ),
+                        ),
+                        Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50)),
+                            height:
+                                MediaQuery.of(context).copyWith().size.height *
+                                    0.4,
+                            width: MediaQuery.of(context).copyWith().size.width *
+                                0.6,
+                            child: imageCarousel),
+                        SizedBox(
+                          height: MediaQuery.of(context).copyWith().size.height *
+                              0.05,
+                        ),
+                        SwipingButton(
                           height:
-                              MediaQuery.of(context).copyWith().size.height *
-                                  0.4,
-                          width: MediaQuery.of(context).copyWith().size.width *
-                              0.6,
-                          child: imageCarousel),
-                      SizedBox(
-                        height: MediaQuery.of(context).copyWith().size.height *
-                            0.05,
-                      ),
-                      SwipingButton(
-                        height:
-                            MediaQuery.of(context).copyWith().size.width * 0.1,
-                        text: "Swipe To Get Started",
-                        padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).copyWith().size.width *
-                                0.14,
-                            right:
-                                MediaQuery.of(context).copyWith().size.width *
-                                    0.15),
-                        swipeButtonColor: MyColors.blue2,
-                        backgroundColor: MyColors.blue3,
-                        swipePercentageNeeded: 0.3,
-                        onSwipeCallback: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Home(
-                                        currentIndex: 0,
-                                        user: new User(),
-                                      )));
-                        },
-                      ),
-                    ],
+                              MediaQuery.of(context).copyWith().size.width * 0.1,
+                          text: "Swipe To Get Started",
+                          padding: EdgeInsets.only(
+                              left: MediaQuery.of(context).copyWith().size.width *
+                                  0.14,
+                              right:
+                                  MediaQuery.of(context).copyWith().size.width *
+                                      0.15),
+                          swipeButtonColor: MyColors.blue2,
+                          backgroundColor: MyColors.blue3,
+                          swipePercentageNeeded: 0.3,
+                          onSwipeCallback: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Home(
+                                          currentIndex: 0,
+                                          user: new User(),
+                                        )));
+                          },
+                        ),
+                      ],
+                    ),
                   );
                 } 
                 else 

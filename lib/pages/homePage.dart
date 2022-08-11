@@ -1,4 +1,7 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:math';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maraka/logic/banner_logic.dart';
 import 'package:maraka/logic/products_logic.dart';
@@ -36,18 +39,39 @@ class _HomePageState extends State<HomePage1> {
   List<Product> products = [];
   double value = 0;
   var selected_category = "All";
-  List<String> _pageCategories = [];
+  final List<String> _pageCategories = [];
   List<dynamic> bottomImgs = [
     {"image": const AssetImage("assets/alldata.png"), "url": server},
     {"image": const AssetImage("assets/payment.png"), "url": server}
   ];
-  Widget imageCarousel = Carousel(
-    boxFit: BoxFit.fill,
-    images: [
-      SvgPicture.asset(
-        "assets/market.svg",
+  // Widget imageCarousel = Carousel(
+  //   boxFit: BoxFit.fill,
+    
+  //   images: [
+  //     SvgPicture.asset(
+  //       "assets/market.svg",
+  //     ),
+  //   ],
+  // );
+  Widget imageCarousel = CarouselSlider(
+    items:  [
+    SvgPicture.asset(
+      "assets/connect.svg",
+    ),
+    ], 
+    options: CarouselOptions(
+      aspectRatio: 16/9,
+      viewportFraction: 0.8,
+      initialPage: 0,
+      enableInfiniteScroll: true,
+      reverse: false,
+      autoPlay: true,
+      autoPlayInterval: const Duration(seconds: 3),
+      autoPlayAnimationDuration: const Duration(microseconds: 800),
+      autoPlayCurve: Curves.fastOutSlowIn,
+      enlargeCenterPage: true,
+      scrollDirection: Axis.horizontal
       ),
-    ],
   );
   Future<dynamic> getAllData() async {
     var resp1 = await makeBanner();
@@ -108,14 +132,14 @@ class _HomePageState extends State<HomePage1> {
     if (logic.response != null) {
       if (logic.response.statusCode == 200) {
         List<dynamic> imgs = [];
-        if (logic.bannersHomeScreen.length > 0) {
+        if (logic.bannersHomeScreen.isNotEmpty) {
           for (var item in logic.bannersHomeScreen) {
             bool skip = false;
             if (item.display != null) {
               if (item.display['data'] != null) {
                 if (item.display['data']['attributes'] != null) {
                   if (item.display['data']['attributes']['url'] != null) {
-                    imgs.add(NetworkImage(
+                    imgs.add( NetworkImage(
                         server + item.display['data']['attributes']['url']));
                     // imgs.add(NetworkImage(
                     //     "https://www.freepngimg.com/thumb/advertising/11-2-advertising-png-clipart-thumb.png"));
@@ -132,6 +156,24 @@ class _HomePageState extends State<HomePage1> {
             dotColor: MyColors.goldFusion,
             dotIncreasedColor: MyColors.blue2,
           );
+            //  imageCarousel = CarouselSlider(
+            //   items: imgs.map((item) => Container(
+            //     child: item,
+            //   )).toList(), 
+            //   options: CarouselOptions(
+            //     aspectRatio: 16/9,
+            //     viewportFraction: 0.8,
+            //     initialPage: 0,
+            //     enableInfiniteScroll: true,
+            //     reverse: false,
+            //     autoPlay: true,
+            //     autoPlayInterval: const Duration(seconds: 3),
+            //     autoPlayAnimationDuration: const Duration(microseconds: 800),
+            //     autoPlayCurve: Curves.fastOutSlowIn,
+            //     enlargeCenterPage: true,
+            //     scrollDirection: Axis.horizontal
+            //     ),
+            // );
         }
       }
     }
@@ -195,7 +237,7 @@ class _HomePageState extends State<HomePage1> {
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
-                        this.selected_category =
+                        selected_category =
                             _pageCategories[index].toLowerCase();
 
                         print(selected_category);
@@ -261,9 +303,9 @@ class _HomePageState extends State<HomePage1> {
                                   decoration: BoxDecoration(
                                     boxShadow: [
                                       BoxShadow(
-                                          color: MyColors.brown3
+                                          color: Color.fromARGB(255, 200, 220, 224)
                                               .withOpacity(0.8),
-                                          spreadRadius: 2,
+                                          spreadRadius: 1,
                                           blurRadius: 4,
                                           offset: const Offset(0, 5))
                                     ],
@@ -272,7 +314,7 @@ class _HomePageState extends State<HomePage1> {
                                           .copyWith()
                                           .size
                                           .height *
-                                      0.40,
+                                      0.30,
                                   width: width,
                                   child: Stack(
                                     children: [
@@ -289,12 +331,10 @@ class _HomePageState extends State<HomePage1> {
                                 SizedBox(
                                   height: height * 0.03,
                                 ),
-                                Container(
-                                  child: Text(
-                                    categories[selected_category].toUpperCase(),
-                                    style: TextStyle(
-                                        fontSize: 18, color: MyColors.oldGold),
-                                  ),
+                                Text(
+                                  categories[selected_category].toUpperCase(),
+                                  style: const TextStyle(
+                                      fontSize: 18, color: MyColors.oldGold),
                                 ),
                                 Expanded(
                                   child: SizedBox(
