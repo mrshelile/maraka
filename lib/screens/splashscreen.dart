@@ -1,22 +1,16 @@
 
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:maraka/logic/banner_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/logic/constants.dart';
-import 'package:maraka/main.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:data_connection_checker/data_connection_checker.dart';
-import 'package:restart_app/restart_app.dart';
 import 'package:swipebuttonflutter/swipebuttonflutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
 
 class Splashcreen extends StatefulWidget {
   const Splashcreen({Key? key}) : super(key: key);
@@ -36,33 +30,7 @@ class _SplashcreenState extends State<Splashcreen> {
       SvgPicture.asset("assets/undraw_empty_cart_co35.svg"),
     ],
   );
-//  Future sendEmail() async{
-//    final username = 'mrdavertzshelile@outlook.com';
-// final password = 'S1helile@com';
-// final smtpServer = SmtpServer(
-//   'smtp-mail.outlook.com',
-//   port: 587,
-//   username: username,
-//   password: password,
-// );
-// final message = Message()
-//   ..from = Address(username, 'Malefetsane Shelile')
-//   ..recipients.add('davertzshelile@gmail.com')
-//   ..subject = 'New POST message from user'
-//   ..text = "this is test email";
-//   int statusCode;
-// try {
-//   final sendReport = await send(message, smtpServer);
-//   print(sendReport.toString());
-//   statusCode = HttpStatus.ok;
-// } on MailerException catch (e) {
-//   print('Message not sent: ${e.problems}');
-//   statusCode = HttpStatus.internalServerError;
-// }
-// // request.response
-// //   ..statusCode = statusCode
-// //   ..close();
-//  }
+
   Future<String> makeBanners() async {
     var logic = BannerLogic();
 
@@ -85,7 +53,7 @@ class _SplashcreenState extends State<Splashcreen> {
             }
           }
         }
-        if (imgs.length > 0)
+        if (imgs.isNotEmpty) {
           imageCarousel = Carousel(
             dotBgColor: Colors.transparent,
             dotSize: 0,
@@ -94,6 +62,7 @@ class _SplashcreenState extends State<Splashcreen> {
                   (i) => GestureDetector(
                     onTap: () async {
                       // print(i);
+                      // ignore: deprecated_member_use
                       if (!await launch("http://" + i.url)) {
                         print("failed launching");
                       } else {
@@ -107,6 +76,7 @@ class _SplashcreenState extends State<Splashcreen> {
                 )
                 .toList(),
           );
+        }
 
         return logic.response.toString();
       } else {
@@ -217,79 +187,94 @@ class _SplashcreenState extends State<Splashcreen> {
                       ),
                     ],
                   );
-                } else {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                        top:
-                            MediaQuery.of(context).copyWith().size.height * 0.3,
-                        left: MediaQuery.of(context).copyWith().size.width *
-                            0.15),
-                    child: Column(
-                      children: [
-                        Container(
-                          height:
-                              MediaQuery.of(context).copyWith().size.height *
-                                  0.3,
-                          width: MediaQuery.of(context).copyWith().size.width *
-                              0.6,
-                          child: SvgPicture.asset("assets/internet.svg",
-                              semanticsLabel: "Security Image"),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: MediaQuery.of(context)
-                                      .copyWith()
-                                      .size
-                                      .height *
-                                  0.01),
-                          child: Text("Oops looks like there is no internet"),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(
-                                left: MediaQuery.of(context)
-                                        .copyWith()
-                                        .size
-                                        .width *
-                                    0.1,
-                                top: MediaQuery.of(context)
-                                        .copyWith()
-                                        .size
-                                        .height *
-                                    0.03),
-                            child: Container(
-                              width:
-                                  MediaQuery.of(context).copyWith().size.width *
-                                      0.35,
-                              decoration: BoxDecoration(
-                                  color: MyColors.blue3,
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey.withOpacity(0.6),
-                                        spreadRadius: 2,
-                                        blurRadius: 5,
-                                        offset: const Offset(0, 5))
-                                  ],
-                                  border: Border.all(color: MyColors.blue2),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: TextButton(
-                                onPressed: () {
-                                  print("object");
-                                   Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MyApp()));
-                                },
-                                child: const Text(
-                                  "Retry",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 15),
-                                ),
-                              ),
-                            )),
-                      ],
-                    ),
+                } 
+                else 
+                {
+                  return   Column(
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: <Widget>[
+                      SizedBox(height: MediaQuery.of(context).copyWith().size.height* 0.3,),
+                      const SpinKitSpinningLines(
+                      color: Color.fromARGB(255, 12, 131, 125),
+                      size: 180.0  
+                      ),
+                     const Text("Checking Internet")
+                    ],
                   );
                 }
+                // else {
+                //   return Padding(
+                //     padding: EdgeInsets.only(
+                //         top:
+                //             MediaQuery.of(context).copyWith().size.height * 0.3,
+                //         left: MediaQuery.of(context).copyWith().size.width *
+                //             0.15),
+                //     child: Column(
+                //       children: [
+                //         Container(
+                //           height:
+                //               MediaQuery.of(context).copyWith().size.height *
+                //                   0.3,
+                //           width: MediaQuery.of(context).copyWith().size.width *
+                //               0.6,
+                //           child: SvgPicture.asset("assets/internet.svg",
+                //               semanticsLabel: "Security Image"),
+                //         ),
+                //         Padding(
+                //           padding: EdgeInsets.only(
+                //               top: MediaQuery.of(context)
+                //                       .copyWith()
+                //                       .size
+                //                       .height *
+                //                   0.01),
+                //           child: Text("Oops looks like there is no internet"),
+                //         ),
+                //         Padding(
+                //             padding: EdgeInsets.only(
+                //                 left: MediaQuery.of(context)
+                //                         .copyWith()
+                //                         .size
+                //                         .width *
+                //                     0.1,
+                //                 top: MediaQuery.of(context)
+                //                         .copyWith()
+                //                         .size
+                //                         .height *
+                //                     0.03),
+                //             child: Container(
+                //               width:
+                //                   MediaQuery.of(context).copyWith().size.width *
+                //                       0.35,
+                //               decoration: BoxDecoration(
+                //                   color: MyColors.blue3,
+                //                   boxShadow: [
+                //                     BoxShadow(
+                //                         color: Colors.grey.withOpacity(0.6),
+                //                         spreadRadius: 2,
+                //                         blurRadius: 5,
+                //                         offset: const Offset(0, 5))
+                //                   ],
+                //                   border: Border.all(color: MyColors.blue2),
+                //                   borderRadius: BorderRadius.circular(10)),
+                //               child: TextButton(
+                //                 onPressed: () {
+                //                   print("object");
+                //                    Navigator.pushReplacement(
+                //                   context,
+                //                   MaterialPageRoute(
+                //                       builder: (context) => MyApp()));
+                //                 },
+                //                 child: const Text(
+                //                   "Retry",
+                //                   style: TextStyle(
+                //                       color: Colors.white, fontSize: 15),
+                //                 ),
+                //               ),
+                //             )),
+                //       ],
+                //     ),
+                //   );
+                // }
               }),
         ],
       ),
