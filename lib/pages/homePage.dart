@@ -303,7 +303,7 @@ class _HomePageState extends State<HomePage1> {
                                   decoration: BoxDecoration(
                                     boxShadow: [
                                       BoxShadow(
-                                          color: Color.fromARGB(255, 200, 220, 224)
+                                          color: const Color.fromARGB(255, 200, 220, 224)
                                               .withOpacity(0.8),
                                           spreadRadius: 1,
                                           blurRadius: 4,
@@ -385,7 +385,8 @@ class _HomePageState extends State<HomePage1> {
                                       Builder(builder: (context) {
                                         return GestureDetector(
                                           onTap: () async {
-                                            if (bottomImgs.length != 0) {
+                                            if (bottomImgs.isNotEmpty) {
+                                              // ignore: prefer_interpolation_to_compose_strings
                                               if (!await launch("http://" +
                                                   bottomImgs[0]["url"])) {
                                                 print("failed launching");
@@ -404,7 +405,7 @@ class _HomePageState extends State<HomePage1> {
                                                 image: DecorationImage(
                                                     image: bottomImgs.isNotEmpty
                                                         ? bottomImgs[0]["image"]
-                                                        : AssetImage(
+                                                        : const AssetImage(
                                                             "assets/products.png"),
                                                     fit: BoxFit.fitHeight)),
                                           ),
@@ -413,6 +414,7 @@ class _HomePageState extends State<HomePage1> {
                                       GestureDetector(
                                         onTap: () async {
                                           if (bottomImgs.isNotEmpty) {
+                                            // ignore: prefer_interpolation_to_compose_strings
                                             if (!await launch("http://" +
                                                 bottomImgs[1]["url"])) {
                                               print("failed launching");
@@ -431,7 +433,7 @@ class _HomePageState extends State<HomePage1> {
                                               image: DecorationImage(
                                                   image: bottomImgs.isNotEmpty
                                                       ? bottomImgs[1]["image"]
-                                                      : AssetImage(
+                                                      : const AssetImage(
                                                           "assets/products.png"),
                                                   fit: BoxFit.fitHeight)),
                                         ),

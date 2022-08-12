@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
@@ -52,6 +54,12 @@ class _CreateAdState extends State<CreateAd> {
   final List<String> _pageCategories = [];
   var uuid = const Uuid();
   var _error = '';
+    bool _loading = false;
+  final _loader = const SpinKitSpinningLines(
+    color: MyColors.blue3,
+    size: 280,
+    // duration: Duration(milliseconds: 1000),
+  );
   // ignore: prefer_typing_uninitialized_variables
   var _dropdownValue;
   @override
@@ -79,12 +87,20 @@ class _CreateAdState extends State<CreateAd> {
                       if (_dropdownValue != null) {
                         ProductLogic productLogic = ProductLogic();
                         // ignore: prefer_typing_uninitialized_variables
+                        setState(() {
+                          _loading=true;
+                          isBtnDisabled=_loading;
+                        });
                         var res;
-                        List<int> imagesUrls = [];
+                        try {
+                          List<int> imagesUrls = [];
                         int index = 0;
                         for (var img in imageFileList!) {
                           if (index >= 3) break;
-                          res = await productLogic.postImages(img);
+                          res = await productLogic.postImages(img)..timeout(
+                              const Duration(seconds: 15),
+                              onTimeout: () => throw TimeoutException(
+                                  'Can\'t connect to internet'));
                           if (res.statusCode == 200) {
                             imagesUrls.add(jsonDecode(res.body)[0]['id']);
                             // print(imagesUrls);
@@ -96,22 +112,34 @@ class _CreateAdState extends State<CreateAd> {
                             seller: null,
                             expiryDate: DateTime.now(),
                             isLiked: false,
-                            id2: this.uuid.v4(),
+                            id2: uuid.v4(),
                             title: _nameController.text,
                             description: _descriptionController.text,
                             price:
                                 double.parse(_priceController.text.toString()),
                             category: _dropdownValue,
                             imageUrls: imagesUrls);
-                        await productLogic.postProduct(product, widget.owner);
+                        await productLogic.postProduct(product, widget.owner).timeout(
+                              const Duration(seconds: 10),
+                              onTimeout: () => throw TimeoutException(
+                                  'Can\'t connect to internet'));
                         // print(productLogic.response.statusCode);
                         if (productLogic.response.statusCode != null) {
                           if (productLogic.response.statusCode == 200) {
+                            setState(() {
+                              _loading=false;
+                              isBtnDisabled=_loading;
+                            });
                             // ignore: use_build_context_synchronously
                             Navigator.pop(context);
+                            
                           }
 
-                      
+                        }
+                        } catch (error) {
+                          _loading = false;
+                          isBtnDisabled= _loading;
+                          _error = "failed!!try again";
                         }
                       } else {
                         setState(() {
@@ -359,6 +387,15 @@ class _CreateAdState extends State<CreateAd> {
               ),
             ),
           ),
+          if(_loading)
+            Container(
+              width: width,
+              height: height,
+            decoration: BoxDecoration(
+              color:Colors.white.withOpacity(0.8)
+            ),
+              child: Center(child: _loader),
+            )
         ],
       ),
     );

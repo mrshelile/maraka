@@ -204,40 +204,40 @@ class _AccountState extends State<Account> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: width * 0.1),
-                                  child: SizedBox(
-                                    width: width,
-                                    height: height * 0.08,
-                                    child: TextFormField(
-                                      controller: _phone2Controller,
-                                      keyboardType: TextInputType.phone,
-                                      decoration: InputDecoration(
-                                        prefixIcon: const Icon(
-                                          Icons.phone_rounded,
-                                          color: MyColors.brown3,
-                                        ),
-                                        labelStyle: isSecondNumber
-                                            ? const TextStyle(color: MyColors.blue3)
-                                            : const TextStyle(color: Colors.brown),
-                                        hintText: "Phone Numbers",
-                                        labelText: widget.user.phone2
-                                                    .toString()
-                                                    .isEmpty ||
-                                                widget.user.phone2 == null
-                                            ? "Phone Numbers"
-                                            : widget.user.phone2.toString(),
-                                        enabled: _isenabled,
-                                        border: InputBorder.none,
-                                      ),
-                                      // validator: (String? value) {
-                                      //   return value == null || value.isEmpty
-                                      //       ? 'Phone Number'
-                                      //       : null;
-                                      // },
-                                    ),
-                                  ),
-                                ),
+                                // Padding(
+                                //   padding: EdgeInsets.only(left: width * 0.1),
+                                //   child: SizedBox(
+                                //     width: width,
+                                //     height: height * 0.08,
+                                //     child: TextFormField(
+                                //       controller: _phone2Controller,
+                                //       keyboardType: TextInputType.phone,
+                                //       decoration: InputDecoration(
+                                //         prefixIcon: const Icon(
+                                //           Icons.phone_rounded,
+                                //           color: MyColors.brown3,
+                                //         ),
+                                //         labelStyle: isSecondNumber
+                                //             ? const TextStyle(color: MyColors.blue3)
+                                //             : const TextStyle(color: Colors.brown),
+                                //         hintText: "Phone Numbers",
+                                //         labelText: widget.user.phone2
+                                //                     .toString()
+                                //                     .isEmpty ||
+                                //                 widget.user.phone2 == null
+                                //             ? "Phone Numbers"
+                                //             : widget.user.phone2.toString(),
+                                //         enabled: _isenabled,
+                                //         border: InputBorder.none,
+                                //       ),
+                                //       // validator: (String? value) {
+                                //       //   return value == null || value.isEmpty
+                                //       //       ? 'Phone Number'
+                                //       //       : null;
+                                //       // },
+                                //     ),
+                                //   ),
+                                // ),
                                 Padding(
                                   padding: EdgeInsets.only(left: width * 0.1),
                                   child: SizedBox(

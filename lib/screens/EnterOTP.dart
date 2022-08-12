@@ -133,7 +133,7 @@ class _OTPState extends State<OTP> {
                                   _errorMessage = "";
                                 });
                                 if (res.statusCode==200) {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => const Login()));
@@ -145,7 +145,7 @@ class _OTPState extends State<OTP> {
                                     _errorMessage = "";
                                   });
                    
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => UpdatePassword(
