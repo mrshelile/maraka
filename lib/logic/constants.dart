@@ -13,7 +13,7 @@ final Map<dynamic, dynamic> categories = {
   // "jobs": "Jobs"
 };
 var server = "https://quiet-fortress-43376.herokuapp.com";
-
+// var server = "http://192.168.43.203:85";
 class Constants {
   Constants._();
   static const double padding = 20;
