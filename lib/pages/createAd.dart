@@ -97,7 +97,7 @@ class _CreateAdState extends State<CreateAd> {
                         int index = 0;
                         for (var img in imageFileList!) {
                           if (index >= 3) break;
-                          res = await productLogic.postImages(img)..timeout(
+                          res = await productLogic.postImages(img).timeout(
                               const Duration(seconds: 15),
                               onTimeout: () => throw TimeoutException(
                                   'Can\'t connect to internet'));
@@ -137,9 +137,12 @@ class _CreateAdState extends State<CreateAd> {
 
                         }
                         } catch (error) {
+                          setState(() {
                           _loading = false;
                           isBtnDisabled= _loading;
+                          print(error);
                           _error = "failed!!try again";
+                          });
                         }
                       } else {
                         setState(() {

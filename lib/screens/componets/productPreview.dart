@@ -10,6 +10,7 @@ class ProductPreview extends StatefulWidget {
   ProductPreview({Key? key, this.product}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProductPreviewState createState() => _ProductPreviewState();
 }
 
@@ -25,15 +26,10 @@ class _ProductPreviewState extends State<ProductPreview> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          Container(
+          SizedBox(
             width: width,
             height: height * 0.5,
-            // decoration: BoxDecoration(
-            //     image: DecorationImage(
-            //         image: NetworkImage(widget.product!.images![0].url),
-            //         fit: BoxFit.fill
-            //         )
-            //         ),
+
             child: Stack(
               children: [
                 Carousel(
@@ -83,7 +79,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                         ),
                         Text(
                           widget.product!.seller!.email.toString(),
-                          style: TextStyle(fontSize: 17),
+                          style: const TextStyle(fontSize: 17),
                         )
                       ],
                     ),
@@ -114,7 +110,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                         scrollDirection: Axis.vertical,
                         child: Text(
                           widget.product!.description!.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w300,
                             fontSize: 20.0,
                           ),
@@ -130,7 +126,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             padding: EdgeInsets.only(left: width * 0.25, top: height * 0.43),
             child: Container(
               width: width * 0.47,
-              height: height * 0.15,
+              height: height * 0.10,
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -147,7 +143,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                             widget.product!.seller!.fullNames.toString(),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: MyColors.gold1),
+                            style: const TextStyle(color: MyColors.gold1),
                           ),
                         ),
                         const Icon(
@@ -160,7 +156,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                   Padding(
                     padding: EdgeInsets.only(right: width * 0.06),
                     child: Text(
-                        "- (+266)" + widget.product!.seller!.phone1.toString()),
+                        "- (+266)${widget.product!.seller!.phone1}"),
                   ),
                   SizedBox(
                     height: height * 0.01,
@@ -168,8 +164,8 @@ class _ProductPreviewState extends State<ProductPreview> {
                   if (widget.product!.seller!.phone2 == null)
                     Padding(
                       padding: EdgeInsets.only(right: width * 0.06),
-                      child: Text("- (+266)" +
-                          widget.product!.seller!.phone2!.toLowerCase()),
+                      
+                      child: Text("- (+266)${widget.product!.seller!.phone2!.toLowerCase()}"),
                     ),
                 ],
               ),

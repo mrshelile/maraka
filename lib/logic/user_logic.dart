@@ -97,7 +97,7 @@ class User {
 
   Future retrieveEmail() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var value = await prefs.getString('email') ?? null;
+    var value = prefs.getString('email');
 
     jsonEncode(value).toString().isEmpty ||
             // ignore: unrelated_type_equality_checks
@@ -145,20 +145,10 @@ class User {
       name = jsonDecode(response.body)['user']['full_name'];
       
       if(jsonDecode(response.body)['user']['phone1']!=null) {
-        phone1 = int.parse(jsonDecode(response.body)['user']['phone1'],radix:16);
+        phone1 = int.parse(jsonDecode(response.body)['user']['phone1']);
           
       }
       
-      // if(jsonDecode(response.body)['user']['phone2']!=null) {
-      //  print(jsonDecode(response.body)['user']['phone2']);
-      //   phone2 = int.parse(jsonDecode(response.body)['user']['phone2'],radix: 16);     
-      // }
-     
-      // subscription =
-      //     jsonDecode(response.body)['user']['subscription_end'] != null
-      //         ? DateTime.parse(
-      //             jsonDecode(response.body)['user']['subscription_end'])
-      //         : null;
       is_blocked = jsonDecode(response.body)['user']['blocked']??false;
       is_confirmed = jsonDecode(response.body)['user']['validated']??false;
       id = jsonDecode(response.body)['user']['id'];

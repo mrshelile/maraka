@@ -35,8 +35,9 @@ class ProductsItem extends StatefulWidget {
 class _ProductsItemState extends State<ProductsItem> {
   @override
   Widget build(BuildContext context) {
-    if (widget.owner.email != null)
+    if (widget.owner.email != null) {
       widget.isFavouriteclicked = widget.product.isLiked;
+    }
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
     return GestureDetector(
@@ -68,6 +69,8 @@ class _ProductsItemState extends State<ProductsItem> {
                   ? Container(
                       padding:
                           EdgeInsets.only(top: height * 0, left: width * 0.38),
+                      decoration: const BoxDecoration(
+                          color: Colors.transparent, shape: BoxShape.circle),
                       child: IconButton(
                         color: Colors.transparent,
                         onPressed: () async {
@@ -87,10 +90,12 @@ class _ProductsItemState extends State<ProductsItem> {
                               widget.isFavouriteclicked = true;
                             });
                           }
-                          if (widget.isFavouritedPage)
-                            Navigator.of(context).push(new MaterialPageRoute(
+                          if (widget.isFavouritedPage) {
+                            // ignore: use_build_context_synchronously
+                            Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) =>
                                     Home(user: widget.owner,currentIndex: 1,)));
+                          }
                         },
                         icon: widget.owner.email != null
                             ? Icon(
@@ -102,34 +107,32 @@ class _ProductsItemState extends State<ProductsItem> {
                                     : MyColors.blue2,
                                 size: 17,
                               )
-                            : Icon(
+                            : const Icon(
                                 Icons.ac_unit_rounded,
                                 color: MyColors.blue2,
                               ),
                       ),
-                      decoration: const BoxDecoration(
-                          color: Colors.transparent, shape: BoxShape.circle),
                     )
                   : Container(
                       padding: EdgeInsets.only(
                           top: height * 0.01, left: width * 0.4),
+                      decoration: const BoxDecoration(
+                          color: Colors.transparent, shape: BoxShape.circle),
                       child: const Icon(
                         Icons.open_with,
                         color: Colors.blueAccent,
                         size: 17,
                       ),
-                      decoration: const BoxDecoration(
-                          color: Colors.transparent, shape: BoxShape.circle),
                     )
             ]),
             Text(
               widget.recents.name!,
               style: const TextStyle(fontWeight: FontWeight.bold, height: 1.5),
             ),
-            Text(
-              widget.recents.name!,
-              style: const TextStyle(fontWeight: FontWeight.bold, height: 1.5),
-            ),
+            // Text(
+            //   widget.recents.name!,
+            //   style: const TextStyle(fontWeight: FontWeight.bold, height: 1.5),
+            // ),
             Text(widget.recents.price!,
                 style: const TextStyle(
                     fontWeight: FontWeight.bold,
