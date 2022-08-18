@@ -65,65 +65,65 @@ class _ProductsItemState extends State<ProductsItem> {
                         image: NetworkImage(widget.recents.imgUrl!),
                         fit: BoxFit.fitHeight)),
               ),
-              widget.isFavouriteBtn
-                  ? Container(
-                      padding:
-                          EdgeInsets.only(top: height * 0, left: width * 0.38),
-                      decoration: const BoxDecoration(
-                          color: Colors.transparent, shape: BoxShape.circle),
-                      child: IconButton(
-                        color: Colors.transparent,
-                        onPressed: () async {
-                          var logic = ProductLogic();
-                          if (widget.product.isLiked) {
-                            await logic.unlikeProduct(
-                                widget.owner, widget.product);
-                            // await widget.getData!();
-                            setState(() {
-                              widget.isFavouriteclicked = false;
-                            });
-                          } else {
-                            await logic.likeProduct(
-                                widget.owner, widget.product);
-                            // await widget.getData!();
-                            setState(() {
-                              widget.isFavouriteclicked = true;
-                            });
-                          }
-                          if (widget.isFavouritedPage) {
-                            // ignore: use_build_context_synchronously
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    Home(user: widget.owner,currentIndex: 1,)));
-                          }
-                        },
-                        icon: widget.owner.email != null
-                            ? Icon(
-                                widget.isFavouriteBtn
-                                    ? Icons.favorite
-                                    : Icons.ac_unit_rounded,
-                                color: widget.isFavouriteclicked
-                                    ? Colors.red
-                                    : MyColors.blue2,
-                                size: 17,
-                              )
-                            : const Icon(
-                                Icons.ac_unit_rounded,
-                                color: MyColors.blue2,
-                              ),
-                      ),
-                    )
-                  : Container(
-                      padding: EdgeInsets.only(
-                          top: height * 0.01, left: width * 0.4),
-                      decoration: const BoxDecoration(
-                          color: Colors.transparent, shape: BoxShape.circle),
-                      child: const Icon(
-                        Icons.open_with,
-                        color: Colors.blueAccent,
-                        size: 17,
-                      ),
-                    )
+              // widget.isFavouriteBtn
+              //     ? Container(
+              //         padding:
+              //             EdgeInsets.only(top: height * 0, left: width * 0.38),
+              //         decoration: const BoxDecoration(
+              //             color: Colors.transparent, shape: BoxShape.circle),
+              //         child: IconButton(
+              //           color: Colors.transparent,
+              //           onPressed: () async {
+              //             var logic = ProductLogic();
+              //             if (widget.product.isLiked) {
+              //               await logic.unlikeProduct(
+              //                   widget.owner, widget.product);
+              //               // await widget.getData!();
+              //               setState(() {
+              //                 widget.isFavouriteclicked = false;
+              //               });
+              //             } else {
+              //               await logic.likeProduct(
+              //                   widget.owner, widget.product);
+              //               // await widget.getData!();
+              //               setState(() {
+              //                 widget.isFavouriteclicked = true;
+              //               });
+              //             }
+              //             if (widget.isFavouritedPage) {
+              //               // ignore: use_build_context_synchronously
+              //               Navigator.of(context).push(MaterialPageRoute(
+              //                   builder: (context) =>
+              //                       Home(user: widget.owner,currentIndex: 1,)));
+              //             }
+              //           },
+              //           icon: widget.owner.email != null
+              //               ? Icon(
+              //                   widget.isFavouriteBtn
+              //                       ? Icons.favorite
+              //                       : Icons.ac_unit_rounded,
+              //                   color: widget.isFavouriteclicked
+              //                       ? Colors.red
+              //                       : MyColors.blue2,
+              //                   size: 17,
+              //                 )
+              //               : const Icon(
+              //                   Icons.ac_unit_rounded,
+              //                   color: MyColors.blue2,
+              //                 ),
+              //         ),
+              //       )
+              //     : Container(
+              //         padding: EdgeInsets.only(
+              //             top: height * 0.01, left: width * 0.4),
+              //         decoration: const BoxDecoration(
+              //             color: Colors.transparent, shape: BoxShape.circle),
+              //         child: const Icon(
+              //           Icons.open_with,
+              //           color: Colors.blueAccent,
+              //           size: 17,
+              //         ),
+              //       )
             ]),
             Text(
               widget.recents.name!,

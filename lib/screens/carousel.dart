@@ -180,7 +180,7 @@ final List<Widget> imageSliders = imgList
                       left: 0.0,
                       right: 0.0,
                       child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
                               Color.fromARGB(200, 0, 0, 0),
@@ -190,11 +190,11 @@ final List<Widget> imageSliders = imgList
                             end: Alignment.topCenter,
                           ),
                         ),
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 20.0),
                         child: Text(
                           'No. ${imgList.indexOf(item)} image',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
