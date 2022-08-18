@@ -2,7 +2,6 @@
 
 import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maraka/logic/banner_logic.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
@@ -16,9 +15,9 @@ import 'package:maraka/themes/color.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_svg/svg.dart';
+// import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 
-import '../main.dart';
 
 const cellRed = Color(0xffc73232);
 const cellMustard = Color(0xffd7aa22);
@@ -55,11 +54,23 @@ class _HomePageState extends State<HomePage1> {
   // );
   Widget imageCarousel = CarouselSlider(
     items:  [
-    SvgPicture.asset(
-      "assets/connect.svg",
+    Container(
+      margin: const EdgeInsets.all(5.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        image:  const DecorationImage(
+          image: Svg('assets/connect.svg'),
+          fit: BoxFit.cover
+        )
+      ),
+      // child: SvgPicture.asset(
+      //   "assets/connect.svg",
+      // ),
     ),
     ], 
     options: CarouselOptions(
+      height: 200,
       aspectRatio: 16/9,
       viewportFraction: 0.8,
       initialPage: 0,
@@ -67,7 +78,7 @@ class _HomePageState extends State<HomePage1> {
       reverse: false,
       autoPlay: true,
       autoPlayInterval: const Duration(seconds: 3),
-      autoPlayAnimationDuration: const Duration(microseconds: 800),
+      autoPlayAnimationDuration: const Duration(microseconds: 200),
       autoPlayCurve: Curves.fastOutSlowIn,
       enlargeCenterPage: true,
       scrollDirection: Axis.horizontal
@@ -148,32 +159,79 @@ class _HomePageState extends State<HomePage1> {
               }
             }
           }
-          imageCarousel = Carousel(
-            // dotHorizontalPadding: 10.0,
-            dotBgColor: Colors.transparent,
-            boxFit: BoxFit.fill,
-            images: imgs,
-            dotColor: MyColors.goldFusion,
-            dotIncreasedColor: MyColors.blue2,
-          );
-            //  imageCarousel = CarouselSlider(
-            //   items: imgs.map((item) => Container(
-            //     child: item,
-            //   )).toList(), 
-            //   options: CarouselOptions(
-            //     aspectRatio: 16/9,
-            //     viewportFraction: 0.8,
-            //     initialPage: 0,
-            //     enableInfiniteScroll: true,
-            //     reverse: false,
-            //     autoPlay: true,
-            //     autoPlayInterval: const Duration(seconds: 3),
-            //     autoPlayAnimationDuration: const Duration(microseconds: 800),
-            //     autoPlayCurve: Curves.fastOutSlowIn,
-            //     enlargeCenterPage: true,
-            //     scrollDirection: Axis.horizontal
-            //     ),
-            // );
+          // imageCarousel = Carousel(
+          //   // dotHorizontalPadding: 10.0,
+          //   dotBgColor: Colors.transparent,
+          //   boxFit: BoxFit.fill,
+          //   images: imgs,
+          //   dotColor: MyColors.goldFusion,
+          //   dotIncreasedColor: MyColors.blue2,
+          // );
+             imageCarousel = CarouselSlider(
+              items: imgs.map((item) => Container(
+              margin: const EdgeInsets.all(5.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  image:   DecorationImage(
+                    image: item,
+                    fit: BoxFit.cover
+                  )
+                ),
+                // child: Align(
+                //   alignment: Alignment.bottomRight,
+                //   child: Container(
+                //     width:MediaQuery.of(context).copyWith().size.width*0.25,
+                //     height: MediaQuery.of(context).copyWith().size.height*0.07,
+                //     decoration:  const BoxDecoration(
+                //     boxShadow: [
+                //       BoxShadow(
+                //         color: Colors.white,
+                //         spreadRadius: 1,
+                //         blurRadius: 2,
+                //       )
+                //       ],
+                //     gradient: LinearGradient(
+                //       begin: Alignment.topLeft,
+                //       end: Alignment.bottomRight,
+                //       stops: [
+                //         0.2,
+                //         0.4,
+                //         0.6
+                //       ],
+                //       colors: [
+                //         MyColors.blue2,
+                //         MyColors.blue3,
+                //         MyColors.blue2,
+                //         ]),
+                //       borderRadius:BorderRadius.only(topLeft: Radius.circular(15.0)) 
+                //     ),
+                //     child: GestureDetector(
+                //       onTap: (() {
+                        
+                //       }),
+                //       child: const Center(
+                //         child: Text("CHECK",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+              )).toList(),
+              options: CarouselOptions(
+                aspectRatio: 16/9,
+                viewportFraction: 0.8,
+                initialPage: 0,
+                height: 180.0,
+                enableInfiniteScroll: true,
+                reverse: false,
+                autoPlay: true,
+                autoPlayInterval: const Duration(seconds: 3),
+                autoPlayAnimationDuration: const Duration(microseconds: 800),
+                autoPlayCurve: Curves.slowMiddle,
+                enlargeCenterPage: true,
+                scrollDirection: Axis.horizontal
+                ),
+            );
         }
       }
     }
@@ -295,36 +353,36 @@ class _HomePageState extends State<HomePage1> {
                           builder: (context, AsyncSnapshot snapshot) {
                             return Column(
                               children: <Widget>[
-                                // SizedBox(
-                                //   height: height * 0.0,
-                                // ),
-
-                                Container(
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: const Color.fromARGB(255, 200, 220, 224)
-                                              .withOpacity(0.8),
-                                          spreadRadius: 1,
-                                          blurRadius: 4,
-                                          offset: const Offset(0, 5))
-                                    ],
-                                  ),
-                                  height: MediaQuery.of(context)
-                                          .copyWith()
-                                          .size
-                                          .height *
-                                      0.30,
-                                  width: width,
-                                  child: Stack(
-                                    children: [
-                                      Container(
-                                        color: Colors.white.withOpacity(0.8),
-                                      ),
-                                      imageCarousel,
-                                    ],
-                                  ),
+                                SizedBox(
+                                  height: height * 0.05,
                                 ),
+                                imageCarousel,
+                                // Container(
+                                //   decoration: BoxDecoration(
+                                //     boxShadow: [
+                                //       BoxShadow(
+                                //           color: const Color.fromARGB(255, 200, 220, 224)
+                                //               .withOpacity(0.8),
+                                //           spreadRadius: 1,
+                                //           blurRadius: 4,
+                                //           offset: const Offset(0, 5))
+                                //     ],
+                                //   ),
+                                //   height: MediaQuery.of(context)
+                                //           .copyWith()
+                                //           .size
+                                //           .height *
+                                //       0.30,
+                                //   width: width,
+                                //   child: Stack(
+                                //     children: [
+                                //       Container(
+                                //         color: Colors.white.withOpacity(0.8),
+                                //       ),
+                                //       imageCarousel,
+                                //     ],
+                                //   ),
+                                // ),
                                 // SizedBox(
                                 //   height: height * 0.01,
                                 // ),
