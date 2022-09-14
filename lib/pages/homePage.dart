@@ -26,15 +26,15 @@ const cellBlue = Color(0xff1553be);
 const background = Color(0xff242830);
 
 // ignore: must_be_immutable
-class HomePage1 extends StatefulWidget {
+class HomePage extends StatefulWidget {
   User owner;
-  HomePage1({Key? key, required this.owner}) : super(key: key);
+  HomePage({Key? key, required this.owner}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage1> {
+class _HomePageState extends State<HomePage> {
   List<Product> products = [];
   double value = 0;
   var selected_category = "All";

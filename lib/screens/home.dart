@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final _ktabsPages = <Widget>[
-      HomePage1(
+      HomePage(
         owner: widget.user,
       ),
       // FavouritesPage(
