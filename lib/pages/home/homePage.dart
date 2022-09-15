@@ -172,44 +172,6 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(10.0),
                           image:
                               DecorationImage(image: item, fit: BoxFit.cover)),
-                      // child: Align(
-                      //   alignment: Alignment.bottomRight,
-                      //   child: Container(
-                      //     width:MediaQuery.of(context).copyWith().size.width*0.25,
-                      //     height: MediaQuery.of(context).copyWith().size.height*0.07,
-                      //     decoration:  const BoxDecoration(
-                      //     boxShadow: [
-                      //       BoxShadow(
-                      //         color: Colors.white,
-                      //         spreadRadius: 1,
-                      //         blurRadius: 2,
-                      //       )
-                      //       ],
-                      //     gradient: LinearGradient(
-                      //       begin: Alignment.topLeft,
-                      //       end: Alignment.bottomRight,
-                      //       stops: [
-                      //         0.2,
-                      //         0.4,
-                      //         0.6
-                      //       ],
-                      //       colors: [
-                      //         MyColors.blue2,
-                      //         MyColors.blue3,
-                      //         MyColors.blue2,
-                      //         ]),
-                      //       borderRadius:BorderRadius.only(topLeft: Radius.circular(15.0))
-                      //     ),
-                      //     child: GestureDetector(
-                      //       onTap: (() {
-
-                      //       }),
-                      //       child: const Center(
-                      //         child: Text("CHECK",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                     ))
                 .toList(),
             options: CarouselOptions(
@@ -250,6 +212,14 @@ class _HomePageState extends State<HomePage> {
     // productLogic.getProduct(1);
     var height = MediaQuery.of(context).copyWith().size.height;
     var width = MediaQuery.of(context).copyWith().size.width;
-    return Body();
+    return Stack(
+      children: <Widget>[
+        CustomPaint(
+          painter: BackgroundDesign(),
+          child: Container(),
+          ),
+        Body(),
+      ],
+    );
   }
 }

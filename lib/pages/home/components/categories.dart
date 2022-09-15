@@ -11,22 +11,31 @@ class Categories extends StatelessWidget {
       {"icon": "assets/icons/Bill Icon.svg", "text": "Bill"},
       {"icon": "assets/icons/Game Icon.svg", "text": "Game"},
       {"icon": "assets/icons/Gift Icon.svg", "text": "Daily Gift"},
+      {"icon": "assets/icons/Gift Icon.svg", "text": "Daily Gift"},
+      {"icon": "assets/icons/Discover.svg", "text": "More"},
       {"icon": "assets/icons/Discover.svg", "text": "More"},
     ];
     return Padding(
-      padding: EdgeInsets.all(getProportionateScreenWidth(20)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(
-          categories.length,
-          (index) => CategoryCard(
-            icon: categories[index]["icon"],
-            text: categories[index]["text"],
-            press: () {},
-          ),
-        ),
-      ),
+      padding: EdgeInsets.all(getProportionateScreenWidth(20, context)),
+      child:SizedBox(
+        height: getProportionateScreenWidth(80, context),
+        
+        child: ListView.builder(
+          physics: const ScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+            itemCount: categories.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding:  EdgeInsets.only(left: getProportionateScreenWidth(5, context)),
+                child: CategoryCard(
+                  icon: categories[index]["icon"],
+                  text: categories[index]["text"],
+                  press: () {},
+                ),
+              );
+          }),
+      )
     );
   }
 }
@@ -47,13 +56,13 @@ class CategoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: SizedBox(
-        width: getProportionateScreenWidth(55),
+        width: getProportionateScreenWidth(55, context),
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(getProportionateScreenWidth(15)),
-              height: getProportionateScreenWidth(55),
-              width: getProportionateScreenWidth(55),
+              padding: EdgeInsets.all(getProportionateScreenWidth(15, context)),
+              height: getProportionateScreenWidth(55, context),
+              width: getProportionateScreenWidth(55, context),
               decoration: BoxDecoration(
                 color: Color(0xFFFFECDF),
                 borderRadius: BorderRadius.circular(10),

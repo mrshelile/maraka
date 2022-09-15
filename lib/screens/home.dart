@@ -1,15 +1,14 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-import 'package:delayed_display/delayed_display.dart';
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/pages/favouritesPage.dart';
-import 'package:maraka/pages/homePage.dart';
+
 import 'package:maraka/pages/myadsPage.dart';
 import 'package:maraka/screens/account.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/home/homePage.dart';
 import 'login.dart';
 
 class Home extends StatefulWidget {
