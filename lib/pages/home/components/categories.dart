@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:maraka/themes/color.dart';
 
 import '../../../size_config.dart';
 
@@ -7,36 +8,34 @@ class Categories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> categories = [
-      {"icon": "assets/icons/Flash Icon.svg", "text": "Flash Deal"},
-      {"icon": "assets/icons/Bill Icon.svg", "text": "Bill"},
-      {"icon": "assets/icons/Game Icon.svg", "text": "Game"},
-      {"icon": "assets/icons/Gift Icon.svg", "text": "Daily Gift"},
-      {"icon": "assets/icons/Gift Icon.svg", "text": "Daily Gift"},
-      {"icon": "assets/icons/Discover.svg", "text": "More"},
-      {"icon": "assets/icons/Discover.svg", "text": "More"},
+      {"icon": "assets/mindeset.svg", "text": "Daily Gift"},
+      {"icon": "assets/mindeset.svg", "text": "Daily Gift"},
+      {"icon": "assets/mindeset.svg", "text": "Daily Gift"},
+      {"icon": "assets/mindeset.svg", "text": "Daily Gift"},
     ];
     return Padding(
-      padding: EdgeInsets.all(getProportionateScreenWidth(20, context)),
-      child:SizedBox(
-        height: getProportionateScreenWidth(80, context),
-        
-        child: ListView.builder(
-          physics: const ScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-            itemCount: categories.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding:  EdgeInsets.only(left: getProportionateScreenWidth(5, context)),
-                child: CategoryCard(
-                  icon: categories[index]["icon"],
-                  text: categories[index]["text"],
-                  press: () {},
-                ),
-              );
-          }),
-      )
-    );
+        padding: EdgeInsets.all(getProportionateScreenWidth(20, context)),
+        child: SizedBox(
+          height: getProportionateScreenWidth(80, context),
+          child: ListView.builder(
+              physics: const ScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: categories.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                      left: getProportionateScreenWidth(5, context)),
+                  child: CategoryCard(
+                    icon: categories[index]["icon"],
+                    text: categories[index]["text"],
+                    press: () {
+                      print("clicked category:$index");
+                    },
+                  ),
+                );
+              }),
+        ));
   }
 }
 
@@ -60,16 +59,16 @@ class CategoryCard extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(getProportionateScreenWidth(15, context)),
-              height: getProportionateScreenWidth(55, context),
-              width: getProportionateScreenWidth(55, context),
+              padding: EdgeInsets.all(getProportionateScreenWidth(10, context)),
+              height: getProportionateScreenWidth(60, context),
+              width: getProportionateScreenWidth(60, context),
               decoration: BoxDecoration(
-                color: Color(0xFFFFECDF),
+                color: MyColors.blue2.withOpacity(0.7),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: SvgPicture.asset(icon!),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Text(text!, textAlign: TextAlign.center)
           ],
         ),
