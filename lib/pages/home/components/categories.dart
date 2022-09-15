@@ -8,6 +8,8 @@ class Categories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> categories = [
+      {"icon": "assets/mindeset.svg", "text": "Daily Giftds lllllllllll"},
+      {"icon": "assets/mindeset.svg", "text": "Daily Gift"},
       {"icon": "assets/mindeset.svg", "text": "Daily Gift"},
       {"icon": "assets/mindeset.svg", "text": "Daily Gift"},
       {"icon": "assets/mindeset.svg", "text": "Daily Gift"},
@@ -25,7 +27,7 @@ class Categories extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: EdgeInsets.only(
-                      left: getProportionateScreenWidth(5, context)),
+                      left: getProportionateScreenWidth(15, context)),
                   child: CategoryCard(
                     icon: categories[index]["icon"],
                     text: categories[index]["text"],
@@ -63,13 +65,25 @@ class CategoryCard extends StatelessWidget {
               height: getProportionateScreenWidth(60, context),
               width: getProportionateScreenWidth(60, context),
               decoration: BoxDecoration(
-                color: MyColors.blue2.withOpacity(0.7),
+                color: Color.fromARGB(209, 216, 224, 224).withOpacity(0.7),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: SvgPicture.asset(icon!),
             ),
             const SizedBox(height: 5),
-            Text(text!, textAlign: TextAlign.center)
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SizedBox(
+                // height: getProportionateScreenHeight(51, context),
+                child: Text(
+                  text!,
+                  // maxLines: 3,
+                  textAlign: TextAlign.start,
+                  style:
+                      TextStyle(fontSize: getProportionateScreenWidth(10, context)),
+                ),
+              ),
+            )
           ],
         ),
       ),

@@ -27,10 +27,10 @@ List<Product> demoProducts = [
   Product(
     id: 1,
     images: [
-      "assets/images/ps4_console_white_1.png",
-      "assets/images/ps4_console_white_2.png",
-      "assets/images/ps4_console_white_3.png",
-      "assets/images/ps4_console_white_4.png",
+      "assets/271237223_975273653197121_7777506664250916614_n.jpg",
+      "assets/products.png",
+      "assets/products.png",
+      "assets/products.png",
     ],
     colors: [
       Color(0xFFF6625E),
@@ -48,7 +48,7 @@ List<Product> demoProducts = [
   Product(
     id: 2,
     images: [
-      "assets/images/Image Popular Product 2.png",
+      "assets/4a18cd7fd6e2aab3ed6b0c0583b28bf2.jpg",
     ],
     colors: [
       Color(0xFFF6625E),
@@ -65,12 +65,12 @@ List<Product> demoProducts = [
   Product(
     id: 3,
     images: [
-      "assets/images/glap.png",
+      "assets/4a18cd7fd6e2aab3ed6b0c0583b28bf2.jpg",
     ],
     colors: [
-      Color(0xFFF6625E),
-      Color(0xFF836DB8),
-      Color(0xFFDECB9C),
+      const Color(0xFFF6625E),
+      const Color(0xFF836DB8),
+      const Color(0xFFDECB9C),
       Colors.white,
     ],
     title: "Gloves XC Omega - Polygon",
@@ -80,23 +80,7 @@ List<Product> demoProducts = [
     isFavourite: true,
     isPopular: true,
   ),
-  Product(
-    id: 4,
-    images: [
-      "assets/images/wireless headset.png",
-    ],
-    colors: [
-      Color(0xFFF6625E),
-      Color(0xFF836DB8),
-      Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    title: "Logitech Head",
-    price: 20.20,
-    description: description,
-    rating: 4.1,
-    isFavourite: true,
-  ),
+ 
 ];
 
 const String description =
