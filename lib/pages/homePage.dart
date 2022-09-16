@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
     return logic.response;
   }
 
-  Future makeBanner() async {
+Future makeBanner() async {
     var logic = BannerLogic();
     await logic.getHomeScreenTop();
     if (logic.response != null) {
