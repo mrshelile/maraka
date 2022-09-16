@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:maraka/pages/home/details/details_screen.dart';
 import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/color.dart';
 
@@ -24,12 +25,18 @@ class ProductCard extends StatelessWidget {
       child: SizedBox(
         width: getProportionateScreenWidth(width,context),
         child: GestureDetector(
-          onTap: () => {}
+          onTap: () => {
+            Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DetailsScreen(agrs: product,)))
+          }
           // Navigator.pushNamed(
           //   context,
           //   DetailsScreen.routeName,
           //   arguments: ProductDetailsArguments(product: product),
           // )
+           
           ,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,7 +65,7 @@ class ProductCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "\$${product.price}",
+                    "M${product.price}",
                     style: TextStyle(
                       fontSize: getProportionateScreenWidth(18,context),
                       fontWeight: FontWeight.w600,

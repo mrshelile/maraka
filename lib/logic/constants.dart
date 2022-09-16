@@ -14,6 +14,9 @@ final Map<dynamic, dynamic> categories = {
 };
 // var server = "https://quiet-fortress-43376.herokuapp.com";
 var server = "http://192.168.43.89:3012";
+const kAnimationDuration = Duration(milliseconds: 200);
+
+const defaultDuration = Duration(milliseconds: 250);
 class Constants {
   Constants._();
   static const double padding = 20;
