@@ -15,7 +15,6 @@ import 'package:maraka/themes/sideClipDesign.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
-
 // ignore: must_be_immutable
 class CreateAd extends StatefulWidget {
   User owner;
@@ -54,7 +53,7 @@ class _CreateAdState extends State<CreateAd> {
   final List<String> _pageCategories = [];
   var uuid = const Uuid();
   var _error = '';
-    bool _loading = false;
+  bool _loading = false;
   final _loader = const SpinKitSpinningLines(
     color: MyColors.blue3,
     size: 280,
@@ -64,8 +63,11 @@ class _CreateAdState extends State<CreateAd> {
   var _dropdownValue;
   @override
   void initState() {
-    categories.forEach((key, value) {
-      _pageCategories.add(key);
+    // categories.forEach((key, value) {
+    //   _pageCategories.add(key);
+    // });
+    categories.forEach((element) {
+      _pageCategories.add(element['text']);
     });
     super.initState();
   }
@@ -88,60 +90,59 @@ class _CreateAdState extends State<CreateAd> {
                         ProductLogic productLogic = ProductLogic();
                         // ignore: prefer_typing_uninitialized_variables
                         setState(() {
-                          _loading=true;
-                          isBtnDisabled=_loading;
+                          _loading = true;
+                          isBtnDisabled = _loading;
                         });
                         var res;
                         try {
                           List<int> imagesUrls = [];
-                        int index = 0;
-                        for (var img in imageFileList!) {
-                          if (index >= 3) break;
-                          res = await productLogic.postImages(img).timeout(
-                              const Duration(seconds: 15),
-                              onTimeout: () => throw TimeoutException(
-                                  'Can\'t connect to internet'));
-                          if (res.statusCode == 200) {
-                            imagesUrls.add(jsonDecode(res.body)[0]['id']);
-                            // print(imagesUrls);
+                          int index = 0;
+                          for (var img in imageFileList!) {
+                            if (index >= 3) break;
+                            res = await productLogic.postImages(img).timeout(
+                                const Duration(seconds: 15),
+                                onTimeout: () => throw TimeoutException(
+                                    'Can\'t connect to internet'));
+                            if (res.statusCode == 200) {
+                              imagesUrls.add(jsonDecode(res.body)[0]['id']);
+                              // print(imagesUrls);
+                            }
+                            index++;
                           }
-                          index++;
-                        }
-                        Product product = Product(
-                            images: null,
-                            seller: null,
-                            expiryDate: DateTime.now(),
-                            isLiked: false,
-                            id2: uuid.v4(),
-                            title: _nameController.text,
-                            description: _descriptionController.text,
-                            price:
-                                double.parse(_priceController.text.toString()),
-                            category: _dropdownValue,
-                            imageUrls: imagesUrls);
-                        await productLogic.postProduct(product, widget.owner).timeout(
-                              const Duration(seconds: 10),
-                              onTimeout: () => throw TimeoutException(
-                                  'Can\'t connect to internet'));
-                        // print(productLogic.response.statusCode);
-                        if (productLogic.response.statusCode != null) {
-                          if (productLogic.response.statusCode == 200) {
-                            setState(() {
-                              _loading=false;
-                              isBtnDisabled=_loading;
-                            });
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context);
-                            
+                          Product product = Product(
+                              images: null,
+                              seller: null,
+                              expiryDate: DateTime.now(),
+                              isLiked: false,
+                              id2: uuid.v4(),
+                              title: _nameController.text,
+                              description: _descriptionController.text,
+                              price: double.parse(
+                                  _priceController.text.toString()),
+                              category: _dropdownValue,
+                              imageUrls: imagesUrls);
+                          await productLogic
+                              .postProduct(product, widget.owner)
+                              .timeout(const Duration(seconds: 10),
+                                  onTimeout: () => throw TimeoutException(
+                                      'Can\'t connect to internet'));
+                          // print(productLogic.response.statusCode);
+                          if (productLogic.response.statusCode != null) {
+                            if (productLogic.response.statusCode == 200) {
+                              setState(() {
+                                _loading = false;
+                                isBtnDisabled = _loading;
+                              });
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                            }
                           }
-
-                        }
                         } catch (error) {
                           setState(() {
-                          _loading = false;
-                          isBtnDisabled= _loading;
-                          print(error);
-                          _error = "failed!!try again";
+                            _loading = false;
+                            isBtnDisabled = _loading;
+                            print(error);
+                            _error = "failed!!try again";
                           });
                         }
                       } else {
@@ -150,7 +151,6 @@ class _CreateAdState extends State<CreateAd> {
                         });
                       }
                     }
-                    
                   },
             child: const Icon(Icons.done)),
       ),
@@ -390,13 +390,11 @@ class _CreateAdState extends State<CreateAd> {
               ),
             ),
           ),
-          if(_loading)
+          if (_loading)
             Container(
               width: width,
               height: height,
-            decoration: BoxDecoration(
-              color:Colors.white.withOpacity(0.8)
-            ),
+              decoration: BoxDecoration(color: Colors.white.withOpacity(0.8)),
               child: Center(child: _loader),
             )
         ],

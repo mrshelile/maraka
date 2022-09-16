@@ -37,7 +37,7 @@ dependencies:
   flutter_svg: ^0.22.0
   swipebuttonflutter: ^1.0.0
   bottom_navy_bar: ^6.0.0
-  get: ^4.6.1
+  get: ^4.6.5
   search_widget: ^1.0.2
   carousel_slider: ^4.1.1
   carousel_select_widget: ^0.1.0

@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:maraka/logic/constants.dart';
+import 'package:maraka/logic/store.dart';
 import 'package:maraka/themes/color.dart';
 
 import '../../../size_config.dart';
 
 class Categories extends StatelessWidget {
+  final store = Get.put(StoreController());
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> categories = [
-      {"icon": "assets/mindeset.svg", "text": "Daily Giftds lllllllllll"},
-      {"icon": "assets/mindeset.svg", "text": "Daily Gift"},
-      {"icon": "assets/mindeset.svg", "text": "Daily Gift"},
-      {"icon": "assets/mindeset.svg", "text": "Daily Gift"},
-      {"icon": "assets/mindeset.svg", "text": "Daily Gift"},
-      {"icon": "assets/mindeset.svg", "text": "Daily Gift"},
-    ];
     return Padding(
         padding: EdgeInsets.all(getProportionateScreenWidth(20, context)),
         child: SizedBox(
@@ -32,7 +28,8 @@ class Categories extends StatelessWidget {
                     icon: categories[index]["icon"],
                     text: categories[index]["text"],
                     press: () {
-                      print("clicked category:$index");
+                      store.selectCategory(categories[index]["text"]);
+                      
                     },
                   ),
                 );
@@ -79,8 +76,8 @@ class CategoryCard extends StatelessWidget {
                   text!,
                   // maxLines: 3,
                   textAlign: TextAlign.start,
-                  style:
-                      TextStyle(fontSize: getProportionateScreenWidth(10, context)),
+                  style: TextStyle(
+                      fontSize: getProportionateScreenWidth(10, context)),
                 ),
               ),
             )
