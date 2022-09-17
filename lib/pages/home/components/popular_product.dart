@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:maraka/logic/products_logic.dart';
 
 import 'package:maraka/logic/store.dart';
+import 'package:maraka/logic/user_logic.dart';
+import 'package:maraka/models/product.dart';
 import 'package:maraka/pages/home/components/product_card.dart';
 
-import 'Product.dart';
 import 'package:get/get.dart';
 import '../../../size_config.dart';
 import 'section_title.dart';
 
 class PopularProducts extends StatefulWidget {
+  User owner;
+  PopularProducts({Key? key, required this.owner}) : super(key: key);
+
   @override
   State<PopularProducts> createState() => _PopularProductsState();
 }
@@ -17,10 +21,18 @@ class PopularProducts extends StatefulWidget {
 class _PopularProductsState extends State<PopularProducts> {
   final store = Get.find<StoreController>();
 
-  // Future<List<Product>> makeProductList() async {
+  Future<List<Product>> makeProductList() async {
+    var logic = ProductLogic();
+
+    List<Product> products = await logic.getProducts(
+        widget.owner, store.selectedCategory.toLowerCase());
+    store.setProducts(products);
+    return products;
+  }
+
   @override
   void initState() {
-    store.setProducts();
+    // store.setProducts();
     super.initState();
   }
 
@@ -39,22 +51,32 @@ class _PopularProductsState extends State<PopularProducts> {
         ),
         SizedBox(height: getProportionateScreenWidth(20, context)),
         SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              ...List.generate(
-                store.products.length,
-                (index) {
-                  return ProductCard(product: store.products[index]);
+            scrollDirection: Axis.horizontal,
+            child: GetBuilder(
+                init: store,
+                builder: (_) {
+                  return FutureBuilder(
+                      future: makeProductList(),
+                      builder: ((context, snapshot) {
+                        return Row(
+                          children: [
+                            ...List.generate(
+                              store.products.length,
+                              (index) {
+                                return ProductCard(
+                                    product: store.products[index]);
 
-                  // return const SizedBox
-                  //     .shrink(); // here by default width and height is 0
-                },
-              ),
-              SizedBox(width: getProportionateScreenWidth(20, context)),
-            ],
-          ),
-        )
+                                // return const SizedBox
+                                //     .shrink(); // here by default width and height is 0
+                              },
+                            ),
+                            SizedBox(
+                                width:
+                                    getProportionateScreenWidth(20, context)),
+                          ],
+                        );
+                      }));
+                })),
       ],
     );
   }

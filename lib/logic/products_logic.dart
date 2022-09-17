@@ -147,13 +147,16 @@ class ProductLogic {
   // }
 
   Future<List<Product>> getProducts(User ownerModel, String category) async {
+   
     var filter1 = "filters[owner][email][\$ne]=${ownerModel.email}";
     var filter2;
+    
     if (category.toLowerCase() != "all") {
       filter2 = "filters[category][\$eq]=${category.toLowerCase()}";
     } else {
       filter2 = "filters[category][\$ne]=$category";
     }
+     
     var response = await http.get(
       Uri.parse(
           // ignore: prefer_interpolation_to_compose_strings

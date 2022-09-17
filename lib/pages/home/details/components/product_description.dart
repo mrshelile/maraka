@@ -35,8 +35,8 @@ class ProductDescription extends StatelessWidget {
             children: <Widget>[
               SizedBox(height: MediaQuery.of(context).copyWith().size.height*0.02,),
               Text(product.seller!.fullNames.toString(),style: const TextStyle(color: Colors.black),),
-              Text(product.seller!.email.toString(),style: TextStyle(color: Colors.black),),
-              Text(product.seller!.phone1.toString(),style: TextStyle(color: Colors.black),),
+              Text(product.seller!.email.toString(),style: const TextStyle(color: Colors.black),),
+              Text(product.seller!.phone1.toString(),style: const TextStyle(color: Colors.black),),
               SizedBox(height: MediaQuery.of(context).copyWith().size.height*0.01,),
             ],
           )

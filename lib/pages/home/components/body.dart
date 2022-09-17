@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maraka/logic/user_logic.dart';
 
 import '../../../size_config.dart';
 import 'categories.dart';
@@ -7,22 +8,29 @@ import 'home_header.dart';
 import 'popular_product.dart';
 import 'special_offers.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
+  User owner;
+  Body({Key? key,required this.owner}) : super(key: key);
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: getProportionateScreenHeight(20,context)),
-            HomeHeader(),
-            SizedBox(height: getProportionateScreenWidth(10,context)),
+            SizedBox(height: getProportionateScreenHeight(20, context)),
+            HomeHeader(owner: widget.owner,),
+            SizedBox(height: getProportionateScreenWidth(10, context)),
             DiscountBanner(),
             Categories(),
             SpecialOffers(),
-            SizedBox(height: getProportionateScreenWidth(30,context)),
-            PopularProducts(),
-            SizedBox(height: getProportionateScreenWidth(30,context)),
+            SizedBox(height: getProportionateScreenWidth(30, context)),
+            PopularProducts(owner: widget.owner,),
+            SizedBox(height: getProportionateScreenWidth(30, context)),
           ],
         ),
       ),

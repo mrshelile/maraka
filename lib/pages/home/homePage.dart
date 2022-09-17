@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
           painter: BackgroundDesign(),
           child: Container(),
           ),
-        Body(),
+        Body(owner: widget.owner,),
       ],
     );
   }
