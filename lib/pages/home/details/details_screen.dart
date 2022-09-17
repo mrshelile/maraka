@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maraka/pages/home/components/Product.dart';
-
+import 'package:maraka/models/product.dart';
 import 'components/body.dart';
 import 'components/custom_app_bar.dart';
 

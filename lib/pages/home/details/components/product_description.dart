@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:maraka/pages/home/components/Product.dart';
+import 'package:get/get.dart';
+import 'package:maraka/logic/store.dart';
+import 'package:maraka/models/product.dart';
 import 'package:maraka/size_config.dart';
 
 
 class ProductDescription extends StatelessWidget {
-  const ProductDescription({
+  ProductDescription({
     Key? key,
     required this.product,
     this.pressOnSeeMore,
   }) : super(key: key);
-
+  final store = Get.find<StoreController>();
   final Product product;
   final GestureTapCallback? pressOnSeeMore;
 
@@ -22,7 +24,7 @@ class ProductDescription extends StatelessWidget {
           padding:
               EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20,context)),
           child: Text(
-            product.title,
+            product.title.toString(),
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -32,9 +34,9 @@ class ProductDescription extends StatelessWidget {
           child: Column(
             children: <Widget>[
               SizedBox(height: MediaQuery.of(context).copyWith().size.height*0.02,),
-              Text("Malefetsane Shelile",style: TextStyle(color: Colors.black),),
-              Text("davertzshelile@gmail.com",style: TextStyle(color: Colors.black),),
-              Text("(+266) 69356845",style: TextStyle(color: Colors.black),),
+              Text(product.seller!.fullNames.toString(),style: const TextStyle(color: Colors.black),),
+              Text(product.seller!.email.toString(),style: TextStyle(color: Colors.black),),
+              Text(product.seller!.phone1.toString(),style: TextStyle(color: Colors.black),),
               SizedBox(height: MediaQuery.of(context).copyWith().size.height*0.01,),
             ],
           )
@@ -45,7 +47,7 @@ class ProductDescription extends StatelessWidget {
             right: getProportionateScreenWidth(64,context),
           ),
           child: Text(
-            product.description,
+            product.description.toString(),
             
           ),
         ),

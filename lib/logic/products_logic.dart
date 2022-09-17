@@ -13,13 +13,14 @@ class ProductLogic {
   List<Product> products = [];
   List<Product> myAds = [];
   List<Product> favourites = [];
-  String _allProducts = "/api/products";
+  final String _allProducts = "/api/products";
+  // ignore: prefer_typing_uninitialized_variables
   var response;
   Future likeProduct(User owner, Product product) async {
-    var filter = "filters[identifier][\$eq]=" + product.id2.toString();
+    var filter = "filters[identifier][\$eq]=${product.id2}";
     List<int> likedIds = [];
     var response = await http.get(
-      Uri.parse(server + _allProducts + "?populate=*&" + filter),
+      Uri.parse("$server$_allProducts?populate=*&$filter"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -43,9 +44,9 @@ class ProductLogic {
         "likedby": likedIds,
       }
     };
-    print(likedIds);
+   
     var response2 = await http.put(
-        Uri.parse(server + _allProducts + "/" + product.id1.toString()),
+        Uri.parse("$server$_allProducts/${product.id1}"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -56,10 +57,10 @@ class ProductLogic {
   }
 
   Future unlikeProduct(User owner, Product product) async {
-    var filter = "filters[identifier][\$eq]=" + product.id2.toString();
+    var filter = "filters[identifier][\$eq]=${product.id2}";
     List<int> likedIds = [];
     var response = await http.get(
-      Uri.parse(server + _allProducts + "?populate=*&" + filter),
+      Uri.parse("$server$_allProducts?populate=*&$filter"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -83,9 +84,9 @@ class ProductLogic {
         "likedby": likedIds,
       }
     };
-    print(likedIds);
+  
     var response2 = await http.put(
-        Uri.parse(server + _allProducts + "/" + product.id1.toString()),
+        Uri.parse("$server$_allProducts/${product.id1}"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -95,12 +96,13 @@ class ProductLogic {
   }
 
   Future postImages(XFile image) async {
+    // ignore: unrelated_type_equality_checks
     if (image == Null) return;
     final imageTemporary = File(image.path);
     var stream = http.ByteStream(image.openRead());
     stream.cast();
     var length = await imageTemporary.length(); 
-    var req = http.MultipartRequest('POST', Uri.parse(server + "/api/upload"));
+    var req = http.MultipartRequest('POST', Uri.parse("$server/api/upload"));
     var multiport = http.MultipartFile("files", stream, length,
         filename: imageTemporary.path, contentType: MediaType('images', 'png'));
     req.files.add(multiport);
@@ -116,7 +118,7 @@ class ProductLogic {
   }
 
   Future postProduct(Product ad, User owner) async {
-    var uuid = Uuid();
+    var uuid = const Uuid();
     print(DateTime.now().add(const Duration(days: 31)));
     Map<String, String> headers = {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -145,15 +147,17 @@ class ProductLogic {
   // }
 
   Future<List<Product>> getProducts(User ownerModel, String category) async {
-    var filter1 = "filters[owner][email][\$ne]=" + ownerModel.email.toString();
+    var filter1 = "filters[owner][email][\$ne]=${ownerModel.email}";
     var filter2;
-    if (category.toLowerCase() != "all")
-      filter2 = "filters[category][\$eq]=" + category.toLowerCase();
-    else
-      filter2 = "filters[category][\$ne]=" + category;
+    if (category.toLowerCase() != "all") {
+      filter2 = "filters[category][\$eq]=${category.toLowerCase()}";
+    } else {
+      filter2 = "filters[category][\$ne]=$category";
+    }
     var response = await http.get(
       Uri.parse(
-          server + _allProducts + "?populate=*&" + filter1 + "&" + filter2),
+          // ignore: prefer_interpolation_to_compose_strings
+          "$server$_allProducts?populate=*&$filter1&" + filter2),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -180,13 +184,13 @@ class ProductLogic {
         for (var ite in item['attributes']['likedbies']['data']) {
           // print(ownerModel.email.toString());
 
-          if (ownerModel.email.toString().contains(ite['attributes']['email']))
-            // print(item);
+          if (ownerModel.email.toString().contains(ite['attributes']['email'])) {
             likedby = true;
+          }
         }
         //  print(item['attributes']['likedby']['data'][0]['attributes']['email']);
 
-        Seller seller = new Seller(
+        Seller seller = Seller(
             fullNames: owner['full_name'].toString(),
             phone1: owner['phone1'].toString(),
             phone2: owner['phone2'].toString(),
@@ -194,11 +198,11 @@ class ProductLogic {
             email: owner['email'].toString());
         List imagesJson = item['attributes']['display']['data'];
         List<ImageStrapi> images = [];
-        imagesJson.forEach((element) {
+        for (var element in imagesJson) {
           images.add(ImageStrapi(
               name: element['attributes']['name'],
               url: server + element['attributes']['url']));
-        });
+        }
 
         //  print(DateTime.parse(createAt));
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
@@ -224,10 +228,10 @@ class ProductLogic {
   }
 
   Future<List<Product>> getMyAds(User owner) async {
-    var filter = "filters[owner][email][\$eq]=" + owner.email!;
+    var filter = "filters[owner][email][\$eq]=${owner.email!}";
     // print(filter);
     var response = await http.get(
-      Uri.parse(server + _allProducts + "?populate=*&" + filter),
+      Uri.parse("$server$_allProducts?populate=*&$filter"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -283,10 +287,10 @@ class ProductLogic {
   }
 
   Future<List<Product>> getFavourites(User owner) async {
-    var filter = "filters[likedby][email][\$in]=" + owner.email!;
+    var filter = "filters[likedby][email][\$in]=${owner.email!}";
 
     var response = await http.get(
-      Uri.parse(server + _allProducts + "?populate=*&" + filter),
+      Uri.parse("$server$_allProducts?populate=*&$filter"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

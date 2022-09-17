@@ -29,8 +29,7 @@ List<Product> demoProducts = [
     images: [
       "assets/271237223_975273653197121_7777506664250916614_n.jpg",
       "assets/products.png",
-      "assets/products.png",
-      "assets/products.png",
+
     ],
     colors: [
       Color(0xFFF6625E),

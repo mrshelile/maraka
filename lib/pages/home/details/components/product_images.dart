@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maraka/logic/constants.dart';
-import 'package:maraka/pages/home/components/Product.dart';
+import 'package:maraka/models/product.dart';
 import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/color.dart';
 
@@ -27,9 +27,13 @@ class _ProductImagesState extends State<ProductImages> {
           width: getProportionateScreenWidth(238,context),
           child: AspectRatio(
             aspectRatio: 1,
+            // child: Hero(
+            //   tag: widget.product.id1.toString(),
+            //   child: Image.asset(widget.product.images[selectedImage]),
+            // ),
             child: Hero(
-              tag: widget.product.id.toString(),
-              child: Image.asset(widget.product.images[selectedImage]),
+              tag: widget.product.id1.toString(),
+              child: Image.network(widget.product.images![selectedImage].url),
             ),
           ),
         ),
@@ -37,7 +41,7 @@ class _ProductImagesState extends State<ProductImages> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ...List.generate(widget.product.images.length,
+            ...List.generate(widget.product.images!.length,
                 (index) => buildSmallProductPreview(index)),
           ],
         )
@@ -54,8 +58,8 @@ class _ProductImagesState extends State<ProductImages> {
       },
       child: AnimatedContainer(
         duration: defaultDuration,
-        margin: EdgeInsets.only(right: 15),
-        padding: EdgeInsets.all(8),
+        margin: const EdgeInsets.only(right: 15),
+        padding: const EdgeInsets.all(8),
         height: getProportionateScreenWidth(48,context),
         width: getProportionateScreenWidth(48,context),
         decoration: BoxDecoration(
@@ -64,8 +68,9 @@ class _ProductImagesState extends State<ProductImages> {
           border: Border.all(
               color: MyColors.blue2.withOpacity(selectedImage == index ? 1 : 0)),
         ),
-        child: Image.asset(widget.product.images[index]),
-      ),
-    );
-  }
+        // child: Image.asset(widget.product.images[index]),
+        child: Image.network(widget.product.images![index].url),
+    ),
+  );
+}
 }

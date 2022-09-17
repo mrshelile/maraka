@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maraka/pages/home/components/Product.dart';
+import 'package:maraka/models/product.dart';
 import 'product_description.dart';
 import 'top_rounded_container.dart';
 import 'product_images.dart';

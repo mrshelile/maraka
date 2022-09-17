@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:maraka/models/product.dart';
 import 'package:maraka/pages/home/details/details_screen.dart';
 import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/color.dart';
 
 
-import 'Product.dart';
+// import 'Product.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -17,6 +17,7 @@ class ProductCard extends StatelessWidget {
 
   final double width, aspectRetio;
   final Product product;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +31,7 @@ class ProductCard extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => DetailsScreen(agrs: product,)))
-          }
-          // Navigator.pushNamed(
-          //   context,
-          //   DetailsScreen.routeName,
-          //   arguments: ProductDetailsArguments(product: product),
-          // )
-           
-          ,
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -46,19 +40,22 @@ class ProductCard extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(getProportionateScreenWidth(20,context)),
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(221, 199, 211, 211).withOpacity(0.1),
+                    color: const Color.fromARGB(221, 199, 211, 211).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(15),
                   ),
+                  // child: Hero(
+                  //   tag: product.id.toString(),
+                  //   child: Image.asset(product.images[0]),
                   child: Hero(
-                    tag: product.id.toString(),
-                    child: Image.asset(product.images[0]),
+                    tag: product.id1.toString(),
+                    child: Image.network(product.images![0].url),
                   ),
                 ),
               ),
               const SizedBox(height: 10),
               Text(
-                product.title,
-                style: TextStyle(color: Colors.black),
+                product.title.toString(),
+                // style: TextStyle(color: Colors.black),
                 maxLines: 2,
               ),
               Row(
