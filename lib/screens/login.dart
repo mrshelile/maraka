@@ -235,7 +235,8 @@ class _LoginState extends State<Login> {
                   Padding(
                     padding: EdgeInsets.only(
                         left:
-                            MediaQuery.of(context).copyWith().size.width * 0.25,
+                            MediaQuery.of(context).copyWith().size.width * 0.1,
+
                         top: MediaQuery.of(context).copyWith().size.height *
                             0.01),
                     child: Row(
@@ -250,9 +251,11 @@ class _LoginState extends State<Login> {
                                   MediaQuery.of(context).copyWith().size.width *
                                       0.01),
                           child: TextButton(
-                            child: const Text(
+                            child:  Text(
                               "Sign up",
-                              style: TextStyle(color: MyColors.blue3),
+                              style: TextStyle(color: MyColors.blue3,
+                              fontSize:MediaQuery.of(context).copyWith().size.width*0.051
+                              ),
                             ),
                             onPressed: () {
                               Navigator.pushReplacement(

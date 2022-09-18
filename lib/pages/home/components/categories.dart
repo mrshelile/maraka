@@ -54,15 +54,23 @@ class CategoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: SizedBox(
-        width: MediaQuery.of(context).copyWith().size.width*0.1,
+        width: MediaQuery.of(context).copyWith().size.width*0.2,
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(MediaQuery.of(context).copyWith().size.width*0.02),
+              padding: EdgeInsets.all(MediaQuery.of(context).copyWith().size.width*0.025),
               height: getProportionateScreenWidth(60, context),
-              width: MediaQuery.of(context).copyWith().size.width*0.5,
+              width: MediaQuery.of(context).copyWith().size.width,
               decoration: BoxDecoration(
-                color: Color.fromARGB(209, 216, 224, 224).withOpacity(0.7),
+                boxShadow:const [
+                BoxShadow(
+                      color: Color.fromARGB(209, 218, 213, 213),
+                      spreadRadius: 5,
+                      blurRadius:6,
+                      offset: Offset(0,3)
+                    )
+                  ],
+                color: Color.fromARGB(255, 169, 208, 235).withOpacity(0.7),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: SvgPicture.asset(icon!),
@@ -77,7 +85,9 @@ class CategoryCard extends StatelessWidget {
                   // maxLines: 3,
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                      fontSize: MediaQuery.of(context).copyWith().size.width*0.02),
+                      fontSize: MediaQuery.of(context).copyWith().size.width*0.02,
+                      fontWeight: FontWeight.bold
+                      ),
                 ),
               ),
             )

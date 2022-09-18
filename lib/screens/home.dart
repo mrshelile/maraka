@@ -59,6 +59,7 @@ class _HomeState extends State<Home> {
         showElevation: true,
         itemCornerRadius: 24,
         curve: Curves.easeIn,
+        
         onItemSelected: (index) async {
           // await widget.user.removeToken();
           // await widget.user.retrieveEmail();

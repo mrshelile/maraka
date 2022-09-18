@@ -28,6 +28,7 @@ class _DiscountBannerState extends State<DiscountBanner> {
             vertical: 5,
           ),
           decoration: BoxDecoration(
+            
             color: const Color.fromARGB(159, 242, 243, 245),
             borderRadius: BorderRadius.circular(20),
           ),

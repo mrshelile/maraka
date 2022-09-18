@@ -137,17 +137,21 @@ class _AccountState extends State<Account> {
                                   children: [
                                     Padding(
                                       padding:
-                                          EdgeInsets.only(left: width * 0.3),
-                                      child: const Text(
+                                          EdgeInsets.only(left: width * 0.1),
+                                      child: Text(
                                         "Personal Information",
-                                        style: TextStyle(fontSize: 15),
+                                        style: TextStyle(fontSize: 
+                                        MediaQuery.of(context).copyWith().size.width*0.05
+                                        ),
                                       ),
                                     ),
                                     TextButton(
-                                      child: const Text(
+                                      child: Text(
                                         "Sign Out",
                                         style:
-                                            TextStyle(color: MyColors.blue3),
+                                            TextStyle(color: MyColors.blue3,
+                                         fontSize: MediaQuery.of(context).copyWith().size.width*0.05  
+                                            ),
                                       ),
                                       onPressed: () {
                                         widget.user.removeAll();
