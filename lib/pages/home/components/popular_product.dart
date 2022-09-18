@@ -63,8 +63,18 @@ class _PopularProductsState extends State<PopularProducts> {
                             ...List.generate(
                               store.products.length,
                               (index) {
-                                return ProductCard(
-                                    product: store.products[index]);
+                                return store.search.isEmpty
+                                    ? ProductCard(
+                                        product: store.products[index])
+                                    : store.products[index].title!
+                                            .toLowerCase()
+                                            .toString()
+                                            .contains(store.search
+                                                .toLowerCase()
+                                                .toString())
+                                        ? ProductCard(
+                                            product: store.products[index])
+                                        : Container();
 
                                 // return const SizedBox
                                 //     .shrink(); // here by default width and height is 0

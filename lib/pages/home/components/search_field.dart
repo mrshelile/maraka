@@ -23,13 +23,22 @@ class _SearchFieldState extends State<SearchField> {
     sizeConfig.init(context);
     return Container(
       width: sizeConfig.screenWidth * 0.6,
+      
       decoration: BoxDecoration(
-        color: MyColors.blue4.withOpacity(0.1),
+        boxShadow:const [
+           BoxShadow(
+            color: Color.fromARGB(209, 240, 236, 236),
+            spreadRadius: 5,
+            blurRadius:7,
+            offset: Offset(1,3)
+          )
+        ],
+        color: const Color.fromARGB(255, 224, 229, 240).withOpacity(0.9),
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextField(
         onChanged: (value) async {
-          print(value);
+          store.searchNow(value);
         },
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
@@ -39,7 +48,7 @@ class _SearchFieldState extends State<SearchField> {
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             hintText: "Search product",
-            prefixIcon: Icon(Icons.search)),
+            prefixIcon: const Icon(Icons.search)),
       ),
     );
   }

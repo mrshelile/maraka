@@ -23,7 +23,7 @@ class Categories extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: EdgeInsets.only(
-                      left: getProportionateScreenWidth(15, context)),
+                      left: getProportionateScreenWidth(20, context)),
                   child: CategoryCard(
                     icon: categories[index]["icon"],
                     text: categories[index]["text"],
@@ -54,13 +54,13 @@ class CategoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: SizedBox(
-        width: getProportionateScreenWidth(55, context),
+        width: MediaQuery.of(context).copyWith().size.width*0.1,
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(getProportionateScreenWidth(10, context)),
+              padding: EdgeInsets.all(MediaQuery.of(context).copyWith().size.width*0.02),
               height: getProportionateScreenWidth(60, context),
-              width: getProportionateScreenWidth(60, context),
+              width: MediaQuery.of(context).copyWith().size.width*0.5,
               decoration: BoxDecoration(
                 color: Color.fromARGB(209, 216, 224, 224).withOpacity(0.7),
                 borderRadius: BorderRadius.circular(10),
@@ -77,7 +77,7 @@ class CategoryCard extends StatelessWidget {
                   // maxLines: 3,
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                      fontSize: getProportionateScreenWidth(10, context)),
+                      fontSize: MediaQuery.of(context).copyWith().size.width*0.02),
                 ),
               ),
             )

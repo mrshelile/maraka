@@ -7,9 +7,15 @@ import 'package:maraka/models/product.dart';
 
 class StoreController extends GetxController {
   var selectedCategory = "All";
+  var search = '';
   List<Product> products = [];
   void selectCategory(String value) {
     selectedCategory = value;
+    update();
+  }
+
+  void searchNow(String value) {
+    search = value;
     update();
   }
 
