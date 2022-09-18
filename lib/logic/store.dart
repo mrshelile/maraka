@@ -25,6 +25,7 @@ class StoreController extends GetxController {
     List<Product> products =
         await logic.getProducts(owner, selectedCategory.toLowerCase());
     setProducts(products);
+    
     update();
     return products;
   }
@@ -43,6 +44,7 @@ class StoreController extends GetxController {
           isLiked: element.isLiked,
           category: element.category));
     }
+    products.shuffle();
     update();
   }
 }

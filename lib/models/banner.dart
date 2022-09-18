@@ -5,9 +5,10 @@ class Banner {
   var url;
   var owner;
   var display;
-  bool? splashscreen=false;
+  var how_Long;
+  bool? splashscreen = false;
   var expire_date;
-  bool? home=false;
+  bool? home = false;
   ImageStrapi? imageLarge;
   ImageStrapi? imageSmall;
   ImageStrapi? imageMedium;
@@ -15,6 +16,7 @@ class Banner {
   var imgUrl;
   Banner(
       {this.id,
+      this.how_Long,
       this.url,
       this.imgUrl,
       this.owner,
