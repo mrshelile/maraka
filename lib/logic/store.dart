@@ -9,17 +9,8 @@ class StoreController extends GetxController {
   var selectedCategory = "All";
   var search = '';
   List<Product> products = [];
-  void selectCategory(String value) {
+  void selectCategory(String value ,User owner) async{
     selectedCategory = value;
-    update();
-  }
-
-  void searchNow(String value) {
-    search = value;
-    update();
-  }
-
-  Future<List<Product>> onchangeCategory(User owner) async {
     var logic = ProductLogic();
 
     List<Product> products =
@@ -27,7 +18,23 @@ class StoreController extends GetxController {
     setProducts(products);
     
     update();
-    return products;
+  }
+
+  void searchNow(String value) {
+    search = value;
+    
+    update();
+  }
+
+  void onchangeCategory(User owner) async {
+    var logic = ProductLogic();
+
+    List<Product> products =
+        await logic.getProducts(owner, selectedCategory.toLowerCase());
+    setProducts(products);
+    
+    update();
+    // return products;
   }
 
   void setProducts(List<Product> data) {

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:file_picker/file_picker.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -38,10 +38,6 @@ class _CreateAdState extends State<CreateAd> {
       imageFileList!.addAll(selectedImages);
     }
     // imageFileList = imageFileList!.sublist(0, 2);
-    print("=========================================================");
-    print("Image List Length:" + imageFileList!.length.toString());
-    print(
-        "======================================================================================================");
     setState(() {});
   }
   //V EDIT
@@ -66,9 +62,9 @@ class _CreateAdState extends State<CreateAd> {
     // categories.forEach((key, value) {
     //   _pageCategories.add(key);
     // });
-    categories.forEach((element) {
-      _pageCategories.add(element['text']);
-    });
+    for (var element in categories) {
+      _pageCategories.add(element['text'].toString().toLowerCase());
+    }
     super.initState();
   }
 
@@ -98,8 +94,9 @@ class _CreateAdState extends State<CreateAd> {
                           List<int> imagesUrls = [];
                           int index = 0;
                           for (var img in imageFileList!) {
+                            print(img);
                             if (index >= 3) break;
-                            res = await productLogic.postImages(img).timeout(
+                            res = await productLogic.postImages(img,_nameController.text).timeout(
                                 const Duration(seconds: 15),
                                 onTimeout: () => throw TimeoutException(
                                     'Can\'t connect to internet'));
@@ -110,22 +107,24 @@ class _CreateAdState extends State<CreateAd> {
                             index++;
                           }
                           Product product = Product(
-                              images: null,
-                              seller: null,
-                              expiryDate: DateTime.now(),
-                              isLiked: false,
-                              id2: uuid.v4(),
-                              title: _nameController.text,
-                              description: _descriptionController.text,
-                              price: double.parse(
-                                  _priceController.text.toString()),
-                              category: _dropdownValue,
-                              imageUrls: imagesUrls);
+                            images: null,
+                            seller: null,
+                            expiryDate: DateTime.now(),
+                            isLiked: false,
+                            id2: uuid.v4(),
+                            title: _nameController.text,
+                            description: _descriptionController.text,
+                            price:
+                                double.parse(_priceController.text.toString()),
+                            category: _dropdownValue,
+                            // imageUrls: [0]
+                          );
                           await productLogic
                               .postProduct(product, widget.owner)
                               .timeout(const Duration(seconds: 10),
                                   onTimeout: () => throw TimeoutException(
                                       'Can\'t connect to internet'));
+                          print(productLogic.response.statusCode);
                           // print(productLogic.response.statusCode);
                           if (productLogic.response.statusCode != null) {
                             if (productLogic.response.statusCode == 200) {
@@ -220,7 +219,15 @@ class _CreateAdState extends State<CreateAd> {
                       padding: EdgeInsets.only(
                           left: width * 0.25, top: height * 0.001),
                       child: IconButton(
-                        onPressed: () => selectImages(),
+                        onPressed: () async {
+                          selectImages();
+                          // FilePickerResult? result =
+                          //     await FilePicker.platform.pickFiles();
+                          // if (result != null) {
+                          //   imageFileList!.add(
+                          //       XFile(result.files.single.path.toString()));
+                          // }
+                        },
                         icon: const Icon(
                           Icons.upload_file,
                           color: MyColors.goldenBrown,

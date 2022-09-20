@@ -18,6 +18,7 @@ class TopRoundedContainer extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: getProportionateScreenWidth(20,context)),
       padding: EdgeInsets.only(top: getProportionateScreenWidth(20,context)),
+      height: MediaQuery.of(context).copyWith().size.height*0.5,
       width: double.infinity,
       decoration: BoxDecoration(
         color: color,

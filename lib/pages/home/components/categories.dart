@@ -3,12 +3,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/logic/store.dart';
+import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/themes/color.dart';
 
 import '../../../size_config.dart';
 
 class Categories extends StatelessWidget {
   final store = Get.put(StoreController());
+  User owner;
+  Categories({Key? key,required this.owner}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,8 +31,7 @@ class Categories extends StatelessWidget {
                     icon: categories[index]["icon"],
                     text: categories[index]["text"],
                     press: () {
-                      store.selectCategory(categories[index]["text"]);
-                      
+                      store.selectCategory(categories[index]["text"],owner);
                     },
                   ),
                 );
@@ -54,22 +56,22 @@ class CategoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: SizedBox(
-        width: MediaQuery.of(context).copyWith().size.width*0.2,
+        width: MediaQuery.of(context).copyWith().size.width * 0.2,
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(MediaQuery.of(context).copyWith().size.width*0.025),
+              padding: EdgeInsets.all(
+                  MediaQuery.of(context).copyWith().size.width * 0.025),
               height: getProportionateScreenWidth(60, context),
               width: MediaQuery.of(context).copyWith().size.width,
               decoration: BoxDecoration(
-                boxShadow:const [
-                BoxShadow(
+                boxShadow: const [
+                  BoxShadow(
                       color: Color.fromARGB(209, 218, 213, 213),
                       spreadRadius: 5,
-                      blurRadius:6,
-                      offset: Offset(0,3)
-                    )
-                  ],
+                      blurRadius: 6,
+                      offset: Offset(0, 3))
+                ],
                 color: Color.fromARGB(255, 169, 208, 235).withOpacity(0.7),
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -85,9 +87,9 @@ class CategoryCard extends StatelessWidget {
                   // maxLines: 3,
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                      fontSize: MediaQuery.of(context).copyWith().size.width*0.02,
-                      fontWeight: FontWeight.bold
-                      ),
+                      fontSize:
+                          MediaQuery.of(context).copyWith().size.width * 0.02,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             )

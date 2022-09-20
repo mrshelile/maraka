@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/pages/home/details/details_screen.dart';
+import 'package:maraka/screens/componets/productPreview.dart';
 import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/color.dart';
 
@@ -30,7 +31,7 @@ class ProductCard extends StatelessWidget {
             Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => DetailsScreen(agrs: product,)))
+                builder: (context) => ProductPreview(product: product,)))
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

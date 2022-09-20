@@ -61,7 +61,7 @@ class _MyAdsState extends State<MyAds> {
                     return SizedBox(
                       // decoration: BoxDecoration(
                       //     border: Border.all(color: Colors.black)),
-                      height: height * 0.6,
+                      height: height * 0.68,
                       width: width,
                       child: GridView.builder(
                           itemCount: myads.length,

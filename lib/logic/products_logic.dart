@@ -95,7 +95,7 @@ class ProductLogic {
     return response2;
   }
 
-  Future postImages(XFile image) async {
+  Future postImages(XFile image,String name) async {
     // ignore: unrelated_type_equality_checks
     if (image == Null) return;
     final imageTemporary = File(image.path);
@@ -104,7 +104,7 @@ class ProductLogic {
     var length = await imageTemporary.length(); 
     var req = http.MultipartRequest('POST', Uri.parse("$server/api/upload"));
     var multiport = http.MultipartFile("files", stream, length,
-        filename: imageTemporary.path, contentType: MediaType('images', 'png'));
+        filename: name, contentType: MediaType('images', 'png'));
     req.files.add(multiport);
     var streamResponse = await req.send();
     var response = await http.Response.fromStream(streamResponse);

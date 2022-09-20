@@ -60,7 +60,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             child: Container(
               height: height * 0.58,
               decoration: const BoxDecoration(
-                  color: MyColors.snow,
+                  color: Color.fromARGB(225, 245, 247, 247),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20))),
@@ -158,9 +158,9 @@ class _ProductPreviewState extends State<ProductPreview> {
                     child: Text(
                         "- (+266)${widget.product!.seller!.phone1}"),
                   ),
-                  SizedBox(
-                    height: height * 0.01,
-                  ),
+                  // SizedBox(
+                  //   height: height * 0.01,
+                  // ),
                   if (widget.product!.seller!.phone2 == null)
                     Padding(
                       padding: EdgeInsets.only(right: width * 0.06),

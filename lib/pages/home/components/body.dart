@@ -26,7 +26,7 @@ class _BodyState extends State<Body> {
             HomeHeader(owner: widget.owner,),
             SizedBox(height: getProportionateScreenWidth(10, context)),
             DiscountBanner(),
-            Categories(),
+            Categories(owner: widget.owner,),
             SpecialOffers(),
             SizedBox(height: getProportionateScreenWidth(30, context)),
             PopularProducts(owner: widget.owner,),

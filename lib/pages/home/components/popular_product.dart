@@ -52,41 +52,38 @@ class _PopularProductsState extends State<PopularProducts> {
         SizedBox(height: getProportionateScreenWidth(20, context)),
         SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: GetBuilder(
-                init: store,
-                builder: (_) {
-                  return FutureBuilder(
-                      future: makeProductList(),
-                      builder: ((context, snapshot) {
-                        return Row(
-                          children: [
-                            ...List.generate(
-                              store.products.length,
-                              (index) {
-                                return store.search.isEmpty
+            child: FutureBuilder(
+                future: makeProductList(),
+                builder: ((context, snapshot) {
+                  return GetBuilder(
+                    init: store,
+                    builder: (_) {
+                    return Row(
+                      children: [
+                        ...List.generate(
+                          store.products.length,
+                          (index) {
+                            return store.search.isEmpty
+                                ? ProductCard(product: store.products[index])
+                                : store.products[index].title!
+                                        .toLowerCase()
+                                        .toString()
+                                        .contains(store.search
+                                            .toLowerCase()
+                                            .toString())
                                     ? ProductCard(
                                         product: store.products[index])
-                                    : store.products[index].title!
-                                            .toLowerCase()
-                                            .toString()
-                                            .contains(store.search
-                                                .toLowerCase()
-                                                .toString())
-                                        ? ProductCard(
-                                            product: store.products[index])
-                                        : Container();
-
-                                // return const SizedBox
-                                //     .shrink(); // here by default width and height is 0
-                              },
-                            ),
-                            SizedBox(
-                                width:
-                                    getProportionateScreenWidth(20, context)),
-                          ],
-                        );
-                      }));
-                })),
+                                    : Container();
+                            // return const SizedBox
+                            //     .shrink(); // here by default width and height is 0
+                          },
+                        ),
+                        SizedBox(
+                            width: getProportionateScreenWidth(20, context)),
+                      ],
+                    );
+                  });
+                }))),
       ],
     );
   }
