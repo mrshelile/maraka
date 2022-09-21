@@ -9,36 +9,38 @@ class StoreController extends GetxController {
   var selectedCategory = "All";
   var search = '';
   List<Product> products = [];
-  void selectCategory(String value ,User owner) async{
+  void selectCategory(String value, User owner) async {
     selectedCategory = value;
     var logic = ProductLogic();
 
     List<Product> products =
         await logic.getProducts(owner, selectedCategory.toLowerCase());
     setProducts(products);
-    
+    //
     update();
   }
 
   void searchNow(String value) {
     search = value;
-    
+
     update();
   }
 
   void onchangeCategory(User owner) async {
     var logic = ProductLogic();
 
-    List<Product> products =
+    List<Product> products1 =
         await logic.getProducts(owner, selectedCategory.toLowerCase());
-    setProducts(products);
-    
+    print(products1);
+    setProducts(products1);
+
     update();
     // return products;
   }
 
   void setProducts(List<Product> data) {
     products = [];
+
     for (Product element in data) {
       products.add(Product(
           title: element.title,

@@ -7,6 +7,7 @@ import 'package:maraka/models/ImageStrapi.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/logic/constants.dart';
 import 'package:uuid/uuid.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
 
 class ProductLogic {
@@ -44,14 +45,14 @@ class ProductLogic {
         "likedby": likedIds,
       }
     };
-   
-    var response2 = await http.put(
-        Uri.parse("$server$_allProducts/${product.id1}"),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(data),
-        encoding: Encoding.getByName("utf-8"));
+
+    var response2 =
+        await http.put(Uri.parse("$server$_allProducts/${product.id1}"),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(data),
+            encoding: Encoding.getByName("utf-8"));
     product.isLiked = true;
     return response2;
   }
@@ -84,24 +85,24 @@ class ProductLogic {
         "likedby": likedIds,
       }
     };
-  
-    var response2 = await http.put(
-        Uri.parse("$server$_allProducts/${product.id1}"),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(data),
-        encoding: Encoding.getByName("utf-8"));
+
+    var response2 =
+        await http.put(Uri.parse("$server$_allProducts/${product.id1}"),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(data),
+            encoding: Encoding.getByName("utf-8"));
     return response2;
   }
 
-  Future postImages(XFile image,String name) async {
+  Future postImages(XFile image, String name) async {
     // ignore: unrelated_type_equality_checks
     if (image == Null) return;
     final imageTemporary = File(image.path);
     var stream = http.ByteStream(image.openRead());
     stream.cast();
-    var length = await imageTemporary.length(); 
+    var length = await imageTemporary.length();
     var req = http.MultipartRequest('POST', Uri.parse("$server/api/upload"));
     var multiport = http.MultipartFile("files", stream, length,
         filename: name, contentType: MediaType('images', 'png'));
@@ -147,16 +148,15 @@ class ProductLogic {
   // }
 
   Future<List<Product>> getProducts(User ownerModel, String category) async {
-   
     var filter1 = "filters[owner][email][\$ne]=${ownerModel.email}";
     var filter2;
-    
+
     if (category.toLowerCase() != "all") {
       filter2 = "filters[category][\$eq]=${category.toLowerCase()}";
     } else {
       filter2 = "filters[category][\$ne]=$category";
     }
-     
+
     var response = await http.get(
       Uri.parse(
           // ignore: prefer_interpolation_to_compose_strings
@@ -184,13 +184,15 @@ class ProductLogic {
         var likedby = false;
         // if()
 
-        for (var ite in item['attributes']['likedbies']['data']) {
-          // print(ownerModel.email.toString());
+        // for (var ite in item['attributes']['likedbies']['data']) {
+        //   // print(ownerModel.email.toString());
 
-          if (ownerModel.email.toString().contains(ite['attributes']['email'])) {
-            likedby = true;
-          }
-        }
+        //   if (ownerModel.email
+        //       .toString()
+        //       .contains(ite['attributes']['email'])) {
+        //     likedby = true;
+        //   }
+        // }
         //  print(item['attributes']['likedby']['data'][0]['attributes']['email']);
 
         Seller seller = Seller(
@@ -201,7 +203,9 @@ class ProductLogic {
             email: owner['email'].toString());
         List imagesJson = item['attributes']['display']['data'];
         List<ImageStrapi> images = [];
+
         for (var element in imagesJson) {
+          
           images.add(ImageStrapi(
               name: element['attributes']['name'],
               url: server + element['attributes']['url']));
