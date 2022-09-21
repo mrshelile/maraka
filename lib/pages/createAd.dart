@@ -117,11 +117,11 @@ class _CreateAdState extends State<CreateAd> {
                             price:
                                 double.parse(_priceController.text.toString()),
                             category: _dropdownValue,
-                            // imageUrls: [0]
+                            imageUrls: imagesUrls
                           );
                           await productLogic
                               .postProduct(product, widget.owner)
-                              .timeout(const Duration(seconds: 10),
+                              .timeout(const Duration(seconds: 15),
                                   onTimeout: () => throw TimeoutException(
                                       'Can\'t connect to internet'));
                           print(productLogic.response.statusCode);
