@@ -94,9 +94,9 @@ class _CreateAdState extends State<CreateAd> {
                           List<int> imagesUrls = [];
                           int index = 0;
                           for (var img in imageFileList!) {
-                            print(img);
+                            
                             if (index >= 3) break;
-                            res = await productLogic.postImages(img,_nameController.text).timeout(
+                            res = await productLogic.postImages(img,_nameController.text.trim()).timeout(
                                 const Duration(seconds: 15),
                                 onTimeout: () => throw TimeoutException(
                                     'Can\'t connect to internet'));
@@ -112,10 +112,10 @@ class _CreateAdState extends State<CreateAd> {
                             expiryDate: DateTime.now(),
                             isLiked: false,
                             id2: uuid.v4(),
-                            title: _nameController.text,
-                            description: _descriptionController.text,
+                            title: _nameController.text.trim(),
+                            description: _descriptionController.text.trim(),
                             price:
-                                double.parse(_priceController.text.toString()),
+                                double.parse(_priceController.text.trim().toString()),
                             category: _dropdownValue,
                             imageUrls: imagesUrls
                           );
@@ -124,7 +124,7 @@ class _CreateAdState extends State<CreateAd> {
                               .timeout(const Duration(seconds: 15),
                                   onTimeout: () => throw TimeoutException(
                                       'Can\'t connect to internet'));
-                          print(productLogic.response.statusCode);
+                          // print(productLogic.response.statusCode);
                           // print(productLogic.response.statusCode);
                           if (productLogic.response.statusCode != null) {
                             if (productLogic.response.statusCode == 200) {

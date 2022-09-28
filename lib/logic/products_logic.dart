@@ -120,7 +120,7 @@ class ProductLogic {
 
   Future postProduct(Product ad, User owner) async {
     var uuid = const Uuid();
-    print(DateTime.now().add(const Duration(days: 31)));
+    // print(DateTime.now().add(const Duration(days: 31)));
     Map<String, String> headers = {
       'Content-Type': 'application/json; charset=UTF-8',
     };
