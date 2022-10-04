@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:maraka/logic/banner_logic.dart';
 import 'package:maraka/logic/constants.dart';
+import 'package:maraka/logic/sendVisitor.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../size_config.dart';
@@ -14,6 +15,8 @@ class SpecialOffers extends StatelessWidget {
   }) : super(key: key);
   List<dynamic> banners = [];
   Future getFeatureAds() async {
+    Visitor visitor = Visitor();
+    await visitor.createVisitor();
     BannerLogic logic = BannerLogic();
     var res = await logic.getBottomBanner();
     for (var element in logic.bannersBottom) {
@@ -47,9 +50,7 @@ class SpecialOffers extends StatelessWidget {
                           image: server + item.imgUrl,
                           name: item.owner,
                           press: () async {
-                            await launchUrl(
-                              Uri.parse("http://" + item.url)
-                            );
+                            await launchUrl(Uri.parse("http://" + item.url));
                           },
                         ),
                       SizedBox(width: getProportionateScreenWidth(20, context)),

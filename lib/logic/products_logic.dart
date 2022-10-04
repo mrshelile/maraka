@@ -257,7 +257,7 @@ class ProductLogic {
         var expire_date = item["attributes"]['expire_date'];
         // var identifier = item["attributes"]['identifier'];
         var owner = item["attributes"]['owner']['data']['attributes'];
-        Seller seller = new Seller(
+        Seller seller = Seller(
             fullNames: owner['full_name'].toString(),
             phone1: owner['phone1'].toString(),
             phone2: owner['phone2'].toString(),
@@ -272,7 +272,7 @@ class ProductLogic {
         });
         ;
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
-          print(DateTime.parse(createAt));
+       
           myAds.add(Product(
               isLiked: false,
               id1: id1,
@@ -289,8 +289,9 @@ class ProductLogic {
       }
       // print(myAds[0].images![0].url);
       return myAds;
-    } else
+    } else {
       throw Null;
+    }
   }
 
   Future<List<Product>> getFavourites(User owner) async {
@@ -316,7 +317,7 @@ class ProductLogic {
         var expire_date = item["attributes"]['expire_date'];
         // var identifier = item["attributes"]['identifier'];
         var owner = item["attributes"]['owner']['data']['attributes'];
-        Seller seller = new Seller(
+        Seller seller = Seller(
             fullNames: owner['full_name'].toString(),
             phone1: owner['phone1'].toString(),
             phone2: owner['phone2'].toString(),
@@ -347,7 +348,8 @@ class ProductLogic {
       }
       // print(myAds[0].images![0].url);
       return favourites;
-    } else
+    } else {
       throw Null;
+    }
   }
 }
