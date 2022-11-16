@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "324057731980",
+    "project_id": "maraka-16ee4",
+    "storage_bucket": "maraka-16ee4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324057731980:android:0d3cbd519c4a91f28b3ca9",
+        "android_client_info": {
+          "package_name": "com.example.maraka"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "324057731980-5rora37elgki2vfjrhh2r40jrj8klrlt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnJmgpzhDfuYya4ZiDz-0BvZLVDqnsvEc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "324057731980-5rora37elgki2vfjrhh2r40jrj8klrlt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
