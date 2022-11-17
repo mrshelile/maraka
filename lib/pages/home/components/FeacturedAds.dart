@@ -9,8 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../size_config.dart';
 import 'section_title.dart';
 
-class SpecialOffers extends StatelessWidget {
-  SpecialOffers({
+class FeacturedAds extends StatelessWidget {
+  FeacturedAds({
     Key? key,
   }) : super(key: key);
   List<dynamic> banners = [];
@@ -87,9 +87,13 @@ class SpecialOfferCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: Stack(
               children: [
-                Image.network(
-                  image,
-                  fit: BoxFit.fill,
+                SizedBox(
+                  width: MediaQuery.of(context).copyWith().size.width,
+                  height: MediaQuery.of(context).copyWith().size.height,
+                  child: Image.network(
+                    image,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -97,8 +101,8 @@ class SpecialOfferCard extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Color(0xFF343434).withOpacity(0.4),
-                        Color(0xFF343434).withOpacity(0.15),
+                        const Color(0xFF343434).withOpacity(0.4),
+                        const Color(0xFF343434).withOpacity(0.15),
                       ],
                     ),
                   ),
