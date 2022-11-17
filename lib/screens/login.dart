@@ -216,7 +216,7 @@ class _LoginState extends State<Login> {
                                 }
                               } catch (error) {
                                 // ignore: avoid_print
-                                print(error.toString());
+                          
                                 setState(() {
                                   _errorMessage =
                                       "Opps looks like there is no internet";
@@ -251,10 +251,10 @@ class _LoginState extends State<Login> {
                                   MediaQuery.of(context).copyWith().size.width *
                                       0.01),
                           child: TextButton(
-                            child:  Text(
+                            child:  const Text(
                               "Sign up",
                               style: TextStyle(color: MyColors.blue3,
-                              fontSize:MediaQuery.of(context).copyWith().size.width*0.051
+                           
                               ),
                             ),
                             onPressed: () {

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/pages/home/details/details_screen.dart';
@@ -44,11 +46,8 @@ class ProductCard extends StatelessWidget {
                     color: const Color.fromARGB(221, 199, 211, 211).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  // child: Hero(
-                  //   tag: product.id.toString(),
-                  //   child: Image.asset(product.images[0]),
                   child: Hero(
-                    tag: product.id1.toString(),
+                    tag: product.id1.toString()+Random().nextInt(90).toString(),
                     child: Image.network(product.images![0].url),
                   ),
                 ),

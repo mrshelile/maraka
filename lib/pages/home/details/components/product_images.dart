@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/models/product.dart';
@@ -14,6 +16,7 @@ class ProductImages extends StatefulWidget {
   final Product product;
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProductImagesState createState() => _ProductImagesState();
 }
 
@@ -27,10 +30,7 @@ class _ProductImagesState extends State<ProductImages> {
           width: getProportionateScreenWidth(238,context),
           child: AspectRatio(
             aspectRatio: 1,
-            // child: Hero(
-            //   tag: widget.product.id1.toString(),
-            //   child: Image.asset(widget.product.images[selectedImage]),
-            // ),
+  
             child: Hero(
               tag: widget.product.id1.toString(),
               child: Image.network(widget.product.images![selectedImage].url),

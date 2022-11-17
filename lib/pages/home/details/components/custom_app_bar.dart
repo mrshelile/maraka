@@ -7,11 +7,10 @@ import 'package:maraka/themes/color.dart';
 class CustomAppBar extends StatelessWidget {
   // final double rating;
 
-  CustomAppBar();
+  const CustomAppBar({Key? key}) : super(key: key);
 
-  @override
   // AppBar().preferredSize.height provide us the height that appy on our app bar
-  Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
+  // Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class CustomAppBar extends StatelessWidget {
                 ),
               ),
             ),
-            Spacer(),
+            const Spacer(),
           ],
         ),
       ),
