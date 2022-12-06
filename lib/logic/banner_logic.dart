@@ -48,25 +48,25 @@ class BannerLogic {
 
   Future getHomeScreenTop() async {
     response = await http.get(
-      Uri.parse("$server$_banner?populate=*"),
+      Uri.parse("$server$_banner"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['data'];
+      var data = jsonDecode(response.body);
 
       for (var item in data) {
         Banner ad = Banner(
           id: item['id'],
-          url: item['attributes']['url'],
-          owner: item['attributes']['owner'],
-          expire_date: item['attributes']['expire_date'],
-          splashscreen: item['attributes']['splashscreen'],
-          home: item['attributes']['home'],
-          display: item['attributes']['display'],
-          imgUrl: item['attributes']['display']['data']['attributes']['url'],
+          url: item['link'],
+          owner: item['owner'],
+          expire_date: item['expire_date'],
+          splashscreen: item['splashscreen'],
+          home: item['home'],
+          display: item['display'],
+          imgUrl: item['display'],
         );
         if (ad.home == true) {
           bannersHomeScreen.add(ad);
