@@ -79,24 +79,24 @@ class BannerLogic {
 
   Future getBottomBanner() async {
     response = await http.get(
-      Uri.parse("$server$_bannerBottom?populate=*"),
+      Uri.parse("$server$_bannerBottom"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['data'];
+      var data = jsonDecode(response.body);
 
       for (var item in data) {
         Banner ad = Banner(
           id: item['id'],
-          url: item['attributes']['url'],
-          owner: item['attributes']['brand'],
-          expire_date: item['attributes']['expire_date'],
-          how_Long: item['attributes']['how_long'],
-          display: item['attributes']['display'],
-          imgUrl: item['attributes']['display']['data']['attributes']['url'],
+          url: item['link'],
+          owner: item['owner'],
+          expire_date: item['expire_date'],
+          // how_Long: item['how_long'],
+          display: item['display'],
+          imgUrl: item['display'],
         );
         bannersBottom.add(ad);
       }

@@ -27,7 +27,7 @@ class _BodyState extends State<Body> {
             SizedBox(height: getProportionateScreenWidth(10, context)),
             DiscountBanner(),
             Categories(owner: widget.owner,),
-            // FeacturedAds(),
+            FeacturedAds(),
             // SizedBox(height: getProportionateScreenWidth(30, context)),
             // PopularProducts(owner: widget.owner,),
             SizedBox(height: getProportionateScreenWidth(30, context)),
