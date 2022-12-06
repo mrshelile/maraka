@@ -18,7 +18,7 @@ List<Map<String, dynamic>> categories = [
   {"icon": "assets/mindeset.svg", "text": "Others"},
 ];
 
-var server = "http://192.168.43.89:3001";
+var server = "http://127.0.0.1:3002";
 // var server = "https://agile-headland-32385.herokuapp.com";
 
 const kAnimationDuration = Duration(milliseconds: 200);
