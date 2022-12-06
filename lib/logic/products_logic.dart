@@ -14,88 +14,10 @@ class ProductLogic {
   List<Product> products = [];
   List<Product> myAds = [];
   List<Product> favourites = [];
-  final String _allProducts = "/api/products";
+  final String _allProducts = "/products";
   // ignore: prefer_typing_uninitialized_variables
   var response;
-  Future likeProduct(User owner, Product product) async {
-    var filter = "filters[identifier][\$eq]=${product.id2}";
-    List<int> likedIds = [];
-    var response = await http.get(
-      Uri.parse("$server$_allProducts?populate=*&$filter"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      // print(jsonDecode(response.body)['data'][0]['attributes']['likedby']);
-      var data = jsonDecode(response.body)['data'];
-      for (var item in data) {
-        var favourites = item['attributes']['likedby']['data'];
-        // print(favourites);
-        for (var like in favourites) {
-          likedIds.add(like['id']);
-        }
-        likedIds.add(owner.id);
-        break;
-      }
-    }
-    var data = {
-      "data": {
-        "likedby": likedIds,
-      }
-    };
-
-    var response2 =
-        await http.put(Uri.parse("$server$_allProducts/${product.id1}"),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(data),
-            encoding: Encoding.getByName("utf-8"));
-    product.isLiked = true;
-    return response2;
-  }
-
-  Future unlikeProduct(User owner, Product product) async {
-    var filter = "filters[identifier][\$eq]=${product.id2}";
-    List<int> likedIds = [];
-    var response = await http.get(
-      Uri.parse("$server$_allProducts?populate=*&$filter"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['data'];
-      for (var item in data) {
-        var favourites = item['attributes']['likedby']['data'];
-        // print(favourites);
-        for (var like in favourites) {
-          likedIds.add(like['id']);
-        }
-        likedIds.removeWhere((element) => element == owner.id);
-        product.isLiked = false;
-        break;
-      }
-    }
-    var data = {
-      "data": {
-        "likedby": likedIds,
-      }
-    };
-
-    var response2 =
-        await http.put(Uri.parse("$server$_allProducts/${product.id1}"),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(data),
-            encoding: Encoding.getByName("utf-8"));
-    return response2;
-  }
-
+  
   Future postImages(XFile image, String name) async {
     // ignore: unrelated_type_equality_checks
     if (image == Null) return;

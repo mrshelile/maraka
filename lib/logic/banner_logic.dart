@@ -6,8 +6,8 @@ import 'package:maraka/logic/constants.dart';
 import 'package:r_get_ip/r_get_ip.dart';
 
 class BannerLogic {
-  final String _banner = "/banners/";
-  final String _bannerBottom = "/featured-ads/";
+  final String _banner = "/banners";
+  final String _bannerBottom = "/featured-ads";
   // ignore: prefer_typing_uninitialized_variables
   var response;
   List<Banner> bannersSplashScreen = [];
