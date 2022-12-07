@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:maraka/models/ImageStrapi.dart';
+import 'package:http/http.dart' as http;
 
 class Product {
   String? category;
@@ -43,7 +46,20 @@ class Seller {
       this.url,
       this.id,
       this.subscription_end});
-  void makeAllInformationFromUrl(){
-    
-  }     
+  Future makeAllInformationFromUrl() async {
+    var response = await http.get(Uri.parse(
+        // ignore: prefer_interpolation_to_compose_strings
+        "$url"), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    });
+    if (response.statusCode == 200) {
+      var item = jsonDecode(response.body);
+       // id = int.parse(item['id']);
+        fullNames = item['full_name'];
+        email = item['email'];
+        phone1 = item['phone1'];
+      //print(item);
+    }
+    return response;
+  }
 }
