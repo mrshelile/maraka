@@ -24,7 +24,6 @@ class Product {
       required this.id2,
       required this.seller,
       required this.images,
-      required this.isLiked,
       required this.category});
 }
 
@@ -33,11 +32,18 @@ class Seller {
   String? phone2;
   String? fullNames;
   String? email;
+  String? url;
+  String? id;
   var subscription_end;
   Seller(
       {this.fullNames,
       this.phone1,
       this.phone2,
       this.email,
+      this.url,
+      this.id,
       this.subscription_end});
+  void makeAllInformationFromUrl(){
+    
+  }     
 }

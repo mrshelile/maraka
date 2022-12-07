@@ -14,10 +14,10 @@ class ProductLogic {
   List<Product> products = [];
   List<Product> myAds = [];
   List<Product> favourites = [];
-  final String _allProducts = "/products";
+  final String _allProducts = "/product";
   // ignore: prefer_typing_uninitialized_variables
   var response;
-  
+
   Future postImages(XFile image, String name) async {
     // ignore: unrelated_type_equality_checks
     if (image == Null) return;
@@ -70,75 +70,54 @@ class ProductLogic {
   // }
 
   Future<List<Product>> getProducts(User ownerModel, String category) async {
-    var filter1 = "filters[owner][email][\$ne]=${ownerModel.email}";
-    var filter2;
-
-    if (category.toLowerCase() != "all") {
-      filter2 = "filters[category][\$eq]=${category.toLowerCase()}";
-    } else {
-      filter2 = "filters[category][\$ne]=$category";
+    String filter = "";
+    if (category.toLowerCase() != "All".toLowerCase()) {
+      filter = "?search=$category";
     }
-
     var response = await http.get(
       Uri.parse(
           // ignore: prefer_interpolation_to_compose_strings
-          "$server$_allProducts?populate=*&$filter1&" + filter2),
+          "$server$_allProducts$filter"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
+    
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['data'];
-
+      var data = jsonDecode(response.body);
+       
       for (var item in data) {
         var id1 = item['id'];
-        var id2 = item['attributes']['identifier'];
-        // print(id2);
-
-        var name = item['attributes']['name'];
-        var createAt = item["attributes"]['createdAt'];
-        var category = item["attributes"]['category'];
-        var description = item["attributes"]['description'];
-        var price = item["attributes"]['price'];
-        var expire_date = item["attributes"]['expire_date'];
+        var id2 = item['identifier'];
+        
+        var name = item['name'];
+        var createAt = item['created'];
+        var category = item['category'];
+        var description = item['description'];
+        var price = item['price'];
+        var expire_date = item['expire_date'];
         // var identifier = item["attributes"]['identifier'];
-        var owner = item["attributes"]['owner']['data']['attributes'];
-        var likedby = false;
-        // if()
-
-        // for (var ite in item['attributes']['likedbies']['data']) {
-        //   // print(ownerModel.email.toString());
-
-        //   if (ownerModel.email
-        //       .toString()
-        //       .contains(ite['attributes']['email'])) {
-        //     likedby = true;
-        //   }
-        // }
-        //  print(item['attributes']['likedby']['data'][0]['attributes']['email']);
+        var owner = item['owner'];
 
         Seller seller = Seller(
-            fullNames: owner['full_name'].toString(),
-            phone1: owner['phone1'].toString(),
-            phone2: owner['phone2'].toString(),
-            subscription_end: owner['subscription_end'],
-            email: owner['email'].toString());
-        List imagesJson = item['attributes']['display']['data'];
-        List<ImageStrapi> images = [];
+            url: owner
+            );
+        // List imagesJson = item['attributes']['display']['data'];
+        List<ImageStrapi> images = [ImageStrapi(
+        url:item['display']
+        )];
 
-        for (var element in imagesJson) {
-          
-          images.add(ImageStrapi(
-              name: element['attributes']['name'],
-              url: server + element['attributes']['url']));
-        }
+        // for (var element in imagesJson) {
+        //   images.add(ImageStrapi(
+        //       name: element['attributes']['name'],
+        //       url: server + element['attributes']['url']));
+        // }
 
-        //  print(DateTime.parse(createAt));
+        print(DateTime.parse(expire_date));
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
           products.add(Product(
               id1: id1,
               id2: id2,
-              isLiked: likedby,
               title: name,
               category: category.toString().toLowerCase(),
               seller: seller,
@@ -147,7 +126,9 @@ class ProductLogic {
               expiryDate: DateTime.parse(expire_date),
               createdAt: DateTime.parse(createAt),
               description: description));
+              
         }
+        
       }
 
       return products;
@@ -194,9 +175,7 @@ class ProductLogic {
         });
         ;
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
-       
           myAds.add(Product(
-              isLiked: false,
               id1: id1,
               id2: id2,
               title: name,
@@ -211,65 +190,6 @@ class ProductLogic {
       }
       // print(myAds[0].images![0].url);
       return myAds;
-    } else {
-      throw Null;
-    }
-  }
-
-  Future<List<Product>> getFavourites(User owner) async {
-    var filter = "filters[likedby][email][\$in]=${owner.email!}";
-
-    var response = await http.get(
-      Uri.parse("$server$_allProducts?populate=*&$filter"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['data'];
-      for (var item in data) {
-        var id1 = item['id'];
-        var id2 = item['attributes']['identifier'];
-        var name = item['attributes']['name'];
-        var createAt = item["attributes"]['createdAt'];
-        var category = item["attributes"]['category'];
-        var description = item["attributes"]['description'];
-        var price = item["attributes"]['price'];
-        var expire_date = item["attributes"]['expire_date'];
-        // var identifier = item["attributes"]['identifier'];
-        var owner = item["attributes"]['owner']['data']['attributes'];
-        Seller seller = Seller(
-            fullNames: owner['full_name'].toString(),
-            phone1: owner['phone1'].toString(),
-            phone2: owner['phone2'].toString(),
-            subscription_end: owner['subscription_end'],
-            email: owner['email'].toString());
-        List imagesJson = item['attributes']['display']['data'];
-        List<ImageStrapi> images = [];
-        imagesJson.forEach((element) {
-          images.add(ImageStrapi(
-              name: element['attributes']['name'],
-              url: server + element['attributes']['url']));
-        });
-        ;
-        {
-          favourites.add(Product(
-              expiryDate: DateTime.parse(expire_date),
-              createdAt: DateTime.parse(createAt),
-              isLiked: true,
-              id1: id1,
-              id2: id2,
-              title: name,
-              category: category.toString().toLowerCase(),
-              seller: seller,
-              images: images,
-              price: price,
-              description: description));
-        }
-      }
-      // print(myAds[0].images![0].url);
-      return favourites;
     } else {
       throw Null;
     }

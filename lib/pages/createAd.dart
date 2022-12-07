@@ -110,7 +110,7 @@ class _CreateAdState extends State<CreateAd> {
                             images: null,
                             seller: null,
                             expiryDate: DateTime.now(),
-                            isLiked: false,
+                         
                             id2: uuid.v4(),
                             title: _nameController.text.trim(),
                             description: _descriptionController.text.trim(),

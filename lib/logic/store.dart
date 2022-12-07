@@ -50,7 +50,7 @@ class StoreController extends GetxController {
           id2: element.id2,
           seller: element.seller,
           images: element.images,
-          isLiked: element.isLiked,
+        
           category: element.category));
     }
     products.shuffle();
