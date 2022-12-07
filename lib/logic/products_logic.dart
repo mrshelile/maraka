@@ -87,6 +87,7 @@ class ProductLogic {
       var data = jsonDecode(response.body);
        
       for (var item in data) {
+   
         var id1 = item['id'];
         var id2 = item['identifier'];
         
@@ -98,22 +99,20 @@ class ProductLogic {
         var expire_date = item['expire_date'];
         // var identifier = item["attributes"]['identifier'];
         var owner = item['owner'];
-
+   print(owner);
         Seller seller = Seller(
             url: owner
             );
-        // List imagesJson = item['attributes']['display']['data'];
-        List<ImageStrapi> images = [ImageStrapi(
-        url:item['display']
-        )];
+     
+        List imagesJson = item['display'];
+        List<ImageStrapi> images = [];
 
-        // for (var element in imagesJson) {
-        //   images.add(ImageStrapi(
-        //       name: element['attributes']['name'],
-        //       url: server + element['attributes']['url']));
-        // }
+        for (var element in imagesJson) {
+          images.add(ImageStrapi(
+              url: element['image']));
+        }
 
-        print(DateTime.parse(expire_date));
+        
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
           products.add(Product(
               id1: id1,
