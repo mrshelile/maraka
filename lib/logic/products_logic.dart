@@ -97,9 +97,7 @@ class ProductLogic {
         var description = item['description'];
         var price = item['price'];
         var expire_date = item['expire_date'];
-        // var identifier = item["attributes"]['identifier'];
         var owner = item['owner'];
-   print(owner);
         Seller seller = Seller(
             url: owner
             );
