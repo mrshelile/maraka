@@ -27,7 +27,7 @@ class User {
   var response;
 
   final _login = "/auth/login/";
-  final _register = "/api/auth/local/register";
+  final _register = "/auth_user";
   final _userUrl = "/api/users/";
   
   final _updatePasswordUrl="/api/marakapasswordreset";
@@ -205,13 +205,14 @@ class User {
 
     Map data = {
       'email': email,
-      'identifier': email,
       "username": email,
       "phone1": phone1.toString(),
       "phone2": phone2.toString(),
       "otp": otp,
       "full_name": name,
       "validated": false,
+      "is_active":false,
+      "is_superuser":false,
       'password': password
     };
     response = await http.post(Uri.parse(server + _register),
