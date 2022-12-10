@@ -25,7 +25,6 @@ Future verifyOTP(User user, otp) async {
       .get(Uri.parse("$server$_userUrl?search=${user.email.toString()}"));
   if (response.statusCode == 200) {
     if (jsonDecode(response.body).isNotEmpty) {
-      print(jsonDecode(response.body)[0]['otp']);
       if (jsonDecode(response.body)[0]['otp'].toString() == otp.toString()) {
         isvalid = true;
       }
@@ -63,39 +62,24 @@ Future activateAcc(user) async {
   }
 }
 
-Future updateOTP(id, otp) async {
-  var data = {"otp": otp};
-  var respose = await http.put(Uri.parse(server + _userUrl + id.toString()),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(data),
-      encoding: Encoding.getByName("utf-8"));
-  return respose;
-}
+// Future updateOTP(id, otp) async {
+//   var data = {"otp": otp};
+//   var respose = await http.put(Uri.parse(server + _userUrl + id.toString()),
+//       headers: <String, String>{
+//         'Content-Type': 'application/json; charset=UTF-8',
+//       },
+//       body: jsonEncode(data),
+//       encoding: Encoding.getByName("utf-8"));
+//   return respose;
+// }
 
 Future sendOTP(to, otp) async {
-  // final message = Message()
-  //   ..from = Address(username, 'Malefetsane Shelile')
-  //   ..recipients.add(to)
-  //   ..subject = 'OTP CODE'
-  //   ..text = "go to the app and add this otp code $otp";
-  // int statusCode;
-  // try {
-  //   final sendReport = await send(message, smtpServer);
-  //   print(sendReport.toString());
-  //   statusCode = HttpStatus.ok;
-  // } on MailerException catch (e) {
-  //   print('Message not sent: ${e.problems}');
-  //   statusCode = HttpStatus.internalServerError;
-  // }
-  // print(statusCode);
   Map data = {
     'email': to,
     'subject': "OTP CODE",
     "body": "go to the app and add this otp code $otp"
   };
-  print(data);
+
   var response = await http.post(Uri.parse(server + _sendEmailUrl),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',

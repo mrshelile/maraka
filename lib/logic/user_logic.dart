@@ -29,8 +29,8 @@ class User {
   final _login = "/auth/login/";
   final _register = "/auth_user";
   final _userUrl = "/list_users";
-  
-  final _updatePasswordUrl="/api/marakapasswordreset";
+  final _userPasswordReset = "/reset-password";
+  final _updatePasswordUrl = "/api/marakapasswordreset";
   User(
       {this.name,
       this.email,
@@ -131,27 +131,26 @@ class User {
 
   Future login() async {
     Map data = {'username': email, 'password': password};
-    
+
     response = await http.post(Uri.parse(server + _login),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
-   
+
     if (response.statusCode == 200) {
       // isValidatedAcc = jsonDecode(response.body)['user']['validated'];
-      
+
       jwt = jsonDecode(response.body)['token'];
       name = jsonDecode(response.body)['user']['full_name'];
-      
-      if(jsonDecode(response.body)['user']['phone1']!=null) {
+
+      if (jsonDecode(response.body)['user']['phone1'] != null) {
         phone1 = int.parse(jsonDecode(response.body)['user']['phone1']);
-          
       }
-      
-      is_blocked = jsonDecode(response.body)['user']['is_active']??false;
-      is_confirmed = jsonDecode(response.body)['user']['validated']??false;
+
+      is_blocked = jsonDecode(response.body)['user']['is_active'] ?? false;
+      is_confirmed = jsonDecode(response.body)['user']['validated'] ?? false;
       id = jsonDecode(response.body)['user']['id'];
       password = null;
       await _storeToken(jwt);
@@ -163,33 +162,28 @@ class User {
   }
 
   Future resetPassword() async {
-    var filter = "filters[email][\$eq]=$email";
     otp = OTP.generateTOTPCodeString(
         'JBSWY3DPEHPK3PXP', DateTime.now().millisecondsSinceEpoch);
-    response = await http.get(
-      Uri.parse("$server$_userUrl?$filter"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-    if (response.statusCode == 200) {
-      // print(jsonDecode(response.body)[0]);
-      if (jsonDecode(response.body).isNotEmpty) {
-        id = jsonDecode(response.body)[0]['id'];
-        await updateOTP(id, int.parse(otp)).whenComplete(() async =>
-            await sendOTP(email.toString(), int.parse(otp))
-                .whenComplete(() => canUpdatePassword = true));
-      } else {
-        canUpdatePassword = false;
-      }
-    }
-    // ignore: avoid_print
-    // print(canUpdatePassword);
+    var data = {"email": email, "otp": otp};
+    response =await http.put(Uri.parse(server + _userPasswordReset),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(data),
+        encoding: Encoding.getByName("utf-8"));
+    
+    if (response.statusCode == 200) {}
+    return response;
   }
 
   // ignore: non_constant_identifier_names
-  Future updatePassword(Newpassword,int OTP,email) async {
-    var data = {"password": Newpassword.toString(),"confirmPassword":Newpassword.toString(),"OTP":OTP,"email":email,};
+  Future updatePassword(Newpassword, int OTP, email) async {
+    var data = {
+      "password": Newpassword.toString(),
+      "confirmPassword": Newpassword.toString(),
+      "OTP": OTP,
+      "email": email,
+    };
     var respose = await http.post(Uri.parse(server + _updatePasswordUrl),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -211,8 +205,8 @@ class User {
       "otp": otp,
       "full_name": name,
       "validated": false,
-      "is_active":false,
-      "is_superuser":false,
+      "is_active": false,
+      "is_superuser": false,
       'password': password
     };
     response = await http.post(Uri.parse(server + _register),
