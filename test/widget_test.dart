@@ -14,13 +14,23 @@ void main() {
   //   final res = await sendOTP("davertzshelile@gmail.com", "1212");
   //   expect(res.statusCode, 200);
   // });
-  test("user registration", () async {
+  // test("user registration", () async {
+  //   User user = User(
+  //       name: "test user",
+  //       email: 'email@email.com',
+  //       phone1: 1212,
+  //       password: "Password@1");
+  //   final res = await user.register();
+  //   expect(res.statusCode, 201);
+  // });
+  test("verify otp by email", () async {
     User user = User(
         name: "test user",
         email: 'email@email.com',
         phone1: 1212,
         password: "Password@1");
-    final res = await user.register();
-    expect(res.statusCode, 201);
+    final res = await verifyOTP(user, 0);
+    expect(res.statusCode, 200);
+    expect(isvalid, true);
   });
 }

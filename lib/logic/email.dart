@@ -5,10 +5,11 @@ import 'package:maraka/logic/constants.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
+import 'package:maraka/logic/user_logic.dart';
 
 const username = 'mrdavertzshelile@outlook.com';
 const password = 'S1helile@com';
-const _userUrl = "/api/users/";
+const _userUrl = "/list_users";
 const _sendEmailUrl = "/sendEmail/";
 bool isvalid = false;
 final smtpServer = SmtpServer(
@@ -17,21 +18,23 @@ final smtpServer = SmtpServer(
   username: username,
   password: password,
 );
-Future verifyOTP(user, otp) async {
+Future verifyOTP(User user, otp) async {
   isvalid = false;
 
-  var filter =
-      "filters[email][\$eq]=" + user.email + "&filters[otp][\$eq]=" + otp;
-  var response = await http.get(Uri.parse("$server$_userUrl?$filter"));
+  var response = await http
+      .get(Uri.parse("$server$_userUrl?search=${user.email.toString()}"));
   if (response.statusCode == 200) {
     if (jsonDecode(response.body).isNotEmpty) {
-      isvalid = true;
+      print(jsonDecode(response.body)[0]['otp']);
+      if (jsonDecode(response.body)[0]['otp'].toString() == otp.toString()) {
+        isvalid = true;
+      }
     }
   } else {
     print("failed");
     isvalid = false;
-    return response;
   }
+  return response;
 }
 
 Future activateAcc(user) async {

@@ -28,7 +28,7 @@ class User {
 
   final _login = "/auth/login/";
   final _register = "/auth_user";
-  final _userUrl = "/api/users/";
+  final _userUrl = "/list_users";
   
   final _updatePasswordUrl="/api/marakapasswordreset";
   User(
