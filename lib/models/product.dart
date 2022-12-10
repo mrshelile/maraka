@@ -47,19 +47,23 @@ class Seller {
       this.id,
       this.subscription_end});
   Future makeAllInformationFromUrl() async {
-    var response = await http.get(Uri.parse(
-        // ignore: prefer_interpolation_to_compose_strings
-        "$url"), headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    });
-    if (response.statusCode == 200) {
-      var item = jsonDecode(response.body);
-       // id = int.parse(item['id']);
+    if (url != null) {
+      var response = await http.get(Uri.parse(
+          // ignore: prefer_interpolation_to_compose_strings
+          "$url"), headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      });
+      if (response.statusCode == 200) {
+        var item = jsonDecode(response.body);
+        // id = int.parse(item['id']);
         fullNames = item['full_name'];
         email = item['email'];
         phone1 = item['phone1'];
-      //print(item);
+        //print(item);
+      }
+      return response;
     }
-    return response;
+
+    return http.Response("{data:'no URL'}", 200);
   }
 }

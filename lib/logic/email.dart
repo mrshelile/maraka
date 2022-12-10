@@ -9,7 +9,7 @@ import 'package:mailer/smtp_server.dart';
 const username = 'mrdavertzshelile@outlook.com';
 const password = 'S1helile@com';
 const _userUrl = "/api/users/";
-const _sendEmailUrl="/api/marakasendemail";
+const _sendEmailUrl = "/sendEmail/";
 bool isvalid = false;
 final smtpServer = SmtpServer(
   'smtp-mail.outlook.com',
@@ -87,14 +87,17 @@ Future sendOTP(to, otp) async {
   //   statusCode = HttpStatus.internalServerError;
   // }
   // print(statusCode);
-    Map data = {'email': to, 'subject':"OTP CODE","body":"go to the app and add this otp code $otp"};
-    
-    var response = await http.post(Uri.parse(server + _sendEmailUrl),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(data),
-        encoding: Encoding.getByName("utf-8"));
-   return response;
+  Map data = {
+    'email': to,
+    'subject': "OTP CODE",
+    "body": "go to the app and add this otp code $otp"
+  };
+  print(data);
+  var response = await http.post(Uri.parse(server + _sendEmailUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(data),
+      encoding: Encoding.getByName("utf-8"));
+  return response;
 }
-

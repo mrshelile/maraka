@@ -26,9 +26,10 @@ class User {
   // ignore: prefer_typing_uninitialized_variables
   var response;
 
-  final _login = "/api/auth/local";
+  final _login = "/auth/login/";
   final _register = "/api/auth/local/register";
   final _userUrl = "/api/users/";
+  
   final _updatePasswordUrl="/api/marakapasswordreset";
   User(
       {this.name,
@@ -129,7 +130,7 @@ class User {
   }
 
   Future login() async {
-    Map data = {'identifier': email, 'password': password};
+    Map data = {'username': email, 'password': password};
     
     response = await http.post(Uri.parse(server + _login),
         headers: <String, String>{
@@ -141,7 +142,7 @@ class User {
     if (response.statusCode == 200) {
       // isValidatedAcc = jsonDecode(response.body)['user']['validated'];
       
-      jwt = jsonDecode(response.body)['jwt'];
+      jwt = jsonDecode(response.body)['token'];
       name = jsonDecode(response.body)['user']['full_name'];
       
       if(jsonDecode(response.body)['user']['phone1']!=null) {
@@ -149,11 +150,11 @@ class User {
           
       }
       
-      is_blocked = jsonDecode(response.body)['user']['blocked']??false;
+      is_blocked = jsonDecode(response.body)['user']['is_active']??false;
       is_confirmed = jsonDecode(response.body)['user']['validated']??false;
       id = jsonDecode(response.body)['user']['id'];
       password = null;
-      await _storeToken(jsonDecode(response.body)['jwt']);
+      await _storeToken(jwt);
       await _storeEmail(email.toString());
     }
     return response;
@@ -183,7 +184,7 @@ class User {
       }
     }
     // ignore: avoid_print
-    print(canUpdatePassword);
+    // print(canUpdatePassword);
   }
 
   // ignore: non_constant_identifier_names

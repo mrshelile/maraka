@@ -15,6 +15,7 @@ class ProductLogic {
   List<Product> myAds = [];
   List<Product> favourites = [];
   final String _allProducts = "/product";
+  final String _userProduct = "/user-product/";
   // ignore: prefer_typing_uninitialized_variables
   var response;
 
@@ -82,15 +83,14 @@ class ProductLogic {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-       
+
       for (var item in data) {
-   
         var id1 = item['id'];
         var id2 = item['identifier'];
-        
+
         var name = item['name'];
         var createAt = item['created'];
         var category = item['category'];
@@ -98,19 +98,15 @@ class ProductLogic {
         var price = item['price'];
         var expire_date = item['expire_date'];
         var owner = item['owner'];
-        Seller seller = Seller(
-            url: owner
-            );
-     
+        Seller seller = Seller(url: owner);
+
         List imagesJson = item['display'];
         List<ImageStrapi> images = [];
 
         for (var element in imagesJson) {
-          images.add(ImageStrapi(
-              url: element['image']));
+          images.add(ImageStrapi(url: element['image']));
         }
 
-        
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
           products.add(Product(
               id1: id1,
@@ -123,9 +119,7 @@ class ProductLogic {
               expiryDate: DateTime.parse(expire_date),
               createdAt: DateTime.parse(createAt),
               description: description));
-              
         }
-        
       }
 
       return products;
@@ -135,42 +129,41 @@ class ProductLogic {
   }
 
   Future<List<Product>> getMyAds(User owner) async {
-    var filter = "filters[owner][email][\$eq]=${owner.email!}";
-    // print(filter);
+    var filter = owner.id.toString();
+    
     var response = await http.get(
-      Uri.parse("$server$_allProducts?populate=*&$filter"),
+      Uri.parse("$server$_userProduct$filter"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-
+    
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['data'];
+      var data = jsonDecode(response.body);
+       
       for (var item in data) {
         var id1 = item['id'];
-        var id2 = item['attributes']['identifier'];
-        var name = item['attributes']['name'];
-        var createAt = item["attributes"]['createdAt'];
-        var category = item["attributes"]['category'];
-        var description = item["attributes"]['description'];
-        var price = item["attributes"]['price'];
-        var expire_date = item["attributes"]['expire_date'];
-        // var identifier = item["attributes"]['identifier'];
-        var owner = item["attributes"]['owner']['data']['attributes'];
+        var id2 = item['identifier'];
+
+        var name = item['name'];
+        var createAt = item['created'];
+        var category = item['category'];
+        var description = item['description'];
+        var price = item['price'];
+        var expire_date = item['expire_date'];
+        // var owner = item['owner'];
         Seller seller = Seller(
-            fullNames: owner['full_name'].toString(),
-            phone1: owner['phone1'].toString(),
-            phone2: owner['phone2'].toString(),
-            subscription_end: owner['subscription_end'],
-            email: owner['email'].toString());
-        List imagesJson = item['attributes']['display']['data'];
+            fullNames: owner.name,
+            phone1: owner.phone1.toString(),
+            phone2: owner.phone2.toString(),
+            subscription_end: owner.subscription,
+            email: owner.email);
+        List imagesJson = item['display'];
         List<ImageStrapi> images = [];
-        imagesJson.forEach((element) {
-          images.add(ImageStrapi(
-              name: element['attributes']['name'],
-              url: server + element['attributes']['url']));
-        });
-        ;
+
+        for (var element in imagesJson) {
+          images.add(ImageStrapi(url: element['image']));
+        }
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
           myAds.add(Product(
               id1: id1,
