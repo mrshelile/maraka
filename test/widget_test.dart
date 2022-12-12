@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maraka/logic/email.dart';
 import 'package:maraka/logic/products_logic.dart';
+import 'package:maraka/logic/sendVisitor.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
 
@@ -55,20 +56,25 @@ void main() {
   //   var res = await user.updatePassword("Password@5", 55, user.email);
   //   expect(res.statusCode, 200);
   // });
-  test("create product ", () async {
-    ProductLogic logic = ProductLogic();
-    var response = await logic.postProduct(
-        Product(
-            title: "_nameController.text.trim()",
-            description: "_descriptionController.text.trim()",
-            price: 12,
-            expiryDate: DateTime.now().add(const Duration(days: 31)),
-            id2: '',
-            seller: Seller(),
-            images: [],
-            imageUrls: [24, 25],
-            category: "cars"),
-        14);
-    expect(response.statusCode, 201);
+  // test("create product ", () async {
+  //   ProductLogic logic = ProductLogic();
+  //   var response = await logic.postProduct(
+  //       Product(
+  //           title: "_nameController.text.trim()",
+  //           description: "_descriptionController.text.trim()",
+  //           price: 12,
+  //           expiryDate: DateTime.now().add(const Duration(days: 31)),
+  //           id2: '',
+  //           seller: Seller(),
+  //           images: [],
+  //           imageUrls: [24, 25],
+  //           category: "cars"),
+  //       14);
+  //   expect(response.statusCode, 201);
+  // });
+  test("test create visitor", () async {
+    Visitor visitor = Visitor();
+    var res = await visitor.createVisitor();
+    expect(res.statusCode, 201);
   });
 }

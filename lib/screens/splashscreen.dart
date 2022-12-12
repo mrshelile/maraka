@@ -1,6 +1,7 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maraka/logic/banner_logic.dart';
+import 'package:maraka/logic/sendVisitor.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/themes/background.dart';
@@ -31,6 +32,8 @@ class _SplashcreenState extends State<Splashcreen> {
   );
 
   Future<String> makeBanners() async {
+    Visitor visitor = Visitor();
+    await visitor.createVisitor().timeout(const Duration(seconds: 5));
     var logic = BannerLogic();
 
     await logic.getSplashscreen();
@@ -42,9 +45,7 @@ class _SplashcreenState extends State<Splashcreen> {
         for (var item in logic.bannersSplashScreen) {
           // bool skip = false;
           if (item.display != null) {
-          
-              imgs.add(item);
-            
+            imgs.add(item);
           }
         }
         if (imgs.isNotEmpty) {
@@ -64,7 +65,7 @@ class _SplashcreenState extends State<Splashcreen> {
                       }
                     },
                     child: Image.network(
-                       i.display,
+                      i.display,
                     ),
                   ),
                 )

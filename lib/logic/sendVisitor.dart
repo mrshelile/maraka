@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
 class Visitor {
-  var _visitorUrl = "/api/vistitors";
+  var _visitorUrl = "/visitor";
   Future createVisitor() async {
     /// Initialize Ip Address
     dynamic data;
@@ -31,17 +31,19 @@ class Visitor {
         'Content-Type': 'application/json; charset=UTF-8',
       };
       var data1 = {
-        "data": {"universal": uuid.v4(), "ip_address_hash": digest.toString()}
+        "universal": uuid.v4(),
+        "ip_address_hash": digest.toString()
       };
-      var filter = "filters[ip_address_hash][\$eq]=${digest.toString()}";
+      var filter = "search=${digest.toString()}";
       var res1 = await http.get(Uri.parse("$server$_visitorUrl?$filter"));
-      // print(jsonDecode(res1.body)['data'].length);
-      if(res1.statusCode==200){
-        if(jsonDecode(res1.body)['data'].length<=0){
-             response = await http.post(Uri.parse(server + _visitorUrl),
-          headers: headers,
-          body: jsonEncode(data1),
-          encoding: Encoding.getByName("utf-8"));   
+
+      if (res1.statusCode == 200) {
+        if (jsonDecode(res1.body).length <= 0) {
+          response = await http.post(Uri.parse(server + _visitorUrl),
+              headers: headers,
+              body: jsonEncode(data1),
+              encoding: Encoding.getByName("utf-8"));
+          return response;
         }
       }
     } on IpAddressException catch (exception) {
@@ -50,6 +52,6 @@ class Visitor {
     } catch (error) {
       debugPrint(error.toString());
     }
-    return response;
+    return http.Response("{failed}", 500);
   }
 }
