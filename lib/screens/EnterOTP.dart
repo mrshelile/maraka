@@ -96,7 +96,7 @@ class _OTPState extends State<OTP> {
                             0.01),
                     child: Text(
                       _errorMessage,
-                      style:const TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red),
                     ),
                   ),
                   Padding(
@@ -125,14 +125,8 @@ class _OTPState extends State<OTP> {
                               await verifyOTP(widget.user, _otpController.text);
 
                               if (widget.isRegister && isvalid) {
-                                var res = await activateAcc(widget.user);
-                                // print("object");
-                                // print(res.statusCode);
-                                // print(isvalid);
-                                setState(() {
-                                  _errorMessage = "";
-                                });
-                                if (res.statusCode==200) {
+                                var res = await validateAcc(widget.user);
+                                if (res.statusCode == 200) {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
@@ -144,7 +138,7 @@ class _OTPState extends State<OTP> {
                                   setState(() {
                                     _errorMessage = "";
                                   });
-                   
+
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
@@ -158,12 +152,12 @@ class _OTPState extends State<OTP> {
                                   });
                                 }
                               }
-                   
                             }
                           },
                           child: Text(
                             _buttonText,
-                            style: const TextStyle(color: Colors.white, fontSize: 15),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 15),
                           ),
                         ),
                       )),

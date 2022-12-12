@@ -33,15 +33,16 @@ class _RegistrationState extends State<Registration> {
     size: 80,
     // duration: Duration(milliseconds: 1000),
   );
-RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
-  bool validatePassword(String pass){
+  RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
+  bool validatePassword(String pass) {
     String password = pass.trim();
-    if(pass_valid.hasMatch(password)){
+    if (pass_valid.hasMatch(password)) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -204,15 +205,14 @@ RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
                         validator: (String? value) {
                           if (value!.trim().isEmpty) {
                             return 'Password Cannot Be Empty';
-                          } 
-                          else {
-                          bool result = validatePassword(value.trim());
-                          if(result){
-                            // create account event
-                          return null;
-                          }else{
-                            return "Password not strong enough";
-                          }
+                          } else {
+                            bool result = validatePassword(value.trim());
+                            if (result) {
+                              // create account event
+                              return null;
+                            } else {
+                              return "Password not strong enough";
+                            }
                           }
                         },
                       ),
@@ -253,15 +253,14 @@ RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
                         validator: (String? value) {
                           if (value!.trim().isEmpty) {
                             return 'Confirm Password Cannot Be Empty';
-                          } 
-                          else {
-                          bool result = validatePassword(value.trim());
-                          if(result){
-                            // create account event
-                          return null;
-                          }else{
-                            return "Confirm Password not strong enough";
-                          }
+                          } else {
+                            bool result = validatePassword(value.trim());
+                            if (result) {
+                              // create account event
+                              return null;
+                            } else {
+                              return "Confirm Password not strong enough";
+                            }
                           }
                         },
                       ),
@@ -307,8 +306,8 @@ RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
                                 User user = User(
                                     name: _fullNamesController.text.trim(),
                                     email: _emailController.text.trim(),
-                                    phone1:
-                                        int.parse(_phoneNumberController.text.trim()),
+                                    phone1: int.parse(
+                                        _phoneNumberController.text.trim()),
                                     password: _passwordController.text.trim());
                                 setState(() {
                                   _loading = true;
@@ -323,18 +322,11 @@ RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
                                     _loading = false;
                                   });
                                   if (user.response.statusCode != null) {
-                                    if (user.response.statusCode == 400) {
-                                      setState(() {
-                                        _errorMessage = jsonDecode(
-                                                user.response.body)['error']
-                                            ['message'];
-                                      });
-                                    }
-                                    // print(user.response.statusCode);
                                     setState(() {
                                       _loading = false;
                                     });
-                                    if (user.response.statusCode == 200) {
+                                    print(user.response.statusCode);
+                                    if (user.response.statusCode == 201) {
                                       setState(() {
                                         _errorMessage = "";
                                       });
@@ -350,8 +342,7 @@ RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
                                   }
                                 } catch (error) {
                                   setState(() {
-                                    _errorMessage =
-                                        "Can't connect to internet";
+                                    _errorMessage = "Can't connect to internet";
                                     _loading = false;
                                   });
                                 } finally {}

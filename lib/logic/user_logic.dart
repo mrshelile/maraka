@@ -30,7 +30,7 @@ class User {
   final _register = "/auth_user";
   final _userUrl = "/list_users";
   final _userPasswordReset = "/reset-password";
-  final _updatePasswordUrl = "/api/marakapasswordreset";
+  final _updatePasswordUrl = "/update-password";
   User(
       {this.name,
       this.email,
@@ -47,7 +47,7 @@ class User {
 
   Future retrieveToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var value = await prefs.getString('jwt') ?? null;
+    var value = prefs.getString('jwt');
 
     jsonEncode(value).toString().isEmpty ||
             // ignore: unrelated_type_equality_checks
@@ -65,7 +65,7 @@ class User {
 
   Future _retrieveOTP(String value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var value = await prefs.getString('otp') ?? null;
+    var value = prefs.getString('otp');
 
     jsonEncode(value).toString().isEmpty ||
             // ignore: unrelated_type_equality_checks
@@ -162,29 +162,34 @@ class User {
   }
 
   Future resetPassword() async {
+    canUpdatePassword = false;
     otp = OTP.generateTOTPCodeString(
         'JBSWY3DPEHPK3PXP', DateTime.now().millisecondsSinceEpoch);
     var data = {"email": email, "otp": otp};
-    response =await http.put(Uri.parse(server + _userPasswordReset),
+    response = await http.put(Uri.parse(server + _userPasswordReset),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
-    
-    if (response.statusCode == 200) {}
-    return response;
+
+    if (response.statusCode == 200) {
+      var res = await sendOTP(email, otp);
+      if (res.statusCode == 200) {
+        canUpdatePassword = true;
+        return res;
+      }
+    }
+    return http.Response("internal error", 500);
   }
 
   // ignore: non_constant_identifier_names
   Future updatePassword(Newpassword, int OTP, email) async {
     var data = {
       "password": Newpassword.toString(),
-      "confirmPassword": Newpassword.toString(),
-      "OTP": OTP,
       "email": email,
     };
-    var respose = await http.post(Uri.parse(server + _updatePasswordUrl),
+    var respose = await http.put(Uri.parse(server + _updatePasswordUrl),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -205,10 +210,11 @@ class User {
       "otp": otp,
       "full_name": name,
       "validated": false,
-      "is_active": false,
+      "is_active": true,
       "is_superuser": false,
       'password': password
     };
+
     response = await http.post(Uri.parse(server + _register),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',

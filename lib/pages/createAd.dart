@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
@@ -27,18 +29,18 @@ class CreateAd extends StatefulWidget {
 
 class _CreateAdState extends State<CreateAd> {
   //V EDIT
-  final ImagePicker imagePicker = ImagePicker();
-  List<XFile>? imageFileList = [];
+  // final ImagePicker imagePicker = ImagePicker();
+  List<File> imageFileList = [];
   bool isBtnDisabled = false;
   void selectImages() async {
-    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
-    if (selectedImages!.isNotEmpty) {
-      //
-      //imageFileList = selectedImages.map<File>((XFile(path)) => File(XFile.path)).toList();
-      imageFileList!.addAll(selectedImages);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: true, allowedExtensions: ['jpg', 'png', 'jpeg']);
+
+    if (result != null) {
+      setState(() {
+        imageFileList = result.paths.map((path) => File(path!)).toList();
+      });
     }
-    // imageFileList = imageFileList!.sublist(0, 2);
-    setState(() {});
   }
   //V EDIT
 
@@ -49,19 +51,16 @@ class _CreateAdState extends State<CreateAd> {
   final List<String> _pageCategories = [];
   var uuid = const Uuid();
   var _error = '';
-  bool _loading = false;
+  final bool _loading = false;
   final _loader = const SpinKitSpinningLines(
     color: MyColors.blue3,
     size: 280,
-    // duration: Duration(milliseconds: 1000),
   );
+
   // ignore: prefer_typing_uninitialized_variables
   var _dropdownValue;
   @override
   void initState() {
-    // categories.forEach((key, value) {
-    //   _pageCategories.add(key);
-    // });
     for (var element in categories) {
       _pageCategories.add(element['text'].toString().toLowerCase());
     }
@@ -83,66 +82,35 @@ class _CreateAdState extends State<CreateAd> {
                 : () async {
                     if (_formKey.currentState!.validate()) {
                       if (_dropdownValue != null) {
-                        ProductLogic productLogic = ProductLogic();
-                        // ignore: prefer_typing_uninitialized_variables
-                        setState(() {
-                          _loading = true;
-                          isBtnDisabled = _loading;
-                        });
-                        var res;
-                        try {
-                          List<int> imagesUrls = [];
-                          int index = 0;
-                          for (var img in imageFileList!) {
-                            
-                            if (index >= 3) break;
-                            res = await productLogic.postImages(img,_nameController.text.trim()).timeout(
-                                const Duration(seconds: 15),
-                                onTimeout: () => throw TimeoutException(
-                                    'Can\'t connect to internet'));
-                            if (res.statusCode == 200) {
-                              imagesUrls.add(jsonDecode(res.body)[0]['id']);
-                              // print(imagesUrls);
-                            }
-                            index++;
-                          }
-                          Product product = Product(
-                            images: null,
-                            seller: null,
-                            expiryDate: DateTime.now(),
-                         
-                            id2: uuid.v4(),
-                            title: _nameController.text.trim(),
-                            description: _descriptionController.text.trim(),
-                            price:
-                                double.parse(_priceController.text.trim().toString()),
-                            category: _dropdownValue,
-                            imageUrls: imagesUrls
-                          );
-                          await productLogic
-                              .postProduct(product, widget.owner)
-                              .timeout(const Duration(seconds: 15),
-                                  onTimeout: () => throw TimeoutException(
-                                      'Can\'t connect to internet'));
-                          // print(productLogic.response.statusCode);
-                          // print(productLogic.response.statusCode);
-                          if (productLogic.response.statusCode != null) {
-                            if (productLogic.response.statusCode == 200) {
-                              setState(() {
-                                _loading = false;
-                                isBtnDisabled = _loading;
-                              });
-                              // ignore: use_build_context_synchronously
-                              Navigator.pop(context);
+                        List<int> imageIds = [];
+                        ProductLogic logic = ProductLogic();
+                        int i = 0;
+                        for (var element in imageFileList) {
+                          if (i <= 2) {
+                            var res = await logic.postImages(
+                                imageFileList[0], imageFileList[0].path);
+                            if (res.statusCode == 201) {
+                              imageIds.add(jsonDecode(res.body)['id']);
                             }
                           }
-                        } catch (error) {
-                          setState(() {
-                            _loading = false;
-                            isBtnDisabled = _loading;
-                            print(error);
-                            _error = "failed!!try again";
-                          });
+                          i++;
+                        }
+                        if (imageIds.isNotEmpty) {
+                          var response = await logic.postProduct(
+                              Product(
+                                  title: _nameController.text.trim(),
+                                  description:
+                                      _descriptionController.text.trim(),
+                                  price: _priceController.text.trim(),
+                                  expiryDate: DateTime.now()
+                                      .add(const Duration(days: 31)),
+                                  id2: '',
+                                  seller: Seller(),
+                                  images: [],
+                                  imageUrls: imageIds,
+                                  category: _dropdownValue),
+                              widget.owner.id);
+                          print(response.statusCode);
                         }
                       } else {
                         setState(() {
@@ -169,7 +137,7 @@ class _CreateAdState extends State<CreateAd> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  imageFileList!.isNotEmpty
+                  imageFileList.isNotEmpty
                       ? Padding(
                           padding: EdgeInsets.only(
                               left: width * 0.1, top: height * 0.19),
@@ -182,11 +150,11 @@ class _CreateAdState extends State<CreateAd> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(20)),
                               child: CarouselSlider.builder(
-                                itemCount: imageFileList!.length,
+                                itemCount: imageFileList.length,
                                 itemBuilder: (BuildContext context, int index,
                                     int pageViewIndex) {
                                   return Image.file(
-                                    File(imageFileList![index].path),
+                                    imageFileList[index],
                                     fit: BoxFit.cover,
                                   );
                                 },
@@ -221,12 +189,6 @@ class _CreateAdState extends State<CreateAd> {
                       child: IconButton(
                         onPressed: () async {
                           selectImages();
-                          // FilePickerResult? result =
-                          //     await FilePicker.platform.pickFiles();
-                          // if (result != null) {
-                          //   imageFileList!.add(
-                          //       XFile(result.files.single.path.toString()));
-                          // }
                         },
                         icon: const Icon(
                           Icons.upload_file,

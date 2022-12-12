@@ -11,6 +11,7 @@ const username = 'mrdavertzshelile@outlook.com';
 const password = 'S1helile@com';
 const _userUrl = "/list_users";
 const _sendEmailUrl = "/sendEmail/";
+const _validateAcc = '/validate-account';
 bool isvalid = false;
 final smtpServer = SmtpServer(
   'smtp-mail.outlook.com',
@@ -24,6 +25,7 @@ Future verifyOTP(User user, otp) async {
   var response = await http
       .get(Uri.parse("$server$_userUrl?search=${user.email.toString()}"));
   if (response.statusCode == 200) {
+  
     if (jsonDecode(response.body).isNotEmpty) {
       if (jsonDecode(response.body)[0]['otp'].toString() == otp.toString()) {
         isvalid = true;
@@ -36,30 +38,16 @@ Future verifyOTP(User user, otp) async {
   return response;
 }
 
-Future activateAcc(user) async {
-  var filter = "filters[email][\$eq]=" + user.email;
-  var response = await http.get(Uri.parse("$server$_userUrl?$filter"));
-  if (response.statusCode == 200) {
-    if (jsonDecode(response.body).isNotEmpty) {
-      response = await http.put(
-          // ignore: prefer_interpolation_to_compose_strings
-          Uri.parse(server +
-              _userUrl +
-              "" +
-              jsonDecode(response.body)[0]['id'].toString()),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode({"validated": true}),
-          encoding: Encoding.getByName("utf-8"));
-    }
-    return response;
-  } else {
-    // ignore: avoid_print
-    print("failed");
-    isvalid = false;
-    return response;
-  }
+Future validateAcc(User user) async {
+  var response = await http.put(
+      // ignore: prefer_interpolation_to_compose_strings
+      Uri.parse(server + _validateAcc),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({"email": user.email}),
+      encoding: Encoding.getByName("utf-8"));
+  return response;
 }
 
 // Future updateOTP(id, otp) async {

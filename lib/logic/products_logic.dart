@@ -15,52 +15,46 @@ class ProductLogic {
   List<Product> myAds = [];
   List<Product> favourites = [];
   final String _allProducts = "/product";
+  final _productCreate = '/product-create';
   final String _userProduct = "/user-product/";
   // ignore: prefer_typing_uninitialized_variables
   var response;
 
-  Future postImages(XFile image, String name) async {
+  Future postImages(File image, String name) async {
     // ignore: unrelated_type_equality_checks
     if (image == Null) return;
-    final imageTemporary = File(image.path);
+    // final imageTemporary = File(image.path);
     var stream = http.ByteStream(image.openRead());
     stream.cast();
-    var length = await imageTemporary.length();
-    var req = http.MultipartRequest('POST', Uri.parse("$server/api/upload"));
-    var multiport = http.MultipartFile("files", stream, length,
+    var length = await image.length();
+    var req = http.MultipartRequest('POST', Uri.parse("$server/multi-image"));
+    var multiport = http.MultipartFile("image", stream, length,
         filename: name, contentType: MediaType('images', 'png'));
     req.files.add(multiport);
     var streamResponse = await req.send();
     var response = await http.Response.fromStream(streamResponse);
-    if (streamResponse.statusCode == 200) {
-      // print(response.body);
-      print("file uploaded");
-    } else
-      print("failed");
 
     return response;
   }
 
-  Future postProduct(Product ad, User owner) async {
+  Future postProduct(Product ad, int id) async {
     var uuid = const Uuid();
     // print(DateTime.now().add(const Duration(days: 31)));
     Map<String, String> headers = {
+      "dataType": "json",
       'Content-Type': 'application/json; charset=UTF-8',
     };
     var data = {
-      "data": {
-        "name": ad.title,
-        "category": ad.category,
-        "description": ad.description,
-        "price": ad.price,
-        "expire_date": DateTime.now().add(const Duration(days: 31)).toString(),
-        'identifier': uuid.v4(),
-        'owner': [owner.id],
-        'display': ad.imageUrls
-      }
+      "name": ad.title,
+      "category": ad.category,
+      "description": ad.description,
+      "price": ad.price,
+      "expire_date": DateTime.now().add(const Duration(days: 31)).toString(),
+      'identifier': uuid.v4(),
+      'owner': id,
+      'display': ad.imageUrls
     };
-
-    response = await http.post(Uri.parse(server + _allProducts),
+    response = await http.post(Uri.parse(server + _productCreate),
         headers: headers,
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
@@ -130,17 +124,17 @@ class ProductLogic {
 
   Future<List<Product>> getMyAds(User owner) async {
     var filter = owner.id.toString();
-    
+
     var response = await http.get(
       Uri.parse("$server$_userProduct$filter"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-       
+
       for (var item in data) {
         var id1 = item['id'];
         var id2 = item['identifier'];
