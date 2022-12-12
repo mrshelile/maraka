@@ -51,7 +51,7 @@ class _CreateAdState extends State<CreateAd> {
   final List<String> _pageCategories = [];
   var uuid = const Uuid();
   var _error = '';
-  final bool _loading = false;
+  bool _loading = false;
   final _loader = const SpinKitSpinningLines(
     color: MyColors.blue3,
     size: 280,
@@ -82,39 +82,72 @@ class _CreateAdState extends State<CreateAd> {
                 : () async {
                     if (_formKey.currentState!.validate()) {
                       if (_dropdownValue != null) {
+                        setState(() {
+                          _loading = true;
+                        });
                         List<int> imageIds = [];
                         ProductLogic logic = ProductLogic();
                         int i = 0;
-                        for (var element in imageFileList) {
-                          if (i <= 2) {
-                            var res = await logic.postImages(
-                                imageFileList[0], imageFileList[0].path);
-                            if (res.statusCode == 201) {
-                              imageIds.add(jsonDecode(res.body)['id']);
+                        try {
+                          for (var element in imageFileList) {
+                            if (i <= 2) {
+                              var res = await logic
+                                  .postImages(
+                                      imageFileList[0], imageFileList[0].path)
+                                  .timeout(const Duration(seconds: 25),
+                                      onTimeout: () => throw TimeoutException(
+                                          'Can\'t upload image'));
+                              if (res.statusCode == 201) {
+                                imageIds.add(jsonDecode(res.body)['id']);
+                              }
+                            }
+                            i++;
+                          }
+                          if (imageIds.isNotEmpty) {
+                            var response = await logic
+                                .postProduct(
+                                    Product(
+                                        title: _nameController.text.trim(),
+                                        description:
+                                            _descriptionController.text.trim(),
+                                        price: _priceController.text.trim(),
+                                        expiryDate: DateTime.now()
+                                            .add(const Duration(days: 31)),
+                                        id2: '',
+                                        seller: Seller(),
+                                        images: [],
+                                        imageUrls: imageIds,
+                                        category: _dropdownValue),
+                                    widget.owner.id)
+                                .timeout(const Duration(seconds: 25),
+                                    onTimeout: () => throw TimeoutException(
+                                        'Can\'t create product'));
+                            // print(response.statusCode);
+                            if (response.statusCode == 201) {
+                              setState(() {
+                                _loading = false;
+                              });
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              Navigator.pop(context);
+                            } else {
+                              setState(() {
+                                _loading = false;
+                                _error = "failed";
+                              });
                             }
                           }
-                          i++;
-                        }
-                        if (imageIds.isNotEmpty) {
-                          var response = await logic.postProduct(
-                              Product(
-                                  title: _nameController.text.trim(),
-                                  description:
-                                      _descriptionController.text.trim(),
-                                  price: _priceController.text.trim(),
-                                  expiryDate: DateTime.now()
-                                      .add(const Duration(days: 31)),
-                                  id2: '',
-                                  seller: Seller(),
-                                  images: [],
-                                  imageUrls: imageIds,
-                                  category: _dropdownValue),
-                              widget.owner.id);
-                          print(response.statusCode);
+                        } catch (e) {
+                          setState(() {
+                            _loading = false;
+                            _error = 'failed';
+                          });
                         }
                       } else {
                         setState(() {
                           _error = "Please Choose Category";
+                          setState(() {
+                            _loading = false;
+                          });
                         });
                       }
                     }
