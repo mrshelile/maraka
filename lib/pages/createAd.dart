@@ -126,8 +126,9 @@ class _CreateAdState extends State<CreateAd> {
                             if (response.statusCode == 201) {
                               setState(() {
                                 _loading = false;
+                                isBtnDisabled = _loading;
                               });
-                              FocusScope.of(context).requestFocus(FocusNode());
+                              
                               Navigator.pop(context);
                             } else {
                               setState(() {
