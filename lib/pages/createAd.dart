@@ -7,11 +7,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/logic/constants.dart';
+import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:maraka/themes/sideClipDesign.dart';
 import 'package:image_picker/image_picker.dart';
@@ -128,8 +128,16 @@ class _CreateAdState extends State<CreateAd> {
                                 _loading = false;
                                 isBtnDisabled = _loading;
                               });
-                              
-                              Navigator.pop(context);
+
+                              if (!mounted) return;
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Home(
+                                            user: widget.owner,
+                                            currentIndex: 1,
+                                          )));
+                              // Navigator.pop(context);
                             } else {
                               setState(() {
                                 _loading = false;
