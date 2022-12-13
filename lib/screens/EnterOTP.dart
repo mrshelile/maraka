@@ -122,7 +122,7 @@ class _OTPState extends State<OTP> {
                         child: TextButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              await verifyOTP(widget.user, _otpController.text);
+                              await verifyOTP(widget.user, _otpController.text.trim());
 
                               if (widget.isRegister && isvalid) {
                                 var res = await validateAcc(widget.user);
@@ -144,7 +144,7 @@ class _OTPState extends State<OTP> {
                                       MaterialPageRoute(
                                           builder: (context) => UpdatePassword(
                                                 user: widget.user,
-                                                OTP: _otpController.text,
+                                                OTP: _otpController.text.trim(),
                                               )));
                                 } else {
                                   setState(() {

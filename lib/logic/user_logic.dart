@@ -222,9 +222,10 @@ class User {
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
     password = null;
-    await _storeEmail(email!).then((value) async =>
-        await sendOTP(email, otp).then((value) async => await _storeOTP(otp)));
-
+    if (response.statusCode == 201 || response.statusCode==200) {
+      await _storeEmail(email!).then((value) async => await sendOTP(email, otp)
+          .then((value) async => await _storeOTP(otp)));
+    }
     return response;
   }
 }

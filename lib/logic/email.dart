@@ -24,15 +24,15 @@ Future verifyOTP(User user, otp) async {
 
   var response = await http
       .get(Uri.parse("$server$_userUrl?search=${user.email.toString()}"));
+
   if (response.statusCode == 200) {
-  
+ 
     if (jsonDecode(response.body).isNotEmpty) {
       if (jsonDecode(response.body)[0]['otp'].toString() == otp.toString()) {
         isvalid = true;
       }
     }
   } else {
-    print("failed");
     isvalid = false;
   }
   return response;

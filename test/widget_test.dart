@@ -22,7 +22,7 @@ void main() {
   // test("user registration", () async {
   //   User user = User(
   //       name: "test user",
-  //       email: 'email@email.com',
+  //       email: 'davertzshelile@gmail.com',
   //       phone1: 1212,
   //       password: "Password@1");
   //   final res = await user.register();
@@ -31,10 +31,10 @@ void main() {
   // test("verify otp by email", () async {
   //   User user = User(
   //       name: "test user",
-  //       email: 'test@test.com',
+  //       email: 'davertzshelile@gmail.com',
   //       phone1: 1212,
   //       password: "Password@1");
-  //   final res = await verifyOTP(user, 12);
+  //   final res = await verifyOTP(user, 304118);
   //   expect(res.statusCode, 200);
   //   expect(isvalid, true);
   // });
