@@ -69,6 +69,7 @@ class _CreateAdState extends State<CreateAd> {
 
   @override
   Widget build(BuildContext context) {
+    int countBtnDisable = 0;
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
     return Scaffold(
@@ -83,11 +84,14 @@ class _CreateAdState extends State<CreateAd> {
                     if (_formKey.currentState!.validate()) {
                       setState(() {
                         isBtnDisabled = true;
+                        countBtnDisable++;
                       });
-                      if (_dropdownValue != null) {
-                        setState(() {
-                          _loading = true;
-                        });
+                      if (_dropdownValue != null && countBtnDisable < 2) {
+                        if (mounted) {
+                          setState(() {
+                            _loading = true;
+                          });
+                        }
                         List<int> imageIds = [];
                         ProductLogic logic = ProductLogic();
                         int i = 0;
@@ -126,10 +130,13 @@ class _CreateAdState extends State<CreateAd> {
                                         'Can\'t create product'));
                             // print(response.statusCode);
                             if (response.statusCode == 201) {
-                              setState(() {
-                                _loading = false;
-                                isBtnDisabled = _loading;
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  _loading = false;
+                                  isBtnDisabled = true;
+                                  // countBtnDisable = 0;
+                                });
+                              }
 
                               if (!mounted) return;
                               Navigator.pushReplacement(
@@ -141,28 +148,36 @@ class _CreateAdState extends State<CreateAd> {
                                           )));
                               // Navigator.pop(context);
                             } else {
-                              setState(() {
-                                _loading = false;
-                                _error = "failed";
-                                isBtnDisabled = false;
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  _loading = false;
+                                  _error = "failed";
+                                  isBtnDisabled = false;
+                                  countBtnDisable = 0;
+                                });
+                              }
                             }
                           }
                         } catch (e) {
-                          setState(() {
-                            _loading = false;
-                            _error = 'failed';
-                            isBtnDisabled = false;
-                          });
+                          if (mounted) {
+                            setState(() {
+                              _loading = false;
+                              _error = 'failed';
+                              isBtnDisabled = false;
+                              countBtnDisable = 0;
+                            });
+                          }
                         }
                       } else {
-                        setState(() {
-                          _error = "Please Choose Category";
+                        if (mounted) {
                           setState(() {
-                            _loading = false;
-                            isBtnDisabled = false;
+                            _error = "Please Choose Category";
+                            setState(() {
+                              _loading = false;
+                              isBtnDisabled = false;
+                            });
                           });
-                        });
+                        }
                       }
                     }
                   },
