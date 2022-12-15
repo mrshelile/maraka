@@ -157,6 +157,7 @@ class ProductLogic {
 
         for (var element in imagesJson) {
           images.add(ImageStrapi(url: element['image']));
+          
         }
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
           myAds.add(Product(

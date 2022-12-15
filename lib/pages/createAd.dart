@@ -81,6 +81,9 @@ class _CreateAdState extends State<CreateAd> {
                 ? null
                 : () async {
                     if (_formKey.currentState!.validate()) {
+                      setState(() {
+                        isBtnDisabled = true;
+                      });
                       if (_dropdownValue != null) {
                         setState(() {
                           _loading = true;
@@ -92,8 +95,7 @@ class _CreateAdState extends State<CreateAd> {
                           for (var element in imageFileList) {
                             if (i <= 2) {
                               var res = await logic
-                                  .postImages(
-                                      imageFileList[0], imageFileList[0].path)
+                                  .postImages(element, element.path)
                                   .timeout(const Duration(seconds: 25),
                                       onTimeout: () => throw TimeoutException(
                                           'Can\'t upload image'));
@@ -142,6 +144,7 @@ class _CreateAdState extends State<CreateAd> {
                               setState(() {
                                 _loading = false;
                                 _error = "failed";
+                                isBtnDisabled = false;
                               });
                             }
                           }
@@ -149,6 +152,7 @@ class _CreateAdState extends State<CreateAd> {
                           setState(() {
                             _loading = false;
                             _error = 'failed';
+                            isBtnDisabled = false;
                           });
                         }
                       } else {
@@ -156,6 +160,7 @@ class _CreateAdState extends State<CreateAd> {
                           _error = "Please Choose Category";
                           setState(() {
                             _loading = false;
+                            isBtnDisabled = false;
                           });
                         });
                       }
