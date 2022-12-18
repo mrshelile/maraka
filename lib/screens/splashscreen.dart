@@ -1,7 +1,7 @@
-
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maraka/logic/banner_logic.dart';
+import 'package:maraka/logic/sendVisitor.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/themes/background.dart';
@@ -32,6 +32,8 @@ class _SplashcreenState extends State<Splashcreen> {
   );
 
   Future<String> makeBanners() async {
+    Visitor visitor = Visitor();
+    await visitor.createVisitor().timeout(const Duration(seconds: 5));
     var logic = BannerLogic();
 
     await logic.getSplashscreen();
@@ -41,16 +43,9 @@ class _SplashcreenState extends State<Splashcreen> {
         List imgs = [];
         // List banner = [];
         for (var item in logic.bannersSplashScreen) {
-          bool skip = false;
+          // bool skip = false;
           if (item.display != null) {
-            if (item.display['data'] != null) {
-              if (item.display['data']['attributes'] != null) {
-                if (item.display['data']['attributes']['url'] != null) {
-                  // print(item.display['data']['attributes']['url']);
-                  imgs.add(server + item.display['data']['attributes']['url']);
-                }
-              }
-            }
+            imgs.add(item);
           }
         }
         if (imgs.isNotEmpty) {
@@ -63,14 +58,14 @@ class _SplashcreenState extends State<Splashcreen> {
                     onTap: () async {
                       // print(i);
                       // ignore: deprecated_member_use
-                      if (!await launch("http://" + i.url)) {
+                      if (!await launch("http://${i.url}")) {
                         print("failed launching");
                       } else {
                         print("should launch");
                       }
                     },
                     child: Image.network(
-                      server + i.imgUrl,
+                      i.display,
                     ),
                   ),
                 )
@@ -80,13 +75,14 @@ class _SplashcreenState extends State<Splashcreen> {
 
         return logic.response.toString();
       } else {
-        print("first fail");
+        debugPrint("not ok status");
         return "";
       }
     } else {
-      print("second fail");
+      debugPrint("no Response");
       return "";
     }
+    // return '';
   }
 
   @override
@@ -108,8 +104,9 @@ class _SplashcreenState extends State<Splashcreen> {
                     child: Column(
                       children: <Widget>[
                         SizedBox(
-                          height: MediaQuery.of(context).copyWith().size.height *
-                              0.05,
+                          height:
+                              MediaQuery.of(context).copyWith().size.height *
+                                  0.05,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -125,25 +122,31 @@ class _SplashcreenState extends State<Splashcreen> {
                                         .size
                                         .height *
                                     0.2,
-                                width:
-                                    MediaQuery.of(context).copyWith().size.width *
-                                        0.3,
+                                width: MediaQuery.of(context)
+                                        .copyWith()
+                                        .size
+                                        .width *
+                                    0.3,
                                 child: Image.asset(
                                   "assets/maraka.png",
                                 )),
                           ],
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).copyWith().size.height *
-                              0.07,
+                          height:
+                              MediaQuery.of(context).copyWith().size.height *
+                                  0.07,
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).copyWith().size.width *
-                                  0.14,
-                              bottom:
-                                  MediaQuery.of(context).copyWith().size.height *
-                                      0.05),
+                              left:
+                                  MediaQuery.of(context).copyWith().size.width *
+                                      0.14,
+                              bottom: MediaQuery.of(context)
+                                      .copyWith()
+                                      .size
+                                      .height *
+                                  0.05),
                           child: const Text(
                             "Shopping made easy, buy and/sell anything, anytime",
                             style:
@@ -156,20 +159,23 @@ class _SplashcreenState extends State<Splashcreen> {
                             height:
                                 MediaQuery.of(context).copyWith().size.height *
                                     0.4,
-                            width: MediaQuery.of(context).copyWith().size.width *
-                                0.6,
+                            width:
+                                MediaQuery.of(context).copyWith().size.width *
+                                    0.6,
                             child: imageCarousel),
                         SizedBox(
-                          height: MediaQuery.of(context).copyWith().size.height *
-                              0.05,
+                          height:
+                              MediaQuery.of(context).copyWith().size.height *
+                                  0.05,
                         ),
                         SwipingButton(
-                          height:
-                              MediaQuery.of(context).copyWith().size.width * 0.1,
+                          height: MediaQuery.of(context).copyWith().size.width *
+                              0.1,
                           text: "Swipe To Get Started",
                           padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).copyWith().size.width *
-                                  0.14,
+                              left:
+                                  MediaQuery.of(context).copyWith().size.width *
+                                      0.14,
                               right:
                                   MediaQuery.of(context).copyWith().size.width *
                                       0.15),
@@ -182,25 +188,25 @@ class _SplashcreenState extends State<Splashcreen> {
                                 MaterialPageRoute(
                                     builder: (context) => Home(
                                           currentIndex: 0,
-                                          user: new User(),
+                                          user: User(),
                                         )));
                           },
                         ),
                       ],
                     ),
                   );
-                } 
-                else 
-                {
-                  return   Column(
+                } else {
+                  return Column(
                     // ignore: prefer_const_literals_to_create_immutables
                     children: <Widget>[
-                      SizedBox(height: MediaQuery.of(context).copyWith().size.height* 0.3,),
-                      const SpinKitSpinningLines(
-                      color: Color.fromARGB(255, 12, 131, 125),
-                      size: 180.0  
+                      SizedBox(
+                        height:
+                            MediaQuery.of(context).copyWith().size.height * 0.3,
                       ),
-                     const Text("Checking Internet")
+                      const SpinKitSpinningLines(
+                          color: Color.fromARGB(255, 12, 131, 125),
+                          size: 180.0),
+                      const Text("Checking Internet")
                     ],
                   );
                 }

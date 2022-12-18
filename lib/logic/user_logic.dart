@@ -26,10 +26,11 @@ class User {
   // ignore: prefer_typing_uninitialized_variables
   var response;
 
-  final _login = "/api/auth/local";
-  final _register = "/api/auth/local/register";
-  final _userUrl = "/api/users/";
-  final _updatePasswordUrl="/api/marakapasswordreset";
+  final _login = "/auth/login/";
+  final _register = "/auth_user";
+  final _userUrl = "/list_users";
+  final _userPasswordReset = "/reset-password";
+  final _updatePasswordUrl = "/update-password";
   User(
       {this.name,
       this.email,
@@ -46,7 +47,7 @@ class User {
 
   Future retrieveToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var value = await prefs.getString('jwt') ?? null;
+    var value = prefs.getString('jwt');
 
     jsonEncode(value).toString().isEmpty ||
             // ignore: unrelated_type_equality_checks
@@ -64,7 +65,7 @@ class User {
 
   Future _retrieveOTP(String value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var value = await prefs.getString('otp') ?? null;
+    var value = prefs.getString('otp');
 
     jsonEncode(value).toString().isEmpty ||
             // ignore: unrelated_type_equality_checks
@@ -129,67 +130,67 @@ class User {
   }
 
   Future login() async {
-    Map data = {'identifier': email, 'password': password};
-    
+    Map data = {'username': email, 'password': password};
+
     response = await http.post(Uri.parse(server + _login),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
-   
+
     if (response.statusCode == 200) {
       // isValidatedAcc = jsonDecode(response.body)['user']['validated'];
-      
-      jwt = jsonDecode(response.body)['jwt'];
+
+      jwt = jsonDecode(response.body)['token'];
       name = jsonDecode(response.body)['user']['full_name'];
-      
-      if(jsonDecode(response.body)['user']['phone1']!=null) {
+
+      if (jsonDecode(response.body)['user']['phone1'] != null) {
         phone1 = int.parse(jsonDecode(response.body)['user']['phone1']);
-          
       }
-      
-      is_blocked = jsonDecode(response.body)['user']['blocked']??false;
-      is_confirmed = jsonDecode(response.body)['user']['validated']??false;
+
+      is_blocked = jsonDecode(response.body)['user']['is_active'] ?? false;
+      is_confirmed = jsonDecode(response.body)['user']['validated'] ?? false;
       id = jsonDecode(response.body)['user']['id'];
       password = null;
-      await _storeToken(jsonDecode(response.body)['jwt']);
+      await _storeToken(jwt);
       await _storeEmail(email.toString());
     }
+    print(response);
     return response;
     //  if(response.staus)
     //
   }
 
   Future resetPassword() async {
-    var filter = "filters[email][\$eq]=$email";
+    canUpdatePassword = false;
     otp = OTP.generateTOTPCodeString(
         'JBSWY3DPEHPK3PXP', DateTime.now().millisecondsSinceEpoch);
-    response = await http.get(
-      Uri.parse("$server$_userUrl?$filter"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
+    var data = {"email": email, "otp": otp};
+    response = await http.put(Uri.parse(server + _userPasswordReset),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(data),
+        encoding: Encoding.getByName("utf-8"));
+
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body)[0]);
-      if (jsonDecode(response.body).isNotEmpty) {
-        id = jsonDecode(response.body)[0]['id'];
-        await updateOTP(id, int.parse(otp)).whenComplete(() async =>
-            await sendOTP(email.toString(), int.parse(otp))
-                .whenComplete(() => canUpdatePassword = true));
-      } else {
-        canUpdatePassword = false;
+      var res = await sendOTP(email, otp);
+      if (res.statusCode == 200) {
+        canUpdatePassword = true;
+        return res;
       }
     }
-    // ignore: avoid_print
-    print(canUpdatePassword);
+    return http.Response("internal error", 500);
   }
 
   // ignore: non_constant_identifier_names
-  Future updatePassword(Newpassword,int OTP,email) async {
-    var data = {"password": Newpassword.toString(),"confirmPassword":Newpassword.toString(),"OTP":OTP,"email":email,};
-    var respose = await http.post(Uri.parse(server + _updatePasswordUrl),
+  Future updatePassword(Newpassword, int OTP, email) async {
+    var data = {
+      "password": Newpassword.toString(),
+      "email": email,
+    };
+    var respose = await http.put(Uri.parse(server + _updatePasswordUrl),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -204,15 +205,17 @@ class User {
 
     Map data = {
       'email': email,
-      'identifier': email,
       "username": email,
       "phone1": phone1.toString(),
       "phone2": phone2.toString(),
       "otp": otp,
       "full_name": name,
       "validated": false,
+      "is_active": true,
+      "is_superuser": false,
       'password': password
     };
+
     response = await http.post(Uri.parse(server + _register),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -220,9 +223,10 @@ class User {
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
     password = null;
-    await _storeEmail(email!).then((value) async =>
-        await sendOTP(email, otp).then((value) async => await _storeOTP(otp)));
-
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      await _storeEmail(email!).then((value) async => await sendOTP(email, otp)
+          .then((value) async => await _storeOTP(otp)));
+    }
     return response;
   }
 }

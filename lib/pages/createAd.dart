@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,6 +11,7 @@ import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/logic/constants.dart';
+import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:maraka/themes/sideClipDesign.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,18 +29,18 @@ class CreateAd extends StatefulWidget {
 
 class _CreateAdState extends State<CreateAd> {
   //V EDIT
-  final ImagePicker imagePicker = ImagePicker();
-  List<XFile>? imageFileList = [];
+  // final ImagePicker imagePicker = ImagePicker();
+  List<File> imageFileList = [];
   bool isBtnDisabled = false;
   void selectImages() async {
-    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
-    if (selectedImages!.isNotEmpty) {
-      //
-      //imageFileList = selectedImages.map<File>((XFile(path)) => File(XFile.path)).toList();
-      imageFileList!.addAll(selectedImages);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: true, allowedExtensions: ['jpg', 'png', 'jpeg']);
+
+    if (result != null) {
+      setState(() {
+        imageFileList = result.paths.map((path) => File(path!)).toList();
+      });
     }
-    // imageFileList = imageFileList!.sublist(0, 2);
-    setState(() {});
   }
   //V EDIT
 
@@ -53,15 +55,12 @@ class _CreateAdState extends State<CreateAd> {
   final _loader = const SpinKitSpinningLines(
     color: MyColors.blue3,
     size: 280,
-    // duration: Duration(milliseconds: 1000),
   );
+
   // ignore: prefer_typing_uninitialized_variables
   var _dropdownValue;
   @override
   void initState() {
-    // categories.forEach((key, value) {
-    //   _pageCategories.add(key);
-    // });
     for (var element in categories) {
       _pageCategories.add(element['text'].toString().toLowerCase());
     }
@@ -70,6 +69,7 @@ class _CreateAdState extends State<CreateAd> {
 
   @override
   Widget build(BuildContext context) {
+    int countBtnDisable = 0;
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
     return Scaffold(
@@ -82,72 +82,102 @@ class _CreateAdState extends State<CreateAd> {
                 ? null
                 : () async {
                     if (_formKey.currentState!.validate()) {
-                      if (_dropdownValue != null) {
-                        ProductLogic productLogic = ProductLogic();
-                        // ignore: prefer_typing_uninitialized_variables
-                        setState(() {
-                          _loading = true;
-                          isBtnDisabled = _loading;
-                        });
-                        var res;
-                        try {
-                          List<int> imagesUrls = [];
-                          int index = 0;
-                          for (var img in imageFileList!) {
-                            
-                            if (index >= 3) break;
-                            res = await productLogic.postImages(img,_nameController.text.trim()).timeout(
-                                const Duration(seconds: 15),
-                                onTimeout: () => throw TimeoutException(
-                                    'Can\'t connect to internet'));
-                            if (res.statusCode == 200) {
-                              imagesUrls.add(jsonDecode(res.body)[0]['id']);
-                              // print(imagesUrls);
-                            }
-                            index++;
-                          }
-                          Product product = Product(
-                            images: null,
-                            seller: null,
-                            expiryDate: DateTime.now(),
-                            isLiked: false,
-                            id2: uuid.v4(),
-                            title: _nameController.text.trim(),
-                            description: _descriptionController.text.trim(),
-                            price:
-                                double.parse(_priceController.text.trim().toString()),
-                            category: _dropdownValue,
-                            imageUrls: imagesUrls
-                          );
-                          await productLogic
-                              .postProduct(product, widget.owner)
-                              .timeout(const Duration(seconds: 15),
-                                  onTimeout: () => throw TimeoutException(
-                                      'Can\'t connect to internet'));
-                          // print(productLogic.response.statusCode);
-                          // print(productLogic.response.statusCode);
-                          if (productLogic.response.statusCode != null) {
-                            if (productLogic.response.statusCode == 200) {
-                              setState(() {
-                                _loading = false;
-                                isBtnDisabled = _loading;
-                              });
-                              // ignore: use_build_context_synchronously
-                              Navigator.pop(context);
-                            }
-                          }
-                        } catch (error) {
+                      setState(() {
+                        isBtnDisabled = true;
+                        countBtnDisable++;
+                      });
+                      if (_dropdownValue != null && countBtnDisable < 2) {
+                        if (mounted) {
                           setState(() {
-                            _loading = false;
-                            isBtnDisabled = _loading;
-                            print(error);
-                            _error = "failed!!try again";
+                            _loading = true;
                           });
                         }
+                        List<int> imageIds = [];
+                        ProductLogic logic = ProductLogic();
+                        int i = 0;
+                        try {
+                          for (var element in imageFileList) {
+                            if (i <= 2) {
+                              var res = await logic
+                                  .postImages(element, element.path)
+                                  .timeout(const Duration(seconds: 25),
+                                      onTimeout: () => throw TimeoutException(
+                                          'Can\'t upload image'));
+                              if (res.statusCode == 201) {
+                                imageIds.add(jsonDecode(res.body)['id']);
+                              }
+                            }
+                            i++;
+                          }
+                          if (imageIds.isNotEmpty) {
+                            var response = await logic
+                                .postProduct(
+                                    Product(
+                                        title: _nameController.text.trim(),
+                                        description:
+                                            _descriptionController.text.trim(),
+                                        price: _priceController.text.trim(),
+                                        expiryDate: DateTime.now()
+                                            .add(const Duration(days: 31)),
+                                        id2: '',
+                                        seller: Seller(),
+                                        images: [],
+                                        imageUrls: imageIds,
+                                        category: _dropdownValue),
+                                    widget.owner.id)
+                                .timeout(const Duration(seconds: 25),
+                                    onTimeout: () => throw TimeoutException(
+                                        'Can\'t create product'));
+                            // print(response.statusCode);
+                            if (response.statusCode == 201) {
+                              if (mounted) {
+                                setState(() {
+                                  _loading = false;
+                                  isBtnDisabled = true;
+                                  // countBtnDisable = 0;
+                                });
+                              }
+
+                              if (!mounted) return;
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Home(
+                                            user: widget.owner,
+                                            currentIndex: 1,
+                                          )));
+                              // Navigator.pop(context);
+                            } else {
+                              if (mounted) {
+                                setState(() {
+                                  _loading = false;
+                                  _error = "failed";
+                                  isBtnDisabled = false;
+                                  countBtnDisable = 0;
+                                });
+                              }
+                            }
+                          }
+                        } catch (e) {
+                          if (mounted) {
+                            setState(() {
+                              _loading = false;
+                              _error = 'failed';
+                              isBtnDisabled = false;
+                              countBtnDisable = 0;
+                            });
+                          }
+                        }
                       } else {
-                        setState(() {
-                          _error = "Please Choose Category";
-                        });
+                        if (mounted) {
+                          setState(() {
+                            _error = "Please Choose Category";
+                            setState(() {
+                              _loading = false;
+                              isBtnDisabled = false;
+                            });
+                          });
+                        }
                       }
                     }
                   },
@@ -169,7 +199,7 @@ class _CreateAdState extends State<CreateAd> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  imageFileList!.isNotEmpty
+                  imageFileList.isNotEmpty
                       ? Padding(
                           padding: EdgeInsets.only(
                               left: width * 0.1, top: height * 0.19),
@@ -182,11 +212,11 @@ class _CreateAdState extends State<CreateAd> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(20)),
                               child: CarouselSlider.builder(
-                                itemCount: imageFileList!.length,
+                                itemCount: imageFileList.length,
                                 itemBuilder: (BuildContext context, int index,
                                     int pageViewIndex) {
                                   return Image.file(
-                                    File(imageFileList![index].path),
+                                    imageFileList[index],
                                     fit: BoxFit.cover,
                                   );
                                 },
@@ -221,12 +251,6 @@ class _CreateAdState extends State<CreateAd> {
                       child: IconButton(
                         onPressed: () async {
                           selectImages();
-                          // FilePickerResult? result =
-                          //     await FilePicker.platform.pickFiles();
-                          // if (result != null) {
-                          //   imageFileList!.add(
-                          //       XFile(result.files.single.path.toString()));
-                          // }
                         },
                         icon: const Icon(
                           Icons.upload_file,
@@ -350,7 +374,7 @@ class _CreateAdState extends State<CreateAd> {
                               0.51,
                           child: DropdownButton(
                             value: _dropdownValue,
-                            hint: const Text("Choose an Categories"),
+                            hint: const Text("Choose a Category"),
                             // Down Arrow Icon
                             icon: const Icon(Icons.keyboard_arrow_down),
                             items:

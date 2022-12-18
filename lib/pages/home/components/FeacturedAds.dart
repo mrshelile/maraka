@@ -15,14 +15,13 @@ class FeacturedAds extends StatelessWidget {
   }) : super(key: key);
   List<dynamic> banners = [];
   Future getFeatureAds() async {
-    Visitor visitor = Visitor();
-    await visitor.createVisitor();
+    // Visitor visitor = Visitor();
+    // await visitor.createVisitor();
     BannerLogic logic = BannerLogic();
     var res = await logic.getBottomBanner();
     for (var element in logic.bannersBottom) {
       banners.add(element);
     }
-
     return res;
   }
 
@@ -47,7 +46,7 @@ class FeacturedAds extends StatelessWidget {
                     children: [
                       for (var item in banners)
                         SpecialOfferCard(
-                          image: server + item.imgUrl,
+                          image: item.imgUrl,
                           name: item.owner,
                           press: () async {
                             await launchUrl(Uri.parse("http://" + item.url));

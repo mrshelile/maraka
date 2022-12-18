@@ -22,11 +22,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   @override
   void initState() {
     // TODO: implement initState
-    
+
     super.initState();
   }
 
@@ -67,26 +66,29 @@ class _HomeState extends State<Home> {
         showElevation: true,
         itemCornerRadius: 24,
         curve: Curves.easeIn,
-        
         onItemSelected: (index) async {
           // await widget.user.removeToken();
           // await widget.user.retrieveEmail();
           // print(widget.user.email);
 
-          if (index == 1 || index == 2 ) {
+          if (index == 1 || index == 2) {
             if (widget.user.email == null) {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => const Login()));
             } else {
-              setState(() {
-                if (widget.user.email != null) widget.currentIndex = index;
-              });
+              if (widget.user.email != null) {
+                setState(() {
+                  widget.currentIndex = index;
+                });
+              }
             }
           }
           if (index != 1 || index != 2 || index != 3) {
-            setState(() {
-              if (widget.user.email != null) widget.currentIndex = index;
-            });
+            if (widget.user.email != null) {
+              setState(() {
+                widget.currentIndex = index;
+              });
+            }
           }
         },
         items: <BottomNavyBarItem>[

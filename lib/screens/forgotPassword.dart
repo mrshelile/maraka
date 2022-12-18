@@ -82,10 +82,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   r"{0,253}[a-zA-Z0])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9]"
                                   r"{0,253}[a-zA-Z0])?)*$";
                               RegExp regex = RegExp(pattern);
-                              if (!regex.hasMatch(value!) &&
-                                  value.isNotEmpty) {
+                              if (!regex.hasMatch(value!.trim()) &&
+                                  value.trim().isNotEmpty) {
                                 return "Invalid Email Format";
-                              } else if (value.isEmpty) {
+                              } else if (value.trim().isEmpty) {
                                 return 'Email Address Cannot be empty';
                               } else {
                                 return null;
@@ -130,7 +130,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   User? tempUser =
-                                      User(email: _emailController.text);
+                                      User(email: _emailController.text.trim());
                                     setState(() {
                                     _loading = true;
                                   });

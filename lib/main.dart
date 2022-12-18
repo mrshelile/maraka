@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         FocusScope.of(context).requestFocus(new FocusNode());
       },
       child: MaterialApp(
-        title: 'Online Shop',
+        title: 'Maraka',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           // This is the theme of your application.

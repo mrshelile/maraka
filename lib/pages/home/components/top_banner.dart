@@ -8,16 +8,19 @@ import 'package:maraka/themes/color.dart';
 
 import '../../../size_config.dart';
 
-class DiscountBanner extends StatefulWidget {
+// class DiscountBanner extends StatefulWidget {
+//   const DiscountBanner({
+//     Key? key,
+//   }) : super(key: key);
+
+//   @override
+//   State<DiscountBanner> createState() => _DiscountBannerState();
+// }
+
+class DiscountBanner extends StatelessWidget {
   DiscountBanner({
     Key? key,
   }) : super(key: key);
-
-  @override
-  State<DiscountBanner> createState() => _DiscountBannerState();
-}
-
-class _DiscountBannerState extends State<DiscountBanner> {
   Widget imageCarousel = CarouselSlider(
     items: [
       Container(
@@ -28,7 +31,6 @@ class _DiscountBannerState extends State<DiscountBanner> {
             vertical: 5,
           ),
           decoration: BoxDecoration(
-            
             color: const Color.fromARGB(159, 242, 243, 245),
             borderRadius: BorderRadius.circular(20),
           ),
@@ -57,20 +59,12 @@ class _DiscountBannerState extends State<DiscountBanner> {
         if (logic.bannersHomeScreen.isNotEmpty) {
           for (var item in logic.bannersHomeScreen) {
             if (item.display != null) {
-              if (item.display['data'] != null) {
-                if (item.display['data']['attributes'] != null) {
-                  if (item.display['data']['attributes']['url'] != null) {
-                    imgs.add(NetworkImage(
-                        server + item.display['data']['attributes']['url']));
-                  }
-                }
-              }
+              imgs.add(item);
             }
           }
           imageCarousel = CarouselSlider(
             items: imgs
-                .map((item) => 
-                  Container(
+                .map((item) => Container(
                       width: double.infinity,
                       margin: const EdgeInsets.all(5),
                       padding: const EdgeInsets.symmetric(
@@ -81,23 +75,22 @@ class _DiscountBannerState extends State<DiscountBanner> {
                           color: const Color.fromARGB(159, 242, 243, 245),
                           borderRadius: BorderRadius.circular(10.0),
                           image:
-                              DecorationImage(image: item, fit: BoxFit.cover)),
-                    )
-                    )
+                              DecorationImage(image: NetworkImage(item.display), fit: BoxFit.cover)),
+                    ))
                 .toList(),
             options: CarouselOptions(
-            height: 150,
-            aspectRatio: 16 / 9,
-            viewportFraction: 0.8,
-            initialPage: 0,
-            enableInfiniteScroll: true,
-            reverse: false,
-            autoPlay: true,
-            autoPlayInterval: const Duration(seconds: 3),
-            autoPlayAnimationDuration: const Duration(microseconds: 200),
-            autoPlayCurve: Curves.fastOutSlowIn,
-            enlargeCenterPage: true,
-            scrollDirection: Axis.horizontal),
+                height: 150,
+                aspectRatio: 16 / 9,
+                viewportFraction: 0.8,
+                initialPage: 0,
+                enableInfiniteScroll: true,
+                reverse: false,
+                autoPlay: true,
+                autoPlayInterval: const Duration(seconds: 3),
+                autoPlayAnimationDuration: const Duration(microseconds: 200),
+                autoPlayCurve: Curves.fastOutSlowIn,
+                enlargeCenterPage: true,
+                scrollDirection: Axis.horizontal),
           );
         }
       }

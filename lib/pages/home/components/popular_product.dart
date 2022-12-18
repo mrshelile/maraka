@@ -56,33 +56,35 @@ class _PopularProductsState extends State<PopularProducts> {
                 future: makeProductList(),
                 builder: ((context, snapshot) {
                   return GetBuilder(
-                    init: store,
-                    builder: (_) {
-                    return Row(
-                      children: [
-                        ...List.generate(
-                          store.products.length,
-                          (index) {
-                            return store.search.isEmpty
-                                ? ProductCard(product: store.products[index])
-                                : store.products[index].title!
-                                        .toLowerCase()
-                                        .toString()
-                                        .contains(store.search
-                                            .toLowerCase()
-                                            .toString())
+                      init: store,
+                      builder: (_) {
+                        return Row(
+                          children: [
+                            ...List.generate(
+                              store.products.length,
+                              (index) {
+                                return store.search.isEmpty
                                     ? ProductCard(
                                         product: store.products[index])
-                                    : Container();
-                            // return const SizedBox
-                            //     .shrink(); // here by default width and height is 0
-                          },
-                        ),
-                        SizedBox(
-                            width: getProportionateScreenWidth(20, context)),
-                      ],
-                    );
-                  });
+                                    : store.products[index].title!
+                                            .toLowerCase()
+                                            .toString()
+                                            .contains(store.search
+                                                .toLowerCase()
+                                                .toString())
+                                        ? ProductCard(
+                                            product: store.products[index])
+                                        : Container();
+                                // return const SizedBox
+                                //     .shrink(); // here by default width and height is 0
+                              },
+                            ),
+                            SizedBox(
+                                width:
+                                    getProportionateScreenWidth(20, context)),
+                          ],
+                        );
+                      });
                 }))),
       ],
     );
