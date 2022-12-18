@@ -14,7 +14,6 @@ import 'package:maraka/logic/constants.dart';
 import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:maraka/themes/sideClipDesign.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 // ignore: must_be_immutable
@@ -34,8 +33,9 @@ class _CreateAdState extends State<CreateAd> {
   bool isBtnDisabled = false;
   void selectImages() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
+       type: FileType.custom,
         allowMultiple: true, allowedExtensions: ['jpg', 'png', 'jpeg']);
-
+        
     if (result != null) {
       setState(() {
         imageFileList = result.paths.map((path) => File(path!)).toList();

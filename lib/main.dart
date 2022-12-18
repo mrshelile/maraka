@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       child: MaterialApp(
         title: 'Maraka',
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blueGrey,
         ),
-        home: Splashcreen(),
+        home: const Splashcreen(),
 
         // home: CarouselSelectWidgetSample(),
       ),

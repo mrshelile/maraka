@@ -32,8 +32,8 @@ class _SplashcreenState extends State<Splashcreen> {
   );
 
   Future<String> makeBanners() async {
-    Visitor visitor = Visitor();
-    await visitor.createVisitor().timeout(const Duration(seconds: 5));
+    // Visitor visitor = Visitor();
+    // await visitor.createVisitor().timeout(const Duration(seconds: 5));
     var logic = BannerLogic();
 
     await logic.getSplashscreen();
