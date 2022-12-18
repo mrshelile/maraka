@@ -374,7 +374,7 @@ class _CreateAdState extends State<CreateAd> {
                               0.51,
                           child: DropdownButton(
                             value: _dropdownValue,
-                            hint: const Text("Choose an Categories"),
+                            hint: const Text("Choose a Category"),
                             // Down Arrow Icon
                             icon: const Icon(Icons.keyboard_arrow_down),
                             items:
