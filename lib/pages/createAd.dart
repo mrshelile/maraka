@@ -32,14 +32,28 @@ class _CreateAdState extends State<CreateAd> {
   List<File> imageFileList = [];
   bool isBtnDisabled = false;
   void selectImages() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-       type: FileType.custom,
-        allowMultiple: true, allowedExtensions: ['jpg', 'png', 'jpeg']);
-        
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.image, allowMultiple: true
+            // allowMultiple: true, allowedExtensions: ['jpg', 'png', 'jpeg']
+            );
+
     if (result != null) {
-      setState(() {
-        imageFileList = result.paths.map((path) => File(path!)).toList();
-      });
+      if (result.files.length <= 3) {
+        if (result.files.every((element) => element.size <= 3750000)) {
+          setState(() {
+            _error = "";
+            imageFileList = result.paths.map((path) => File(path!)).toList();
+          });
+        } else {
+          setState(() {
+            _error = "image is too large";
+          });
+        }
+      } else {
+        setState(() {
+          _error = "maximum of 3 images";
+        });
+      }
     }
   }
   //V EDIT
@@ -86,98 +100,109 @@ class _CreateAdState extends State<CreateAd> {
                         isBtnDisabled = true;
                         countBtnDisable++;
                       });
-                      if (_dropdownValue != null && countBtnDisable < 2) {
-                        if (mounted) {
-                          setState(() {
-                            _loading = true;
-                          });
-                        }
-                        List<int> imageIds = [];
-                        ProductLogic logic = ProductLogic();
-                        int i = 0;
-                        try {
-                          for (var element in imageFileList) {
-                            if (i <= 2) {
-                              var res = await logic
-                                  .postImages(element, element.path)
-                                  .timeout(const Duration(seconds: 25),
-                                      onTimeout: () => throw TimeoutException(
-                                          'Can\'t upload image'));
-                              if (res.statusCode == 201) {
-                                imageIds.add(jsonDecode(res.body)['id']);
-                              }
-                            }
-                            i++;
-                          }
-                          if (imageIds.isNotEmpty) {
-                            var response = await logic
-                                .postProduct(
-                                    Product(
-                                        title: _nameController.text.trim(),
-                                        description:
-                                            _descriptionController.text.trim(),
-                                        price: _priceController.text.trim(),
-                                        expiryDate: DateTime.now()
-                                            .add(const Duration(days: 31)),
-                                        id2: '',
-                                        seller: Seller(),
-                                        images: [],
-                                        imageUrls: imageIds,
-                                        category: _dropdownValue),
-                                    widget.owner.id)
-                                .timeout(const Duration(seconds: 25),
-                                    onTimeout: () => throw TimeoutException(
-                                        'Can\'t create product'));
-                            // print(response.statusCode);
-                            if (response.statusCode == 201) {
-                              if (mounted) {
-                                setState(() {
-                                  _loading = false;
-                                  isBtnDisabled = true;
-                                  // countBtnDisable = 0;
-                                });
-                              }
-
-                              if (!mounted) return;
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Home(
-                                            user: widget.owner,
-                                            currentIndex: 1,
-                                          )));
-                              // Navigator.pop(context);
-                            } else {
-                              if (mounted) {
-                                setState(() {
-                                  _loading = false;
-                                  _error = "failed";
-                                  isBtnDisabled = false;
-                                  countBtnDisable = 0;
-                                });
-                              }
-                            }
-                          }
-                        } catch (e) {
+                      if (imageFileList.isNotEmpty) {
+                        if (_dropdownValue != null && countBtnDisable < 2) {
                           if (mounted) {
                             setState(() {
-                              _loading = false;
-                              _error = 'failed';
-                              isBtnDisabled = false;
-                              countBtnDisable = 0;
+                              _loading = true;
+                            });
+                          }
+                          List<int> imageIds = [];
+                          ProductLogic logic = ProductLogic();
+                          int i = 0;
+                          try {
+                            for (var element in imageFileList) {
+                              if (i <= 2) {
+                                var res = await logic
+                                    .postImages(element, element.path)
+                                    .timeout(const Duration(seconds: 25),
+                                        onTimeout: () => throw TimeoutException(
+                                            'Can\'t upload image'));
+                                if (res.statusCode == 201) {
+                                  imageIds.add(jsonDecode(res.body)['id']);
+                                }
+                              }
+                              i++;
+                            }
+                            if (imageIds.isNotEmpty) {
+                              var response = await logic
+                                  .postProduct(
+                                      Product(
+                                          title: _nameController.text.trim(),
+                                          description: _descriptionController
+                                              .text
+                                              .trim(),
+                                          price: _priceController.text.trim(),
+                                          expiryDate: DateTime.now()
+                                              .add(const Duration(days: 31)),
+                                          id2: '',
+                                          seller: Seller(),
+                                          images: [],
+                                          imageUrls: imageIds,
+                                          category: _dropdownValue),
+                                      widget.owner.id)
+                                  .timeout(const Duration(seconds: 25),
+                                      onTimeout: () => throw TimeoutException(
+                                          'Can\'t create product'));
+                              // print(response.statusCode);
+                              if (response.statusCode == 201) {
+                                if (mounted) {
+                                  setState(() {
+                                    _loading = false;
+                                    isBtnDisabled = true;
+                                    // countBtnDisable = 0;
+                                  });
+                                }
+
+                                if (!mounted) return;
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Home(
+                                              user: widget.owner,
+                                              currentIndex: 1,
+                                            )));
+                                // Navigator.pop(context);
+                              } else {
+                                if (mounted) {
+                                  setState(() {
+                                    _loading = false;
+                                    _error = "failed";
+                                    isBtnDisabled = false;
+                                    countBtnDisable = 0;
+                                  });
+                                }
+                              }
+                            }
+                          } catch (e) {
+                            if (mounted) {
+                              setState(() {
+                                _loading = false;
+                                _error = 'failed';
+                                isBtnDisabled = false;
+                                countBtnDisable = 0;
+                              });
+                            }
+                          }
+                        } else {
+                          if (mounted) {
+                            setState(() {
+                              _error = "Please Choose Category";
+                              setState(() {
+                                _loading = false;
+                                isBtnDisabled = false;
+                                countBtnDisable = 0;
+                              });
                             });
                           }
                         }
                       } else {
-                        if (mounted) {
-                          setState(() {
-                            _error = "Please Choose Category";
-                            setState(() {
-                              _loading = false;
-                              isBtnDisabled = false;
-                            });
-                          });
-                        }
+                        setState(() {
+                          _loading = false;
+                          _error = "Choose Image";
+                          countBtnDisable = 0;
+                          isBtnDisabled = false;
+                        });
                       }
                     }
                   },
@@ -284,7 +309,7 @@ class _CreateAdState extends State<CreateAd> {
                             labelText: 'Name',
                           ),
                           validator: (String? value) {
-                            return value == null || value.isEmpty
+                            return value == null || value.trim().isEmpty
                                 ? 'Name Cannot be empty'
                                 : null;
                           },
@@ -321,7 +346,7 @@ class _CreateAdState extends State<CreateAd> {
                             hintText: "M",
                           ),
                           validator: (String? value) {
-                            return value == null || value.isEmpty
+                            return value == null || value.trim().isEmpty
                                 ? 'Price Cannot be empty'
                                 : null;
                           },
@@ -354,8 +379,8 @@ class _CreateAdState extends State<CreateAd> {
                             labelText: 'Description',
                           ),
                           validator: (String? value) {
-                            return value == null || value.isEmpty
-                                ? 'Name Cannot be empty'
+                            return value == null || value.trim().isEmpty
+                                ? 'Descrition Cannot be empty'
                                 : null;
                           },
                         ),

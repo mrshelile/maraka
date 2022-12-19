@@ -38,7 +38,8 @@ class _LoginState extends State<Login> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: LayoutBuilder(builder: (context, constraints) {
-        print(constraints);
+       
+       
         return Stack(
           children: <Widget>[
             CustomPaint(
@@ -193,7 +194,7 @@ class _LoginState extends State<Login> {
                                   if (user.response.statusCode != null) {
                                     if (user.response.statusCode == 200) {
                                       if (user.is_confirmed) {
-                                        // print(user.is_confirmed);
+                                        
                                         // ignore: use_build_context_synchronously
                                         Navigator.pushReplacement(
                                             context,
@@ -222,7 +223,7 @@ class _LoginState extends State<Login> {
                                     }
                                   }
                                 } catch (error) {
-                                  // ignore: avoid_print
+                               
 
                                   setState(() {
                                     _errorMessage =
