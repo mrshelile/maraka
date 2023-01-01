@@ -65,13 +65,13 @@ class CategoryCard extends StatelessWidget {
               height: getProportionateScreenWidth(60, context),
               width: MediaQuery.of(context).copyWith().size.width,
               decoration: BoxDecoration(
-                boxShadow: const [
-                  BoxShadow(
-                      color: Color.fromARGB(209, 218, 213, 213),
-                      spreadRadius: 5,
-                      blurRadius: 6,
-                      offset: Offset(0, 3))
-                ],
+                // boxShadow: const [
+                //   BoxShadow(
+                //       color: Color.fromARGB(209, 218, 213, 213),
+                //       spreadRadius: 5,
+                //       blurRadius: 6,
+                //       offset: Offset(0, 3))
+                // ],
                 color: Color.fromARGB(255, 169, 208, 235).withOpacity(0.7),
                 borderRadius: BorderRadius.circular(10),
               ),

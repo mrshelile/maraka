@@ -73,7 +73,7 @@ class _HomeState extends State<Home> {
 
           if (index == 1 || index == 2) {
             if (widget.user.email == null) {
-              Navigator.pushReplacement(context,
+              Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const Login()));
             } else {
               if (widget.user.email != null) {
