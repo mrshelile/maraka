@@ -54,6 +54,7 @@ class ProductLogic {
       'owner': id,
       'display': ad.imageUrls
     };
+  
     response = await http.post(Uri.parse(server + _productCreate),
         headers: headers,
         body: jsonEncode(data),
@@ -157,7 +158,6 @@ class ProductLogic {
 
         for (var element in imagesJson) {
           images.add(ImageStrapi(url: element['image']));
-          
         }
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
           myAds.add(Product(

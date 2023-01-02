@@ -211,7 +211,7 @@ class _RegistrationState extends State<Registration> {
                               // create account event
                               return null;
                             } else {
-                              return "Password not strong enough";
+                              return "Password not strong enough (e.g Password@1)";
                             }
                           }
                         },
@@ -259,7 +259,7 @@ class _RegistrationState extends State<Registration> {
                               // create account event
                               return null;
                             } else {
-                              return "Confirm Password not strong enough";
+                              return "Confirm Password not strong enough (e.g Password@1)";
                             }
                           }
                         },
@@ -299,9 +299,13 @@ class _RegistrationState extends State<Registration> {
                             borderRadius: BorderRadius.circular(10)),
                         child: TextButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              if (_passwordController.text
-                                  .endsWith(_rePasswordController.text)) {
+                            if (_formKey.currentState!.validate() &&
+                                validatePassword(
+                                    _passwordController.text.trim()) &&
+                                validatePassword(
+                                    _rePasswordController.text.trim())) {
+                              if (_passwordController.text.trim().endsWith(
+                                  _rePasswordController.text.trim())) {
                                 // int phone1 = int.parse(_phoneNumberController.text);
                                 User user = User(
                                     name: _fullNamesController.text.trim(),
@@ -347,7 +351,9 @@ class _RegistrationState extends State<Registration> {
                                   });
                                 } finally {}
                               } else {
-                                _errorMessage = "Password does not match";
+                                setState(() {
+                                  _errorMessage = "Password does not match";
+                                });
                               }
                             }
                           },
