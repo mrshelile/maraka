@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:maraka/models/banner.dart';
 import 'package:maraka/logic/constants.dart';
-import 'package:r_get_ip/r_get_ip.dart';
+
 
 class BannerLogic {
   final String _banner = "/banners";

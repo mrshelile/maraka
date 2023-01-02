@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:maraka/logic/constants.dart';
-import 'package:get/get_connect/http/src/status/http_status.dart';
-import 'package:mailer/mailer.dart';
+
 import 'package:mailer/smtp_server.dart';
 import 'package:maraka/logic/user_logic.dart';
 

@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
-import 'package:maraka/logic/constants.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/models/ImageStrapi.dart';
 import 'package:maraka/models/product.dart';
 
 class StoreController extends GetxController {
@@ -31,7 +29,6 @@ class StoreController extends GetxController {
 
     List<Product> products1 =
         await logic.getProducts(owner, selectedCategory.toLowerCase());
-    print(products1);
     setProducts(products1);
 
     update();
