@@ -3,7 +3,6 @@
 import 'dart:async';
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:maraka/logic/email.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/login.dart';
@@ -15,7 +14,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 class UpdatePassword extends StatefulWidget {
   User user;
   var OTP;
-  UpdatePassword({Key? key, required this.user,required this.OTP}) : super(key: key);
+  UpdatePassword({Key? key, required this.user, required this.OTP})
+      : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -27,8 +27,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   // final _otpController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _passwordController = TextEditingController();
-    bool _loading = false;
-    final _loader = const SpinKitFoldingCube(
+  bool _loading = false;
+  final _loader = const SpinKitFoldingCube(
     color: MyColors.blue3,
     size: 80,
     // duration: Duration(milliseconds: 1000),
@@ -36,14 +36,15 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   // bool _isOTP = true;
   // ignore: non_constant_identifier_names
   RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
-  bool validatePassword(String pass){
+  bool validatePassword(String pass) {
     String password = pass.trim();
-    if(pass_valid.hasMatch(password)){
+    if (pass_valid.hasMatch(password)) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
+
   var _errorMessage = "";
   bool _isobscure = true;
   bool _isobscure1 = true;
@@ -69,27 +70,40 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                         children: <Widget>[
                           Padding(
                             padding: EdgeInsets.only(
-                                left: MediaQuery.of(context).copyWith().size.width *
+                                left: MediaQuery.of(context)
+                                        .copyWith()
+                                        .size
+                                        .width *
                                     0.05,
-                                top: MediaQuery.of(context).copyWith().size.height *
+                                top: MediaQuery.of(context)
+                                        .copyWith()
+                                        .size
+                                        .height *
                                     0.2),
                             child: SizedBox(
-                              height:
-                                  MediaQuery.of(context).copyWith().size.height *
-                                      0.3,
-                              width: MediaQuery.of(context).copyWith().size.width *
-                                  0.6,
+                              height: MediaQuery.of(context)
+                                      .copyWith()
+                                      .size
+                                      .height *
+                                  0.3,
+                              width:
+                                  MediaQuery.of(context).copyWith().size.width *
+                                      0.6,
                               child: SvgPicture.asset("assets/realtime.svg",
                                   semanticsLabel: "Real time Image"),
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                                left: MediaQuery.of(context).copyWith().size.width *
+                                left: MediaQuery.of(context)
+                                        .copyWith()
+                                        .size
+                                        .width *
                                     0.1),
                             child: SizedBox(
-                              width: MediaQuery.of(context).copyWith().size.width *
-                                  0.8,
+                              width:
+                                  MediaQuery.of(context).copyWith().size.width *
+                                      0.8,
                               child: TextFormField(
                                 obscureText: _isobscure1,
                                 controller: _passwordController,
@@ -111,7 +125,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                       });
                                     },
                                   ),
-                                  labelStyle: const TextStyle(color: MyColors.brown3),
+                                  labelStyle:
+                                      const TextStyle(color: MyColors.brown3),
                                   border: const UnderlineInputBorder(),
                                   labelText: 'Password',
                                 ),
@@ -119,15 +134,15 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 validator: (String? value) {
                                   if (value!.trim().isEmpty) {
                                     return 'Password Cannot Be Empty';
-                                  } 
-                                  else {
-                                  bool result = validatePassword(value.trim());
-                                  if(result){
-                                    // create account event
-                                  return null;
-                                  }else{
-                                    return "Password not strong enough";
-                                  }
+                                  } else {
+                                    bool result =
+                                        validatePassword(value.trim());
+                                    if (result) {
+                                      // create account event
+                                      return null;
+                                    } else {
+                                      return "Password not strong enough (e.g Password@1)";
+                                    }
                                   }
                                 },
                               ),
@@ -135,11 +150,15 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                                left: MediaQuery.of(context).copyWith().size.width *
+                                left: MediaQuery.of(context)
+                                        .copyWith()
+                                        .size
+                                        .width *
                                     0.1),
                             child: SizedBox(
-                              width: MediaQuery.of(context).copyWith().size.width *
-                                  0.8,
+                              width:
+                                  MediaQuery.of(context).copyWith().size.width *
+                                      0.8,
                               child: TextFormField(
                                 controller: _confirmPasswordController,
                                 obscureText: _isobscure,
@@ -161,7 +180,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                       });
                                     },
                                   ),
-                                  labelStyle: const TextStyle(color: MyColors.brown3),
+                                  labelStyle:
+                                      const TextStyle(color: MyColors.brown3),
                                   border: const UnderlineInputBorder(),
                                   labelText: 'Confirm Password',
                                 ),
@@ -169,15 +189,15 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 validator: (String? value) {
                                   if (value!.trim().isEmpty) {
                                     return 'Confirm Password Cannot Be Empty';
-                                  } 
-                                  else {
-                                  bool result = validatePassword(value.trim());
-                                  if(result){
-                                    // create account event
-                                  return null;
-                                  }else{
-                                    return "Confirm Password not strong enough";
-                                  }
+                                  } else {
+                                    bool result =
+                                        validatePassword(value.trim());
+                                    if (result) {
+                                      // create account event
+                                      return null;
+                                    } else {
+                                      return "Password not strong enough (e.g Password@1)";
+                                    }
                                   }
                                 },
                               ),
@@ -187,9 +207,13 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                       ),
                       Padding(
                           padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).copyWith().size.width *
-                                  0.25,
-                              top: MediaQuery.of(context).copyWith().size.height *
+                              left:
+                                  MediaQuery.of(context).copyWith().size.width *
+                                      0.25,
+                              top: MediaQuery.of(context)
+                                      .copyWith()
+                                      .size
+                                      .height *
                                   0),
                           child: Text(
                             _errorMessage,
@@ -197,13 +221,18 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                           )),
                       Padding(
                           padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).copyWith().size.width *
-                                  0.3,
-                              top: MediaQuery.of(context).copyWith().size.height *
+                              left:
+                                  MediaQuery.of(context).copyWith().size.width *
+                                      0.3,
+                              top: MediaQuery.of(context)
+                                      .copyWith()
+                                      .size
+                                      .height *
                                   0.04),
                           child: Container(
                             width:
-                                MediaQuery.of(context).copyWith().size.width * 0.35,
+                                MediaQuery.of(context).copyWith().size.width *
+                                    0.35,
                             decoration: BoxDecoration(
                                 color: MyColors.blue3,
                                 boxShadow: [
@@ -217,51 +246,58 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 borderRadius: BorderRadius.circular(10)),
                             child: TextButton(
                               onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  if (_passwordController.text.trim()
-                                      .endsWith(_confirmPasswordController.text.trim())) {
+                                if (_formKey.currentState!.validate() &&
+                                    validatePassword(
+                                        _passwordController.text.trim()) &&
+                                    validatePassword(_confirmPasswordController
+                                        .text
+                                        .trim())) {
+                                  if (_passwordController.text.trim().endsWith(
+                                      _confirmPasswordController.text.trim())) {
                                     setState(() {
                                       _errorMessage = "";
                                       _loading = true;
                                     });
                                     try {
-                                 
-                                    var res = await widget.user.updatePassword(_confirmPasswordController.text.trim(),
-                                    int.parse(widget.OTP),widget.user.email).timeout(const Duration(seconds: 10),
-                                            onTimeout: () => throw TimeoutException(
-                                                'Internet may not be available'));
-                                    if (res.statusCode==200) {
-                                       setState(() {
-                                      _errorMessage = "";
-                                      _loading = false;
-                                    });
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => const Login()));
-                          
-                                    }else
-                                    {
-                                    setState(() {
-                                    _errorMessage = "failed try again";
-                                    _loading = false;
-                                    });
-                                    }
-                               
+                                      var res = await widget.user
+                                          .updatePassword(
+                                              _confirmPasswordController.text
+                                                  .trim(),
+                                              int.parse(widget.OTP),
+                                              widget.user.email)
+                                          .timeout(const Duration(seconds: 10),
+                                              onTimeout: () =>
+                                                  throw TimeoutException(
+                                                      'Internet may not be available'));
+                                      if (res.statusCode == 200) {
+                                        setState(() {
+                                          _errorMessage = "";
+                                          _loading = false;
+                                        });
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Login()));
+                                      } else {
+                                        setState(() {
+                                          _errorMessage = "failed try again";
+                                          _loading = false;
+                                        });
+                                      }
                                     } catch (error) {
                                       setState(() {
-                                      _errorMessage =
-                                          "Internet may not be available";
-                                      _loading = false;
-
-                                        });
+                                        _errorMessage =
+                                            "Internet may not be available";
+                                        _loading = false;
+                                      });
                                     }
-                             
                                   } else
                                     // ignore: curly_braces_in_flow_control_structures
                                     setState(() {
-                                       _loading = false;
-                                      _errorMessage = "Passwords does not match";
+                                      _loading = false;
+                                      _errorMessage =
+                                          "Passwords does not match";
                                     });
 
                                   // await widget.user
@@ -270,14 +306,15 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                               },
                               child: const Text(
                                 "Update",
-                                style: TextStyle(color: Colors.white, fontSize: 15),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 15),
                               ),
                             ),
                           )),
                       Padding(
                         padding: EdgeInsets.only(
-                            left:
-                                MediaQuery.of(context).copyWith().size.width * 0.25,
+                            left: MediaQuery.of(context).copyWith().size.width *
+                                0.25,
                             top: MediaQuery.of(context).copyWith().size.height *
                                 0.01),
                         child: Row(
@@ -288,9 +325,11 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left:
-                                      MediaQuery.of(context).copyWith().size.width *
-                                          0.01),
+                                  left: MediaQuery.of(context)
+                                          .copyWith()
+                                          .size
+                                          .width *
+                                      0.01),
                               child: TextButton(
                                 child: const Text(
                                   "Login",
@@ -310,14 +349,14 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                     ],
                   ),
                   if (_loading)
-                  Container(
-                    width: MediaQuery.of(context).copyWith().size.width,
-                    height: MediaQuery.of(context).copyWith().size.height,
-                    color: Colors.white.withOpacity(0.92),
-                    child: Center(
-                      child: _loader,
+                    Container(
+                      width: MediaQuery.of(context).copyWith().size.width,
+                      height: MediaQuery.of(context).copyWith().size.height,
+                      color: Colors.white.withOpacity(0.92),
+                      child: Center(
+                        child: _loader,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),

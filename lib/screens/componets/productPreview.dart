@@ -39,7 +39,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                   Carousel(
                     dotBgColor: Colors.transparent,
                     dotSize: 0,
-                    boxFit: BoxFit.none,
+                    boxFit: BoxFit.scaleDown,
                     images: imgs,
                   ),
                   Padding(
