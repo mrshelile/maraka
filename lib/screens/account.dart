@@ -90,25 +90,15 @@ class _AccountState extends State<Account> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(left: width * 0.1),
-                              child: Container(
-                                width: width * 0.45,
-                                child: TextFormField(
-                                  controller: _fullNameController,
-                                  decoration: InputDecoration(
-                                    labelStyle:
-                                        TextStyle(color: MyColors.blue3),
-                                    hintText: "full Names",
-                                    labelText: widget.user.name,
-                                    enabled: false,
-                                    border: InputBorder.none,
-                                  ),
-                                  validator: (String? value) {
-                                    return value == null || value.isEmpty
-                                        ? 'Enter Your Full Names'
-                                        : null;
-                                  },
-                                ),
-                              ),
+                              child: SizedBox(
+                                  width: width * 0.45,
+                                  height: height * 0.2,
+                                  child: Text(
+                                    maxLines: 3,
+                                    widget.user.name.toString(),
+                                    style:
+                                        const TextStyle(color: MyColors.blue3),
+                                  )),
                             )
                           ],
                         ),
