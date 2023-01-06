@@ -16,6 +16,11 @@ class SearchField extends StatefulWidget {
 
 class _SearchFieldState extends State<SearchField> {
   final store = Get.find<StoreController>();
+  @override
+  void initState() {
+    store.search = "";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +28,7 @@ class _SearchFieldState extends State<SearchField> {
     sizeConfig.init(context);
     return Container(
       width: sizeConfig.screenWidth * 0.6,
-      
       decoration: BoxDecoration(
-        // boxShadow:const [
-        //    BoxShadow(
-        //     color: Color.fromARGB(209, 240, 236, 236),
-        //     spreadRadius: 5,
-        //     blurRadius:7,
-        //     offset: Offset(1,3)
-        //   )
-        // ],
         color: const Color.fromARGB(255, 224, 229, 240).withOpacity(0.9),
         borderRadius: BorderRadius.circular(15),
       ),
