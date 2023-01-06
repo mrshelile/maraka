@@ -32,7 +32,6 @@ class _SplashcreenState extends State<Splashcreen> {
   );
 
   Future<String> makeBanners() async {
-   
     var logic = BannerLogic();
 
     await logic.getSplashscreen();
@@ -63,8 +62,26 @@ class _SplashcreenState extends State<Splashcreen> {
                         print("should launch");
                       }
                     },
-                    child: Image.network(
-                      i.display,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height:
+                              MediaQuery.of(context).copyWith().size.height *
+                                  0.35,
+                          child: Image.network(
+                            // fit:BoxFit.scaleDown,
+                            i.display,
+                          ),
+                        ),
+                        SizedBox(
+                            height:
+                                MediaQuery.of(context).copyWith().size.height *
+                                    0.05,
+                            child: Text(
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                i.owner.toString()))
+                      ],
                     ),
                   ),
                 )
