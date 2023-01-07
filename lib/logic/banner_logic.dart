@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:maraka/models/banner.dart';
 import 'package:maraka/logic/constants.dart';
 
-
 class BannerLogic {
   final String _banner = "/banners";
   final String _bannerBottom = "/featured-ads";
@@ -25,6 +24,17 @@ class BannerLogic {
       var data = jsonDecode(response.body);
 
       for (var item in data) {
+        var imag = '';
+        var res = await http.get(
+          Uri.parse(item['display']),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        );
+
+        if (res.statusCode == 200) {
+          imag = jsonDecode(res.body)['image'];
+        }
         Banner ad = Banner(
           id: item['id'],
           url: item['link'],
@@ -32,8 +42,8 @@ class BannerLogic {
           expire_date: item['expire_date'],
           splashscreen: item['splashscreen'],
           home: item['home'],
-          display: item['display'],
-          imgUrl: item['display'],
+          display: imag,
+          imgUrl: imag,
         );
 
         if (ad.splashscreen == true) {
@@ -41,7 +51,7 @@ class BannerLogic {
         }
       }
       bannersSplashScreen.shuffle();
-    
+
       return response;
     }
   }
@@ -58,6 +68,17 @@ class BannerLogic {
       var data = jsonDecode(response.body);
 
       for (var item in data) {
+        var imag = '';
+        var res = await http.get(
+          Uri.parse(item['display']),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        );
+
+        if (res.statusCode == 200) {
+          imag = jsonDecode(res.body)['image'];
+        }
         Banner ad = Banner(
           id: item['id'],
           url: item['link'],
@@ -65,8 +86,8 @@ class BannerLogic {
           expire_date: item['expire_date'],
           splashscreen: item['splashscreen'],
           home: item['home'],
-          display: item['display'],
-          imgUrl: item['display'],
+          display: imag,
+          imgUrl: imag,
         );
         if (ad.home == true) {
           bannersHomeScreen.add(ad);
@@ -89,14 +110,25 @@ class BannerLogic {
       var data = jsonDecode(response.body);
 
       for (var item in data) {
+        var imag = '';
+        var res = await http.get(
+          Uri.parse(item['display']),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        );
+
+        if (res.statusCode == 200) {
+          imag = jsonDecode(res.body)['image'];
+        }
         Banner ad = Banner(
           id: item['id'],
           url: item['link'],
           owner: item['owner'],
           expire_date: item['expire_date'],
           // how_Long: item['how_long'],
-          display: item['display'],
-          imgUrl: item['display'],
+          display: imag,
+          imgUrl: imag,
         );
         bannersBottom.add(ad);
       }
