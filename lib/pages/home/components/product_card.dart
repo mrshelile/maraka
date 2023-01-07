@@ -26,6 +26,8 @@ class ProductCard extends StatelessWidget {
       padding: EdgeInsets.only(left: getProportionateScreenWidth(20, context)),
       child: SizedBox(
         width: getProportionateScreenWidth(width, context),
+        height: getProportionateScreenHeight(
+            MediaQuery.of(context).copyWith().size.height * 0.95, context),
         child: GestureDetector(
           onTap: () => {
             Navigator.push(
