@@ -27,7 +27,7 @@ class ProductCard extends StatelessWidget {
       child: SizedBox(
         width: getProportionateScreenWidth(width, context),
         height: getProportionateScreenHeight(
-            MediaQuery.of(context).copyWith().size.height * 0.95, context),
+            MediaQuery.of(context).copyWith().size.height * 0.35, context),
         child: GestureDetector(
           onTap: () => {
             Navigator.push(
@@ -65,6 +65,7 @@ class ProductCard extends StatelessWidget {
               Text(
                 product.title.toString(),
                 // style: TextStyle(color: Colors.black),
+                overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
               Row(
