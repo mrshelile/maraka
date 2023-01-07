@@ -92,7 +92,7 @@ class _AccountState extends State<Account> {
                               padding: EdgeInsets.only(left: width * 0.1),
                               child: SizedBox(
                                   width: width * 0.45,
-                                  height: height * 0.2,
+                                  height: height * 0.05,
                                   child: Text(
                                     maxLines: 3,
                                     widget.user.name.toString(),
