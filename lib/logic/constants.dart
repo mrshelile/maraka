@@ -21,7 +21,7 @@ List<Map<String, dynamic>> categories = [
 var server = "https://maraka.co.ls/buyandsellDjango-api";
 // var server = "http://127.0.0.1:3002/buyandsellDjango-api";
 // var server = "https://agile-headland-32385.herokuapp.com";
-
+  
 const kAnimationDuration = Duration(milliseconds: 200);
 
 const defaultDuration = Duration(milliseconds: 250);
