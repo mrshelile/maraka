@@ -26,8 +26,6 @@ class ProductCard extends StatelessWidget {
       padding: EdgeInsets.only(left: getProportionateScreenWidth(20, context)),
       child: SizedBox(
         width: getProportionateScreenWidth(width, context),
-        height: getProportionateScreenHeight(
-            MediaQuery.of(context).copyWith().size.height * 0.35, context),
         child: GestureDetector(
           onTap: () => {
             Navigator.push(
@@ -62,25 +60,28 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              Text(
-                product.title.toString(),
-                // style: TextStyle(color: Colors.black),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "M${product.price}",
-                    style: TextStyle(
-                      fontSize: getProportionateScreenWidth(18, context),
-                      fontWeight: FontWeight.w600,
-                      color: MyColors.blue4,
+              SizedBox(
+                height: MediaQuery.of(context).copyWith().size.height * 0.1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.title.toString(),
+                      // style: TextStyle(color: Colors.black),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
-                  ),
-                ],
-              )
+                    Text(
+                      "M${product.price}",
+                      style: TextStyle(
+                        fontSize: getProportionateScreenWidth(18, context),
+                        fontWeight: FontWeight.w600,
+                        color: MyColors.blue4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
