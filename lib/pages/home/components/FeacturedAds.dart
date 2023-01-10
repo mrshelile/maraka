@@ -106,24 +106,29 @@ class SpecialOfferCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: getProportionateScreenWidth(15.0, context),
-                    vertical: getProportionateScreenWidth(10, context),
-                  ),
-                  child: Text.rich(
-                    TextSpan(
-                      style: const TextStyle(color: Colors.white),
-                      children: [
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenWidth(15.0, context),
+                      vertical: getProportionateScreenWidth(10, context),
+                    ),
+                    child: Center(
+                      child: Text.rich(
                         TextSpan(
-                          text: "$name\n",
-                          style: TextStyle(
-                            fontSize: getProportionateScreenWidth(18, context),
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: const TextStyle(color: Colors.white),
+                          children: [
+                            TextSpan(
+                              text: "$name\n",
+                              style: TextStyle(
+                                fontSize:
+                                    getProportionateScreenWidth(18, context),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            // TextSpan(text: "$numOfBrands Brands")
+                          ],
                         ),
-                        // TextSpan(text: "$numOfBrands Brands")
-                      ],
+                      ),
                     ),
                   ),
                 ),
