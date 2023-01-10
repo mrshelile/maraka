@@ -56,7 +56,7 @@ class CategoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: SizedBox(
-        width: MediaQuery.of(context).copyWith().size.width * 0.2,
+        width: MediaQuery.of(context).copyWith().size.width * 0.38,
         child: Column(
           children: [
             Container(
@@ -88,7 +88,7 @@ class CategoryCard extends StatelessWidget {
                   textAlign: TextAlign.start,
                   style: TextStyle(
                       fontSize:
-                          MediaQuery.of(context).copyWith().size.width * 0.02,
+                          MediaQuery.of(context).copyWith().size.width * 0.023,
                       fontWeight: FontWeight.bold),
                 ),
               ),

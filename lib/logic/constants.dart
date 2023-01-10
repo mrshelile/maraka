@@ -13,9 +13,9 @@
 //   // "jobs": "Jobs"
 // };
 List<Map<String, dynamic>> categories = [
-  {"icon": "assets/mindeset.svg", "text": "All"},
+  // {"icon": "assets/mindeset.svg", "text": "All"},
   {"icon": "assets/mindeset.svg", "text": "Cars"},
-  {"icon": "assets/mindeset.svg", "text": "Others"},
+  {"icon": "assets/mindeset.svg", "text": "Miscellaneous"},
 ];
 
 // var server = "https://maraka.co.ls/buyandsellDjango-api";
