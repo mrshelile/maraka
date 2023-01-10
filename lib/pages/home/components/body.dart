@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maraka/logic/user_logic.dart';
+import 'package:maraka/pages/home/components/List_product.dart';
 
 import '../../../size_config.dart';
 import 'categories.dart';
@@ -27,9 +28,9 @@ class _BodyState extends State<Body> {
             SizedBox(height: getProportionateScreenWidth(10, context)),
             DiscountBanner(),
             Categories(owner: widget.owner,),
-            FeacturedAds(),
-            SizedBox(height: getProportionateScreenWidth(30, context)),
-            PopularProducts(owner: widget.owner,),
+            // FeacturedAds(),
+            // SizedBox(height: getProportionateScreenWidth(30, context)),
+            ProductList(owner: widget.owner),
             SizedBox(height: getProportionateScreenWidth(30, context)),
           ],
         ),
