@@ -53,7 +53,7 @@ class ProductLogic {
       'owner': id,
       'display': ad.imageUrls
     };
-  
+
     response = await http.post(Uri.parse(server + _productCreate),
         headers: headers,
         body: jsonEncode(data),
@@ -96,7 +96,7 @@ class ProductLogic {
 
         List imagesJson = item['display'];
         List<ImageStrapi> images = [];
-
+        // print(item['car']);
         for (var element in imagesJson) {
           images.add(ImageStrapi(url: element['image']));
         }
@@ -110,6 +110,7 @@ class ProductLogic {
               seller: seller,
               images: images,
               price: price,
+              car: item['car'],
               expiryDate: DateTime.parse(expire_date),
               createdAt: DateTime.parse(createAt),
               description: description));

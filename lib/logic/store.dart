@@ -39,6 +39,7 @@ class StoreController extends GetxController {
     products = [];
 
     for (Product element in data) {
+      
       products.add(Product(
           title: element.title,
           description: element.description,
@@ -47,7 +48,7 @@ class StoreController extends GetxController {
           id2: element.id2,
           seller: element.seller,
           images: element.images,
-        
+          car: element.car,
           category: element.category));
     }
     products.shuffle();

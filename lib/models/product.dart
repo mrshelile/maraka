@@ -16,11 +16,13 @@ class Product {
   var createdAt;
   var expiryDate;
   List<int>? imageUrls;
+  var car ;
   Product(
       {required this.title,
       required this.description,
       required this.price,
       this.id1,
+      this.car,
       this.createdAt,
       this.imageUrls,
       required this.expiryDate,

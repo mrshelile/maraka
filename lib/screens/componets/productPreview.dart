@@ -125,27 +125,63 @@ class _ProductPreviewState extends State<ProductPreview> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text("Make: "),
+                                          Text(
+                                            "Make: ${widget.product!.car['make']}",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 20.0,
+                                            ),
+                                          ),
                                           SizedBox(
                                             height: height * 0.01,
                                           ),
-                                          Text("Model: "),
+                                          Text(
+                                            "Model: ${widget.product!.car['model']}",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 20.0,
+                                            ),
+                                          ),
                                           SizedBox(
                                             height: height * 0.01,
                                           ),
-                                          Text("Year: "),
+                                          Text(
+                                            "Year: ${widget.product!.car['year'].toString()}",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 20.0,
+                                            ),
+                                          ),
                                           SizedBox(
                                             height: height * 0.01,
                                           ),
-                                          Text("Transmission: "),
+                                          Text(
+                                            "Transmission: ${widget.product!.car['transmission']}",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 20.0,
+                                            ),
+                                          ),
                                           SizedBox(
                                             height: height * 0.01,
                                           ),
-                                          Text("Fuel: "),
+                                          Text(
+                                            "Fuel: ${widget.product!.car['fuel']}",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 20.0,
+                                            ),
+                                          ),
                                           SizedBox(
                                             height: height * 0.01,
                                           ),
-                                          Text("Mileage: ")
+                                          Text(
+                                            "Mileage: ${widget.product!.car['kilos']}",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 20.0,
+                                            ),
+                                          )
                                         ],
                                       ),
                                     ),
