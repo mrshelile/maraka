@@ -68,8 +68,6 @@ class _ProductListState extends State<ProductList> {
                                     ? ListProductCard(
                                         product: store.products[index])
                                     : Container();
-                            // return const SizedBox
-                            //     .shrink(); // here by default width and height is 0
                           },
                         ),
                         SizedBox(
