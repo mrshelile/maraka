@@ -7,7 +7,8 @@ class Recents {
   List<String>? detailUrl;
   String? category;
   String? description;
-  Recents({this.name, this.price, this.imgUrl, this.detailUrl});
+  String? car;
+  Recents({this.name, this.price, this.imgUrl, this.detailUrl,this.car});
 
   // static List<Recents> generateFavourites() {
   //   return [
@@ -45,17 +46,17 @@ class Recents {
   //         ])
   //   ];
   // }
- static List<Recents> generateFavourites(List<Product> items) {
-  List<Recents> products = [];
-  items.forEach((element) {
+  static List<Recents> generateFavourites(List<Product> items) {
+    List<Recents> products = [];
+    items.forEach((element) {
       products.add(Recents(
           name: element.title,
           price: "M " + element.price.toString(),
           imgUrl: element.images![0].url));
     });
     return products;
-}
-  
+  }
+
   static List<Recents> generateMyAds(List<Product> items) {
     List<Recents> products = [];
     items.forEach((element) {

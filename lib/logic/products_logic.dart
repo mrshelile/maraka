@@ -61,7 +61,7 @@ class ProductLogic {
         headers: headers,
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
-  
+
     return response;
   }
 
@@ -200,6 +200,7 @@ class ProductLogic {
               seller: seller,
               images: images,
               price: price,
+              car: item['car'],
               expiryDate: DateTime.parse(expire_date),
               description: description));
         }

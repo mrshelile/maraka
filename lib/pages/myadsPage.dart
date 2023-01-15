@@ -40,10 +40,7 @@ class _MyAdsState extends State<MyAds> {
           ),
           Column(
             children: <Widget>[
-              // SizedBox(
-              //   height: height * 0.17,
-              // ),
-
+           
               Padding(
                 padding: EdgeInsets.only(top: height * 0.0, right: width * 0.6),
                 child: SizedBox(
@@ -78,7 +75,6 @@ class _MyAdsState extends State<MyAds> {
                                 isFavouriteclicked: false,
                                 isFavouriteBtn: false,
                                 product: myads[index],
-                                recents: Recents.generateMyAds(myads)[index],
                               )),
                     );
                   } else {

@@ -9,7 +9,6 @@ import 'package:maraka/themes/color.dart';
 
 // ignore: must_be_immutable
 class ProductsItem extends StatefulWidget {
-  final Recents recents;
   Product product;
   bool isFavouritedPage = true;
   bool isFavouriteBtn = true;
@@ -23,10 +22,9 @@ class ProductsItem extends StatefulWidget {
       required this.owner,
       required this.product,
       required this.isFavouriteclicked,
-      required this.recents,
+
       required this.isFavouriteBtn})
       : super(key: key);
-
 
   @override
   State<ProductsItem> createState() => _ProductsItemState();
@@ -62,20 +60,18 @@ class _ProductsItemState extends State<ProductsItem> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(13),
                     image: DecorationImage(
-                        image: NetworkImage(widget.recents.imgUrl!),
+                        image: NetworkImage(widget.product.images![0].url),
                         fit: BoxFit.fitHeight)),
               ),
-              
             ]),
             Text(
-              widget.recents.name!,
+              widget.product.category!.toLowerCase() == "cars"
+                  ? "${widget.product.car['year'].toString()} ${widget.product.car['make']} ${widget.product.car['model']}"
+                  : widget.product.title!,
               style: const TextStyle(fontWeight: FontWeight.bold, height: 1.5),
             ),
-            // Text(
-            //   widget.recents.name!,
-            //   style: const TextStyle(fontWeight: FontWeight.bold, height: 1.5),
-            // ),
-            Text(widget.recents.price!,
+
+            Text(widget.product.price!.toString(),
                 style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     height: 1.5,
