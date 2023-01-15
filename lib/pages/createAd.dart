@@ -5,8 +5,10 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get_connect/http/src/exceptions/exceptions.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
@@ -60,9 +62,15 @@ class _CreateAdState extends State<CreateAd> {
 
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _modelController = TextEditingController();
+  final _makeController = TextEditingController();
+  final _mileageController = TextEditingController();
+  final _fuelController = TextEditingController();
+  final _yearController = TextEditingController();
   final _priceController = TextEditingController();
   final _descriptionController = TextEditingController();
   final List<String> _pageCategories = [];
+  final List<String> _transmissionList = ["Auto", "Manual"];
   var uuid = const Uuid();
   var _error = '';
   bool _loading = false;
@@ -72,7 +80,7 @@ class _CreateAdState extends State<CreateAd> {
   );
 
   // ignore: prefer_typing_uninitialized_variables
-  var _dropdownValue;
+  var _dropdownValue, _transmissionValue;
   @override
   void initState() {
     for (var element in categories) {
@@ -86,128 +94,429 @@ class _CreateAdState extends State<CreateAd> {
     int countBtnDisable = 0;
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
+    Widget _name = Padding(
+      padding: EdgeInsets.only(top: height * 0.03),
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: MediaQuery.of(context).copyWith().size.width * 0.1),
+        child: SizedBox(
+          width: MediaQuery.of(context).copyWith().size.width * 0.8,
+          child: TextFormField(
+            controller: _nameController,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(
+                Icons.title,
+                color: MyColors.brown2,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              labelStyle: const TextStyle(color: MyColors.brown3),
+              labelText: 'Name',
+            ),
+            validator: (String? value) {
+              return value == null || value.trim().isEmpty
+                  ? 'Name Cannot be empty'
+                  : null;
+            },
+          ),
+        ),
+      ),
+    );
+    Widget _model = Padding(
+      padding: EdgeInsets.only(top: height * 0.05),
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: MediaQuery.of(context).copyWith().size.width * 0.1),
+        child: SizedBox(
+          width: MediaQuery.of(context).copyWith().size.width * 0.8,
+          child: TextFormField(
+            controller: _modelController,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(
+                Icons.model_training_outlined,
+                color: MyColors.brown2,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              labelStyle: const TextStyle(color: MyColors.brown3),
+              labelText: 'Model',
+            ),
+            validator: (String? value) {
+              return value == null || value.trim().isEmpty
+                  ? 'Field Cannot be empty'
+                  : null;
+            },
+          ),
+        ),
+      ),
+    );
+    Widget _make = Padding(
+      padding: EdgeInsets.only(top: height * 0.05),
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: MediaQuery.of(context).copyWith().size.width * 0.1),
+        child: SizedBox(
+          width: MediaQuery.of(context).copyWith().size.width * 0.8,
+          child: TextFormField(
+            controller: _makeController,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(
+                Icons.type_specimen,
+                color: MyColors.brown2,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              labelStyle: const TextStyle(color: MyColors.brown3),
+              labelText: 'Make',
+            ),
+            validator: (String? value) {
+              return value == null || value.trim().isEmpty
+                  ? 'Field Cannot be empty'
+                  : null;
+            },
+          ),
+        ),
+      ),
+    );
+    Widget _mileage = Padding(
+      padding: EdgeInsets.only(top: height * 0.05),
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: MediaQuery.of(context).copyWith().size.width * 0.1),
+        child: SizedBox(
+          width: MediaQuery.of(context).copyWith().size.width * 0.8,
+          child: TextFormField(
+            controller: _mileageController,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(
+                Icons.travel_explore_outlined,
+                color: MyColors.brown2,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              labelStyle: const TextStyle(color: MyColors.brown3),
+              labelText: 'Mileage',
+            ),
+            validator: (String? value) {
+              return value == null || value.trim().isEmpty
+                  ? 'Field Cannot be empty'
+                  : null;
+            },
+          ),
+        ),
+      ),
+    );
+    Widget _fuel = Padding(
+      padding: EdgeInsets.only(top: height * 0.05),
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: MediaQuery.of(context).copyWith().size.width * 0.1),
+        child: SizedBox(
+          width: MediaQuery.of(context).copyWith().size.width * 0.8,
+          child: TextFormField(
+            controller: _fuelController,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(
+                Icons.ramp_left_outlined,
+                color: MyColors.brown2,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              labelStyle: const TextStyle(color: MyColors.brown3),
+              labelText: 'Fuel Type',
+            ),
+            validator: (String? value) {
+              return value == null || value.trim().isEmpty
+                  ? 'Field Cannot be empty'
+                  : null;
+            },
+          ),
+        ),
+      ),
+    );
+    Widget _year = Padding(
+      padding: EdgeInsets.only(top: height * 0.05),
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: MediaQuery.of(context).copyWith().size.width * 0.1),
+        child: SizedBox(
+          width: MediaQuery.of(context).copyWith().size.width * 0.8,
+          child: TextFormField(
+            controller: _yearController,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(
+                Icons.calendar_today,
+                color: MyColors.brown2,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              labelStyle: const TextStyle(color: MyColors.brown3),
+              labelText: 'Year',
+            ),
+            validator: (String? value) {
+              return value == null || value.trim().isEmpty
+                  ? 'Field Cannot be empty'
+                  : null;
+            },
+          ),
+        ),
+      ),
+    );
+    Widget _transmission = Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: EdgeInsets.only(left: width * 0.15, top: height * 0.02),
+        child: DropdownButton(
+          value: _transmissionValue,
+          hint: Text(
+            "Transmission",
+            style: TextStyle(fontSize: width * 0.04),
+          ),
+          // Down Arrow Icon
+          icon: const Icon(
+            Icons.keyboard_arrow_down,
+          ),
+          items: _transmissionList.map((String item) {
+            return DropdownMenuItem(
+              value: item.toLowerCase(),
+              child: Text(item),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              _transmissionValue = value;
+            });
+          },
+        ),
+      ),
+    );
+    Widget _price = Padding(
+      padding: EdgeInsets.only(top: height * 0.05),
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: MediaQuery.of(context).copyWith().size.width * 0.1),
+        child: SizedBox(
+          width: MediaQuery.of(context).copyWith().size.width * 0.8,
+          child: TextFormField(
+            controller: _priceController,
+            textInputAction: TextInputAction.next,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+// for version 2 and greater youcan also use this
+              FilteringTextInputFormatter.digitsOnly
+            ],
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            decoration: InputDecoration(
+              prefixIcon: const Icon(
+                Icons.amp_stories,
+                color: MyColors.brown2,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              labelStyle: const TextStyle(color: MyColors.brown3),
+              labelText: 'Price',
+              hintText: "M",
+            ),
+            validator: (String? value) {
+              return value == null || value.trim().isEmpty
+                  ? 'Price Cannot be empty'
+                  : null;
+            },
+          ),
+        ),
+      ),
+    );
+    Widget _description = Padding(
+      padding: EdgeInsets.only(top: height * 0.05),
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: MediaQuery.of(context).copyWith().size.width * 0.1),
+        child: SizedBox(
+          width: MediaQuery.of(context).copyWith().size.width * 0.8,
+          child: TextFormField(
+            controller: _descriptionController,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(
+                Icons.description,
+                color: MyColors.brown2,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              labelStyle: const TextStyle(color: MyColors.brown3),
+              labelText: 'Description',
+            ),
+            validator: (String? value) {
+              return value == null || value.trim().isEmpty
+                  ? 'Descrition Cannot be empty'
+                  : null;
+            },
+          ),
+        ),
+      ),
+    );
     return Scaffold(
-      floatingActionButton: SingleChildScrollView(
-        child: FloatingActionButton(
-            tooltip: 'Save',
-            backgroundColor: MyColors.blue2,
-            foregroundColor: MyColors.gold,
-            onPressed: isBtnDisabled
-                ? null
-                : () async {
-                    if (_formKey.currentState!.validate()) {
-                      setState(() {
-                        isBtnDisabled = true;
-                        countBtnDisable++;
-                      });
-                      if (imageFileList.isNotEmpty) {
-                        if (_dropdownValue != null && countBtnDisable < 2) {
-                          if (mounted) {
-                            setState(() {
-                              _loading = true;
-                            });
-                          }
-                          List<int> imageIds = [];
-                          ProductLogic logic = ProductLogic();
-                          int i = 0;
-                          try {
-                            for (var element in imageFileList) {
-                              if (i <= 2) {
-                                var res = await logic
-                                    .postImages(element, element.path)
-                                    .timeout(const Duration(seconds: 25),
-                                        onTimeout: () => throw TimeoutException(
-                                            'Can\'t upload image'));
-                                if (res.statusCode == 201) {
-                                  imageIds.add(jsonDecode(res.body)['id']);
-                                }
-                              }
-                              i++;
-                            }
-                            if (imageIds.isNotEmpty) {
-                              var response = await logic
-                                  .postProduct(
-                                      Product(
-                                          title: _nameController.text.trim(),
-                                          description: _descriptionController
-                                              .text
-                                              .trim(),
-                                          price: _priceController.text.trim(),
-                                          expiryDate: DateTime.now()
-                                              .add(const Duration(days: 31)),
-                                          id2: '',
-                                          seller: Seller(),
-                                          images: [],
-                                          imageUrls: imageIds,
-                                          category: _dropdownValue),
-                                      widget.owner.id)
+      floatingActionButton: FloatingActionButton(
+          tooltip: 'Save',
+          backgroundColor: MyColors.blue2,
+          foregroundColor: MyColors.gold,
+          onPressed: isBtnDisabled
+              ? null
+              : () async {
+                  if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      isBtnDisabled = true;
+                      countBtnDisable++;
+                    });
+                    var car;
+                    if (imageFileList.isNotEmpty) {
+                      if (_dropdownValue != null && countBtnDisable < 2) {
+                        if (mounted) {
+                          setState(() {
+                            _loading = true;
+                          });
+                        }
+                        List<int> imageIds = [];
+                        ProductLogic logic = ProductLogic();
+                        int i = 0;
+
+                        try {
+                          for (var element in imageFileList) {
+                            if (i <= 2) {
+                              var res = await logic
+                                  .postImages(element, element.path)
                                   .timeout(const Duration(seconds: 25),
                                       onTimeout: () => throw TimeoutException(
-                                          'Can\'t create product'));
-                              // print(response.statusCode);
-                              if (response.statusCode == 201) {
-                                if (mounted) {
-                                  setState(() {
-                                    _loading = false;
-                                    isBtnDisabled = true;
-                                    // countBtnDisable = 0;
-                                  });
-                                }
-
-                                if (!mounted) return;
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Home(
-                                              user: widget.owner,
-                                              currentIndex: 1,
-                                            )));
-                                // Navigator.pop(context);
-                              } else {
-                                if (mounted) {
-                                  setState(() {
-                                    _loading = false;
-                                    _error = "failed";
-                                    isBtnDisabled = false;
-                                    countBtnDisable = 0;
-                                  });
-                                }
+                                          'Can\'t upload image'));
+                              if (res.statusCode == 201) {
+                                imageIds.add(jsonDecode(res.body)['id']);
                               }
                             }
-                          } catch (e) {
-                            if (mounted) {
-                              setState(() {
-                                _loading = false;
-                                _error = 'failed';
-                                isBtnDisabled = false;
-                                countBtnDisable = 0;
-                              });
+                            i++;
+                          }
+                          if (imageIds.isNotEmpty) {
+                            if (_dropdownValue.toString().toLowerCase() ==
+                                "cars") {
+                              if (_transmissionValue != null) {
+                                var carRes = await logic.postCar(
+                                    fuel: _fuelController.text,
+                                    make: _makeController.text,
+                                    mileage: _mileageController.text,
+                                    model: _modelController.text,
+                                    transmition: _transmissionValue,
+                                    year: _yearController.text);
+
+                                if (carRes.statusCode == 201) {
+                                  car = jsonDecode(carRes.body)["id"];
+                                } else {
+                                  car = -1;
+                                  throw Exception("failed to create car");
+                                }
+                              } else {
+                                throw UnauthorizedException();
+                              }
+                            }
+                            var response = await logic
+                                .postProduct(
+                                    Product(
+                                        title: _nameController.text.trim(),
+                                        description:
+                                            _descriptionController.text.trim(),
+                                        price: _priceController.text.trim(),
+                                        expiryDate: DateTime.now()
+                                            .add(const Duration(days: 31)),
+                                        id2: '',
+                                        seller: Seller(),
+                                        images: [],
+                                        imageUrls: imageIds,
+                                        category: _dropdownValue),
+                                    widget.owner.id,
+                                    car)
+                                .timeout(const Duration(seconds: 25),
+                                    onTimeout: () => throw TimeoutException(
+                                        'Can\'t create product'));
+                            
+                            if (response.statusCode == 201) {
+                              if (mounted) {
+                                setState(() {
+                                  _loading = false;
+                                  isBtnDisabled = true;
+                                  // countBtnDisable = 0;
+                                });
+                              }
+
+                              if (!mounted) return;
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Home(
+                                            user: widget.owner,
+                                            currentIndex: 1,
+                                          )));
+                              // Navigator.pop(context);
+                            } else {
+                              throw Exception("product not created");
                             }
                           }
-                        } else {
+                        } on UnauthorizedException {
                           if (mounted) {
                             setState(() {
-                              _error = "Please Choose Category";
-                              setState(() {
-                                _loading = false;
-                                isBtnDisabled = false;
-                                countBtnDisable = 0;
-                              });
+                              _loading = false;
+                              _error = "Transmission not chosen";
+                              isBtnDisabled = false;
+                              countBtnDisable = 0;
+                            });
+                          }
+                        } catch (e) {
+                          debugPrint(e.toString());
+                          if (mounted) {
+                            setState(() {
+                              _loading = false;
+                              _error = 'failed';
+                              isBtnDisabled = false;
+                              countBtnDisable = 0;
                             });
                           }
                         }
                       } else {
-                        setState(() {
-                          _loading = false;
-                          _error = "Choose Image";
-                          countBtnDisable = 0;
-                          isBtnDisabled = false;
-                        });
+                        if (mounted) {
+                          setState(() {
+                            _error = "Please Choose Category";
+                            setState(() {
+                              _loading = false;
+                              isBtnDisabled = false;
+                              countBtnDisable = 0;
+                            });
+                          });
+                        }
                       }
+                    } else {
+                      setState(() {
+                        _loading = false;
+                        _error = "Choose Image";
+                        countBtnDisable = 0;
+                        isBtnDisabled = false;
+                      });
                     }
-                  },
-            child: const Icon(Icons.done)),
-      ),
+                  }
+                },
+          child: const Icon(Icons.done)),
       body: Stack(
         children: <Widget>[
           CustomPaint(
@@ -283,110 +592,19 @@ class _CreateAdState extends State<CreateAd> {
                           size: 30,
                         ),
                       )),
-                  Padding(
-                    padding: EdgeInsets.only(top: height * 0.03),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).copyWith().size.width *
-                              0.1),
-                      child: SizedBox(
-                        width:
-                            MediaQuery.of(context).copyWith().size.width * 0.8,
-                        child: TextFormField(
-                          controller: _nameController,
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(
-                              Icons.title,
-                              color: MyColors.brown2,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: MyColors.blue2, width: 2.0),
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
-                            labelStyle: const TextStyle(color: MyColors.brown3),
-                            labelText: 'Name',
-                          ),
-                          validator: (String? value) {
-                            return value == null || value.trim().isEmpty
-                                ? 'Name Cannot be empty'
-                                : null;
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: height * 0.05),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).copyWith().size.width *
-                              0.1),
-                      child: SizedBox(
-                        width:
-                            MediaQuery.of(context).copyWith().size.width * 0.8,
-                        child: TextFormField(
-                          controller: _priceController,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true),
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(
-                              Icons.amp_stories,
-                              color: MyColors.brown2,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: MyColors.blue2, width: 2.0),
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
-                            labelStyle: const TextStyle(color: MyColors.brown3),
-                            labelText: 'Price',
-                            hintText: "M",
-                          ),
-                          validator: (String? value) {
-                            return value == null || value.trim().isEmpty
-                                ? 'Price Cannot be empty'
-                                : null;
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: height * 0.05),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).copyWith().size.width *
-                              0.1),
-                      child: SizedBox(
-                        width:
-                            MediaQuery.of(context).copyWith().size.width * 0.8,
-                        child: TextFormField(
-                          controller: _descriptionController,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(
-                              Icons.description,
-                              color: MyColors.brown2,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: MyColors.blue2, width: 2.0),
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
-                            labelStyle: const TextStyle(color: MyColors.brown3),
-                            labelText: 'Description',
-                          ),
-                          validator: (String? value) {
-                            return value == null || value.trim().isEmpty
-                                ? 'Descrition Cannot be empty'
-                                : null;
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+                  if (_dropdownValue.toString().toLowerCase() != 'cars') ...[
+                    _name,
+                    _description
+                  ],
+                  _price,
+                  if (_dropdownValue.toString().toLowerCase() == 'cars') ...[
+                    _year,
+                    _model,
+                    _make,
+                    _fuel,
+                    _mileage,
+                    _transmission
+                  ],
                   Padding(
                     padding:
                         EdgeInsets.only(top: height * 0.03, bottom: height * 0),
@@ -407,8 +625,7 @@ class _CreateAdState extends State<CreateAd> {
                             icon: const Icon(
                               Icons.keyboard_arrow_down,
                             ),
-                            items:
-                                _pageCategories.sublist(1).map((String items) {
+                            items: _pageCategories.map((String items) {
                               return DropdownMenuItem(
                                 value: items,
                                 child: Text(items),

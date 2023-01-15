@@ -15,6 +15,7 @@ class ProductLogic {
   List<Product> favourites = [];
   final String _allProducts = "/product";
   final _productCreate = '/product-create';
+  final _carCreate = '/car';
   final String _userProduct = "/user-product/";
   // ignore: prefer_typing_uninitialized_variables
   var response;
@@ -36,9 +37,8 @@ class ProductLogic {
     return response;
   }
 
-  Future postProduct(Product ad, int id) async {
+  Future postProduct(Product ad, int id, var car) async {
     var uuid = const Uuid();
-    // print(DateTime.now().add(const Duration(days: 31)));
     Map<String, String> headers = {
       "dataType": "json",
       'Content-Type': 'application/json; charset=UTF-8',
@@ -53,8 +53,40 @@ class ProductLogic {
       'owner': id,
       'display': ad.imageUrls
     };
+    if (car != null || car != -1) {
+      data['car'] = car;
+    }
 
     response = await http.post(Uri.parse(server + _productCreate),
+        headers: headers,
+        body: jsonEncode(data),
+        encoding: Encoding.getByName("utf-8"));
+  
+    return response;
+  }
+
+  Future postCar(
+      {required String model,
+      required var year,
+      required String fuel,
+      required String make,
+      required String mileage,
+      required String transmition}) async {
+    var uuid = const Uuid();
+    Map<String, String> headers = {
+      "dataType": "json",
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    var data = {
+      "model": model,
+      "make": make,
+      "year": year,
+      "fuel": fuel,
+      "kilos": mileage,
+      "transmission": transmition
+    };
+
+    response = await http.post(Uri.parse(server + _carCreate),
         headers: headers,
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
@@ -96,7 +128,6 @@ class ProductLogic {
 
         List imagesJson = item['display'];
         List<ImageStrapi> images = [];
-        // print(item['car']);
         for (var element in imagesJson) {
           images.add(ImageStrapi(url: element['image']));
         }
@@ -173,7 +204,6 @@ class ProductLogic {
               description: description));
         }
       }
-      // print(myAds[0].images![0].url);
       return myAds;
     } else {
       throw Null;
