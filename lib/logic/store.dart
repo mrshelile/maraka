@@ -4,7 +4,7 @@ import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
 
 class StoreController extends GetxController {
-  var selectedCategory = "Car";
+  var selectedCategory = "Cars";
   var search = '';
   List<Product> products = [];
   void selectCategory(String value, User owner) async {
