@@ -117,6 +117,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                                       top: height * 0.01, left: width * 0.05),
                                   child: SizedBox(
                                     height: height * 0.24,
+                                    width: width,
                                     child: SingleChildScrollView(
                                       scrollDirection: Axis.vertical,
                                       child: Column(
