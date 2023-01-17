@@ -16,26 +16,29 @@ class Categories extends StatelessWidget {
   Widget build(BuildContext context) {
             var width = MediaQuery.of(context).copyWith().size.width;
         var height = MediaQuery.of(context).copyWith().size.height;
-    return SizedBox(
-      height: getProportionateScreenWidth(80, context),
-      child: ListView.builder(
-          physics: const ScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          itemCount: categories.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: EdgeInsets.only(
-                  left: getProportionateScreenWidth(20, context)),
-              child: CategoryCard(
-                icon: categories[index]["icon"],
-                text: categories[index]["text"],
-                press: () {
-                  store.selectCategory(categories[index]["text"],owner);
-                },
-              ),
-            );
-          }),
+    return Padding(
+      padding: EdgeInsets.only(left: getProportionateScreenWidth(38, context)),
+      child: SizedBox(
+        height: getProportionateScreenWidth(80, context),
+        child: ListView.builder(
+            physics: const ScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemCount: categories.length,
+            
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.only(right: width*0.05),
+                child: CategoryCard(
+                  icon: categories[index]["icon"],
+                  text: categories[index]["text"],
+                  press: () {
+                    store.selectCategory(categories[index]["text"],owner);
+                  },
+                ),
+              );
+            }),
+      ),
     );
   }
 }
@@ -65,13 +68,7 @@ class CategoryCard extends StatelessWidget {
               height: getProportionateScreenWidth(60, context),
               width: MediaQuery.of(context).copyWith().size.width,
               decoration: BoxDecoration(
-                // boxShadow: const [
-                //   BoxShadow(
-                //       color: Color.fromARGB(209, 218, 213, 213),
-                //       spreadRadius: 5,
-                //       blurRadius: 6,
-                //       offset: Offset(0, 3))
-                // ],
+              
                 color: Color.fromARGB(255, 169, 208, 235).withOpacity(0.7),
                 borderRadius: BorderRadius.circular(10),
               ),

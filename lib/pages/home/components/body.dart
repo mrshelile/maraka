@@ -11,7 +11,7 @@ import 'FeacturedAds.dart';
 
 class Body extends StatefulWidget {
   User owner;
-  Body({Key? key,required this.owner}) : super(key: key);
+  Body({Key? key, required this.owner}) : super(key: key);
   @override
   State<Body> createState() => _BodyState();
 }
@@ -22,19 +22,25 @@ class _BodyState extends State<Body> {
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+
           children: [
             // SizedBox(height: getProportionateScreenHeight(20, context)),
-            HomeHeader(owner: widget.owner,),
-            // SizedBox(height: getProportionateScreenWidth(10, context)),
+            HomeHeader(
+              owner: widget.owner,
+            ),
+            SizedBox(height: getProportionateScreenWidth(10, context)),
             DiscountBanner(),
-            Categories(owner: widget.owner,),
+            SizedBox(height: getProportionateScreenWidth(10, context)),
+
+            Categories(
+              owner: widget.owner,
+            ),
             // FeacturedAds(),
             // SizedBox(height: getProportionateScreenWidth(30, context)),
             ProductList(owner: widget.owner),
-            SizedBox(height: getProportionateScreenWidth(30, context)),
+            SizedBox(height: getProportionateScreenWidth(10, context)),
           ],
         ),
       ),
