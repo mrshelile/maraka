@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
@@ -36,15 +37,16 @@ class _ProductListState extends State<ProductList> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: getProportionateScreenWidth(20, context)),
+          padding:
+              EdgeInsets.only(left: getProportionateScreenWidth(38, context)),
           child: GetBuilder(
               init: store,
               builder: (_) {
-                return SectionTitle(title: store.selectedCategory);
+                return SectionTitle(
+                    title: store.selectedCategory.toUpperCase());
               }),
         ),
-        SizedBox(height: getProportionateScreenWidth(20, context)),
+        // SizedBox(height: getProportionateScreenWidth(20, context)),
         FutureBuilder(
             future: makeProductList(),
             builder: ((context, snapshot) {

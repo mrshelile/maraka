@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,12 +16,8 @@ import 'package:maraka/themes/color.dart';
 class ListProductCard extends StatelessWidget {
   const ListProductCard({
     Key? key,
-    this.width = 320,
-    this.aspectRetio = 5 / 3,
     required this.product,
   }) : super(key: key);
-
-  final double width, aspectRetio;
   final Product product;
 
   @override
@@ -28,189 +25,85 @@ class ListProductCard extends StatelessWidget {
     final store = Get.find<StoreController>();
     return LayoutBuilder(
       builder: (context, constraints) {
-        Widget carWidget() {
-          return AspectRatio(
-              aspectRatio: aspectRetio,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Color.fromARGB(68, 102, 99, 99),
-                      width: 0.8,
-                      style: BorderStyle.solid),
-                  color:
-                      const Color.fromARGB(221, 199, 211, 211).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width:
-                          MediaQuery.of(context).copyWith().size.width * 0.45,
-                      height: MediaQuery.of(context).copyWith().size.height,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(221, 199, 211, 211)
-                            .withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Hero(
-                        tag: product.id1.toString() +
-                            Random().nextInt(90).toString(),
-                        child: Image.network(
-                          product.images![0].url,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                    AspectRatio(
-                      aspectRatio: 0.7,
-                      child: Container(
-                        padding: EdgeInsets.only(left: 7, top: 15),
-                        width: 190,
-                        height: 100,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
-                              "${product.car['year']} ${product.car['make']} ${product.car['model']}",
-                              textScaleFactor: 5 / 3.5,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: SizedBox(
-                                child: Text(
-                                    style: TextStyle(color: MyColors.blue2),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    "M${product.price}"),
-                              ),
-                            ),
-                            if (constraints.maxWidth >= 294)
-                              Padding(
-                                padding: EdgeInsets.only(top: 5),
-                                child: SizedBox(
-                                  child: Text(
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                      "${product.car['kilos']}Km | ${product.car['transmission'].toString()} |  ${product.car['fuel'].toString()}"),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ));
-        }
-
-        Widget others() {
-          return AspectRatio(
-              aspectRatio: aspectRetio,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Color.fromARGB(68, 102, 99, 99),
-                      width: 0.95,
-                      style: BorderStyle.solid),
-                  color:
-                      const Color.fromARGB(221, 199, 211, 211).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width:
-                          MediaQuery.of(context).copyWith().size.width * 0.45,
-                      height: MediaQuery.of(context).copyWith().size.height,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(221, 199, 211, 211)
-                            .withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Hero(
-                        tag: product.id1.toString() +
-                            Random().nextInt(90).toString(),
-                        child: Image.network(
-                          product.images![0].url,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                    AspectRatio(
-                      aspectRatio: 0.7,
-                      child: Container(
-                        padding: EdgeInsets.only(left: 7, top: 15),
-                        width: 190,
-                        height: 100,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
-                              product.title!,
-                              textScaleFactor: 5 / 3.5,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: SizedBox(
-                                child: Text(
-                                    style: TextStyle(color: MyColors.blue2),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    "M${product.price}"),
-                              ),
-                            ),
-                            if (constraints.maxWidth >= 294) ...[
-                              Padding(
-                                padding: EdgeInsets.only(top: 5),
-                                child: SizedBox(
-                                  child: Text(
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                      "${product.description}"),
-                                ),
-                              )
-                            ],
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ));
-        }
-
+        var width = MediaQuery.of(context).copyWith().size.width;
+        var height = MediaQuery.of(context).copyWith().size.height;
         debugPrint(constraints.toString());
         return Padding(
-          padding: EdgeInsets.only(
-              top: getProportionateScreenHeight(15, context),
-              left: getProportionateScreenWidth(15, context)),
-          child: SizedBox(
-            width: getProportionateScreenWidth(width, context),
-            child: GestureDetector(
-                onTap: () => {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProductPreview(
-                                    product: product,
-                                  )))
-                    },
-                child: GetBuilder(
-                    init: store,
-                    builder: (controller) {
-                      return store.selectedCategory.toLowerCase() == "cars" &&
-                              product.category!.toLowerCase() == "cars"
-                          ? carWidget()
-                          : Container(
-                              child: others(),
-                            );
-                    })),
+          padding: EdgeInsets.only(left: width * 0.1, right: width * 0.09,top: height*0.03),
+          child: AspectRatio(
+            aspectRatio: 2.2,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 226, 226, 226),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  AspectRatio(
+                    aspectRatio: 6 / 1.7,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(
+                              product.images![0].url,
+                            )),
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15)),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 1,
+                  ),
+                  AspectRatio(
+                    aspectRatio: 13 / 2,
+                    child: Container(
+                      // color: Colors.redAccent,
+                      padding: EdgeInsets.only(left: 5),
+                      child: Wrap(
+                        direction: Axis.vertical,
+                        alignment: WrapAlignment.start,
+                        spacing: 3.0,
+                        runAlignment: WrapAlignment.start,
+                        // runSpacing: 8.0,
+                        // crossAxisAlignment: WrapCrossAlignment.center,
+                        // textDirection: TextDirection.rtl,
+                        // verticalDirection: VerticalDirection.up,
+                        children: <Widget>[
+                          Text(
+                            
+                            "Toyata SUV 2003",
+                            overflow:TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                                fontSize: width * 0.03,
+                                color: MyColors.black,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            overflow:TextOverflow.clip,
+                            "1212000km  | Auto  | Diesel",
+                            maxLines: 1,
+                            style: TextStyle(fontSize: width * 0.03),
+                          ),
+                          Text(
+                            "M323 566",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: MyColors.blue2, fontSize: width * 0.03),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         );
       },

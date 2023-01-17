@@ -14,29 +14,29 @@ class Categories extends StatelessWidget {
   Categories({Key? key,required this.owner}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.all(getProportionateScreenWidth(20, context)),
-        child: SizedBox(
-          height: getProportionateScreenWidth(80, context),
-          child: ListView.builder(
-              physics: const ScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                      left: getProportionateScreenWidth(20, context)),
-                  child: CategoryCard(
-                    icon: categories[index]["icon"],
-                    text: categories[index]["text"],
-                    press: () {
-                      store.selectCategory(categories[index]["text"],owner);
-                    },
-                  ),
-                );
-              }),
-        ));
+            var width = MediaQuery.of(context).copyWith().size.width;
+        var height = MediaQuery.of(context).copyWith().size.height;
+    return SizedBox(
+      height: getProportionateScreenWidth(80, context),
+      child: ListView.builder(
+          physics: const ScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          itemCount: categories.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: EdgeInsets.only(
+                  left: getProportionateScreenWidth(20, context)),
+              child: CategoryCard(
+                icon: categories[index]["icon"],
+                text: categories[index]["text"],
+                press: () {
+                  store.selectCategory(categories[index]["text"],owner);
+                },
+              ),
+            );
+          }),
+    );
   }
 }
 

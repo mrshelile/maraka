@@ -22,10 +22,13 @@ class _BodyState extends State<Body> {
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          
           children: [
-            SizedBox(height: getProportionateScreenHeight(20, context)),
+            // SizedBox(height: getProportionateScreenHeight(20, context)),
             HomeHeader(owner: widget.owner,),
-            SizedBox(height: getProportionateScreenWidth(10, context)),
+            // SizedBox(height: getProportionateScreenWidth(10, context)),
             DiscountBanner(),
             Categories(owner: widget.owner,),
             // FeacturedAds(),
