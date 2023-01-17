@@ -23,8 +23,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // ProductLogic productLogic = ProductLogic();
-    // productLogic.getProduct(1);
+
     var height = MediaQuery.of(context).copyWith().size.height;
     var width = MediaQuery.of(context).copyWith().size.width;
     return Stack(

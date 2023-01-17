@@ -26,7 +26,7 @@ class _BodyState extends State<Body> {
           crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-            // SizedBox(height: getProportionateScreenHeight(20, context)),
+          
             HomeHeader(
               owner: widget.owner,
             ),
@@ -37,8 +37,7 @@ class _BodyState extends State<Body> {
             Categories(
               owner: widget.owner,
             ),
-            // FeacturedAds(),
-            // SizedBox(height: getProportionateScreenWidth(30, context)),
+            SizedBox(height: getProportionateScreenHeight(10, context),),
             ProductList(owner: widget.owner),
             SizedBox(height: getProportionateScreenWidth(10, context)),
           ],
