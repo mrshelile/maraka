@@ -11,11 +11,11 @@ import '../../../size_config.dart';
 class Categories extends StatelessWidget {
   final store = Get.put(StoreController());
   User owner;
-  Categories({Key? key,required this.owner}) : super(key: key);
+  Categories({Key? key, required this.owner}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-            var width = MediaQuery.of(context).copyWith().size.width;
-        var height = MediaQuery.of(context).copyWith().size.height;
+    var width = MediaQuery.of(context).copyWith().size.width;
+    var height = MediaQuery.of(context).copyWith().size.height;
     return Padding(
       padding: EdgeInsets.only(left: getProportionateScreenWidth(38, context)),
       child: SizedBox(
@@ -24,16 +24,15 @@ class Categories extends StatelessWidget {
             physics: const ScrollPhysics(),
             scrollDirection: Axis.horizontal,
             itemCount: categories.length,
-            
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return Padding(
-                padding: EdgeInsets.only(right: width*0.05),
+                padding: EdgeInsets.only(right: width * 0.05),
                 child: CategoryCard(
                   icon: categories[index]["icon"],
                   text: categories[index]["text"],
                   press: () {
-                    store.selectCategory(categories[index]["text"],owner);
+                    store.selectCategory(categories[index]["text"], owner);
                   },
                 ),
               );
@@ -68,13 +67,12 @@ class CategoryCard extends StatelessWidget {
               height: getProportionateScreenWidth(60, context),
               width: MediaQuery.of(context).copyWith().size.width,
               decoration: BoxDecoration(
-              
                 color: Color.fromARGB(255, 169, 208, 235).withOpacity(0.7),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: SvgPicture.asset(icon!),
             ),
-            const SizedBox(height: 5),
+             SizedBox(height: getProportionateScreenHeight(2, context)),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SizedBox(
@@ -83,10 +81,7 @@ class CategoryCard extends StatelessWidget {
                   text!,
                   // maxLines: 3,
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                      fontSize:
-                          MediaQuery.of(context).copyWith().size.width * 0.023,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: getProportionateScreenWidth(12, context), fontWeight: FontWeight.bold),
                 ),
               ),
             )
