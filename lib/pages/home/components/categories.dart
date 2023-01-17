@@ -67,21 +67,22 @@ class CategoryCard extends StatelessWidget {
               height: getProportionateScreenWidth(60, context),
               width: MediaQuery.of(context).copyWith().size.width,
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 169, 208, 235).withOpacity(0.7),
+                color:
+                    const Color.fromARGB(255, 169, 208, 235).withOpacity(0.7),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: SvgPicture.asset(icon!),
             ),
-             SizedBox(height: getProportionateScreenHeight(2, context)),
+            SizedBox(height: getProportionateScreenHeight(2, context)),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SizedBox(
-                // height: getProportionateScreenHeight(51, context),
                 child: Text(
                   text!,
-                  // maxLines: 3,
                   textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: getProportionateScreenWidth(12, context), fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: getProportionateScreenWidth(12, context),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             )
