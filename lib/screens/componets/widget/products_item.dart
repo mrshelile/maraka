@@ -65,9 +65,12 @@ class _ProductsItemState extends State<ProductsItem> {
               ),
             ]),
             Text(
+              
               widget.product.category!.toLowerCase() == "cars"
                   ? "${widget.product.car['year'].toString()} ${widget.product.car['make']} ${widget.product.car['model']}"
                   : widget.product.title!,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontWeight: FontWeight.bold, height: 1.5),
             ),
 

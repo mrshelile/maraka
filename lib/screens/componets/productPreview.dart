@@ -166,9 +166,10 @@ class _ProductPreviewState extends State<ProductPreview> {
                                 fontWeight: FontWeight.w600,
                                 color: Color.fromARGB(255, 98, 152, 184)),
                           )),
-                      if (store.selectedCategory.toLowerCase() == "cars")
+                      if (store.selectedCategory.toLowerCase() == "cars" ||
+                          widget.product!.category!.toLowerCase() == "cars")
                         ...carInfo(),
-                      if (store.selectedCategory.toLowerCase() != "cars")
+                      if (store.selectedCategory.toLowerCase() != "cars" &&  widget.product!.category!.toLowerCase() != "cars")
                         ...otherInfo(),
                       Container(
                           padding: EdgeInsets.only(
