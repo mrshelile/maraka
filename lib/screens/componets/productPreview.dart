@@ -169,7 +169,8 @@ class _ProductPreviewState extends State<ProductPreview> {
                       if (store.selectedCategory.toLowerCase() == "cars" ||
                           widget.product!.category!.toLowerCase() == "cars")
                         ...carInfo(),
-                      if (store.selectedCategory.toLowerCase() != "cars" &&  widget.product!.category!.toLowerCase() != "cars")
+                      if (store.selectedCategory.toLowerCase() != "cars" &&
+                          widget.product!.category!.toLowerCase() != "cars")
                         ...otherInfo(),
                       Container(
                           padding: EdgeInsets.only(
@@ -177,7 +178,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                               left: getProportionateScreenWidth(25, context)),
                           width: width * 0.95,
                           child: Text(
-                            "Names: ${widget.product!.seller!.fullNames}",
+                            "Names: ${widget.product!.seller!.fullNames ?? ""}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -190,7 +191,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                               left: getProportionateScreenWidth(25, context)),
                           width: width * 0.95,
                           child: Text(
-                            "Email: ${widget.product!.seller!.email}",
+                            "Email: ${widget.product!.seller!.email ?? ""}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -203,7 +204,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                               left: getProportionateScreenWidth(25, context)),
                           width: width * 0.95,
                           child: Text(
-                            "Phone Numbers: ${widget.product!.seller!.phone1}",
+                            "Phone Numbers: ${widget.product!.seller!.phone1 ?? ""}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(

@@ -99,7 +99,7 @@ class ListProductCard extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(
-                                          fontSize: width * 0.03,
+                                          fontSize: width * 0.035,
                                           color: MyColors.black,
                                           fontWeight: FontWeight.w600),
                                     ),

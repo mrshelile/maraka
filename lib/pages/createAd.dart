@@ -94,281 +94,208 @@ class _CreateAdState extends State<CreateAd> {
     int countBtnDisable = 0;
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
-    Widget _name = Padding(
-      padding: EdgeInsets.only(top: height * 0.03),
-      child: Padding(
-        padding: EdgeInsets.only(
-            left: MediaQuery.of(context).copyWith().size.width * 0.1),
-        child: SizedBox(
-          width: MediaQuery.of(context).copyWith().size.width * 0.8,
-          child: TextFormField(
-            controller: _nameController,
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.title,
-                color: MyColors.brown2,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              labelStyle: const TextStyle(color: MyColors.brown3),
-              labelText: 'Name',
-            ),
-            validator: (String? value) {
-              return value == null || value.trim().isEmpty
-                  ? 'Name Cannot be empty'
-                  : null;
-            },
+    Widget name = Container(
+      padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+      child: TextFormField(
+        controller: _nameController,
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.title,
+            color: MyColors.brown2,
+            size: width * 0.04,
           ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Name',
         ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Name Cannot be empty'
+              : null;
+        },
       ),
     );
-    Widget _model = Padding(
-      padding: EdgeInsets.only(top: height * 0.05),
-      child: Padding(
-        padding: EdgeInsets.only(
-            left: MediaQuery.of(context).copyWith().size.width * 0.1),
-        child: SizedBox(
-          width: MediaQuery.of(context).copyWith().size.width * 0.8,
-          child: TextFormField(
-            controller: _modelController,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.model_training_outlined,
-                color: MyColors.brown2,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              labelStyle: const TextStyle(color: MyColors.brown3),
-              labelText: 'Model',
-            ),
-            validator: (String? value) {
-              return value == null || value.trim().isEmpty
-                  ? 'Field Cannot be empty'
-                  : null;
-            },
+    Widget model = Container(
+      padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+      child: TextFormField(
+        controller: _modelController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.model_training_outlined,
+            color: MyColors.brown2,
+            size: width * 0.04,
           ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Model',
         ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Field Cannot be empty'
+              : null;
+        },
       ),
     );
-    Widget _make = Padding(
-      padding: EdgeInsets.only(top: height * 0.05),
-      child: Padding(
-        padding: EdgeInsets.only(
-            left: MediaQuery.of(context).copyWith().size.width * 0.1),
-        child: SizedBox(
-          width: MediaQuery.of(context).copyWith().size.width * 0.8,
-          child: TextFormField(
-            controller: _makeController,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.type_specimen,
-                color: MyColors.brown2,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              labelStyle: const TextStyle(color: MyColors.brown3),
-              labelText: 'Make',
-            ),
-            validator: (String? value) {
-              return value == null || value.trim().isEmpty
-                  ? 'Field Cannot be empty'
-                  : null;
-            },
+    Widget make = Container(
+      padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+      width: width,
+      child: TextFormField(
+        controller: _makeController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.type_specimen,
+            color: MyColors.brown2,
+            size: width * 0.04,
           ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Make',
         ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Field Cannot be empty'
+              : null;
+        },
       ),
     );
-    Widget _mileage = Padding(
-      padding: EdgeInsets.only(top: height * 0.05),
-      child: Padding(
-        padding: EdgeInsets.only(
-            left: MediaQuery.of(context).copyWith().size.width * 0.1),
-        child: SizedBox(
-          width: MediaQuery.of(context).copyWith().size.width * 0.8,
-          child: TextFormField(
-            controller: _mileageController,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.travel_explore_outlined,
-                color: MyColors.brown2,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              labelStyle: const TextStyle(color: MyColors.brown3),
-              labelText: 'Mileage',
-            ),
-            validator: (String? value) {
-              return value == null || value.trim().isEmpty
-                  ? 'Field Cannot be empty'
-                  : null;
-            },
+    Widget mileage = Container(
+      padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+      width: width,
+      child: TextFormField(
+        controller: _mileageController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.travel_explore_outlined,
+            color: MyColors.brown2,
+            size: width * 0.04,
           ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Mileage',
         ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Field Cannot be empty'
+              : null;
+        },
       ),
     );
-    Widget _fuel = Padding(
-      padding: EdgeInsets.only(top: height * 0.05),
-      child: Padding(
-        padding: EdgeInsets.only(
-            left: MediaQuery.of(context).copyWith().size.width * 0.1),
-        child: SizedBox(
-          width: MediaQuery.of(context).copyWith().size.width * 0.8,
-          child: TextFormField(
-            controller: _fuelController,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.ramp_left_outlined,
-                color: MyColors.brown2,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              labelStyle: const TextStyle(color: MyColors.brown3),
-              labelText: 'Fuel Type',
-            ),
-            validator: (String? value) {
-              return value == null || value.trim().isEmpty
-                  ? 'Field Cannot be empty'
-                  : null;
-            },
+    Widget fuel = Container(
+      padding: EdgeInsets.only(left: width * 0.1),
+      width: width,
+      child: TextFormField(
+        controller: _fuelController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.ramp_left_outlined,
+            color: MyColors.brown2,
+            size: width * 0.042,
           ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Fuel Type',
         ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Field Cannot be empty'
+              : null;
+        },
       ),
     );
-    Widget _year = Padding(
-      padding: EdgeInsets.only(top: height * 0.05),
-      child: Padding(
-        padding: EdgeInsets.only(
-            left: MediaQuery.of(context).copyWith().size.width * 0.1),
-        child: SizedBox(
-          width: MediaQuery.of(context).copyWith().size.width * 0.8,
-          child: TextFormField(
-            controller: _yearController,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.calendar_today,
-                color: MyColors.brown2,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              labelStyle: const TextStyle(color: MyColors.brown3),
-              labelText: 'Year',
-            ),
-            validator: (String? value) {
-              return value == null || value.trim().isEmpty
-                  ? 'Field Cannot be empty'
-                  : null;
-            },
+    Widget year = Container(
+      padding: EdgeInsets.only(left: width * 0.1),
+      width: width,
+      child: TextFormField(
+        controller: _yearController,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          FilteringTextInputFormatter.digitsOnly
+        ],
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.calendar_today,
+            color: MyColors.brown2,
+            size: width * 0.04,
           ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Year',
         ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Field Cannot be empty'
+              : null;
+        },
       ),
     );
-    Widget _transmission = Align(
-      alignment: Alignment.centerLeft,
-      child: Padding(
-        padding: EdgeInsets.only(left: width * 0.15, top: height * 0.02),
-        child: DropdownButton(
-          value: _transmissionValue,
-          hint: Text(
-            "Transmission",
-            style: TextStyle(fontSize: width * 0.04),
-          ),
-          // Down Arrow Icon
-          icon: const Icon(
-            Icons.keyboard_arrow_down,
-          ),
-          items: _transmissionList.map((String item) {
-            return DropdownMenuItem(
-              value: item.toLowerCase(),
-              child: Text(item),
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() {
-              _transmissionValue = value;
-            });
-          },
+    Widget transmission = Container(
+      padding: EdgeInsets.only(left: width * 0.1),
+      width: width,
+      child: DropdownButton(
+        value: _transmissionValue,
+        hint: Text(
+          "Transmission",
+          style: TextStyle(fontSize: width * 0.04, color: MyColors.brown3),
         ),
+        // Down Arrow Icon
+        icon: const Icon(
+          Icons.keyboard_arrow_down,
+        ),
+        underline: Container(),
+        items: _transmissionList.map((String item) {
+          return DropdownMenuItem(
+            value: item.toLowerCase(),
+            child: Text(item),
+          );
+        }).toList(),
+        onChanged: (value) {
+          setState(() {
+            _transmissionValue = value;
+          });
+        },
       ),
     );
-    Widget _price = Padding(
-      padding: EdgeInsets.only(top: height * 0.05),
-      child: Padding(
-        padding: EdgeInsets.only(
-            left: MediaQuery.of(context).copyWith().size.width * 0.1),
-        child: SizedBox(
-          width: MediaQuery.of(context).copyWith().size.width * 0.8,
-          child: TextFormField(
-            controller: _priceController,
-            textInputAction: TextInputAction.next,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-// for version 2 and greater youcan also use this
-              FilteringTextInputFormatter.digitsOnly
-            ],
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.amp_stories,
-                color: MyColors.brown2,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              labelStyle: const TextStyle(color: MyColors.brown3),
-              labelText: 'Price',
-              hintText: "M",
-            ),
-            validator: (String? value) {
-              return value == null || value.trim().isEmpty
-                  ? 'Price Cannot be empty'
-                  : null;
-            },
+    Widget price = Container(
+      padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+      child: TextFormField(
+        controller: _priceController,
+        textInputAction: TextInputAction.next,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          FilteringTextInputFormatter.digitsOnly
+        ],
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.amp_stories,
+            color: MyColors.brown2,
+            size: width * 0.04,
           ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Price',
+          hintText: "M",
         ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Price Cannot be empty'
+              : null;
+        },
       ),
     );
-    Widget _description = Padding(
-      padding: EdgeInsets.only(top: height * 0.05),
-      child: Padding(
-        padding: EdgeInsets.only(
-            left: MediaQuery.of(context).copyWith().size.width * 0.1),
-        child: SizedBox(
-          width: MediaQuery.of(context).copyWith().size.width * 0.8,
-          child: TextFormField(
-            controller: _descriptionController,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.description,
-                color: MyColors.brown2,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: MyColors.blue2, width: 2.0),
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              labelStyle: const TextStyle(color: MyColors.brown3),
-              labelText: 'Description',
-            ),
-            validator: (String? value) {
-              return value == null || value.trim().isEmpty
-                  ? 'Descrition Cannot be empty'
-                  : null;
-            },
+    Widget description = Container(
+      padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+      child: TextFormField(
+        controller: _descriptionController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.description,
+            color: MyColors.brown2,
+            size: width * 0.04,
           ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Description',
         ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Descrition Cannot be empty'
+              : null;
+        },
       ),
     );
     return Scaffold(
@@ -451,7 +378,7 @@ class _CreateAdState extends State<CreateAd> {
                                 .timeout(const Duration(seconds: 25),
                                     onTimeout: () => throw TimeoutException(
                                         'Can\'t create product'));
-                            
+
                             if (response.statusCode == 201) {
                               if (mounted) {
                                 setState(() {
@@ -532,6 +459,7 @@ class _CreateAdState extends State<CreateAd> {
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   imageFileList.isNotEmpty
                       ? Padding(
@@ -593,17 +521,17 @@ class _CreateAdState extends State<CreateAd> {
                         ),
                       )),
                   if (_dropdownValue.toString().toLowerCase() != 'cars') ...[
-                    _name,
-                    _description
+                    name,
+                    description
                   ],
-                  _price,
+                  price,
                   if (_dropdownValue.toString().toLowerCase() == 'cars') ...[
-                    _year,
-                    _model,
-                    _make,
-                    _fuel,
-                    _mileage,
-                    _transmission
+                    year,
+                    model,
+                    make,
+                    fuel,
+                    mileage,
+                    transmission
                   ],
                   Padding(
                     padding:
