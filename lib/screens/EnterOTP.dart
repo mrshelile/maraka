@@ -66,6 +66,16 @@ class _OTPState extends State<OTP> {
                         child: SizedBox(
                           width: MediaQuery.of(context).copyWith().size.width *
                               0.8,
+                          child: Text("Check email for OTP code"),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: MediaQuery.of(context).copyWith().size.width *
+                                0.1),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).copyWith().size.width *
+                              0.8,
                           child: TextFormField(
                             controller: _otpController,
                             decoration: const InputDecoration(
@@ -122,7 +132,8 @@ class _OTPState extends State<OTP> {
                         child: TextButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              await verifyOTP(widget.user, _otpController.text.trim());
+                              await verifyOTP(
+                                  widget.user, _otpController.text.trim());
 
                               if (widget.isRegister && isvalid) {
                                 var res = await validateAcc(widget.user);
