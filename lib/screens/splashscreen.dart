@@ -142,7 +142,7 @@ class _SplashcreenState extends State<Splashcreen> {
                                         .copyWith()
                                         .size
                                         .width *
-                                    0.2,
+                                    0.25,
                                 child: Image.asset(
                                   "assets/iconlogo.png",
                                 )),

@@ -26,7 +26,7 @@ class _BodyState extends State<Body> {
           crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-          
+          SizedBox(height: getProportionateScreenHeight(10, context),),
             HomeHeader(
               owner: widget.owner,
             ),
