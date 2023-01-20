@@ -48,7 +48,7 @@ class ProductLogic {
       "category": ad.category,
       "description": ad.description,
       "price": ad.price,
-      "expire_date": DateTime.now().add(const Duration(days: 31)).toString(),
+      "expire_date": DateTime.now().add(const Duration(days: 93)).toString(),
       'identifier': uuid.v4(),
       'owner': id,
       'display': ad.imageUrls
