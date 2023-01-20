@@ -42,12 +42,12 @@ class _MyAdsState extends State<MyAds> {
             children: <Widget>[
            
               Padding(
-                padding: EdgeInsets.only(top: height * 0.0, right: width * 0.6),
+                padding: EdgeInsets.only(top: height * 0.0, right: width * 0.65),
                 child: SizedBox(
                   height: height * 0.22,
-                  width: width * 0.35,
+                  width: width * 0.23,
                   child: Image.asset(
-                    "assets/maraka.png",
+                    "assets/iconlogo.png",
                   ),
                 ),
               ),

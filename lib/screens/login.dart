@@ -62,9 +62,9 @@ class _LoginState extends State<Login> {
                         height:
                             MediaQuery.of(context).copyWith().size.height * 0.3,
                         width:
-                            MediaQuery.of(context).copyWith().size.width * 0.6,
+                            MediaQuery.of(context).copyWith().size.width * 0.4,
                         child: Image.asset(
-                          "assets/maraka.png",
+                          "assets/iconlogo.png",
                         ),
                       ),
                     ),
@@ -285,7 +285,7 @@ class _LoginState extends State<Login> {
                                       0.01),
                               child: TextButton(
                                 onPressed: () {
-                                  Navigator.pushReplacement(
+                                  Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
