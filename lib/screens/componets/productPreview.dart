@@ -77,6 +77,19 @@ class _ProductPreviewState extends State<ProductPreview> {
                                 fontSize: 13,
                                 color: Color.fromARGB(255, 80, 78, 78)),
                           )),
+                      Container(
+                          padding: EdgeInsets.only(
+                              top: getProportionateScreenHeight(10, context),
+                              left: getProportionateScreenWidth(25, context)),
+                          width: width * 0.95,
+                          child: Text(
+                            "Description: ${widget.product!.description}",
+                            maxLines: 10,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Color.fromARGB(255, 80, 78, 78)),
+                          )),
                     ];
                   }
 

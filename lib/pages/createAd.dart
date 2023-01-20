@@ -522,7 +522,7 @@ class _CreateAdState extends State<CreateAd> {
                       )),
                   if (_dropdownValue.toString().toLowerCase() != 'cars') ...[
                     name,
-                    description
+                    description,
                   ],
                   price,
                   if (_dropdownValue.toString().toLowerCase() == 'cars') ...[
@@ -531,6 +531,7 @@ class _CreateAdState extends State<CreateAd> {
                     make,
                     fuel,
                     mileage,
+                    description,
                     transmission
                   ],
                   Padding(
