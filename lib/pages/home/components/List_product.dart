@@ -61,15 +61,26 @@ class _ProductListState extends State<ProductList> {
                             return store.search.isEmpty
                                 ? ListProductCard(
                                     product: store.products[index])
-                                : store.products[index].title!
-                                        .toLowerCase()
-                                        .toString()
-                                        .contains(store.search
+                                : store.selectedCategory.toLowerCase() != "cars"
+                                    ? store.products[index].title!
                                             .toLowerCase()
-                                            .toString())
-                                    ? ListProductCard(
-                                        product: store.products[index])
-                                    : Container();
+                                            .toString()
+                                            .contains(store.search
+                                                .toLowerCase()
+                                                .toString())
+                                        ? ListProductCard(
+                                            product: store.products[index])
+                                        : Container()
+                                    : store.products[index].car['model']
+                                            .toString().toLowerCase()
+                                            .contains(
+                                                store.search.toLowerCase()) || store.products[index].car['make']
+                                            .toString().toLowerCase()
+                                            .contains(
+                                                store.search.toLowerCase())
+                                        ? ListProductCard(
+                                            product: store.products[index])
+                                        : Container();
                           },
                         ),
                         SizedBox(

@@ -111,120 +111,123 @@ class _ProductPreviewState extends State<ProductPreview> {
                     ];
                   }
 
-                  return Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.start,
-                    children: <Widget>[
-                      IconButton(
-                          color: MyColors.black,
-                          padding: EdgeInsets.only(
-                              left: getProportionateScreenWidth(8, context),
-                              top: getProportionateScreenHeight(20, context)),
-                          onPressed: (() => Navigator.pop(context)),
-                          icon: Icon(Icons.arrow_back_ios)),
-                      Container(
-                          padding: EdgeInsets.only(
-                              top: getProportionateScreenHeight(26, context),
-                              left: getProportionateScreenWidth(9, context)),
-                          width: width * 0.95,
-                          child: Text(
-                            "Details",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          )),
-                      AspectRatio(
-                        aspectRatio: 1.5,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 8, left: 8, right: 8),
-                          child: Container(
-                            decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(25))),
-                            width: width,
-                            child: Carousel(
-                              dotBgColor: Colors.transparent,
-                              dotSize: 0,
-                              boxFit: BoxFit.cover,
-                              borderRadius: true,
-                              images: imgs,
+                  return SingleChildScrollView(
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.start,
+                      children: <Widget>[
+                        IconButton(
+                            color: MyColors.black,
+                            padding: EdgeInsets.only(
+                                left: getProportionateScreenWidth(8, context),
+                                top: getProportionateScreenHeight(20, context)),
+                            onPressed: (() => Navigator.pop(context)),
+                            icon: Icon(Icons.arrow_back_ios)),
+                        Container(
+                            padding: EdgeInsets.only(
+                                top: getProportionateScreenHeight(26, context),
+                                left: getProportionateScreenWidth(9, context)),
+                            width: width * 0.95,
+                            child: Text(
+                              "Details",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            )),
+                        AspectRatio(
+                          aspectRatio: 1.5,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 8, left: 8, right: 8),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      topRight: Radius.circular(25))),
+                              width: width,
+                              child: Carousel(
+                                dotBgColor: Colors.transparent,
+                                dotSize: 0,
+                                boxFit: BoxFit.cover,
+                                borderRadius: true,
+                                images: imgs,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Container(
-                          padding: EdgeInsets.only(
-                              top: getProportionateScreenHeight(6, context),
-                              left: getProportionateScreenWidth(25, context)),
-                          width: width * 0.95,
-                          child: Text(
-                            store.selectedCategory.toLowerCase() == "cars"
-                                ? "${widget.product!.car['make']} ${widget.product!.car['model']} ${widget.product!.car['year']}"
-                                : widget.product!.title!,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          )),
-                      Container(
-                          padding: EdgeInsets.only(
-                              top: getProportionateScreenHeight(9, context),
-                              left: getProportionateScreenWidth(25, context)),
-                          width: width * 0.95,
-                          child: Text(
-                            "M${widget.product!.price}",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromARGB(255, 98, 152, 184)),
-                          )),
-                      if (store.selectedCategory.toLowerCase() == "cars" ||
-                          widget.product!.category!.toLowerCase() == "cars")
-                        ...carInfo(),
-                      if (store.selectedCategory.toLowerCase() != "cars" &&
-                          widget.product!.category!.toLowerCase() != "cars")
-                        ...otherInfo(),
-                      Container(
-                          padding: EdgeInsets.only(
-                              top: getProportionateScreenHeight(15, context),
-                              left: getProportionateScreenWidth(25, context)),
-                          width: width * 0.95,
-                          child: Text(
-                            "Names: ${widget.product!.seller!.fullNames ?? ""}",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontSize: 13,
-                                color: Color.fromARGB(255, 80, 78, 78)),
-                          )),
-                      Container(
-                          padding: EdgeInsets.only(
-                              top: getProportionateScreenHeight(10, context),
-                              left: getProportionateScreenWidth(25, context)),
-                          width: width * 0.95,
-                          child: Text(
-                            "Email: ${widget.product!.seller!.email ?? ""}",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontSize: 13,
-                                color: Color.fromARGB(255, 80, 78, 78)),
-                          )),
-                      Container(
-                          padding: EdgeInsets.only(
-                              top: getProportionateScreenHeight(7, context),
-                              left: getProportionateScreenWidth(25, context)),
-                          width: width * 0.95,
-                          child: Text(
-                            "Phone Numbers: ${widget.product!.seller!.phone1 ?? ""}",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontSize: 13,
-                                color: Color.fromARGB(255, 80, 78, 78)),
-                          )),
-                    ],
+                        Container(
+                            padding: EdgeInsets.only(
+                                top: getProportionateScreenHeight(6, context),
+                                left: getProportionateScreenWidth(25, context)),
+                            width: width * 0.95,
+                            child: Text(
+                              store.selectedCategory.toLowerCase() == "cars"
+                                  ? "${widget.product!.car['make']} ${widget.product!.car['model']} ${widget.product!.car['year']}"
+                                  : widget.product!.title!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            )),
+                        Container(
+                            padding: EdgeInsets.only(
+                                top: getProportionateScreenHeight(9, context),
+                                left: getProportionateScreenWidth(25, context)),
+                            width: width * 0.95,
+                            child: Text(
+                              "M${widget.product!.price}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color.fromARGB(255, 98, 152, 184)),
+                            )),
+                        if (store.selectedCategory.toLowerCase() == "cars" ||
+                            widget.product!.category!.toLowerCase() == "cars")
+                          ...carInfo(),
+                        if (store.selectedCategory.toLowerCase() != "cars" &&
+                            widget.product!.category!.toLowerCase() != "cars")
+                          ...otherInfo(),
+                        Container(
+                            padding: EdgeInsets.only(
+                                top: getProportionateScreenHeight(15, context),
+                                left: getProportionateScreenWidth(25, context)),
+                            width: width * 0.95,
+                            child: Text(
+                              "Names: ${widget.product!.seller!.fullNames ?? ""}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: Color.fromARGB(255, 80, 78, 78)),
+                            )),
+                        Container(
+                            padding: EdgeInsets.only(
+                                top: getProportionateScreenHeight(10, context),
+                                left: getProportionateScreenWidth(25, context)),
+                            width: width * 0.95,
+                            child: Text(
+                              "Email: ${widget.product!.seller!.email ?? ""}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: Color.fromARGB(255, 80, 78, 78)),
+                            )),
+                        Container(
+                            padding: EdgeInsets.only(
+                                top: getProportionateScreenHeight(7, context),
+                                left: getProportionateScreenWidth(25, context)),
+                            width: width * 0.95,
+                            child: Text(
+                              "Phone Numbers: ${widget.product!.seller!.phone1 ?? ""}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: Color.fromARGB(255, 80, 78, 78)),
+                            )),
+                            SizedBox(height: height*0.05,)
+                      ],
+                    ),
                   );
                 },
               );

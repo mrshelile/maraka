@@ -27,7 +27,7 @@ class _SearchFieldState extends State<SearchField> {
     SizeConfig sizeConfig = SizeConfig();
     sizeConfig.init(context);
     return Container(
-      width: sizeConfig.screenWidth * 0.6,
+      width: sizeConfig.screenWidth * 0.8,
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 224, 229, 240).withOpacity(0.9),
         borderRadius: BorderRadius.circular(15),

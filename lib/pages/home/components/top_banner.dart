@@ -26,10 +26,10 @@ class DiscountBanner extends StatelessWidget {
       Container(
           width: double.infinity,
           // margin: const EdgeInsets.all(5),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 5,
-            vertical: 5,
-          ),
+          // padding: const EdgeInsets.symmetric(
+          //   horizontal: 5,
+          //   vertical: 5,
+          // ),
           decoration: BoxDecoration(
             color: const Color.fromARGB(159, 242, 243, 245),
             borderRadius: BorderRadius.circular(20),
@@ -38,8 +38,8 @@ class DiscountBanner extends StatelessWidget {
     ],
     options: CarouselOptions(
         height: 150,
-        aspectRatio: 16 / 9,
-        viewportFraction: 0.8,
+        aspectRatio: 15/9,
+        viewportFraction: 0.84,
         initialPage: 0,
         enableInfiniteScroll: true,
         reverse: false,
@@ -77,8 +77,8 @@ class DiscountBanner extends StatelessWidget {
                 .toList(),
             options: CarouselOptions(
                 height: 150,
-                aspectRatio: 16 / 9,
-                viewportFraction: 0.8,
+                aspectRatio: 15 / 9,
+                viewportFraction: 0.84,
                 initialPage: 0,
                 enableInfiniteScroll: true,
                 reverse: false,
@@ -97,13 +97,10 @@ class DiscountBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: getProportionateScreenWidth(38, context)),
-      child: FutureBuilder(
-          future: makeBanner(),
-          builder: ((context, snapshot) {
-            return imageCarousel;
-          })),
-    );
+    return FutureBuilder(
+        future: makeBanner(),
+        builder: ((context, snapshot) {
+          return imageCarousel;
+        }));
   }
 }
