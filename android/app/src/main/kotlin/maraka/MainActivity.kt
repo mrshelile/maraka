@@ -1,4 +1,4 @@
-package com.maraka.maraka
+package maraka
 
 import io.flutter.embedding.android.FlutterActivity
 

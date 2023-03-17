@@ -40,7 +40,7 @@ class _CreateAdState extends State<CreateAd> {
             );
 
     if (result != null) {
-      if (result.files.length <= 3) {
+      if (result.files.length <= 5) {
         if (result.files.every((element) => element.size <= 3750000)) {
           setState(() {
             _error = "";
@@ -53,7 +53,7 @@ class _CreateAdState extends State<CreateAd> {
         }
       } else {
         setState(() {
-          _error = "maximum of 3 images";
+          _error = "maximum of 5 images";
         });
       }
     }
@@ -325,10 +325,10 @@ class _CreateAdState extends State<CreateAd> {
 
                         try {
                           for (var element in imageFileList) {
-                            if (i <= 2) {
+                            if (i <= 4) {
                               var res = await logic
                                   .postImages(element, element.path)
-                                  .timeout(const Duration(seconds: 25),
+                                  .timeout(const Duration(minutes: 1),
                                       onTimeout: () => throw TimeoutException(
                                           'Can\'t upload image'));
                               if (res.statusCode == 201) {
@@ -337,6 +337,7 @@ class _CreateAdState extends State<CreateAd> {
                             }
                             i++;
                           }
+                          debugPrint(imageIds.toString());
                           if (imageIds.isNotEmpty) {
                             if (_dropdownValue.toString().toLowerCase() ==
                                 "cars") {
@@ -367,7 +368,7 @@ class _CreateAdState extends State<CreateAd> {
                                             _descriptionController.text.trim(),
                                         price: _priceController.text.trim(),
                                         expiryDate: DateTime.now()
-                                            .add(const Duration(days: 31)),
+                                            .add(const Duration(days: 93)),
                                         id2: '',
                                         seller: Seller(),
                                         images: [],
