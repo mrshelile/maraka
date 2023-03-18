@@ -4,6 +4,7 @@ import 'package:maraka/logic/banner_logic.dart';
 import 'package:maraka/logic/sendVisitor.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/logic/constants.dart';
+import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
@@ -78,6 +79,8 @@ class _SplashcreenState extends State<Splashcreen> {
                                 MediaQuery.of(context).copyWith().size.height *
                                     0.05,
                             child: Text(
+                                style: TextStyle(
+                                    fontSize: getProportionateScreenWidth(17, context)),
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                                 i.owner.toString()))

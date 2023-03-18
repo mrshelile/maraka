@@ -48,7 +48,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 16,
                                 color: Color.fromARGB(255, 80, 78, 78)),
                           )),
                       Container(
@@ -61,7 +61,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 16,
                                 color: Color.fromARGB(255, 80, 78, 78)),
                           )),
                       Container(
@@ -74,7 +74,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 16,
                                 color: Color.fromARGB(255, 80, 78, 78)),
                           )),
                       Container(
@@ -87,7 +87,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                             maxLines: 10,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 16,
                                 color: Color.fromARGB(255, 80, 78, 78)),
                           )),
                     ];
@@ -105,7 +105,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                             maxLines: 10,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 16,
                                 color: Color.fromARGB(255, 80, 78, 78)),
                           )),
                     ];
@@ -131,7 +131,9 @@ class _ProductPreviewState extends State<ProductPreview> {
                               "Details",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontWeight: FontWeight.w600),
+                              style: TextStyle(fontWeight: FontWeight.w800,
+                              fontSize: 17
+                              ),
                             )),
                         AspectRatio(
                           aspectRatio: 1.5,
@@ -165,7 +167,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                                   : widget.product!.title!,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontWeight: FontWeight.w600),
+                              style: TextStyle(fontWeight: FontWeight.w600,fontSize: 17),
                             )),
                         Container(
                             padding: EdgeInsets.only(
@@ -177,7 +179,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 15,
+                                  fontSize: 17,
                                   fontWeight: FontWeight.w600,
                                   color: Color.fromARGB(255, 98, 152, 184)),
                             )),
@@ -197,7 +199,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 16,
                                   color: Color.fromARGB(255, 80, 78, 78)),
                             )),
                         Container(
@@ -210,7 +212,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 16,
                                   color: Color.fromARGB(255, 80, 78, 78)),
                             )),
                         Container(
@@ -223,7 +225,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 16,
                                   color: Color.fromARGB(255, 80, 78, 78)),
                             )),
                             SizedBox(height: height*0.05,)

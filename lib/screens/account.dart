@@ -97,7 +97,7 @@ class _AccountState extends State<Account> {
                                     maxLines: 3,
                                     widget.user.name.toString(),
                                     style:
-                                        const TextStyle(color: MyColors.blue3),
+                                        const TextStyle(color: MyColors.blue3,fontSize: 17),
                                   )),
                             )
                           ],
@@ -196,6 +196,7 @@ class _AccountState extends State<Account> {
                                         labelStyle: const TextStyle(
                                             color: MyColors.blue3),
                                         hintText: "Phone Numbers",
+                                        
                                         labelText:
                                             widget.user.phone1.toString(),
                                         enabled: _isenabled,

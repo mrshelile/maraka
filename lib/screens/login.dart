@@ -78,6 +78,7 @@ class _LoginState extends State<Login> {
                         child: TextFormField(
                           controller: _emailController,
                           decoration: const InputDecoration(
+                            
                             hintText: "Enter Your Email Address",
                             prefixIcon: Icon(
                               Icons.email_outlined,
@@ -85,6 +86,7 @@ class _LoginState extends State<Login> {
                             ),
                             labelStyle: TextStyle(color: MyColors.brown3),
                             border: UnderlineInputBorder(),
+                            
                             labelText: 'Enter your email',
                           ),
                           keyboardType: TextInputType.emailAddress,
@@ -251,29 +253,22 @@ class _LoginState extends State<Login> {
                         children: <Widget>[
                           const Text(
                             "Don't Have an Account?",
-                            style: TextStyle(color: MyColors.brown3),
+                            style: TextStyle(color: MyColors.brown3,fontSize: 15),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: MediaQuery.of(context)
-                                        .copyWith()
-                                        .size
-                                        .width *
-                                    0.01),
-                            child: TextButton(
-                              child: const Text(
-                                "Sign up",
-                                style: TextStyle(
-                                  color: MyColors.blue3,
-                                ),
+                          TextButton(
+                            child: const Text(
+                              "Sign up",
+                              style: TextStyle(
+                                color: MyColors.blue3,
+                                fontSize: 16
                               ),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Registration()));
-                              },
                             ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Registration()));
+                            },
                           ),
                           if (constraints.maxWidth >= 600)
                             Padding(
@@ -304,7 +299,7 @@ class _LoginState extends State<Login> {
                       Padding(
                         padding: EdgeInsets.only(
                             left: MediaQuery.of(context).copyWith().size.width *
-                                0.33),
+                                0.3),
                         child: TextButton(
                           onPressed: () {
                             Navigator.pushReplacement(
@@ -314,7 +309,7 @@ class _LoginState extends State<Login> {
                           },
                           child: const Text(
                             "Forgot Password?",
-                            style: TextStyle(color: MyColors.blue3),
+                            style: TextStyle(color: MyColors.blue3,fontSize: 17),
                           ),
                         ),
                       ),

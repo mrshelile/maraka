@@ -33,7 +33,6 @@ class _BodyState extends State<Body> {
             SizedBox(height: getProportionateScreenWidth(10, context)),
             DiscountBanner(),
             SizedBox(height: getProportionateScreenWidth(10, context)),
-
             Categories(
               owner: widget.owner,
             ),

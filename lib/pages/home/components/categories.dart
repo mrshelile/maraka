@@ -79,9 +79,10 @@ class CategoryCard extends StatelessWidget {
               child: SizedBox(
                 child: Text(
                   text!,
+                  
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                      fontSize: getProportionateScreenWidth(12, context),
+                      fontSize: getProportionateScreenWidth(15.2, context),
                       fontWeight: FontWeight.bold),
                 ),
               ),

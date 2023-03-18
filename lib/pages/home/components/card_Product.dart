@@ -57,7 +57,7 @@ class ListProductCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           AspectRatio(
-                            aspectRatio: 6 / 1.7,
+                            aspectRatio: 6 / 1.5,
                             child: Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
@@ -75,7 +75,7 @@ class ListProductCard extends StatelessWidget {
                             height: 1,
                           ),
                           AspectRatio(
-                            aspectRatio: 13 / 2.8,
+                            aspectRatio: 13 / 3.3,
                             child: Container(
                               // color: Colors.redAccent,
                               padding: EdgeInsets.only(left: 5),
@@ -99,7 +99,7 @@ class ListProductCard extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(
-                                          fontSize: width * 0.035,
+                                          fontSize: width * 0.043,
                                           color: MyColors.black,
                                           fontWeight: FontWeight.w600),
                                     ),
@@ -113,7 +113,7 @@ class ListProductCard extends StatelessWidget {
                                           ? "${product.car['kilos']}Km  | ${product.car['transmission']}  | ${product.car['fuel']}"
                                           : "${product.description}",
                                       maxLines: 1,
-                                      style: TextStyle(fontSize: width * 0.03),
+                                      style: TextStyle(fontSize: width * 0.04),
                                     ),
                                   ),
                                   Text(
@@ -122,7 +122,7 @@ class ListProductCard extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         color: MyColors.blue2,
-                                        fontSize: width * 0.03),
+                                        fontSize: width * 0.04),
                                   ),
                                 ],
                               ),

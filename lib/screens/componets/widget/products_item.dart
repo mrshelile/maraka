@@ -38,45 +38,53 @@ class _ProductsItemState extends State<ProductsItem> {
     }
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ProductPreview(
-                      product: widget.product,
-                    )));
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              margin: const EdgeInsets.all(8),
-              height: 170,
-              width: 200,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(13),
-                  image: DecorationImage(
-                      image: NetworkImage(widget.product.images![0].url),
-                      fit: BoxFit.fitHeight)),
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
+      child: Stack(
+        children: [
+          // TopBTnsProductPreview(),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProductPreview(
+                            product: widget.product,
+                          )));
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(8),
+                  height: 170,
+                  width: 200,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(13),
+                      image: DecorationImage(
+                          image: NetworkImage(widget.product.images![0].url),
+                          fit: BoxFit.fitHeight)),
+                ),
+                Text(
+                  widget.product.category!.toLowerCase() == "cars"
+                      ? "${widget.product.car['year'].toString()} ${widget.product.car['make']} ${widget.product.car['model']}"
+                      : widget.product.title!,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style:
+                      const TextStyle(fontWeight: FontWeight.bold, height: 1.7,fontSize: 18),
+                ),
+                Text(widget.product.price!.toString(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        height: 1.7,
+                        fontSize: 17,
+                        color: Color(0xff4f6612)))
+              ],
             ),
-            Text(
-              widget.product.category!.toLowerCase() == "cars"
-                  ? "${widget.product.car['year'].toString()} ${widget.product.car['make']} ${widget.product.car['model']}"
-                  : widget.product.title!,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontWeight: FontWeight.bold, height: 1.5),
-            ),
-            Text(widget.product.price!.toString(),
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    height: 1.5,
-                    color: Color(0xff4f6612)))
-          ],
-        ),
+          ),
+          TopBTnsProductPreview(),
+        ],
       ),
     );
   }
