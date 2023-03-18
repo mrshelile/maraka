@@ -19,7 +19,7 @@ List<Map<String, dynamic>> categories = [
 ];
 
 // var server = "https://maraka.co.ls/buyandsellDjango-apis";
-var server = "http://127.0.0.1:8000/buyandsellDjango-apis";
+var server = "http://192.168.0.101:8000/buyandsellDjango-apis";
 // var server = "https://agile-headland-32385.herokuapp.com";
   
 const kAnimationDuration = Duration(milliseconds: 200);

@@ -94,7 +94,7 @@ class ListProductCard extends StatelessWidget {
                                     child: Text(
                                       store.selectedCategory.toLowerCase() ==
                                               "cars"
-                                          ? "${product.car['model']} ${product.car['make']} ${product.car['year']}"
+                                          ? "${product.car['make']} ${product.car['model']} ${product.car['year']}"
                                           : "${product.title}",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,

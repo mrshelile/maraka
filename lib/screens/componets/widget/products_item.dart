@@ -4,6 +4,7 @@ import 'package:maraka/models/product.dart';
 import 'package:maraka/models/products.dart';
 import 'package:flutter/material.dart';
 import 'package:maraka/screens/componets/productPreview.dart';
+import 'package:maraka/screens/componets/widget/TopBtns.dart';
 import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 
@@ -22,7 +23,6 @@ class ProductsItem extends StatefulWidget {
       required this.owner,
       required this.product,
       required this.isFavouriteclicked,
-
       required this.isFavouriteBtn})
       : super(key: key);
 
@@ -52,28 +52,24 @@ class _ProductsItemState extends State<ProductsItem> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Stack(children: [
-              Container(
-                margin: const EdgeInsets.all(8),
-                height: 170,
-                width: 200,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(13),
-                    image: DecorationImage(
-                        image: NetworkImage(widget.product.images![0].url),
-                        fit: BoxFit.fitHeight)),
-              ),
-            ]),
+            Container(
+              margin: const EdgeInsets.all(8),
+              height: 170,
+              width: 200,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(13),
+                  image: DecorationImage(
+                      image: NetworkImage(widget.product.images![0].url),
+                      fit: BoxFit.fitHeight)),
+            ),
             Text(
-              
               widget.product.category!.toLowerCase() == "cars"
                   ? "${widget.product.car['year'].toString()} ${widget.product.car['make']} ${widget.product.car['model']}"
                   : widget.product.title!,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontWeight: FontWeight.bold, height: 1.5),
             ),
-
             Text(widget.product.price!.toString(),
                 style: const TextStyle(
                     fontWeight: FontWeight.bold,

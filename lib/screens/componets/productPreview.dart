@@ -144,6 +144,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                                       topRight: Radius.circular(25))),
                               width: width,
                               child: Carousel(
+                                autoplay: false,
                                 dotBgColor: Colors.transparent,
                                 dotSize: 0,
                                 boxFit: BoxFit.cover,

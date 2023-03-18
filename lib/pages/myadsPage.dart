@@ -44,8 +44,8 @@ class _MyAdsState extends State<MyAds> {
               Padding(
                 padding: EdgeInsets.only(top: height * 0.0, right: width * 0.65),
                 child: SizedBox(
-                  height: height * 0.22,
-                  width: width * 0.23,
+                  height: height * 0.2,
+                  width: width * 0.2,
                   child: Image.asset(
                     "assets/iconlogo.png",
                   ),
@@ -58,7 +58,7 @@ class _MyAdsState extends State<MyAds> {
                     return SizedBox(
                       // decoration: BoxDecoration(
                       //     border: Border.all(color: Colors.black)),
-                      height: height * 0.68,
+                      height: height * 0.69,
                       width: width,
                       child: GridView.builder(
                           itemCount: myads.length,

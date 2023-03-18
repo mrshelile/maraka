@@ -115,6 +115,30 @@ class _CreateAdState extends State<CreateAd> {
         },
       ),
     );
+    Widget UploadField = GestureDetector(
+      onTap: (){
+         selectImages();
+      },
+      child: Container(
+        padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+        child: TextFormField(
+          readOnly: true,
+          enableInteractiveSelection: false,
+          enabled: false,
+          textInputAction: TextInputAction.next,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.image,
+              color: MyColors.brown2,
+              size: width * 0.04,
+            ),
+            labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+            labelText: 'Chosse Image',
+          ),
+         
+        ),
+      ),
+    );
     Widget model = Container(
       padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
       child: TextFormField(
@@ -501,26 +525,27 @@ class _CreateAdState extends State<CreateAd> {
                             // if ()
                             child: SvgPicture.asset(
                               "assets/upload.svg",
-                              semanticsLabel: "Profile Image",
+                              semanticsLabel: "Image",
                               fit: BoxFit.scaleDown,
                               width: width * 0.35,
                               height: height * 0.25,
                             ),
                           ),
                         ),
-                  Padding(
-                      padding: EdgeInsets.only(
-                          left: width * 0.25, top: height * 0.001),
-                      child: IconButton(
-                        onPressed: () async {
-                          selectImages();
-                        },
-                        icon: const Icon(
-                          Icons.upload_file,
-                          color: MyColors.goldenBrown,
-                          size: 30,
-                        ),
-                      )),
+                  // Padding(
+                  //     padding: EdgeInsets.only(
+                  //         left: width * 0.25, top: height * 0.001),
+                  //     child: IconButton(
+                  //       onPressed: () async {
+                  //         selectImages();
+                  //       },
+                  //       icon: const Icon(
+                  //         Icons.upload_file,
+                  //         color: MyColors.goldenBrown,
+                  //         size: 30,
+                  //       ),
+                  //     )),
+                  UploadField,
                   if (_dropdownValue.toString().toLowerCase() != 'cars') ...[
                     name,
                     description,
