@@ -1,4 +1,6 @@
+import 'package:get/get.dart';
 import 'package:maraka/logic/products_logic.dart';
+import 'package:maraka/logic/store.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/models/products.dart';
@@ -10,7 +12,7 @@ import 'package:maraka/themes/color.dart';
 
 // ignore: must_be_immutable
 class ProductsItem extends StatefulWidget {
-  Product product;
+  int product;
   bool isFavouritedPage = true;
   bool isFavouriteBtn = true;
   bool isFavouriteclicked = false;
@@ -33,60 +35,68 @@ class ProductsItem extends StatefulWidget {
 class _ProductsItemState extends State<ProductsItem> {
   @override
   Widget build(BuildContext context) {
+    final store = Get.find<StoreController>();
     if (widget.owner.email != null) {
-      widget.isFavouriteclicked = widget.product.isLiked;
+      widget.isFavouriteclicked = store.myProducts[widget.product].isLiked;
     }
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
 
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
-      child: Stack(
-        children: [
-          // TopBTnsProductPreview(),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ProductPreview(
-                            product: widget.product,
-                          )));
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(8),
-                  height: 170,
-                  width: 200,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(13),
-                      image: DecorationImage(
-                          image: NetworkImage(widget.product.images![0].url),
-                          fit: BoxFit.fitHeight)),
+    return GetBuilder(
+      init: store,
+      builder: (_) {
+        return Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
+          child: Stack(
+            children: [
+              // TopBTnsProductPreview(),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProductPreview(
+                                product: store.myProducts[widget.product],
+                              )));
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      height: 170,
+                      width: 200,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(13),
+                          image: DecorationImage(
+                              image: NetworkImage(store.myProducts[widget.product].images![0].url),
+                              fit: BoxFit.fitHeight)),
+                    ),
+                    Text(
+                      store.myProducts[widget.product].category!.toLowerCase() == "cars"
+                          ? "${store.myProducts[widget.product].car['year'].toString()} ${store.myProducts[widget.product].car['make']} ${store.myProducts[widget.product].car['model']}"
+                          : store.myProducts[widget.product].title!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, height: 1.7, fontSize: 18),
+                    ),
+                    Text(store.myProducts[widget.product].price!.toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            height: 1.7,
+                            fontSize: 17,
+                            color: Color(0xff4f6612)))
+                  ],
                 ),
-                Text(
-                  widget.product.category!.toLowerCase() == "cars"
-                      ? "${widget.product.car['year'].toString()} ${widget.product.car['make']} ${widget.product.car['model']}"
-                      : widget.product.title!,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, height: 1.7, fontSize: 18),
-                ),
-                Text(widget.product.price!.toString(),
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        height: 1.7,
-                        fontSize: 17,
-                        color: Color(0xff4f6612)))
-              ],
-            ),
+              ),
+              TopBTnsProductPreview(
+                product: widget.product,
+              ),
+            ],
           ),
-          TopBTnsProductPreview(product: widget.product,),
-        ],
-      ),
+        );
+      }
     );
   }
 }

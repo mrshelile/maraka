@@ -1,4 +1,6 @@
+import 'package:get/get.dart';
 import 'package:maraka/logic/products_logic.dart';
+import 'package:maraka/logic/store.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/models/products.dart';
@@ -24,7 +26,7 @@ class _MyAdsState extends State<MyAds> {
     var logic = ProductLogic();
     List<Product> ad = await logic.getMyAds(widget.owner);
     myads = ad;
-    
+
     return ad;
   }
 
@@ -32,6 +34,7 @@ class _MyAdsState extends State<MyAds> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).copyWith().size.height;
     var width = MediaQuery.of(context).copyWith().size.width;
+    final store = Get.find<StoreController>();
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -53,32 +56,34 @@ class _MyAdsState extends State<MyAds> {
                 ),
               ),
               FutureBuilder<dynamic>(
-                future: myAdsList(),
+                future: store.setMyproducts(widget.owner),
                 builder: (context, snapshot) {
                   // print(snapshot.data);
                   if (snapshot.hasData) {
-                    return SizedBox(
-                      // decoration: BoxDecoration(
-                      //     border: Border.all(color: Colors.black)),
-                      height: height * 0.69,
-                      width: width,
-                      child: GridView.builder(
-                          itemCount: myads.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  //childAspectRatio: 2,
-                                  mainAxisExtent: 280,
-                                  mainAxisSpacing: 12,
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 10),
-                          itemBuilder: (context, index) => ProductsItem(
-                                isFavouritedPage: false,
-                                owner: widget.owner,
-                                isFavouriteclicked: false,
-                                isFavouriteBtn: false,
-                                product: myads[index],
-                              )),
-                    );
+                    return GetBuilder(init: store,builder: (_) {
+                      return SizedBox(
+                        // decoration: BoxDecoration(
+                        //     border: Border.all(color: Colors.black)),
+                        height: height * 0.69,
+                        width: width,
+                        child: GridView.builder(
+                            itemCount: store.myProducts.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    //childAspectRatio: 2,
+                                    mainAxisExtent: 280,
+                                    mainAxisSpacing: 12,
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 10),
+                            itemBuilder: (context, index) => ProductsItem(
+                                  isFavouritedPage: false,
+                                  owner: widget.owner,
+                                  isFavouriteclicked: false,
+                                  isFavouriteBtn: false,
+                                  product: index,
+                                )),
+                      );
+                    });
                   } else {
                     return const Text("");
                   }
