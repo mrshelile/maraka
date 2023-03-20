@@ -19,7 +19,7 @@ class Categories extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(left: getProportionateScreenWidth(38, context)),
       child: SizedBox(
-        height: getProportionateScreenWidth(80, context),
+        height: getProportionateScreenWidth(85, context),
         child: ListView.builder(
             physics: const ScrollPhysics(),
             scrollDirection: Axis.horizontal,

@@ -38,6 +38,7 @@ class _ProductsItemState extends State<ProductsItem> {
     }
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
       child: Stack(
@@ -71,8 +72,8 @@ class _ProductsItemState extends State<ProductsItem> {
                       : widget.product.title!,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style:
-                      const TextStyle(fontWeight: FontWeight.bold, height: 1.7,fontSize: 18),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, height: 1.7, fontSize: 18),
                 ),
                 Text(widget.product.price!.toString(),
                     style: const TextStyle(
@@ -83,7 +84,7 @@ class _ProductsItemState extends State<ProductsItem> {
               ],
             ),
           ),
-          TopBTnsProductPreview(),
+          TopBTnsProductPreview(product: widget.product,),
         ],
       ),
     );

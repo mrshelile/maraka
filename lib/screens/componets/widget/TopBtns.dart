@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:maraka/logic/products_logic.dart';
+import 'package:maraka/models/product.dart';
+
 import 'package:maraka/themes/color.dart';
 
 class TopBTnsProductPreview extends StatefulWidget {
-  const TopBTnsProductPreview({Key? key}) : super(key: key);
+  Product product;
+  TopBTnsProductPreview({Key? key, required this.product}) : super(key: key);
 
   @override
   State<TopBTnsProductPreview> createState() => _TopBTnsProductPreviewState();
@@ -11,7 +15,7 @@ class TopBTnsProductPreview extends StatefulWidget {
 class _TopBTnsProductPreviewState extends State<TopBTnsProductPreview> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    ProductLogic logic = ProductLogic();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       // ignore: prefer_const_literals_to_create_immutables
@@ -20,8 +24,9 @@ class _TopBTnsProductPreviewState extends State<TopBTnsProductPreview> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15), color: Colors.white),
           child: IconButton(
-              onPressed: () {
+              onPressed: () async {
                 print("delete pressed");
+               var res= await logic.deleteProduct(widget.product.id1);
               },
               icon: Icon(
                 Icons.delete,

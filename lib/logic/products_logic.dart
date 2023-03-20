@@ -37,6 +37,20 @@ class ProductLogic {
     return response;
   }
 
+  Future deleteProduct(var id) async {
+    Map<String, String> headers = {
+      "dataType": "json",
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    var response = await http.delete(
+      Uri.parse(
+          // ignore: prefer_interpolation_to_compose_strings
+          "$server$_productCreate/$id"),
+      headers:headers,
+    );
+    return response;
+  }
+
   Future postProduct(Product ad, int id, var car) async {
     var uuid = const Uuid();
     Map<String, String> headers = {

@@ -24,6 +24,7 @@ class _MyAdsState extends State<MyAds> {
     var logic = ProductLogic();
     List<Product> ad = await logic.getMyAds(widget.owner);
     myads = ad;
+    
     return ad;
   }
 
@@ -40,9 +41,9 @@ class _MyAdsState extends State<MyAds> {
           ),
           Column(
             children: <Widget>[
-           
               Padding(
-                padding: EdgeInsets.only(top: height * 0.0, right: width * 0.65),
+                padding:
+                    EdgeInsets.only(top: height * 0.0, right: width * 0.65),
                 child: SizedBox(
                   height: height * 0.2,
                   width: width * 0.2,
@@ -54,6 +55,7 @@ class _MyAdsState extends State<MyAds> {
               FutureBuilder<dynamic>(
                 future: myAdsList(),
                 builder: (context, snapshot) {
+                  // print(snapshot.data);
                   if (snapshot.hasData) {
                     return SizedBox(
                       // decoration: BoxDecoration(

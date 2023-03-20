@@ -7,6 +7,29 @@ class StoreController extends GetxController {
   var selectedCategory = "Cars";
   var search = '';
   List<Product> products = [];
+  List<Product> myProducts = [];
+
+  Future<List<Product>> setMyproducts(User owner) async {
+    myProducts = [];
+    var logic = ProductLogic();
+    List<Product> ad = await logic.getMyAds(owner);
+    for (Product element in ad) {
+      myProducts.add(Product(
+          title: element.title,
+          description: element.description,
+          price: element.price,
+          expiryDate: element.expiryDate,
+          id1: element.id1,
+          id2: element.id2,
+          seller: element.seller,
+          images: element.images,
+          car: element.car,
+          category: element.category));
+    }
+    update();
+    return ad;
+  }
+
   void selectCategory(String value, User owner) async {
     selectedCategory = value;
     var logic = ProductLogic();
@@ -39,7 +62,6 @@ class StoreController extends GetxController {
     products = [];
 
     for (Product element in data) {
-      
       products.add(Product(
           title: element.title,
           description: element.description,
