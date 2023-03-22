@@ -46,8 +46,79 @@ class ProductLogic {
       Uri.parse(
           // ignore: prefer_interpolation_to_compose_strings
           "$server$_productCreate/$id"),
-      headers:headers,
+      headers: headers,
     );
+    return response;
+  }
+
+  Future updateCar(
+      {String? model,
+      var year,
+      String? fuel,
+      String? make,
+      String? mileage,
+      String? transmition,
+      var car}) async {
+    Map<String, String> headers = {
+      "dataType": "json",
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    var data = {};
+    if (model != null || model.toString() != '') {
+      data['model'] = model;
+    }
+    if (year != null || year.toString() != '') {
+      data['year'] = year;
+    }
+    if (fuel != null || fuel.toString() != '') {
+      data['fuel'] = fuel;
+    }
+    if (make != null || make.toString() != '') {
+      data['make'] = make;
+    }
+    if (mileage != null || mileage.toString() != '') {
+      data['kilos'] = mileage;
+    }
+    if (transmition != null || transmition.toString() != '') {
+      data[' transmission'] = transmition;
+    }
+    var response = await http.patch(Uri.parse(
+            // ignore: prefer_interpolation_to_compose_strings
+            "$server$_carCreate/$car"),
+        headers: headers,
+        body: jsonEncode(data),
+        encoding: Encoding.getByName("utf-8"));
+
+    return response;
+  }
+
+  Future updateProduct(Product product, var car) async {
+    Map<String, String> headers = {
+      "dataType": "json",
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    var preparedData = {
+      "price": product.price,
+      "description": product.description,
+      "display": product.imageUrls
+    };
+    if (product.category.toString().toLowerCase() != "cars") {
+      if (product.title.toString().isNotEmpty) {
+        preparedData['name'] = product.title.toString();
+      }
+    } else {
+      if (car != null || car != -1) {
+        preparedData['car'] = car;
+      }
+    }
+
+    var response = await http.patch(Uri.parse(
+            // ignore: prefer_interpolation_to_compose_strings
+            "$server$_productCreate/${product.id1}"),
+        headers: headers,
+        body: jsonEncode(preparedData),
+        encoding: Encoding.getByName("utf-8"));
+
     return response;
   }
 

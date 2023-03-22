@@ -2,11 +2,9 @@ import 'dart:io';
 
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/products_logic.dart';
@@ -27,6 +25,7 @@ class _EditAdFormState extends State<EditAdForm> {
     super.initState();
   }
 
+  var imgs = [];
   List<File> imageFileList = [];
   bool isBtnDisabled = false;
   void selectImages() async {
@@ -78,7 +77,7 @@ class _EditAdFormState extends State<EditAdForm> {
     final height = MediaQuery.of(context).copyWith().size.height;
     ProductLogic logic = ProductLogic();
     final store = Get.find<StoreController>();
-    var imgs = [];
+
     for (var item in store.myProducts[widget.product].images!) {
       imgs.add(NetworkImage(item.url));
     }
@@ -114,11 +113,11 @@ class _EditAdFormState extends State<EditAdForm> {
           labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
           labelText: 'Name',
         ),
-        validator: (String? value) {
-          return value == null || value.trim().isEmpty
-              ? 'Name Cannot be empty'
-              : null;
-        },
+        // validator: (String? value) {
+        //   return value == null || value.trim().isEmpty
+        //       ? 'Name Cannot be empty'
+        //       : null;
+        // },
       ),
     );
     Widget UploadField = GestureDetector(
@@ -160,11 +159,11 @@ class _EditAdFormState extends State<EditAdForm> {
           labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
           labelText: 'Model',
         ),
-        validator: (String? value) {
-          return value == null || value.trim().isEmpty
-              ? 'Field Cannot be empty'
-              : null;
-        },
+        // validator: (String? value) {
+        //   return value == null || value.trim().isEmpty
+        //       ? 'Field Cannot be empty'
+        //       : null;
+        // },
       ),
     );
     Widget make = Container(
@@ -181,11 +180,11 @@ class _EditAdFormState extends State<EditAdForm> {
           labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
           labelText: 'Make',
         ),
-        validator: (String? value) {
-          return value == null || value.trim().isEmpty
-              ? 'Field Cannot be empty'
-              : null;
-        },
+        // validator: (String? value) {
+        //   return value == null || value.trim().isEmpty
+        //       ? 'Field Cannot be empty'
+        //       : null;
+        // },
       ),
     );
     Widget mileage = Container(
@@ -202,11 +201,11 @@ class _EditAdFormState extends State<EditAdForm> {
           labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
           labelText: 'Mileage',
         ),
-        validator: (String? value) {
-          return value == null || value.trim().isEmpty
-              ? 'Field Cannot be empty'
-              : null;
-        },
+        // validator: (String? value) {
+        //   return value == null || value.trim().isEmpty
+        //       ? 'Field Cannot be empty'
+        //       : null;
+        // },
       ),
     );
     Widget fuel = Container(
@@ -223,11 +222,11 @@ class _EditAdFormState extends State<EditAdForm> {
           labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
           labelText: 'Fuel Type',
         ),
-        validator: (String? value) {
-          return value == null || value.trim().isEmpty
-              ? 'Field Cannot be empty'
-              : null;
-        },
+        // validator: (String? value) {
+        //   return value == null || value.trim().isEmpty
+        //       ? 'Field Cannot be empty'
+        //       : null;
+        // },
       ),
     );
     Widget year = Container(
@@ -249,11 +248,11 @@ class _EditAdFormState extends State<EditAdForm> {
           labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
           labelText: 'Year',
         ),
-        validator: (String? value) {
-          return value == null || value.trim().isEmpty
-              ? 'Field Cannot be empty'
-              : null;
-        },
+        // validator: (String? value) {
+        //   return value == null || value.trim().isEmpty
+        //       ? 'Field Cannot be empty'
+        //       : null;
+        // },
       ),
     );
     Widget transmission = Container(
@@ -306,11 +305,11 @@ class _EditAdFormState extends State<EditAdForm> {
           labelText: 'Price',
           hintText: "M",
         ),
-        validator: (String? value) {
-          return value == null || value.trim().isEmpty
-              ? 'Price Cannot be empty'
-              : null;
-        },
+        // validator: (String? value) {
+        //   return value == null || value.trim().isEmpty
+        //       ? 'Price Cannot be empty'
+        //       : null;
+        // },
       ),
     );
     Widget description = Container(
@@ -327,11 +326,11 @@ class _EditAdFormState extends State<EditAdForm> {
           labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
           labelText: 'Description',
         ),
-        validator: (String? value) {
-          return value == null || value.trim().isEmpty
-              ? 'Descrition Cannot be empty'
-              : null;
-        },
+        // validator: (String? value) {
+        //   return value == null || value.trim().isEmpty
+        //       ? 'Descrition Cannot be empty'
+        //       : null;
+        // },
       ),
     );
     return Scaffold(
@@ -340,7 +339,9 @@ class _EditAdFormState extends State<EditAdForm> {
         backgroundColor: MyColors.blue2,
         foregroundColor: MyColors.gold,
         child: const Icon(Icons.done),
-        onPressed: () {},
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {}
+        },
       ),
       backgroundColor: Color.fromARGB(255, 236, 235, 232),
       body: GetBuilder(
@@ -359,7 +360,11 @@ class _EditAdFormState extends State<EditAdForm> {
                           dotSize: 0,
                           boxFit: BoxFit.cover,
                           // borderRadius: true,
-                          images: imgs,
+                          images: imageFileList.isEmpty
+                              ? imgs
+                              : imageFileList
+                                  .map((e) => Image.file(e))
+                                  .toList(),
                         ))
                   ],
                 ),
