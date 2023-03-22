@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/store.dart';
 import 'package:maraka/models/product.dart';
+import 'package:maraka/pages/EditAd.dart';
 
 import 'package:maraka/themes/color.dart';
 
@@ -48,7 +49,10 @@ class _TopBTnsProductPreviewState extends State<TopBTnsProductPreview> {
               borderRadius: BorderRadius.circular(15), color: Colors.white),
           child: IconButton(
               onPressed: () {
-                print("edit pressed");
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EditAdForm(product: widget.product,)));
               },
               icon: Icon(
                 Icons.edit_note_rounded,
