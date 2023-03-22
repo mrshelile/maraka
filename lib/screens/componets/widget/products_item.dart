@@ -79,7 +79,7 @@ class _ProductsItemState extends State<ProductsItem> {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold, height: 1.7, fontSize: 18),
+                          fontWeight: FontWeight.bold, height: 1.7, ),
                     ),
                     Text(store.myProducts[widget.product].price!.toString(),
                         style: const TextStyle(
