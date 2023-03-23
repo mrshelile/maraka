@@ -100,8 +100,10 @@ class ProductLogic {
     var preparedData = {
       "price": product.price,
       "description": product.description,
-      "display": product.imageUrls
     };
+    if (product.imageUrls!.isNotEmpty) {
+      preparedData['display'] = product.imageUrls;
+    }
     if (product.category.toString().toLowerCase() != "cars") {
       if (product.title.toString().isNotEmpty) {
         preparedData['name'] = product.title.toString();
@@ -111,7 +113,7 @@ class ProductLogic {
         preparedData['car'] = car;
       }
     }
-
+    // print(preparedData);
     var response = await http.patch(Uri.parse(
             // ignore: prefer_interpolation_to_compose_strings
             "$server$_productCreate/${product.id1}"),

@@ -10,8 +10,8 @@ import '../../logic/store.dart';
 
 // ignore: must_be_immutable
 class ProductPreview extends StatefulWidget {
-  Product? product;
-  ProductPreview({Key? key, this.product}) : super(key: key);
+  Product product;
+  ProductPreview({Key? key, required this.product}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -24,7 +24,7 @@ class _ProductPreviewState extends State<ProductPreview> {
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
     var imgs = [];
-    for (var item in widget.product!.images!) {
+    for (var item in widget.product.images!) {
       imgs.add(NetworkImage(item.url));
     }
     final store = Get.find<StoreController>();
@@ -34,7 +34,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             init: store,
             builder: (controller) {
               return FutureBuilder(
-                future: widget.product!.seller!.makeAllInformationFromUrl(),
+                future: widget.product.seller!.makeAllInformationFromUrl(),
                 builder: (context, snapshot) {
                   List<Widget> carInfo() {
                     return [
@@ -44,10 +44,10 @@ class _ProductPreviewState extends State<ProductPreview> {
                               left: getProportionateScreenWidth(25, context)),
                           width: width * 0.95,
                           child: Text(
-                            "Transmission: ${widget.product!.car['transmission']}",
+                            "Transmission: ${widget.product.car != null ? widget.product.car['transmission'] : ''}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16,
                                 color: Color.fromARGB(255, 80, 78, 78)),
                           )),
@@ -57,10 +57,10 @@ class _ProductPreviewState extends State<ProductPreview> {
                               left: getProportionateScreenWidth(25, context)),
                           width: width * 0.95,
                           child: Text(
-                            "Mileage: ${widget.product!.car['kilos']}Km",
+                            "Mileage: ${widget.product.car != null ? widget.product.car['kilos'] : ''}Km",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16,
                                 color: Color.fromARGB(255, 80, 78, 78)),
                           )),
@@ -70,10 +70,10 @@ class _ProductPreviewState extends State<ProductPreview> {
                               left: getProportionateScreenWidth(25, context)),
                           width: width * 0.95,
                           child: Text(
-                            "Fuel: ${widget.product!.car['fuel']}",
+                            "Fuel: ${widget.product.car != null ? widget.product.car['fuel'] : ''}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16,
                                 color: Color.fromARGB(255, 80, 78, 78)),
                           )),
@@ -83,10 +83,10 @@ class _ProductPreviewState extends State<ProductPreview> {
                               left: getProportionateScreenWidth(25, context)),
                           width: width * 0.95,
                           child: Text(
-                            "Description: ${widget.product!.description}",
+                            "Description: ${widget.product.description}",
                             maxLines: 10,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16,
                                 color: Color.fromARGB(255, 80, 78, 78)),
                           )),
@@ -101,10 +101,10 @@ class _ProductPreviewState extends State<ProductPreview> {
                               left: getProportionateScreenWidth(25, context)),
                           width: width * 0.95,
                           child: Text(
-                            "Description: ${widget.product!.description}",
+                            "Description: ${widget.product.description}",
                             maxLines: 10,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16,
                                 color: Color.fromARGB(255, 80, 78, 78)),
                           )),
@@ -121,24 +121,24 @@ class _ProductPreviewState extends State<ProductPreview> {
                                 left: getProportionateScreenWidth(8, context),
                                 top: getProportionateScreenHeight(20, context)),
                             onPressed: (() => Navigator.pop(context)),
-                            icon: Icon(Icons.arrow_back_ios)),
+                            icon: const Icon(Icons.arrow_back_ios)),
                         Container(
                             padding: EdgeInsets.only(
                                 top: getProportionateScreenHeight(26, context),
                                 left: getProportionateScreenWidth(9, context)),
                             width: width * 0.95,
-                            child: Text(
+                            child: const Text(
                               "Details",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontWeight: FontWeight.w800,
-                              fontSize: 17
-                              ),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w800, fontSize: 17),
                             )),
                         AspectRatio(
                           aspectRatio: 1.5,
                           child: Padding(
-                            padding: EdgeInsets.only(top: 8, left: 8, right: 8),
+                            padding: const EdgeInsets.only(
+                                top: 8, left: 8, right: 8),
                             child: Container(
                               decoration: const BoxDecoration(
                                   borderRadius: BorderRadius.only(
@@ -162,12 +162,14 @@ class _ProductPreviewState extends State<ProductPreview> {
                                 left: getProportionateScreenWidth(25, context)),
                             width: width * 0.95,
                             child: Text(
-                              store.selectedCategory.toLowerCase() == "cars"
-                                  ? "${widget.product!.car['make']} ${widget.product!.car['model']} ${widget.product!.car['year']}"
-                                  : widget.product!.title!,
+                              store.selectedCategory.toLowerCase() == "cars" &&
+                                      widget.product.car != null
+                                  ? "${widget.product.car['make']} ${widget.product.car['model']} ${widget.product.car['year']}"
+                                  : widget.product.title!,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontWeight: FontWeight.w600,fontSize: 17),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 17),
                             )),
                         Container(
                             padding: EdgeInsets.only(
@@ -175,19 +177,17 @@ class _ProductPreviewState extends State<ProductPreview> {
                                 left: getProportionateScreenWidth(25, context)),
                             width: width * 0.95,
                             child: Text(
-                              "M${widget.product!.price}",
+                              "M${widget.product.price}",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w600,
                                   color: Color.fromARGB(255, 98, 152, 184)),
                             )),
-                        if (store.selectedCategory.toLowerCase() == "cars" ||
-                            widget.product!.category!.toLowerCase() == "cars")
+                        if (widget.product.category!.toLowerCase() == "cars")
                           ...carInfo(),
-                        if (store.selectedCategory.toLowerCase() != "cars" &&
-                            widget.product!.category!.toLowerCase() != "cars")
+                        if (widget.product.category!.toLowerCase() != "cars")
                           ...otherInfo(),
                         Container(
                             padding: EdgeInsets.only(
@@ -195,10 +195,10 @@ class _ProductPreviewState extends State<ProductPreview> {
                                 left: getProportionateScreenWidth(25, context)),
                             width: width * 0.95,
                             child: Text(
-                              "Names: ${widget.product!.seller!.fullNames ?? ""}",
+                              "Names: ${widget.product.seller!.fullNames ?? ""}",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 16,
                                   color: Color.fromARGB(255, 80, 78, 78)),
                             )),
@@ -208,10 +208,10 @@ class _ProductPreviewState extends State<ProductPreview> {
                                 left: getProportionateScreenWidth(25, context)),
                             width: width * 0.95,
                             child: Text(
-                              "Email: ${widget.product!.seller!.email ?? ""}",
+                              "Email: ${widget.product.seller!.email ?? ""}",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 16,
                                   color: Color.fromARGB(255, 80, 78, 78)),
                             )),
@@ -221,14 +221,16 @@ class _ProductPreviewState extends State<ProductPreview> {
                                 left: getProportionateScreenWidth(25, context)),
                             width: width * 0.95,
                             child: Text(
-                              "Phone Numbers: ${widget.product!.seller!.phone1 ?? ""}",
+                              "Phone Numbers: ${widget.product.seller!.phone1 ?? ""}",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 16,
                                   color: Color.fromARGB(255, 80, 78, 78)),
                             )),
-                            SizedBox(height: height*0.05,)
+                        SizedBox(
+                          height: height * 0.05,
+                        )
                       ],
                     ),
                   );

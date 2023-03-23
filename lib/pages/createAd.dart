@@ -361,7 +361,7 @@ class _CreateAdState extends State<CreateAd> {
                             }
                             i++;
                           }
-                          debugPrint(imageIds.toString());
+                          // debugPrint(imageIds.toString());
                           if (imageIds.isNotEmpty) {
                             if (_dropdownValue.toString().toLowerCase() ==
                                 "cars") {

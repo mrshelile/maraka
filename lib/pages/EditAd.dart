@@ -1,3 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:carousel_pro/carousel_pro.dart';
@@ -9,6 +13,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/store.dart';
+import 'package:maraka/models/ImageStrapi.dart';
+import 'package:maraka/models/product.dart';
 import 'package:maraka/themes/color.dart';
 
 class EditAdForm extends StatefulWidget {
@@ -337,10 +343,119 @@ class _EditAdFormState extends State<EditAdForm> {
       floatingActionButton: FloatingActionButton(
         tooltip: 'Save',
         backgroundColor: MyColors.blue2,
-        foregroundColor: MyColors.gold,
+        foregroundColor: Color.fromARGB(255, 253, 253, 251),
         child: const Icon(Icons.done),
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {}
+        onPressed: () async {
+          if (_formKey.currentState!.validate()) {
+            setState(() {
+              _loading = true;
+            });
+            List<int> imgIds = [];
+            var car;
+            try {
+              if (imageFileList.isNotEmpty) {
+                store.myProducts[widget.product].images != [];
+                for (var element in imageFileList) {
+                  var res = await logic
+                      .postImages(element, element.path)
+                      .timeout(const Duration(minutes: 1),
+                          onTimeout: () =>
+                              throw TimeoutException('Can\'t upload image'));
+                  if (res.statusCode == 201) {
+                    imgIds.add(jsonDecode(res.body)['id']);
+                    store.myProducts[widget.product].images!
+                        .add(ImageStrapi(url: jsonDecode(res.body)['image']));
+                  } else {
+                    setState(() {
+                      _loading = false;
+                    });
+                    throw Exception("image file not uploaded");
+                  }
+                }
+              }
+
+              if (store.myProducts[widget.product].category
+                      .toString()
+                      .toLowerCase() ==
+                  'cars') {
+                var car_res = await logic
+                    .updateCar(
+                        car: store.myProducts[widget.product].car['id'],
+                        model: _modelController.text,
+                        year: _yearController.text,
+                        fuel: _fuelController.text,
+                        make: _makeController.text,
+                        mileage: _mileageController.text,
+                        transmition: _transmissionValue)
+                    .timeout(const Duration(minutes: 1),
+                        onTimeout: () =>
+                            throw TimeoutException('Can\'t create a Car'));
+                if (car_res.statusCode == 200) {
+                  car = jsonDecode(car_res.body)["id"];
+                  store.myProducts[widget.product].car['model'] =
+                      _modelController.text;
+                  store.myProducts[widget.product].car['year'] =
+                      _yearController.text;
+                  store.myProducts[widget.product].car['fuel'] =
+                      _fuelController.text;
+                  store.myProducts[widget.product].car['make'] =
+                      _makeController.text;
+                  store.myProducts[widget.product].car['kilos'] =
+                      _mileageController.text;
+                  store.myProducts[widget.product].car['transmission'] =
+                      _transmissionValue;
+                } else {
+                  car = -1;
+                  setState(() {
+                    _loading = false;
+                  });
+                  throw Exception("failed to create car");
+                }
+              }
+
+              var res = await logic
+                  .updateProduct(
+                      Product(
+                          title: _nameController.text,
+                          description: _descriptionController.text,
+                          price: _priceController.text,
+                          expiryDate: '',
+                          id1: store.myProducts[widget.product].id1,
+                          id2: '',
+                          seller: null,
+                          images: null,
+                          imageUrls: imgIds,
+                          category: store.myProducts[widget.product].category),
+                      car)
+                  .timeout(const Duration(minutes: 1),
+                      onTimeout: () =>
+                          throw TimeoutException('Can\'t create Product'));
+              if (res.statusCode == 200) {
+                if (store.myProducts[widget.product].category != 'cars') {
+                  store.myProducts[widget.product].title = _nameController.text;
+                }
+                store.myProducts[widget.product].price = _priceController.text;
+                store.myProducts[widget.product].description =
+                    _descriptionController.text;
+                store.update();
+                setState(() {
+                  _loading = false;
+                });
+                FocusScope.of(context).requestFocus(FocusNode());
+                Navigator.pop(context);
+              } else {
+                setState(() {
+                  _loading = false;
+                });
+                throw Exception("failed to create product");
+              }
+            } catch (e) {
+              setState(() {
+                _loading = false;
+                _error = "Failed! Try again later";
+              });
+            }
+          }
         },
       ),
       backgroundColor: Color.fromARGB(255, 236, 235, 232),
@@ -447,7 +562,8 @@ class _EditAdFormState extends State<EditAdForm> {
                       Navigator.pop(context);
                     },
                   ),
-                )
+                ),
+                if (_loading) _loader
               ],
             );
           }),
