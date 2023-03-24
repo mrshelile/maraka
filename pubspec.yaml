@@ -67,6 +67,7 @@ dependencies:
   get_ip_address: ^0.0.5
   crypto: ^3.0.2
   change_app_package_name: ^1.1.0
+  badges: ^3.0.2
   # rename_app: ^1.0.0
 
 

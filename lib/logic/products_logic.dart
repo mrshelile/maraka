@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_launcher_icons/utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/ImageStrapi.dart';
@@ -16,6 +17,7 @@ class ProductLogic {
   final String _allProducts = "/product";
   final _productCreate = '/product-create';
   final _carCreate = '/car';
+  final String _productViewer = "/product-viewer";
   final String _userProduct = "/user-product/";
   // ignore: prefer_typing_uninitialized_variables
   var response;
@@ -218,9 +220,23 @@ class ProductLogic {
         for (var element in imagesJson) {
           images.add(ImageStrapi(url: element['image']));
         }
-
+        var res = await http.get(
+          Uri.parse("$server$_productViewer"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        );
+        int viewers = 0;
+        if (res.statusCode == 200) {
+          for (var element in jsonDecode(res.body)) {
+            if (element['product'] == id1) {
+              viewers++;
+            }
+          }
+        }
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
           products.add(Product(
+            views: viewers,
               id1: id1,
               id2: id2,
               title: name,
@@ -274,11 +290,27 @@ class ProductLogic {
         List imagesJson = item['display'];
         List<ImageStrapi> images = [];
 
+        var res = await http.get(
+          Uri.parse("$server$_productViewer"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        );
+        int viewers = 0;
+        if (res.statusCode == 200) {
+          for (var element in jsonDecode(res.body)) {
+            if (element['product'] == id1) {
+              viewers++;
+            }
+          }
+        }
+
         for (var element in imagesJson) {
           images.add(ImageStrapi(url: element['image']));
         }
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
           myAds.add(Product(
+              views: viewers,
               id1: id1,
               id2: id2,
               title: name,

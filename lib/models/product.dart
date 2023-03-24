@@ -16,7 +16,8 @@ class Product {
   var createdAt;
   var expiryDate;
   List<int>? imageUrls;
-  var car ;
+  var car;
+  int views = 0;
   Product(
       {required this.title,
       required this.description,
@@ -25,6 +26,7 @@ class Product {
       this.car,
       this.createdAt,
       this.imageUrls,
+      required this.views,
       required this.expiryDate,
       required this.id2,
       required this.seller,

@@ -15,6 +15,7 @@ class StoreController extends GetxController {
     var ad = await logic.getMyAds(owner);
     for (Product element in ad) {
       myProducts.add(Product(
+        views: element.views,
           title: element.title,
           description: element.description,
           price: element.price,
@@ -63,6 +64,7 @@ class StoreController extends GetxController {
 
     for (Product element in data) {
       products.add(Product(
+        views: element.views,
           title: element.title,
           description: element.description,
           price: element.price,

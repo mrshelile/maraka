@@ -387,6 +387,7 @@ class _CreateAdState extends State<CreateAd> {
                             var response = await logic
                                 .postProduct(
                                     Product(
+                                      views: 0,
                                         title: _nameController.text.trim(),
                                         description:
                                             _descriptionController.text.trim(),

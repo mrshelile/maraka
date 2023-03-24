@@ -419,6 +419,7 @@ class _EditAdFormState extends State<EditAdForm> {
               var res = await logic
                   .updateProduct(
                       Product(
+                        views: 0,
                           title: _nameController.text,
                           description: _descriptionController.text,
                           price: _priceController.text,
