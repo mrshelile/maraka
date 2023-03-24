@@ -13,13 +13,16 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/store.dart';
+import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/ImageStrapi.dart';
 import 'package:maraka/models/product.dart';
+import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 
 class EditAdForm extends StatefulWidget {
   int product;
-  EditAdForm({Key? key, required this.product});
+  User owner;
+  EditAdForm({Key? key, required this.owner, required this.product});
 
   @override
   State<EditAdForm> createState() => _EditAdFormState();
@@ -392,18 +395,18 @@ class _EditAdFormState extends State<EditAdForm> {
                             throw TimeoutException('Can\'t create a Car'));
                 if (car_res.statusCode == 200) {
                   car = jsonDecode(car_res.body)["id"];
-                  store.myProducts[widget.product].car['model'] =
-                      _modelController.text;
-                  store.myProducts[widget.product].car['year'] =
-                      _yearController.text;
-                  store.myProducts[widget.product].car['fuel'] =
-                      _fuelController.text;
-                  store.myProducts[widget.product].car['make'] =
-                      _makeController.text;
-                  store.myProducts[widget.product].car['kilos'] =
-                      _mileageController.text;
-                  store.myProducts[widget.product].car['transmission'] =
-                      _transmissionValue;
+                  // store.myProducts[widget.product].car['model'] =
+                  //     _modelController.text;
+                  // store.myProducts[widget.product].car['year'] =
+                  //     _yearController.text;
+                  // store.myProducts[widget.product].car['fuel'] =
+                  //     _fuelController.text;
+                  // store.myProducts[widget.product].car['make'] =
+                  //     _makeController.text;
+                  // store.myProducts[widget.product].car['kilos'] =
+                  //     _mileageController.text;
+                  // store.myProducts[widget.product].car['transmission'] =
+                  //     _transmissionValue;
                 } else {
                   car = -1;
                   setState(() {
@@ -434,15 +437,23 @@ class _EditAdFormState extends State<EditAdForm> {
                 if (store.myProducts[widget.product].category != 'cars') {
                   store.myProducts[widget.product].title = _nameController.text;
                 }
-                store.myProducts[widget.product].price = _priceController.text;
-                store.myProducts[widget.product].description =
-                    _descriptionController.text;
-                store.update();
+                // store.myProducts[widget.product].price = _priceController.text;
+                // store.myProducts[widget.product].description =
+                //     _descriptionController.text;
+                // store.update();
                 setState(() {
                   _loading = false;
                 });
-                FocusScope.of(context).requestFocus(FocusNode());
-                Navigator.pop(context);
+                // Get.back();
+                // FocusScope.of(context).requestFocus(FocusNode());
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Home(
+                              currentIndex: 1,
+                              user: widget.owner,
+                            )));
+                // Navigator.pop(context);
               } else {
                 setState(() {
                   _loading = false;

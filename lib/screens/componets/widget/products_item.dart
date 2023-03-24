@@ -36,9 +36,9 @@ class _ProductsItemState extends State<ProductsItem> {
   @override
   Widget build(BuildContext context) {
     final store = Get.find<StoreController>();
-    if (widget.owner.email != null) {
-      widget.isFavouriteclicked = store.myProducts[widget.product].isLiked;
-    }
+    // if (widget.owner.email != null) {
+    //   widget.isFavouriteclicked = store.myProducts[widget.product].isLiked;
+    // }
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
 
@@ -91,6 +91,7 @@ class _ProductsItemState extends State<ProductsItem> {
                 ),
               ),
               TopBTnsProductPreview(
+                owner:widget.owner,
                 product: widget.product,
               ),
             ],

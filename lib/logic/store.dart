@@ -12,7 +12,7 @@ class StoreController extends GetxController {
   Future<List<Product>> setMyproducts(User owner) async {
     myProducts = [];
     var logic = ProductLogic();
-    List<Product> ad = await logic.getMyAds(owner);
+    var ad = await logic.getMyAds(owner);
     for (Product element in ad) {
       myProducts.add(Product(
           title: element.title,
