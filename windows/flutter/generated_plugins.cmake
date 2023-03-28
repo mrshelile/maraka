@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   platform_device_id_windows
+  r_get_ip
   url_launcher_windows
 )
 
