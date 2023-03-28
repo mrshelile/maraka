@@ -20,7 +20,7 @@ import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 
 class EditAdForm extends StatefulWidget {
-  int product;
+  Product product;
   User owner;
   EditAdForm({Key? key, required this.owner, required this.product});
 
@@ -31,25 +31,24 @@ class EditAdForm extends StatefulWidget {
 class _EditAdFormState extends State<EditAdForm> {
   @override
   void initState() {
-    for (var item in store.myProducts[widget.product].images!) {
+    for (var item in widget.product.images!) {
       imgs.add(NetworkImage(item.url));
     }
-    _nameController.text = store.myProducts[widget.product].title.toString();
-    _descriptionController.text =
-        store.myProducts[widget.product].description.toString();
-    _priceController.text = store.myProducts[widget.product].price.toString();
-    if (store.myProducts[widget.product].category.toString().toLowerCase() ==
+    _nameController.text = widget.product.title.toString();
+    _descriptionController.text = widget.product.description.toString();
+    _priceController.text = widget.product.price.toString();
+    if (widget.product.category.toString().toLowerCase() ==
         'cars') {
-      _fuelController.text = store.myProducts[widget.product].car['fuel'] ?? '';
-      _makeController.text = store.myProducts[widget.product].car['make'] ?? '';
+      _fuelController.text = widget.product.car['fuel'] ?? '';
+      _makeController.text = widget.product.car['make'] ?? '';
       _mileageController.text =
-          store.myProducts[widget.product].car['kilos'] ?? '';
+          widget.product.car['kilos'] ?? '';
       _modelController.text =
-          store.myProducts[widget.product].car['model'] ?? '';
+          widget.product.car['model'] ?? '';
       _yearController.text =
-          store.myProducts[widget.product].car['year'].toString();
+          widget.product.car['year'].toString();
       _transmissionValue =
-          store.myProducts[widget.product].car['transmission'] ?? '';
+          widget.product.car['transmission'] ?? '';
     }
     super.initState();
   }
@@ -103,7 +102,6 @@ class _EditAdFormState extends State<EditAdForm> {
   ProductLogic logic = ProductLogic();
   final store = Get.find<StoreController>();
 
-  
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).copyWith().size.width;
@@ -359,7 +357,7 @@ class _EditAdFormState extends State<EditAdForm> {
             var car;
             try {
               if (imageFileList.isNotEmpty) {
-                store.myProducts[widget.product].images != [];
+                widget.product.images != [];
                 for (var element in imageFileList) {
                   var res = await logic
                       .postImages(element, element.path)
@@ -368,7 +366,7 @@ class _EditAdFormState extends State<EditAdForm> {
                               throw TimeoutException('Can\'t upload image'));
                   if (res.statusCode == 201) {
                     imgIds.add(jsonDecode(res.body)['id']);
-                    store.myProducts[widget.product].images!
+                    widget.product.images!
                         .add(ImageStrapi(url: jsonDecode(res.body)['image']));
                   } else {
                     setState(() {
@@ -379,13 +377,13 @@ class _EditAdFormState extends State<EditAdForm> {
                 }
               }
 
-              if (store.myProducts[widget.product].category
+              if (widget.product.category
                       .toString()
                       .toLowerCase() ==
                   'cars') {
                 var car_res = await logic
                     .updateCar(
-                        car: store.myProducts[widget.product].car['id'],
+                        car: widget.product.car['id'],
                         model: _modelController.text,
                         year: _yearController.text,
                         fuel: _fuelController.text,
@@ -397,17 +395,17 @@ class _EditAdFormState extends State<EditAdForm> {
                             throw TimeoutException('Can\'t create a Car'));
                 if (car_res.statusCode == 200) {
                   car = jsonDecode(car_res.body)["id"];
-                  // store.myProducts[widget.product].car['model'] =
+                  // widget.product.car['model'] =
                   //     _modelController.text;
-                  // store.myProducts[widget.product].car['year'] =
+                  // widget.product.car['year'] =
                   //     _yearController.text;
-                  // store.myProducts[widget.product].car['fuel'] =
+                  // widget.product.car['fuel'] =
                   //     _fuelController.text;
-                  // store.myProducts[widget.product].car['make'] =
+                  // widget.product.car['make'] =
                   //     _makeController.text;
-                  // store.myProducts[widget.product].car['kilos'] =
+                  // widget.product.car['kilos'] =
                   //     _mileageController.text;
-                  // store.myProducts[widget.product].car['transmission'] =
+                  // widget.product.car['transmission'] =
                   //     _transmissionValue;
                 } else {
                   car = -1;
@@ -426,28 +424,28 @@ class _EditAdFormState extends State<EditAdForm> {
                           description: _descriptionController.text,
                           price: _priceController.text,
                           expiryDate: '',
-                          id1: store.myProducts[widget.product].id1,
+                          id1: widget.product.id1,
                           id2: '',
                           seller: null,
                           images: null,
                           imageUrls: imgIds,
-                          category: store.myProducts[widget.product].category),
+                          category: widget.product.category),
                       car)
                   .timeout(const Duration(minutes: 1),
                       onTimeout: () =>
                           throw TimeoutException('Can\'t create Product'));
               if (res.statusCode == 200) {
-                if (store.myProducts[widget.product].category != 'cars') {
-                  store.myProducts[widget.product].title = _nameController.text;
+                if (widget.product.category != 'cars') {
+                  widget.product.title = _nameController.text;
                 }
-                // store.myProducts[widget.product].price = _priceController.text;
-                // store.myProducts[widget.product].description =
+                // widget.product.price = _priceController.text;
+                // widget.product.description =
                 //     _descriptionController.text;
                 // store.update();
                 setState(() {
                   _loading = false;
                 });
-                // Get.back();
+
                 // FocusScope.of(context).requestFocus(FocusNode());
                 Navigator.push(
                     context,
@@ -525,7 +523,7 @@ class _EditAdFormState extends State<EditAdForm> {
                               child: Column(
                                 children: <Widget>[
                                   UploadField,
-                                  if (store.myProducts[widget.product].category
+                                  if (widget.product.category
                                           .toString()
                                           .toLowerCase() !=
                                       'cars') ...[
@@ -533,7 +531,7 @@ class _EditAdFormState extends State<EditAdForm> {
                                     description,
                                   ],
                                   price,
-                                  if (store.myProducts[widget.product].category
+                                  if (widget.product.category
                                           .toString()
                                           .toLowerCase() ==
                                       'cars') ...[

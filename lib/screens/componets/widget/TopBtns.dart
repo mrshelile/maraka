@@ -62,10 +62,10 @@ class _TopBTnsProductPreviewState extends State<TopBTnsProductPreview> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => EditAdForm(
-                                    product: widget.product,
+                                    product: store.myProducts[widget.product],
                                     owner: widget.owner,
                                   )));
-                      Get.to(context);
+                 
                     },
                     icon: const Icon(
                       Icons.edit_note_rounded,

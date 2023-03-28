@@ -198,8 +198,10 @@ class ProductLogic {
     var res = await http.get(
         Uri.parse("$server$_productViewer?veiwer_hash=${digest.toString()}"));
     var response;
+    // print(jsonDecode(res.body));
+    // print(res.statusCode);
     if (res.statusCode == 200) {
-      if (jsonDecode(res.body)['product'] == product) {
+      if ((jsonDecode(res.body)as List).isEmpty) {
         response = await http.post(
           Uri.parse(
               // ignore: prefer_interpolation_to_compose_strings
@@ -209,10 +211,11 @@ class ProductLogic {
           },
           body: jsonEncode(data),
         );
-       
+
         return response;
       }
     }
+
     return res;
   }
 
