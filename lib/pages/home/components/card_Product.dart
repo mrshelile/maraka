@@ -135,10 +135,25 @@ class ListProductCard extends StatelessWidget {
                               )
                             ],
                           ),
-                           badges.Badge(
-                            badgeStyle: const badges.BadgeStyle(badgeColor: MyColors.blue3),
-                            badgeContent: Text(product.views>=99? product.views.toString():"99+",style: TextStyle(fontSize: 12,color: Colors.white),),
-                            child: const Icon(Icons.visibility_rounded,size: 35,color: Colors.black54,),
+                          Positioned(
+                            bottom: 0,
+                            right: 3,
+                            child: badges.Badge(
+                              badgeStyle: const badges.BadgeStyle(
+                                  badgeColor: MyColors.blue3),
+                              badgeContent: Text(
+                                product.views <= 99
+                                    ? product.views.toString()
+                                    : "99+",
+                                style:
+                                    const TextStyle(fontSize: 12, color: Colors.white),
+                              ),
+                              child: const Icon(
+                                Icons.visibility_rounded,
+                                size: 25,
+                                color: MyColors.green2,
+                              ),
+                            ),
                           )
                         ],
                       ),

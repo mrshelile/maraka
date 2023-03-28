@@ -2,6 +2,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/color.dart';
@@ -28,7 +29,8 @@ class _ProductPreviewState extends State<ProductPreview> {
       imgs.add(NetworkImage(item.url));
     }
     final store = Get.find<StoreController>();
-
+    final ProductLogic logic = ProductLogic();
+    // logic.createProductViews(widget.product.id1.toString());
     return Scaffold(
         body: GetBuilder(
             init: store,
@@ -156,21 +158,43 @@ class _ProductPreviewState extends State<ProductPreview> {
                             ),
                           ),
                         ),
-                        Container(
-                            padding: EdgeInsets.only(
-                                top: getProportionateScreenHeight(6, context),
-                                left: getProportionateScreenWidth(25, context)),
-                            width: width * 0.95,
-                            child: Text(
-                              store.selectedCategory.toLowerCase() == "cars" &&
-                                      widget.product.car != null
-                                  ? "${widget.product.car['make']} ${widget.product.car['model']} ${widget.product.car['year']}"
-                                  : widget.product.title!,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 17),
-                            )),
+                        Row(
+                          children: [
+                            Container(
+                                padding: EdgeInsets.only(
+                                    top: getProportionateScreenHeight(
+                                        6, context),
+                                    left: getProportionateScreenWidth(
+                                        25, context)),
+                                width: width * 0.5,
+                                child: Text(
+                                  store.selectedCategory.toLowerCase() ==
+                                              "cars" &&
+                                          widget.product.car != null
+                                      ? "${widget.product.car['make']} ${widget.product.car['model']} ${widget.product.car['year']}"
+                                      : widget.product.title!,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 17),
+                                )),
+                            FutureBuilder(
+                                future: logic.createProductViews(
+                                    widget.product.id1),
+                                builder: ((context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                      "Viewers: ${widget.product.views}",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 17),
+                                    );
+                                  }
+                                  return const SizedBox();
+                                })),
+                          ],
+                        ),
                         Container(
                             padding: EdgeInsets.only(
                                 top: getProportionateScreenHeight(9, context),

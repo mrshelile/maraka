@@ -64,6 +64,7 @@ class StoreController extends GetxController {
 
     for (Product element in data) {
       products.add(Product(
+        id1: element.id1,
         views: element.views,
           title: element.title,
           description: element.description,

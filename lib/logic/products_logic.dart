@@ -9,6 +9,8 @@ import 'package:maraka/logic/constants.dart';
 import 'package:uuid/uuid.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
+import 'package:platform_device_id/platform_device_id.dart';
+import 'package:crypto/crypto.dart';
 
 class ProductLogic {
   List<Product> products = [];
@@ -181,9 +183,38 @@ class ProductLogic {
         encoding: Encoding.getByName("utf-8"));
     return response;
   }
+
   // List<Product> getOwnerProducts(List<Product> items) {
   //   return Null;
   // }
+  Future createProductViews(int product) async {
+    String? deviceId = await PlatformDeviceId.getDeviceId;
+
+    var bytes = utf8.encode(deviceId.toString());
+
+    var digest = sha256.convert(bytes);
+
+    var data = {"veiwer_hash": digest.toString(), "product": product};
+    var res = await http.get(
+        Uri.parse("$server$_productViewer?veiwer_hash=${digest.toString()}"));
+    var response;
+    if (res.statusCode == 200) {
+      if (jsonDecode(res.body)['product'] == product) {
+        response = await http.post(
+          Uri.parse(
+              // ignore: prefer_interpolation_to_compose_strings
+              "$server$_productViewer"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(data),
+        );
+       
+        return response;
+      }
+    }
+    return res;
+  }
 
   Future<List<Product>> getProducts(User ownerModel, String category) async {
     String filter = "";
@@ -236,7 +267,7 @@ class ProductLogic {
         }
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
           products.add(Product(
-            views: viewers,
+              views: viewers,
               id1: id1,
               id2: id2,
               title: name,

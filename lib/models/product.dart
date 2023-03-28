@@ -10,7 +10,7 @@ class Product {
   String? description;
   List<ImageStrapi>? images;
   Seller? seller;
-  int? id1;
+  int id1;
   String id2;
   bool isLiked = false;
   var createdAt;
@@ -22,7 +22,7 @@ class Product {
       {required this.title,
       required this.description,
       required this.price,
-      this.id1,
+      required this.id1,
       this.car,
       this.createdAt,
       this.imageUrls,
