@@ -31,6 +31,26 @@ class EditAdForm extends StatefulWidget {
 class _EditAdFormState extends State<EditAdForm> {
   @override
   void initState() {
+    for (var item in store.myProducts[widget.product].images!) {
+      imgs.add(NetworkImage(item.url));
+    }
+    _nameController.text = store.myProducts[widget.product].title.toString();
+    _descriptionController.text =
+        store.myProducts[widget.product].description.toString();
+    _priceController.text = store.myProducts[widget.product].price.toString();
+    if (store.myProducts[widget.product].category.toString().toLowerCase() ==
+        'cars') {
+      _fuelController.text = store.myProducts[widget.product].car['fuel'] ?? '';
+      _makeController.text = store.myProducts[widget.product].car['make'] ?? '';
+      _mileageController.text =
+          store.myProducts[widget.product].car['kilos'] ?? '';
+      _modelController.text =
+          store.myProducts[widget.product].car['model'] ?? '';
+      _yearController.text =
+          store.myProducts[widget.product].car['year'].toString();
+      _transmissionValue =
+          store.myProducts[widget.product].car['transmission'] ?? '';
+    }
     super.initState();
   }
 
@@ -80,33 +100,15 @@ class _EditAdFormState extends State<EditAdForm> {
   final _yearController = TextEditingController();
   final _priceController = TextEditingController();
   final _descriptionController = TextEditingController();
+  ProductLogic logic = ProductLogic();
+  final store = Get.find<StoreController>();
+
+  
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
-    ProductLogic logic = ProductLogic();
-    final store = Get.find<StoreController>();
 
-    for (var item in store.myProducts[widget.product].images!) {
-      imgs.add(NetworkImage(item.url));
-    }
-    _nameController.text = store.myProducts[widget.product].title.toString();
-    _descriptionController.text =
-        store.myProducts[widget.product].description.toString();
-    _priceController.text = store.myProducts[widget.product].price.toString();
-    if (store.myProducts[widget.product].category.toString().toLowerCase() ==
-        'cars') {
-      _fuelController.text = store.myProducts[widget.product].car['fuel'] ?? '';
-      _makeController.text = store.myProducts[widget.product].car['make'] ?? '';
-      _mileageController.text =
-          store.myProducts[widget.product].car['kilos'] ?? '';
-      _modelController.text =
-          store.myProducts[widget.product].car['model'] ?? '';
-      _yearController.text =
-          store.myProducts[widget.product].car['year'].toString();
-      _transmissionValue =
-          store.myProducts[widget.product].car['transmission'] ?? '';
-    }
     Widget name = Container(
       width: width * 0.8,
       padding: EdgeInsets.only(left: width * 0.09, top: height * 0.005),
@@ -419,7 +421,7 @@ class _EditAdFormState extends State<EditAdForm> {
               var res = await logic
                   .updateProduct(
                       Product(
-                        views: 0,
+                          views: 0,
                           title: _nameController.text,
                           description: _descriptionController.text,
                           price: _priceController.text,
