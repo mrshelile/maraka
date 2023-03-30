@@ -4,6 +4,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
+import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/store.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/pages/home/details/details_screen.dart';
@@ -23,6 +24,7 @@ class ListProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final store = Get.find<StoreController>();
+    final logic = ProductLogic();
     return LayoutBuilder(
       builder: (context, constraints) {
         var width = MediaQuery.of(context).copyWith().size.width;
@@ -32,7 +34,9 @@ class ListProductCard extends StatelessWidget {
             init: store,
             builder: (controller) {
               return GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  await logic.createProductViews(product.id1);
+                  // ignore: use_build_context_synchronously
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -145,8 +149,8 @@ class ListProductCard extends StatelessWidget {
                                 product.views <= 99
                                     ? product.views.toString()
                                     : "99+",
-                                style:
-                                    const TextStyle(fontSize: 12, color: Colors.white),
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
                               ),
                               child: const Icon(
                                 Icons.visibility_rounded,

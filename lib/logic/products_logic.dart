@@ -201,7 +201,7 @@ class ProductLogic {
     // print(jsonDecode(res.body));
     // print(res.statusCode);
     if (res.statusCode == 200) {
-      if ((jsonDecode(res.body)as List).isEmpty) {
+      if ((jsonDecode(res.body) as List).isEmpty) {
         response = await http.post(
           Uri.parse(
               // ignore: prefer_interpolation_to_compose_strings
@@ -213,6 +213,27 @@ class ProductLogic {
         );
 
         return response;
+      } else {
+        bool found = false;
+        for (var element in jsonDecode(res.body)) {
+          if (element['product'] == product) {
+            found = true;
+          }
+        }
+        if (!found) {
+          response = await http.post(
+            Uri.parse(
+                // ignore: prefer_interpolation_to_compose_strings
+                "$server$_productViewer"),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(data),
+          );
+          print(jsonDecode(res.body)[0]['product']);
+          print(product);
+          return response;
+        }
       }
     }
 

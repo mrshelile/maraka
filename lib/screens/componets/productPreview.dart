@@ -179,20 +179,25 @@ class _ProductPreviewState extends State<ProductPreview> {
                                       fontWeight: FontWeight.w600,
                                       fontSize: 17),
                                 )),
-                            FutureBuilder(
-                                future: logic.createProductViews(
-                                    widget.product.id1),
-                                builder: ((context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return Text(
-                                      "Viewers: ${widget.product.views}",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w300,
-                                          fontSize: 17),
-                                    );
-                                  }
-                                  return const SizedBox();
-                                })),
+                                Text(
+                              "Viewers: ${widget.product.views}",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w300, fontSize: 17),
+                            )
+                            // FutureBuilder(
+                            //     future: logic.createProductViews(
+                            //         widget.product.id1),
+                            //     builder: ((context, snapshot) {
+                            //       if (snapshot.hasData) {
+                            //         return Text(
+                            //           "Viewers: ${widget.product.views}",
+                            //           style: const TextStyle(
+                            //               fontWeight: FontWeight.w300,
+                            //               fontSize: 17),
+                            //         );
+                            //       }
+                            //       return const SizedBox();
+                            //     })),
                           ],
                         ),
                         Container(
