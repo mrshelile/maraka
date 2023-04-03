@@ -18,6 +18,7 @@ class _ProductListPageState extends State<ProductListPage> {
   final store = Get.find<StoreController>();
   @override
   Widget build(BuildContext context) {
+    
     return Column(
       children: [
         ...List.generate(widget.products.length,

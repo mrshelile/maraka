@@ -17,7 +17,7 @@ List<Map<String, dynamic>> categories = [
   {"icon": "assets/mindeset.svg", "text": "Cars"},
   {"icon": "assets/mindeset.svg", "text": "Miscellaneous"},
 ];
-
+int pageSize = 20;
 // var server = "https://maraka.co.ls/buyandsellDjango-apis";
 var server = "http://192.168.0.100:8000/buyandsellDjango-apis";
 // var server = "https://agile-headland-32385.herokuapp.com";
