@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
@@ -8,6 +9,7 @@ class StoreController extends GetxController {
   var search = '';
   List<Product> products = [];
   List<Product> myProducts = [];
+  List<Widget> productpages = [];
 
   Future<List<Product>> setMyproducts(User owner) async {
     myProducts = [];
@@ -15,7 +17,7 @@ class StoreController extends GetxController {
     var ad = await logic.getMyAds(owner);
     for (Product element in ad) {
       myProducts.add(Product(
-        views: element.views,
+          views: element.views,
           title: element.title,
           description: element.description,
           price: element.price,
@@ -44,7 +46,6 @@ class StoreController extends GetxController {
 
   void searchNow(String value) {
     search = value;
-
     update();
   }
 
@@ -64,8 +65,8 @@ class StoreController extends GetxController {
 
     for (Product element in data) {
       products.add(Product(
-        id1: element.id1,
-        views: element.views,
+          id1: element.id1,
+          views: element.views,
           title: element.title,
           description: element.description,
           price: element.price,
