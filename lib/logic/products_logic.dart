@@ -189,14 +189,14 @@ class ProductLogic {
   // }
   Future createProductViews(int product) async {
     String? deviceId = await PlatformDeviceId.getDeviceId;
-
+    print(deviceId);
     var bytes = utf8.encode(deviceId.toString());
 
     var digest = sha256.convert(bytes);
 
     var data = {"veiwer_hash": digest.toString(), "product": product};
     var res = await http.get(
-        Uri.parse("$server$_productViewer?veiwer_hash=${digest.toString()}"));
+        Uri.parse("$server$_productViewer?search=${digest.toString()}"));
     var response;
     // print(jsonDecode(res.body));
     // print(res.statusCode);
