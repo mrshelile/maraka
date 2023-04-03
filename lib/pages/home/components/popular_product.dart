@@ -25,7 +25,7 @@ class _PopularProductsState extends State<PopularProducts> {
     var logic = ProductLogic();
 
     List<Product> products = await logic.getProducts(
-        widget.owner, store.selectedCategory.toLowerCase());
+        store.selectedCategory.toLowerCase());
     store.setProducts(products);
     return products;
   }

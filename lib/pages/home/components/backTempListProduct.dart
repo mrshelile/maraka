@@ -27,8 +27,8 @@ class _ProductListState extends State<ProductList> {
     var logic = ProductLogic();
 
     List<Product> products = await logic.getProducts(
-        widget.owner, store.selectedCategory.toLowerCase());
-    store.setProducts(products);
+         store.selectedCategory.toLowerCase());
+    store.setProducts(products,);
     return products;
   }
 

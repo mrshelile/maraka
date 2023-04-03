@@ -11,32 +11,11 @@ class StoreController extends GetxController {
   var search = '';
   List<Product> products = [];
   List<Product> myProducts = [];
-  List<Map<int, List<Product>>> pagesContents = [];
-
-  void _generatePages() {
-    // int carsTotal = 0, others = 0;
-    // for (var element in products) {
-    //   if (element.category.toString().toLowerCase() == 'cars') {
-    //     carsTotal++;
-    //   } else {
-    //     others++;
-    //   }
-    // }
-    // int pageEstimate = products.length % pageSize != 0
-    //     ? products.length ~/ pageSize + 1
-    //     : products.length ~/ pageSize;
-    // int startadd = 0;
-    // // print(pageEstimate);
-    // int end = products.length > pageSize ? pageSize - 1 : products.length - 1;
-    // int remaining = products.length > pageSize ? products.length - pageSize : 0;
-    // for (var i = 0; i < pageEstimate; i++) {
-    //   pagesContents.add({i + 1: products.sublist(startadd, end)});
-    //   startadd += pageSize;
-    //   end += pageSize;
-    //   remaining -= pageSize;
-    // }
-    // print(pageEstimate);
-    // pagesContents = [];
+  int currentPageProduct = 0;
+  int lastProductPage = 0;
+  @override
+  onInit() async {
+    super.onInit();
   }
 
   Future<List<Product>> setMyproducts(User owner) async {
@@ -66,7 +45,7 @@ class StoreController extends GetxController {
     var logic = ProductLogic();
 
     List<Product> products =
-        await logic.getProducts(owner, selectedCategory.toLowerCase());
+        await logic.getProducts( selectedCategory.toLowerCase());
     setProducts(products);
     //
     update();
@@ -81,7 +60,7 @@ class StoreController extends GetxController {
     var logic = ProductLogic();
 
     List<Product> products1 =
-        await logic.getProducts(owner, selectedCategory.toLowerCase());
+        await logic.getProducts(selectedCategory.toLowerCase());
     setProducts(products1);
 
     update();
@@ -106,7 +85,6 @@ class StoreController extends GetxController {
           category: element.category));
     }
     // products.shuffle();
-    // _generatePages();
     update();
   }
 }

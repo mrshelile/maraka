@@ -240,7 +240,7 @@ class ProductLogic {
     return res;
   }
 
-  Future<List<Product>> getProducts(User ownerModel, String category) async {
+  Future<List<Product>> getProducts(String category) async {
     String filter = "";
     if (category.toLowerCase() != "All".toLowerCase()) {
       filter = "?search=$category";

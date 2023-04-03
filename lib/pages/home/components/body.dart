@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:maraka/logic/constants.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/store.dart';
 import 'package:maraka/logic/user_logic.dart';
@@ -23,22 +24,19 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   final store = Get.find<StoreController>();
-  List<Widget> pages = [
-    Text("page0"),
-    Text("page1"),
-    Text("page3"),
-    Text("page4")
-  ];
-  int current = 0;
-  int start = 0;
+
   @override
   Widget build(BuildContext context) {
     Future<List<Product>> makeProductList() async {
       var logic = ProductLogic();
 
-      List<Product> products = await logic.getProducts(
-          widget.owner, store.selectedCategory.toLowerCase());
+      List<Product> products =
+          await logic.getProducts(store.selectedCategory.toLowerCase());
       store.setProducts(products);
+
+      // last = store.products.length % pageSize == 0
+      //     ? store.products.length ~/ pageSize
+      //     : store.products.length ~/ pageSize + 1;
       return products;
     }
 
@@ -48,7 +46,8 @@ class _BodyState extends State<Body> {
           Wrap(
             alignment: WrapAlignment.start,
             runAlignment: WrapAlignment.start,
-            crossAxisAlignment: WrapCrossAlignment.start,runSpacing: getProportionateScreenHeight(13, context),
+            crossAxisAlignment: WrapCrossAlignment.start,
+            runSpacing: getProportionateScreenHeight(13, context),
             children: [
               SizedBox(
                 height: getProportionateScreenHeight(10, context),
@@ -74,7 +73,7 @@ class _BodyState extends State<Body> {
                     builder: (_) {
                       return ProductList(
                         owner: widget.owner,
-                        start: start,
+                        products: store.products,
                       );
                     },
                   );
@@ -84,37 +83,40 @@ class _BodyState extends State<Body> {
               // SizedBox(height: getProportionateScreenWidth(10, context)),
             ],
           ),
-          if (current > 0)
+          if (store.currentPageProduct > 0)
             Positioned(
               bottom: getProportionateScreenHeight(6, context),
               child: MaterialButton(
                 color: MyColors.blue3,
-                shape: CircleBorder(),
+                shape: const CircleBorder(),
                 onPressed: () {
                   setState(() {
-                    if (current > 0) --current;
+                    if (store.currentPageProduct > 0) {
+                      --store.currentPageProduct;
+                      store.update();
+                    }
                   });
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_back,
                   color: Colors.white,
                 ),
               ),
             ),
-          if (current < pages.length - 1)
+          if (store.currentPageProduct < store.lastProductPage)
             Positioned(
               right: getProportionateScreenWidth(13, context),
               bottom: getProportionateScreenHeight(6, context),
               child: MaterialButton(
                 color: MyColors.blue3,
-                shape: CircleBorder(),
+                shape: const CircleBorder(),
                 onPressed: () {
                   setState(() {
-                    if (current < pages.length - 1) current = current + 1;
+                    if (store.currentPageProduct < store.lastProductPage - 1)
+                      store.currentPageProduct = store.currentPageProduct + 1;
                   });
-                  print(current);
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_forward,
                   color: Colors.white,
                 ),

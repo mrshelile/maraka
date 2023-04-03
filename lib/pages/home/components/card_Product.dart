@@ -99,8 +99,9 @@ class ListProductCard extends StatelessWidget {
                                         width: width * 0.6,
                                         child: Text(
                                           store.selectedCategory
-                                                      .toLowerCase() ==
-                                                  "cars"
+                                                          .toLowerCase() ==
+                                                      "cars" &&
+                                                  product.car != null
                                               ? "${product.car['make']} ${product.car['model']} ${product.car['year']}"
                                               : "${product.title}",
                                           overflow: TextOverflow.ellipsis,
@@ -116,8 +117,9 @@ class ListProductCard extends StatelessWidget {
                                         child: Text(
                                           overflow: TextOverflow.ellipsis,
                                           store.selectedCategory
-                                                      .toLowerCase() ==
-                                                  "cars"
+                                                          .toLowerCase() ==
+                                                      "cars" &&
+                                                  product.car != null
                                               ? "${product.car['kilos']}Km  | ${product.car['transmission']}  | ${product.car['fuel']}"
                                               : "${product.description}",
                                           maxLines: 1,
