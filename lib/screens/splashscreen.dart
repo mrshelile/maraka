@@ -229,103 +229,10 @@ class _SplashcreenState extends State<Splashcreen> {
                     ],
                   );
                 }
-                // else {
-                //   return Padding(
-                //     padding: EdgeInsets.only(
-                //         top:
-                //             MediaQuery.of(context).copyWith().size.height * 0.3,
-                //         left: MediaQuery.of(context).copyWith().size.width *
-                //             0.15),
-                //     child: Column(
-                //       children: [
-                //         Container(
-                //           height:
-                //               MediaQuery.of(context).copyWith().size.height *
-                //                   0.3,
-                //           width: MediaQuery.of(context).copyWith().size.width *
-                //               0.6,
-                //           child: SvgPicture.asset("assets/internet.svg",
-                //               semanticsLabel: "Security Image"),
-                //         ),
-                //         Padding(
-                //           padding: EdgeInsets.only(
-                //               top: MediaQuery.of(context)
-                //                       .copyWith()
-                //                       .size
-                //                       .height *
-                //                   0.01),
-                //           child: Text("Oops looks like there is no internet"),
-                //         ),
-                //         Padding(
-                //             padding: EdgeInsets.only(
-                //                 left: MediaQuery.of(context)
-                //                         .copyWith()
-                //                         .size
-                //                         .width *
-                //                     0.1,
-                //                 top: MediaQuery.of(context)
-                //                         .copyWith()
-                //                         .size
-                //                         .height *
-                //                     0.03),
-                //             child: Container(
-                //               width:
-                //                   MediaQuery.of(context).copyWith().size.width *
-                //                       0.35,
-                //               decoration: BoxDecoration(
-                //                   color: MyColors.blue3,
-                //                   boxShadow: [
-                //                     BoxShadow(
-                //                         color: Colors.grey.withOpacity(0.6),
-                //                         spreadRadius: 2,
-                //                         blurRadius: 5,
-                //                         offset: const Offset(0, 5))
-                //                   ],
-                //                   border: Border.all(color: MyColors.blue2),
-                //                   borderRadius: BorderRadius.circular(10)),
-                //               child: TextButton(
-                //                 onPressed: () {
-                //                   print("object");
-                //                    Navigator.pushReplacement(
-                //                   context,
-                //                   MaterialPageRoute(
-                //                       builder: (context) => MyApp()));
-                //                 },
-                //                 child: const Text(
-                //                   "Retry",
-                //                   style: TextStyle(
-                //                       color: Colors.white, fontSize: 15),
-                //                 ),
-                //               ),
-                //             )),
-                //       ],
-                //     ),
-                //   );
-                // }
+                
               }),
         ],
       ),
     );
   }
 }
-
-// class InitializationApp extends StatelessWidget {
-//   final Future _initFuture = Init.initialize();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Initialization',
-//       home: FutureBuilder(
-//         future: _initFuture,
-//         builder: (context, snapshot) {
-//           if (snapshot.connectionState == ConnectionState.done) {
-//             return HomePage();
-//           } else {
-//             return SplashScreen();
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }

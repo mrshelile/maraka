@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:maraka/logic/products_logic.dart';
+import 'package:maraka/logic/store.dart';
 import 'package:maraka/logic/user_logic.dart';
+import 'package:maraka/models/product.dart';
 import 'package:maraka/pages/home/components/List_product.dart';
 import 'package:maraka/themes/color.dart';
 
@@ -18,6 +22,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  final store = Get.find<StoreController>();
   List<Widget> pages = [
     Text("page0"),
     Text("page1"),
@@ -28,12 +33,22 @@ class _BodyState extends State<Body> {
   int start = 0;
   @override
   Widget build(BuildContext context) {
+    Future<List<Product>> makeProductList() async {
+      var logic = ProductLogic();
+
+      List<Product> products = await logic.getProducts(
+          widget.owner, store.selectedCategory.toLowerCase());
+      store.setProducts(products);
+      return products;
+    }
+
     return SafeArea(
       child: Stack(
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Wrap(
+            alignment: WrapAlignment.start,
+            runAlignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.start,runSpacing: getProportionateScreenHeight(13, context),
             children: [
               SizedBox(
                 height: getProportionateScreenHeight(10, context),
@@ -50,9 +65,23 @@ class _BodyState extends State<Body> {
               SizedBox(
                 height: getProportionateScreenHeight(10, context),
               ),
-              pages[current],
-              // ProductList(owner: widget.owner),
-              SizedBox(height: getProportionateScreenWidth(10, context)),
+              // pages[current],
+              FutureBuilder(
+                future: makeProductList(),
+                builder: (context, snapshot) {
+                  return GetBuilder(
+                    init: store,
+                    builder: (_) {
+                      return ProductList(
+                        owner: widget.owner,
+                        start: start,
+                      );
+                    },
+                  );
+                },
+              )
+
+              // SizedBox(height: getProportionateScreenWidth(10, context)),
             ],
           ),
           if (current > 0)

@@ -3,6 +3,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:maraka/logic/constants.dart';
 import 'package:maraka/pages/home/components/List_productPage.dart';
 import 'package:maraka/pages/home/components/card_Product.dart';
 import 'package:maraka/pages/home/components/section_title.dart';
@@ -26,21 +27,11 @@ class ProductList extends StatefulWidget {
 
 class _ProductListState extends State<ProductList> {
   final store = Get.find<StoreController>();
-  Future<List<Product>> makeProductList() async {
-    var logic = ProductLogic();
-
-    List<Product> products = await logic.getProducts(
-        widget.owner, store.selectedCategory.toLowerCase());
-    store.setProducts(products);
-    return products;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding:
-          EdgeInsets.only(bottom: getProportionateScreenHeight(270, context)),
-      height: getProportionateScreenHeight(650, context),
+      height: getProportionateScreenHeight(382, context),
       child: ListView(
         children: [
           Padding(
@@ -54,52 +45,48 @@ class _ProductListState extends State<ProductList> {
                 }),
           ),
           // SizedBox(height: getProportionateScreenWidth(20, context)),
-          FutureBuilder(
-              future: makeProductList(),
-              builder: ((context, snapshot) {
-                return GetBuilder(
-                    init: store,
-                    builder: (_) {
-                      return Column(
-                        children: [
-                          ...List.generate(
-                            store.products.length,
-                            (index) {
-                              return store.search.isEmpty
-                                  ? ListProductCard(
-                                      product: store.products[index])
-                                  : store.selectedCategory.toLowerCase() !=
-                                          "cars"
-                                      ? store.products[index].title!
-                                              .toLowerCase()
-                                              .toString()
-                                              .contains(store.search
-                                                  .toLowerCase()
-                                                  .toString())
-                                          ? ListProductCard(
-                                              product: store.products[index])
-                                          : Container()
-                                      : store.products[index].car['model']
-                                                  .toString()
-                                                  .toLowerCase()
-                                                  .contains(store.search
-                                                      .toLowerCase()) ||
-                                              store.products[index].car['make']
-                                                  .toString()
-                                                  .toLowerCase()
-                                                  .contains(store.search
-                                                      .toLowerCase())
-                                          ? ListProductCard(
-                                              product: store.products[index])
-                                          : Container();
-                            },
-                          ),
-                          SizedBox(
-                              width: getProportionateScreenWidth(20, context)),
-                        ],
-                      );
-                    });
-              })),
+          GetBuilder(
+              init: store,
+              builder: (_) {
+                return Column(
+                  children: [
+                    ...List.generate(
+                      pageSize <= store.products.length
+                          ? pageSize
+                          : store.products.length,
+                      (index) {
+                        return store.search.isEmpty
+                            ? ListProductCard(product: store.products[index])
+                            : store.selectedCategory.toLowerCase() != "cars"
+                                ? store.products[index].title!
+                                        .toLowerCase()
+                                        .toString()
+                                        .contains(store.search
+                                            .toLowerCase()
+                                            .toString())
+                                    ? ListProductCard(
+                                        product: store.products[index])
+                                    : Container()
+                                : store.products[index].car['model']
+                                            .toString()
+                                            .toLowerCase()
+                                            .contains(
+                                                store.search.toLowerCase()) ||
+                                        store.products[index].car['make']
+                                            .toString()
+                                            .toLowerCase()
+                                            .contains(
+                                                store.search.toLowerCase())
+                                    ? ListProductCard(
+                                        product: store.products[index])
+                                    : Container();
+                      },
+                    ),
+                    // SizedBox(
+                    //     width: getProportionateScreenWidth(20, context)),
+                  ],
+                );
+              })
         ],
       ),
     );

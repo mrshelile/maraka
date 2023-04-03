@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+import 'package:maraka/logic/store.dart';
 import 'package:maraka/screens/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +21,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final store = Get.put(StoreController());
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
