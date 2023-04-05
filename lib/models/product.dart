@@ -32,6 +32,11 @@ class Product {
       required this.seller,
       required this.images,
       required this.category});
+  @override
+  String toString() {
+    // TODO: implement toString
+    return title??car['model'];
+  }
 }
 
 class Seller {

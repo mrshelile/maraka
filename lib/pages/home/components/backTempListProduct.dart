@@ -63,14 +63,14 @@ class _ProductListState extends State<ProductList> {
                           return Column(
                             children: [
                               ...List.generate(
-                                store.products.length,
+                                store.productsFromdb.length,
                                 (index) {
                                   return store.search.isEmpty
                                       ? ListProductCard(
-                                          product: store.products[index])
+                                          product: store.productsFromdb[index])
                                       : store.selectedCategory.toLowerCase() !=
                                               "cars"
-                                          ? store.products[index].title!
+                                          ? store.productsFromdb[index].title!
                                                   .toLowerCase()
                                                   .toString()
                                                   .contains(store.search
@@ -78,14 +78,14 @@ class _ProductListState extends State<ProductList> {
                                                       .toString())
                                               ? ListProductCard(
                                                   product:
-                                                      store.products[index])
+                                                      store.productsFromdb[index])
                                               : Container()
-                                          : store.products[index].car['model']
+                                          : store.productsFromdb[index].car['model']
                                                       .toString()
                                                       .toLowerCase()
                                                       .contains(store.search
                                                           .toLowerCase()) ||
-                                                  store.products[index]
+                                                  store.productsFromdb[index]
                                                       .car['make']
                                                       .toString()
                                                       .toLowerCase()
@@ -93,7 +93,7 @@ class _ProductListState extends State<ProductList> {
                                                           .toLowerCase())
                                               ? ListProductCard(
                                                   product:
-                                                      store.products[index])
+                                                      store.productsFromdb[index])
                                               : Container();
                                 },
                               ),

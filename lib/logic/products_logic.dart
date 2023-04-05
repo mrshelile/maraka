@@ -117,7 +117,7 @@ class ProductLogic {
         preparedData['car'] = car;
       }
     }
-    // print(preparedData);
+  
     var response = await http.patch(Uri.parse(
             // ignore: prefer_interpolation_to_compose_strings
             "$server$_productCreate/${product.id1}"),
@@ -189,7 +189,7 @@ class ProductLogic {
   // }
   Future createProductViews(int product) async {
     String? deviceId = await PlatformDeviceId.getDeviceId;
-    print(deviceId);
+ 
     var bytes = utf8.encode(deviceId.toString());
 
     var digest = sha256.convert(bytes);
@@ -198,8 +198,7 @@ class ProductLogic {
     var res = await http.get(
         Uri.parse("$server$_productViewer?search=${digest.toString()}"));
     var response;
-    // print(jsonDecode(res.body));
-    // print(res.statusCode);
+   
     if (res.statusCode == 200) {
       if ((jsonDecode(res.body) as List).isEmpty) {
         response = await http.post(
@@ -230,8 +229,7 @@ class ProductLogic {
             },
             body: jsonEncode(data),
           );
-          print(jsonDecode(res.body)[0]['product']);
-          print(product);
+        
           return response;
         }
       }

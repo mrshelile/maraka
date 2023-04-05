@@ -31,8 +31,8 @@ class Categories extends StatelessWidget {
                 child: CategoryCard(
                   icon: categories[index]["icon"],
                   text: categories[index]["text"],
-                  press: () {
-                    store.selectCategory(categories[index]["text"], owner);
+                  press: () async{
+                   await store.selectCategory(categories[index]["text"], owner);
                   },
                 ),
               );

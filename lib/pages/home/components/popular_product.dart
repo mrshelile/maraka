@@ -61,19 +61,19 @@ class _PopularProductsState extends State<PopularProducts> {
                         return Row(
                           children: [
                             ...List.generate(
-                              store.products.length,
+                              store.productsFromdb.length,
                               (index) {
                                 return store.search.isEmpty
                                     ? ProductCard(
-                                        product: store.products[index])
-                                    : store.products[index].title!
+                                        product: store.productsFromdb[index])
+                                    : store.productsFromdb[index].title!
                                             .toLowerCase()
                                             .toString()
                                             .contains(store.search
                                                 .toLowerCase()
                                                 .toString())
                                         ? ProductCard(
-                                            product: store.products[index])
+                                            product: store.productsFromdb[index])
                                         : Container();
                                 // return const SizedBox
                                 //     .shrink(); // here by default width and height is 0

@@ -9,13 +9,42 @@ import 'package:maraka/pages/home/components/List_productPage.dart';
 class StoreController extends GetxController {
   var selectedCategory = "Cars";
   var search = '';
+  List<Product> productsFromdb = [];
   List<Product> products = [];
   List<Product> myProducts = [];
-  int currentPageProduct = 0;
-  int lastProductPage = 0;
+  int currentPageProduct = 1;
+  int pageStart = 0;
+  int pageEnd = pageSize;
+
   @override
   onInit() async {
     super.onInit();
+    final logic = ProductLogic();
+    var res = await logic.getProducts(selectedCategory);
+    setProducts(res);
+  }
+
+  void pageUp() {
+    pageStart = pageEnd;
+    pageEnd += pageSize;
+  }
+
+  void pageDown() {
+    pageEnd = pageStart;
+    pageStart -= pageSize;
+  }
+
+  void pageFilter() {
+    if (pageStart > -1) {
+      if (pageEnd <= productsFromdb.length) {
+        products = productsFromdb.sublist(pageStart, pageEnd);
+      } else {
+        if (pageStart <= productsFromdb.length) {
+         
+          products = productsFromdb.sublist(pageStart, productsFromdb.length);
+        }
+      }
+    }
   }
 
   Future<List<Product>> setMyproducts(User owner) async {
@@ -36,19 +65,20 @@ class StoreController extends GetxController {
           car: element.car,
           category: element.category));
     }
+
     update();
     return ad;
   }
 
-  void selectCategory(String value, User owner) async {
+  Future selectCategory(String value, User owner) async {
     selectedCategory = value;
     var logic = ProductLogic();
 
     List<Product> products =
-        await logic.getProducts( selectedCategory.toLowerCase());
+        await logic.getProducts(selectedCategory.toLowerCase());
     setProducts(products);
     //
-    update();
+    // update();
   }
 
   void searchNow(String value) {
@@ -68,10 +98,10 @@ class StoreController extends GetxController {
   }
 
   void setProducts(List<Product> data) {
-    products = [];
+    productsFromdb = [];
 
     for (Product element in data) {
-      products.add(Product(
+      productsFromdb.add(Product(
           id1: element.id1,
           views: element.views,
           title: element.title,
@@ -83,8 +113,12 @@ class StoreController extends GetxController {
           images: element.images,
           car: element.car,
           category: element.category));
+
+      // products.shuffle();
     }
-    // products.shuffle();
+    products = productsFromdb;
+
+    pageFilter();
     update();
   }
 }

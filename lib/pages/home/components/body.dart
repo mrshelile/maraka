@@ -27,103 +27,81 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Product>> makeProductList() async {
-      var logic = ProductLogic();
-
-      List<Product> products =
-          await logic.getProducts(store.selectedCategory.toLowerCase());
-      store.setProducts(products);
-
-      // last = store.products.length % pageSize == 0
-      //     ? store.products.length ~/ pageSize
-      //     : store.products.length ~/ pageSize + 1;
-      return products;
-    }
-
-    return SafeArea(
-      child: Stack(
-        children: [
-          Wrap(
-            alignment: WrapAlignment.start,
-            runAlignment: WrapAlignment.start,
-            crossAxisAlignment: WrapCrossAlignment.start,
-            runSpacing: getProportionateScreenHeight(13, context),
+    return GetBuilder(
+      init: store,
+      builder: (controller) {
+        return SafeArea(
+          child: Stack(
             children: [
-              SizedBox(
-                height: getProportionateScreenHeight(10, context),
-              ),
-              HomeHeader(
-                owner: widget.owner,
-              ),
-              SizedBox(height: getProportionateScreenWidth(10, context)),
-              DiscountBanner(),
-              SizedBox(height: getProportionateScreenWidth(10, context)),
-              Categories(
-                owner: widget.owner,
-              ),
-              SizedBox(
-                height: getProportionateScreenHeight(10, context),
-              ),
-              // pages[current],
-              FutureBuilder(
-                future: makeProductList(),
-                builder: (context, snapshot) {
-                  return GetBuilder(
-                    init: store,
-                    builder: (_) {
-                      return ProductList(
-                        owner: widget.owner,
-                        products: store.products,
-                      );
-                    },
-                  );
-                },
-              )
+              Wrap(
+                alignment: WrapAlignment.start,
+                runAlignment: WrapAlignment.start,
+                crossAxisAlignment: WrapCrossAlignment.start,
+                runSpacing: getProportionateScreenHeight(13, context),
+                children: [
+                  SizedBox(
+                    height: getProportionateScreenHeight(10, context),
+                  ),
+                  HomeHeader(
+                    owner: widget.owner,
+                  ),
+                  SizedBox(height: getProportionateScreenWidth(10, context)),
+                  DiscountBanner(),
+                  SizedBox(height: getProportionateScreenWidth(10, context)),
+                  Categories(
+                    owner: widget.owner,
+                  ),
+                  SizedBox(
+                    height: getProportionateScreenHeight(10, context),
+                  ),
+                  // pages[current],
+                  ProductList(
+                    owner: widget.owner,
+                  )
 
-              // SizedBox(height: getProportionateScreenWidth(10, context)),
+                  // SizedBox(height: getProportionateScreenWidth(10, context)),
+                ],
+              ),
+              if (store.currentPageProduct > 1)
+                Positioned(
+                  bottom: getProportionateScreenHeight(6, context),
+                  child: MaterialButton(
+                    color: MyColors.blue3,
+                    shape: const CircleBorder(),
+                    onPressed: () {
+                      store.currentPageProduct--;
+                      store.pageDown();
+                      store.pageFilter();
+                      store.update();
+                    },
+                    child: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              Positioned(
+                right: getProportionateScreenWidth(13, context),
+                bottom: getProportionateScreenHeight(6, context),
+                child: MaterialButton(
+                  color: MyColors.blue3,
+                  shape: const CircleBorder(),
+                  onPressed: () {
+                    ++store.currentPageProduct;
+                    store.pageUp();
+                    store.pageFilter();
+                    store.update();
+                  },
+                  child: const Icon(
+                    Icons.arrow_forward,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ],
           ),
-          if (store.currentPageProduct > 0)
-            Positioned(
-              bottom: getProportionateScreenHeight(6, context),
-              child: MaterialButton(
-                color: MyColors.blue3,
-                shape: const CircleBorder(),
-                onPressed: () {
-                  setState(() {
-                    if (store.currentPageProduct > 0) {
-                      --store.currentPageProduct;
-                      store.update();
-                    }
-                  });
-                },
-                child: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          if (store.currentPageProduct < store.lastProductPage)
-            Positioned(
-              right: getProportionateScreenWidth(13, context),
-              bottom: getProportionateScreenHeight(6, context),
-              child: MaterialButton(
-                color: MyColors.blue3,
-                shape: const CircleBorder(),
-                onPressed: () {
-                  setState(() {
-                    if (store.currentPageProduct < store.lastProductPage - 1)
-                      store.currentPageProduct = store.currentPageProduct + 1;
-                  });
-                },
-                child: const Icon(
-                  Icons.arrow_forward,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

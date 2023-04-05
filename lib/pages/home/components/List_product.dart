@@ -17,12 +17,7 @@ import '../../../themes/color.dart';
 
 class ProductList extends StatefulWidget {
   User owner;
-
-  List<Product> products;
-  ProductList(
-      {Key? key,
-      required this.owner,
-      required this.products})
+  ProductList({Key? key, required this.owner})
       : super(key: key);
 
   @override
@@ -55,34 +50,32 @@ class _ProductListState extends State<ProductList> {
                 return Column(
                   children: [
                     ...List.generate(
-                      pageSize <= widget.products.length
-                          ? pageSize
-                          : widget.products.length,
+                      store.products.length,
                       (index) {
                         return store.search.isEmpty
-                            ? ListProductCard(product: widget.products[index])
+                            ? ListProductCard(product: store.products[index])
                             : store.selectedCategory.toLowerCase() != "cars"
-                                ? widget.products[index].title!
+                                ? store.products[index].title!
                                         .toLowerCase()
                                         .toString()
                                         .contains(store.search
                                             .toLowerCase()
                                             .toString())
                                     ? ListProductCard(
-                                        product: widget.products[index])
+                                        product: store.products[index])
                                     : Container()
-                                : widget.products[index].car['model']
+                                : store.products[index].car['model']
                                             .toString()
                                             .toLowerCase()
                                             .contains(
                                                 store.search.toLowerCase()) ||
-                                        widget.products[index].car['make']
+                                        store.products[index].car['make']
                                             .toString()
                                             .toLowerCase()
                                             .contains(
                                                 store.search.toLowerCase())
                                     ? ListProductCard(
-                                        product: widget.products[index])
+                                        product: store.products[index])
                                     : Container();
                       },
                     ),
