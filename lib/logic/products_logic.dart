@@ -117,7 +117,7 @@ class ProductLogic {
         preparedData['car'] = car;
       }
     }
-  
+
     var response = await http.patch(Uri.parse(
             // ignore: prefer_interpolation_to_compose_strings
             "$server$_productCreate/${product.id1}"),
@@ -189,16 +189,16 @@ class ProductLogic {
   // }
   Future createProductViews(int product) async {
     String? deviceId = await PlatformDeviceId.getDeviceId;
- 
+
     var bytes = utf8.encode(deviceId.toString());
 
     var digest = sha256.convert(bytes);
 
     var data = {"veiwer_hash": digest.toString(), "product": product};
-    var res = await http.get(
-        Uri.parse("$server$_productViewer?search=${digest.toString()}"));
+    var res = await http
+        .get(Uri.parse("$server$_productViewer?search=${digest.toString()}"));
     var response;
-   
+
     if (res.statusCode == 200) {
       if ((jsonDecode(res.body) as List).isEmpty) {
         response = await http.post(
@@ -229,7 +229,7 @@ class ProductLogic {
             },
             body: jsonEncode(data),
           );
-        
+
           return response;
         }
       }
@@ -243,6 +243,7 @@ class ProductLogic {
     if (category.toLowerCase() != "All".toLowerCase()) {
       filter = "?search=$category";
     }
+
     var response = await http.get(
       Uri.parse(
           // ignore: prefer_interpolation_to_compose_strings
@@ -251,7 +252,7 @@ class ProductLogic {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-
+    // print(response.statusCode);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 
@@ -306,7 +307,7 @@ class ProductLogic {
 
       return products;
     } else {
-      throw Null;
+      return [];
     }
   }
 

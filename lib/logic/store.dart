@@ -77,8 +77,8 @@ class StoreController extends GetxController {
     List<Product> products =
         await logic.getProducts(selectedCategory.toLowerCase());
     setProducts(products);
-    //
-    // update();
+    
+    update();
   }
 
   void searchNow(String value) {
