@@ -3,10 +3,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:file_picker/file_picker.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
