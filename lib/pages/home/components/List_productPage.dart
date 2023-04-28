@@ -4,7 +4,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/store.dart';
 import 'package:maraka/models/product.dart';
-import 'package:maraka/pages/home/components/card_Product.dart';
+import 'package:maraka/pages/home/components/ListProductCard.dart';
 
 class ProductListPage extends StatefulWidget {
   List<Product> products;

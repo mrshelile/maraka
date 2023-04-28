@@ -14,7 +14,6 @@ import 'categories.dart';
 import 'top_banner.dart';
 import 'home_header.dart';
 
-
 class Body extends StatefulWidget {
   User owner;
   Body({Key? key, required this.owner}) : super(key: key);
@@ -55,25 +54,11 @@ class _BodyState extends State<Body> {
                     height: getProportionateScreenHeight(10, context),
                   ),
                   // pages[current],
-                  store.ishomeProductsLoading
-                      ? Container(
-                          padding: EdgeInsets.only(
-                              top: MediaQuery.of(context)
-                                      .copyWith()
-                                      .size
-                                      .height *
-                                  0.06),
-                          child: const SpinKitSpinningLines (
-                            color: Color.fromARGB(255, 102, 198, 201),
-                            size: 160,
-                            // duration: Duration(milliseconds: 1000),
-                          ),
-                        )
-                      : ProductList(
-                          owner: widget.owner,
-                        )
+                  ProductList(
+                    owner: widget.owner,
+                  ),
 
-                  // SizedBox(height: getProportionateScreenWidth(10, context)),
+                  // SizedBox(height: getProportionateScreenWidth(20, context)),
                 ],
               ),
               if (store.currentPageProduct > 1)

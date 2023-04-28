@@ -3,7 +3,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:maraka/pages/home/components/card_Product.dart';
+import 'package:maraka/pages/home/components/ListProductCard.dart';
 import 'package:maraka/pages/home/components/section_title.dart';
 
 import '../../../logic/products_logic.dart';

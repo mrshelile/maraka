@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:maraka/pages/home/components/card_Product.dart';
+import 'package:maraka/pages/home/components/ListProductCard.dart';
 import 'package:maraka/pages/home/components/section_title.dart';
 import '../../../logic/store.dart';
 import '../../../logic/user_logic.dart';
@@ -22,7 +23,7 @@ class _ProductListState extends State<ProductList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: getProportionateScreenHeight(382, context),
+      height: getProportionateScreenHeight(350, context),
       child: ListView(
         children: [
           Padding(
@@ -39,9 +40,21 @@ class _ProductListState extends State<ProductList> {
           GetBuilder(
               init: store,
               builder: (_) {
-                return Column(
+                return store.ishomeProductsLoading?Container(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context)
+                                      .copyWith()
+                                      .size
+                                      .height *
+                                  0.06),
+                          child: const SpinKitSpinningLines (
+                            color: Color.fromARGB(255, 102, 198, 201),
+                            size: 160,
+                            // duration: Duration(milliseconds: 1000),
+                          ),
+                        ): Column(
                   children: [
-                    ...List.generate(
+                     ...List.generate(
                       store.products.length,
                       (index) {
                         return store.search.isEmpty
