@@ -51,12 +51,15 @@ class _ProductListState extends State<ProductList> {
                         ),
                       )
                     : GridView.count(
+                      physics: ScrollPhysics(),
+                        scrollDirection: Axis.vertical,
                         crossAxisCount: 2,
                         shrinkWrap: true,
                         children: [
                           ...List.generate(
                             store.products.length,
                             (index) {
+                       
                               return store.search.isEmpty
                                   ? ListProductCard(
                                       product: store.products[index])
