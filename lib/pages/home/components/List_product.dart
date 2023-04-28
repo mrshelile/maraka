@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:maraka/logic/constants.dart';
-import 'package:maraka/pages/home/components/List_productPage.dart';
 import 'package:maraka/pages/home/components/card_Product.dart';
 import 'package:maraka/pages/home/components/section_title.dart';
-
-import '../../../logic/products_logic.dart';
 import '../../../logic/store.dart';
 import '../../../logic/user_logic.dart';
-import '../../../models/product.dart';
 import '../../../size_config.dart';
-import '../../../themes/color.dart';
 
 class ProductList extends StatefulWidget {
   User owner;

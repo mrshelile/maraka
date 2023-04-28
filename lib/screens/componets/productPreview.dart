@@ -159,19 +159,20 @@ class _ProductPreviewState extends State<ProductPreview> {
                           ),
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
                                 padding: EdgeInsets.only(
                                     top: getProportionateScreenHeight(
                                         6, context),
                                     left: getProportionateScreenWidth(
-                                        25, context)),
-                                width: width * 0.5,
+                                        20, context)),
+                                width: width * 0.7,
                                 child: Text(
                                   store.selectedCategory.toLowerCase() ==
                                               "cars" &&
                                           widget.product.car != null
-                                      ? "${widget.product.car['make']} ${widget.product.car['model']} ${widget.product.car['year']}"
+                                      ? "${widget.product.car['make']}, ${widget.product.car['model']}, ${widget.product.car['year']}"
                                       : widget.product.title!,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -179,10 +180,15 @@ class _ProductPreviewState extends State<ProductPreview> {
                                       fontWeight: FontWeight.w600,
                                       fontSize: 17),
                                 )),
-                                Text(
-                              "Viewers: ${widget.product.views}",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w300, fontSize: 17),
+                           SizedBox(
+                              width: width * 0.23,
+                              child: Text(
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                "Seen: ${widget.product.views}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 17),
+                              ),
                             )
                             // FutureBuilder(
                             //     future: logic.createProductViews(

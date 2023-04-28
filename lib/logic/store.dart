@@ -15,13 +15,17 @@ class StoreController extends GetxController {
   int currentPageProduct = 1;
   int pageStart = 0;
   int pageEnd = pageSize;
+  bool ishomeProductsLoading = false;
 
   @override
   onInit() async {
     super.onInit();
     final logic = ProductLogic();
+    ishomeProductsLoading = true;
     var res = await logic.getProducts(selectedCategory);
     setProducts(res);
+    ishomeProductsLoading = false;
+    update();
   }
 
   void pageUp() {
@@ -40,7 +44,6 @@ class StoreController extends GetxController {
         products = productsFromdb.sublist(pageStart, pageEnd);
       } else {
         if (pageStart <= productsFromdb.length) {
-         
           products = productsFromdb.sublist(pageStart, productsFromdb.length);
         }
       }
@@ -72,12 +75,13 @@ class StoreController extends GetxController {
 
   Future selectCategory(String value, User owner) async {
     selectedCategory = value;
+    update();
     var logic = ProductLogic();
-
+    ishomeProductsLoading = true;
     List<Product> products =
         await logic.getProducts(selectedCategory.toLowerCase());
     setProducts(products);
-    
+    ishomeProductsLoading = false;
     update();
   }
 
@@ -117,7 +121,6 @@ class StoreController extends GetxController {
       // products.shuffle();
     }
     products = productsFromdb;
-
     pageFilter();
     update();
   }

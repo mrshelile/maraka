@@ -1,11 +1,8 @@
-// ignore_for_file: non_constant_identifier_names
-
 
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/models/product.dart';
 import 'package:maraka/pages/home/components/body.dart';
 import 'package:maraka/themes/background.dart';
-import 'package:maraka/logic/constants.dart';
+
 import 'package:flutter/material.dart';
 // import 'package:flutter_svg/svg.dart';
 

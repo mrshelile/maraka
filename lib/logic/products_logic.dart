@@ -252,7 +252,7 @@ class ProductLogic {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    // print(response.statusCode);
+  
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 

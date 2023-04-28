@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/logic/products_logic.dart';
@@ -12,8 +13,7 @@ import '../../../size_config.dart';
 import 'categories.dart';
 import 'top_banner.dart';
 import 'home_header.dart';
-import 'popular_product.dart';
-import 'FeacturedAds.dart';
+
 
 class Body extends StatefulWidget {
   User owner;
@@ -55,9 +55,23 @@ class _BodyState extends State<Body> {
                     height: getProportionateScreenHeight(10, context),
                   ),
                   // pages[current],
-                  ProductList(
-                    owner: widget.owner,
-                  )
+                  store.ishomeProductsLoading
+                      ? Container(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context)
+                                      .copyWith()
+                                      .size
+                                      .height *
+                                  0.06),
+                          child: const SpinKitSpinningLines (
+                            color: Color.fromARGB(255, 102, 198, 201),
+                            size: 160,
+                            // duration: Duration(milliseconds: 1000),
+                          ),
+                        )
+                      : ProductList(
+                          owner: widget.owner,
+                        )
 
                   // SizedBox(height: getProportionateScreenWidth(10, context)),
                 ],
