@@ -43,10 +43,9 @@ class ListProductCard extends StatelessWidget {
             },
             child: Padding(
               padding: EdgeInsets.only(
-                  left: width * 0.1, right: width * 0.09, top: height * 0.03),
-              child: AspectRatio(
-                aspectRatio: 1.93,
-                child: Container(
+                  left: width * 0.04, right: width * 0.02, top: height * 0.03),
+              child: Container(
+                  width: width * 0.3,
                   decoration: BoxDecoration(
                     color: Color.fromARGB(255, 226, 226, 226),
                     borderRadius: BorderRadius.circular(15),
@@ -56,9 +55,9 @@ class ListProductCard extends StatelessWidget {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
+                        children: [
                           AspectRatio(
-                            aspectRatio: 6 / 1.5,
+                            aspectRatio: 2,
                             child: Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
@@ -76,12 +75,12 @@ class ListProductCard extends StatelessWidget {
                             height: 1,
                           ),
                           AspectRatio(
-                            aspectRatio: 13 / 3.3,
+                            aspectRatio: 3,
                             child: Container(
                               // color: Colors.redAccent,
                               padding: EdgeInsets.only(left: 5),
                               child: Wrap(
-                                direction: Axis.vertical,
+                                // direction: Axis.vertical,
                                 alignment: WrapAlignment.start,
                                 spacing: 6.0,
                                 runAlignment: WrapAlignment.start,
@@ -91,7 +90,7 @@ class ListProductCard extends StatelessWidget {
                                 // verticalDirection: VerticalDirection.up,
                                 children: <Widget>[
                                   SizedBox(
-                                    width: width * 0.6,
+                                    width: width * 0.453,
                                     child: Text(
                                       store.selectedCategory.toLowerCase() ==
                                                   "cars" &&
@@ -101,11 +100,12 @@ class ListProductCard extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(
-                                          fontSize: width * 0.043,
+                                          fontSize: width * 0.04,
                                           color: MyColors.black,
-                                          fontWeight: FontWeight.w600),
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ),
+                                  SizedBox(height: 3,),
                                   SizedBox(
                                     width: width * 0.6,
                                     child: Text(
@@ -154,9 +154,7 @@ class ListProductCard extends StatelessWidget {
                         ),
                       )
                     ],
-                  ),
-                ),
-              ),
+                  )),
             ),
           );
         });
