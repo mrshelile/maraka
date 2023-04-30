@@ -87,6 +87,36 @@ class StoreController extends GetxController {
 
   void searchNow(String value) {
     search = value;
+    var temp = productsFromdb;
+    products = [];
+    if (search.isNotEmpty) {
+      if (selectedCategory.toLowerCase() == 'cars') {
+        for (var element in temp) {
+          if (element.car['model']
+                  .toString()
+                  .toLowerCase()
+                  .contains(search.toLowerCase()) ||
+              element.car['make']
+                  .toString()
+                  .toLowerCase()
+                  .contains(search.toLowerCase())) {
+            products.add(element);
+          }
+        }
+      } else {
+        for (var element1 in temp) {
+          if (element1.title
+              .toString()
+              .toLowerCase()
+              .contains(search.toLowerCase())) {
+            products.add(element1);
+          }
+        }
+      }
+    } else {
+      products = temp;
+    }
+    print(products);
     update();
   }
 

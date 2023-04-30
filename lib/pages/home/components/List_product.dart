@@ -50,46 +50,20 @@ class _ProductListState extends State<ProductList> {
                           // duration: Duration(milliseconds: 1000),
                         ),
                       )
-                    : GridView.count(
-                      physics: ScrollPhysics(),
+                    : GridView.builder(
+                        physics: const ScrollPhysics(),
                         scrollDirection: Axis.vertical,
-                        crossAxisCount: 2,
                         shrinkWrap: true,
-                        children: [
-                          ...List.generate(
-                            store.products.length,
-                            (index) {
-                       
-                              return store.search.isEmpty
-                                  ? ListProductCard(
-                                      product: store.products[index])
-                                  : store.selectedCategory.toLowerCase() !=
-                                          "cars"
-                                      ? store.products[index].title!
-                                              .toLowerCase()
-                                              .toString()
-                                              .contains(store.search
-                                                  .toLowerCase()
-                                                  .toString())
-                                          ? ListProductCard(
-                                              product: store.products[index])
-                                          : Container()
-                                      : store.products[index].car['model']
-                                                  .toString()
-                                                  .toLowerCase()
-                                                  .contains(store.search
-                                                      .toLowerCase()) ||
-                                              store.products[index].car['make']
-                                                  .toString()
-                                                  .toLowerCase()
-                                                  .contains(store.search
-                                                      .toLowerCase())
-                                          ? ListProductCard(
-                                              product: store.products[index])
-                                          : Container();
-                            },
-                          ),
-                        ],
+                        itemCount:store.products.length,
+                        itemBuilder: (context, index) =>
+                            ListProductCard(product: store.products[index]),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                //childAspectRatio: 2,
+                                // mainAxisExtent: 280,
+                                // mainAxisSpacing: 12,
+                                crossAxisCount: 2,
+                                ),
                       );
               })
         ],
