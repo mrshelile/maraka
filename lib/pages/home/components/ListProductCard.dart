@@ -57,7 +57,7 @@ class ListProductCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AspectRatio(
-                            aspectRatio: 2,
+                            aspectRatio: 0.8,
                             child: Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(

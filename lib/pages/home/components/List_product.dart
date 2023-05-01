@@ -59,7 +59,7 @@ class _ProductListState extends State<ProductList> {
                             ListProductCard(product: store.products[index]),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                //childAspectRatio: 2,
+                                childAspectRatio: 0.6,
                                 // mainAxisExtent: 280,
                                 // mainAxisSpacing: 12,
                                 crossAxisCount: 2,
