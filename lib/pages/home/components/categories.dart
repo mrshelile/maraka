@@ -31,8 +31,10 @@ class Categories extends StatelessWidget {
                 child: CategoryCard(
                   icon: categories[index]["icon"],
                   text: categories[index]["text"],
-                  press: () async{
-                   await store.selectCategory(categories[index]["text"], owner);
+                  press: () async {
+                    
+                    await store.selectCategory(
+                        categories[index]["text"], owner);
                   },
                 ),
               );
@@ -79,7 +81,6 @@ class CategoryCard extends StatelessWidget {
               child: SizedBox(
                 child: Text(
                   text!,
-                  
                   textAlign: TextAlign.start,
                   style: TextStyle(
                       fontSize: getProportionateScreenWidth(15.2, context),

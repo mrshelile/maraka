@@ -78,6 +78,7 @@ class StoreController extends GetxController {
     update();
     var logic = ProductLogic();
     ishomeProductsLoading = true;
+      
     List<Product> products =
         await logic.getProducts(selectedCategory.toLowerCase());
     setProducts(products);
@@ -122,7 +123,7 @@ class StoreController extends GetxController {
 
   void onchangeCategory(User owner) async {
     var logic = ProductLogic();
-
+  
     List<Product> products1 =
         await logic.getProducts(selectedCategory.toLowerCase());
     setProducts(products1);
@@ -150,6 +151,7 @@ class StoreController extends GetxController {
 
       // products.shuffle();
     }
+
     products = productsFromdb;
     pageFilter();
     update();

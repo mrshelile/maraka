@@ -252,7 +252,7 @@ class ProductLogic {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-  
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 
@@ -274,20 +274,21 @@ class ProductLogic {
         for (var element in imagesJson) {
           images.add(ImageStrapi(url: element['image']));
         }
-        var res = await http.get(
-          Uri.parse("$server$_productViewer"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-        );
-        int viewers = 0;
-        if (res.statusCode == 200) {
-          for (var element in jsonDecode(res.body)) {
-            if (element['product'] == id1) {
-              viewers++;
-            }
-          }
-        }
+ 
+        // var res = await http.get(
+        //   Uri.parse("$server$_productViewer"),
+        //   headers: <String, String>{
+        //     'Content-Type': 'application/json; charset=UTF-8',
+        //   },
+        // );
+        int viewers = item['viewers'].length;
+        // if (res.statusCode == 200) {
+        //   for (var element in jsonDecode(res.body)) {
+        //     if (element['product'] == id1) {
+        //       viewers++;
+        //     }
+        //   }
+        // }
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
           products.add(Product(
               views: viewers,
