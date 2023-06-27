@@ -6,6 +6,7 @@ import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/color.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../../logic/store.dart';
 
@@ -24,13 +25,21 @@ class _ProductPreviewState extends State<ProductPreview> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
+    double _scale = 1.0;
+    double _previousScale = 1.0;
     var imgs = [];
     for (var item in widget.product.images!) {
-      imgs.add(NetworkImage(item.url));
+      imgs.add(PhotoView(
+          imageProvider: NetworkImage(item.url),
+          minScale: PhotoViewComputedScale.contained,
+          maxScale: PhotoViewComputedScale.covered * 2.5,
+          initialScale: PhotoViewComputedScale.contained,
+          backgroundDecoration: BoxDecoration(
+            color: Theme.of(context).canvasColor,
+          )));
     }
     final store = Get.find<StoreController>();
     final ProductLogic logic = ProductLogic();
-    // logic.createProductViews(widget.product.id1.toString());
     return Scaffold(
         body: GetBuilder(
             init: store,
@@ -180,7 +189,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                                       fontWeight: FontWeight.w600,
                                       fontSize: 17),
                                 )),
-                           SizedBox(
+                            SizedBox(
                               width: width * 0.23,
                               child: Text(
                                 maxLines: 1,
@@ -190,20 +199,6 @@ class _ProductPreviewState extends State<ProductPreview> {
                                     fontWeight: FontWeight.w500, fontSize: 17),
                               ),
                             )
-                            // FutureBuilder(
-                            //     future: logic.createProductViews(
-                            //         widget.product.id1),
-                            //     builder: ((context, snapshot) {
-                            //       if (snapshot.hasData) {
-                            //         return Text(
-                            //           "Viewers: ${widget.product.views}",
-                            //           style: const TextStyle(
-                            //               fontWeight: FontWeight.w300,
-                            //               fontSize: 17),
-                            //         );
-                            //       }
-                            //       return const SizedBox();
-                            //     })),
                           ],
                         ),
                         Container(
