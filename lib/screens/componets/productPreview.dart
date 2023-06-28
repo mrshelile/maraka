@@ -7,6 +7,7 @@ import 'package:maraka/models/product.dart';
 import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 import '../../logic/store.dart';
 
@@ -25,21 +26,113 @@ class _ProductPreviewState extends State<ProductPreview> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
+    bool isZoomed = false; // Track the zoom-in state
+    int zoomIndex = 0;
     double _scale = 1.0;
+    int _currentIndex = 0;
     double _previousScale = 1.0;
     var imgs = [];
-    for (var item in widget.product.images!) {
-      imgs.add(PhotoView(
-          imageProvider: NetworkImage(item.url),
+    final List<PhotoViewGalleryPageOptions> imageList = widget.product.images!
+        .map((item) => PhotoViewGalleryPageOptions(
+              imageProvider: NetworkImage(item.url),
+              minScale: PhotoViewComputedScale.contained,
+              maxScale: PhotoViewComputedScale.covered * 2.5,
+              initialScale: PhotoViewComputedScale.contained,
+            ))
+        .toList();
+    final store = Get.find<StoreController>();
+    final ProductLogic logic = ProductLogic();
+    void toggleZoomState() {
+      setState(() {
+        isZoomed = !isZoomed;
+      });
+    }
+
+    Widget buildZoomedView(PhotoViewGalleryPageOptions imageOption) {
+      return GestureDetector(
+        onTap: toggleZoomState, // Toggle zoom state on tap
+        child: PhotoView(
+          imageProvider: imageOption.imageProvider,
           minScale: PhotoViewComputedScale.contained,
           maxScale: PhotoViewComputedScale.covered * 2.5,
           initialScale: PhotoViewComputedScale.contained,
-          backgroundDecoration: BoxDecoration(
-            color: Theme.of(context).canvasColor,
-          )));
+        ),
+      );
     }
-    final store = Get.find<StoreController>();
-    final ProductLogic logic = ProductLogic();
+
+    // Widget buildProductDetails(double width) {
+
+    // }
+    List<Widget> carInfo() {
+      return [
+        Container(
+            padding: EdgeInsets.only(
+                top: getProportionateScreenHeight(30, context),
+                left: getProportionateScreenWidth(25, context)),
+            width: width * 0.95,
+            child: Text(
+              "Transmission: ${widget.product.car != null ? widget.product.car['transmission'] : ''}",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  fontSize: 16, color: Color.fromARGB(255, 80, 78, 78)),
+            )),
+        Container(
+            padding: EdgeInsets.only(
+                top: getProportionateScreenHeight(10, context),
+                left: getProportionateScreenWidth(25, context)),
+            width: width * 0.95,
+            child: Text(
+              "Mileage: ${widget.product.car != null ? widget.product.car['kilos'] : ''}Km",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  fontSize: 16, color: Color.fromARGB(255, 80, 78, 78)),
+            )),
+        Container(
+            padding: EdgeInsets.only(
+                top: getProportionateScreenHeight(10, context),
+                left: getProportionateScreenWidth(25, context)),
+            width: width * 0.95,
+            child: Text(
+              "Fuel: ${widget.product.car != null ? widget.product.car['fuel'] : ''}",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  fontSize: 16, color: Color.fromARGB(255, 80, 78, 78)),
+            )),
+        Container(
+            padding: EdgeInsets.only(
+                top: getProportionateScreenHeight(10, context),
+                left: getProportionateScreenWidth(25, context)),
+            width: width * 0.95,
+            child: Text(
+              "Description: ${widget.product.description}",
+              maxLines: 10,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  fontSize: 16, color: Color.fromARGB(255, 80, 78, 78)),
+            )),
+      ];
+    }
+
+    List<Widget> otherInfo() {
+      return [
+        Container(
+            padding: EdgeInsets.only(
+                top: getProportionateScreenHeight(10, context),
+                left: getProportionateScreenWidth(25, context)),
+            width: width * 0.95,
+            child: Text(
+              "Description: ${widget.product.description}",
+              maxLines: 10,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  fontSize: 16, color: Color.fromARGB(255, 80, 78, 78)),
+            )),
+      ];
+    }
+
     return Scaffold(
         body: GetBuilder(
             init: store,
@@ -47,81 +140,6 @@ class _ProductPreviewState extends State<ProductPreview> {
               return FutureBuilder(
                 future: widget.product.seller!.makeAllInformationFromUrl(),
                 builder: (context, snapshot) {
-                  List<Widget> carInfo() {
-                    return [
-                      Container(
-                          padding: EdgeInsets.only(
-                              top: getProportionateScreenHeight(30, context),
-                              left: getProportionateScreenWidth(25, context)),
-                          width: width * 0.95,
-                          child: Text(
-                            "Transmission: ${widget.product.car != null ? widget.product.car['transmission'] : ''}",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                color: Color.fromARGB(255, 80, 78, 78)),
-                          )),
-                      Container(
-                          padding: EdgeInsets.only(
-                              top: getProportionateScreenHeight(10, context),
-                              left: getProportionateScreenWidth(25, context)),
-                          width: width * 0.95,
-                          child: Text(
-                            "Mileage: ${widget.product.car != null ? widget.product.car['kilos'] : ''}Km",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                color: Color.fromARGB(255, 80, 78, 78)),
-                          )),
-                      Container(
-                          padding: EdgeInsets.only(
-                              top: getProportionateScreenHeight(10, context),
-                              left: getProportionateScreenWidth(25, context)),
-                          width: width * 0.95,
-                          child: Text(
-                            "Fuel: ${widget.product.car != null ? widget.product.car['fuel'] : ''}",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                color: Color.fromARGB(255, 80, 78, 78)),
-                          )),
-                      Container(
-                          padding: EdgeInsets.only(
-                              top: getProportionateScreenHeight(10, context),
-                              left: getProportionateScreenWidth(25, context)),
-                          width: width * 0.95,
-                          child: Text(
-                            "Description: ${widget.product.description}",
-                            maxLines: 10,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                color: Color.fromARGB(255, 80, 78, 78)),
-                          )),
-                    ];
-                  }
-
-                  List<Widget> otherInfo() {
-                    return [
-                      Container(
-                          padding: EdgeInsets.only(
-                              top: getProportionateScreenHeight(10, context),
-                              left: getProportionateScreenWidth(25, context)),
-                          width: width * 0.95,
-                          child: Text(
-                            "Description: ${widget.product.description}",
-                            maxLines: 10,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                color: Color.fromARGB(255, 80, 78, 78)),
-                          )),
-                    ];
-                  }
-
                   return SingleChildScrollView(
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.start,
@@ -156,13 +174,33 @@ class _ProductPreviewState extends State<ProductPreview> {
                                       topLeft: Radius.circular(15),
                                       topRight: Radius.circular(25))),
                               width: width,
-                              child: Carousel(
-                                autoplay: false,
-                                dotBgColor: Colors.transparent,
-                                dotSize: 0,
-                                boxFit: BoxFit.cover,
-                                borderRadius: true,
-                                images: imgs,
+                              child: PhotoViewGallery.builder(
+                                itemCount: imageList.length,
+                                builder: (BuildContext context, int index) {
+                                  return PhotoViewGalleryPageOptions(
+                                    imageProvider: NetworkImage(
+                                        widget.product.images![index].url),
+                                    minScale: PhotoViewComputedScale.contained,
+                                    maxScale:
+                                        PhotoViewComputedScale.covered * 2.5,
+                                    initialScale:
+                                        PhotoViewComputedScale.contained,
+                                  );
+                                },
+                                loadingBuilder: (context, event) =>
+                                    const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                backgroundDecoration: const BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                pageController:
+                                    PageController(initialPage: _currentIndex),
+                                onPageChanged: (index) {
+                                  setState(() {
+                                    _currentIndex = index;
+                                  });
+                                },
                               ),
                             ),
                           ),
