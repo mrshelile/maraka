@@ -274,7 +274,7 @@ class ProductLogic {
         for (var element in imagesJson) {
           images.add(ImageStrapi(url: element['image']));
         }
- 
+
         // var res = await http.get(
         //   Uri.parse("$server$_productViewer"),
         //   headers: <String, String>{
@@ -305,11 +305,38 @@ class ProductLogic {
               description: description));
         }
       }
-
-      return products;
+      // print();
+      return _quicksortByCreatedAt(products);
     } else {
       return [];
     }
+  }
+
+  List<Product> _quicksortByCreatedAt(List<Product> products) {
+    if (products.length <= 1) {
+      return products;
+    }
+
+    final pivot = products[products.length ~/ 2].createdAt;
+    final List<Product> left = [];
+    final List<Product> middle = [];
+    final List<Product> right = [];
+
+    for (final product in products) {
+      if (product.createdAt.isAfter(pivot)) {
+        left.add(product);
+      } else if (product.createdAt == pivot) {
+        middle.add(product);
+      } else {
+        right.add(product);
+      }
+    }
+
+    return [
+      ..._quicksortByCreatedAt(left),
+      ...middle,
+      ..._quicksortByCreatedAt(right)
+    ];
   }
 
   Future<List<Product>> getMyAds(User owner) async {
