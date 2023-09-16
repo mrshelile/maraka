@@ -80,7 +80,8 @@ class _SplashcreenState extends State<Splashcreen> {
                                     0.05,
                             child: Text(
                                 style: TextStyle(
-                                    fontSize: getProportionateScreenWidth(17, context)),
+                                    fontSize: getProportionateScreenWidth(
+                                        17, context)),
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                                 i.owner.toString()))
@@ -135,20 +136,53 @@ class _SplashcreenState extends State<Splashcreen> {
                                   MediaQuery.of(context).copyWith().size.width *
                                       0.1,
                             ),
-                            SizedBox(
-                                height: MediaQuery.of(context)
-                                        .copyWith()
-                                        .size
-                                        .height *
-                                    0.2,
-                                width: MediaQuery.of(context)
-                                        .copyWith()
-                                        .size
-                                        .width *
-                                    0.25,
-                                child: Image.asset(
-                                  "assets/iconlogo.png",
-                                )),
+                            Row(
+                              children: [
+                                Container(
+                                   
+                                    height: MediaQuery.of(context)
+                                            .copyWith()
+                                            .size
+                                            .height *
+                                        0.2,
+                                    width: MediaQuery.of(context)
+                                            .copyWith()
+                                            .size
+                                            .width *
+                                        0.25,
+                                    child: Image.asset(
+                                      "assets/iconlogo.png",
+                                    )),
+                                Container(
+                                  padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                            .copyWith()
+                                            .size
+                                            .height *
+                                        0.06,
+                                    left: MediaQuery.of(context)
+                                            .copyWith()
+                                            .size
+                                            .width *
+                                        0.15,
+                                  ),
+                                  width: MediaQuery.of(context)
+                                          .copyWith()
+                                          .size
+                                          .width *
+                                      0.62,
+                                  child: const Text(
+                                    "Shopping made easy, buy and/sell anything, anytime",
+                                    style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        color:
+                                            Color.fromARGB(255, 243, 243, 243),
+                                        fontSize: 15),
+                                    maxLines: 3,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                         SizedBox(
@@ -160,16 +194,16 @@ class _SplashcreenState extends State<Splashcreen> {
                           padding: EdgeInsets.only(
                               left:
                                   MediaQuery.of(context).copyWith().size.width *
-                                      0.14,
+                                      0.005,
                               bottom: MediaQuery.of(context)
                                       .copyWith()
                                       .size
                                       .height *
                                   0.05),
                           child: const Text(
-                            "Shopping made easy, buy and/sell anything, anytime",
+                            "Buy and Sell for free",
                             style:
-                                TextStyle(color: MyColors.brown3, fontSize: 20),
+                                TextStyle(color: MyColors.brown3, fontSize: 22),
                           ),
                         ),
                         Container(
@@ -229,7 +263,6 @@ class _SplashcreenState extends State<Splashcreen> {
                     ],
                   );
                 }
-                
               }),
         ],
       ),
