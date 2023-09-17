@@ -138,7 +138,7 @@ class _SplashcreenState extends State<Splashcreen> {
                             ),
                             Row(
                               children: [
-                                Container(
+                                SizedBox(
                                    
                                     height: MediaQuery.of(context)
                                             .copyWith()
@@ -149,7 +149,7 @@ class _SplashcreenState extends State<Splashcreen> {
                                             .copyWith()
                                             .size
                                             .width *
-                                        0.25,
+                                        0.23,
                                     child: Image.asset(
                                       "assets/iconlogo.png",
                                     )),
@@ -172,12 +172,12 @@ class _SplashcreenState extends State<Splashcreen> {
                                           .width *
                                       0.62,
                                   child: const Text(
-                                    "Shopping made easy, buy and/sell anything, anytime",
+                                    "Shopping made easy, buy and sell anything, anytime",
                                     style: TextStyle(
                                         overflow: TextOverflow.ellipsis,
                                         color:
                                             Color.fromARGB(255, 243, 243, 243),
-                                        fontSize: 15),
+                                        fontSize: 12),
                                     maxLines: 3,
                                   ),
                                 ),

@@ -3,12 +3,31 @@ import 'package:maraka/logic/store.dart';
 import 'package:maraka/screens/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:awesome_notifications/awesome_notifications.dart';
 // void main() {
 //   runApp(MyApp());
 // }
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await AwesomeNotifications().initialize(
+  // set the icon to null if you want to use the default app icon
+  '',
+  [
+    NotificationChannel(
+        channelGroupKey: 'version_update',
+        channelKey: 'basic_channel',
+        channelName: 'VersionUpdate',
+        channelDescription: 'Notification channel for basic tests',
+        defaultColor: Color(0xFF9D50DD),
+        ledColor: Colors.white)
+  ],
+  // Channel groups are only visual and are not required
+  channelGroups: [
+    NotificationChannelGroup(
+        channelGroupName: 'VersionUpdate', channelGroupkey: 'version_update')
+  ],
+  debug: true
+);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(const MyApp());
