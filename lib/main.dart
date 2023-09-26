@@ -1,33 +1,24 @@
+import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/store.dart';
 import 'package:maraka/screens/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:maraka/service/background_service.dart';
+
 // void main() {
 //   runApp(MyApp());
 // }
-void main() async{
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import 'logic/constants.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AwesomeNotifications().initialize(
-  // set the icon to null if you want to use the default app icon
-  '',
-  [
-    NotificationChannel(
-        channelGroupKey: 'version_update',
-        channelKey: 'basic_channel',
-        channelName: 'VersionUpdate',
-        channelDescription: 'Notification channel for basic tests',
-        defaultColor: Color(0xFF9D50DD),
-        ledColor: Colors.white)
-  ],
-  // Channel groups are only visual and are not required
-  channelGroups: [
-    NotificationChannelGroup(
-        channelGroupName: 'VersionUpdate', channelGroupkey: 'version_update')
-  ],
-  debug: true
-);
+  // BackgroundService.start();
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(const MyApp());
@@ -35,12 +26,13 @@ void main() async{
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final store = Get.put(StoreController());
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());

@@ -1,9 +1,8 @@
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maraka/logic/banner_logic.dart';
-import 'package:maraka/logic/sendVisitor.dart';
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/logic/constants.dart';
 import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/home.dart';
@@ -30,6 +29,7 @@ class _SplashcreenState extends State<Splashcreen> {
     images: [
       SvgPicture.asset("assets/undraw_empty_cart_co35.svg"),
     ],
+    // options: CarouselOptions(),
   );
 
   Future<String> makeBanners() async {
@@ -51,6 +51,7 @@ class _SplashcreenState extends State<Splashcreen> {
           imageCarousel = Carousel(
             dotBgColor: Colors.transparent,
             dotSize: 0,
+    
             images: logic.bannersSplashScreen
                 .map(
                   (i) => GestureDetector(
@@ -79,12 +80,13 @@ class _SplashcreenState extends State<Splashcreen> {
                                 MediaQuery.of(context).copyWith().size.height *
                                     0.05,
                             child: Text(
-                                style: TextStyle(
-                                    fontSize: getProportionateScreenWidth(
-                                        17, context)),
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                i.owner.toString()))
+                              i.owner.toString(),
+                              style: TextStyle(
+                                  fontSize:
+                                      getProportionateScreenWidth(17, context)),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ))
                       ],
                     ),
                   ),
@@ -139,7 +141,6 @@ class _SplashcreenState extends State<Splashcreen> {
                             Row(
                               children: [
                                 SizedBox(
-                                   
                                     height: MediaQuery.of(context)
                                             .copyWith()
                                             .size

@@ -5,6 +5,8 @@
 import FlutterMacOS
 import Foundation
 
+import device_info_plus
+import flutter_local_notifications
 import platform_device_id
 import platform_device_id_macos
 import r_get_ip
@@ -12,6 +14,8 @@ import shared_preferences_foundation
 import url_launcher_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
+  DeviceInfoPlusMacosPlugin.register(with: registry.registrar(forPlugin: "DeviceInfoPlusMacosPlugin"))
+  FlutterLocalNotificationsPlugin.register(with: registry.registrar(forPlugin: "FlutterLocalNotificationsPlugin"))
   PlatformDeviceIdMacosPlugin.register(with: registry.registrar(forPlugin: "PlatformDeviceIdMacosPlugin"))
   PlatformDeviceIdMacosPlugin.register(with: registry.registrar(forPlugin: "PlatformDeviceIdMacosPlugin"))
   RGetIpPlugin.register(with: registry.registrar(forPlugin: "RGetIpPlugin"))

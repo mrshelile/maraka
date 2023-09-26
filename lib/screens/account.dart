@@ -21,16 +21,12 @@ class _AccountState extends State<Account> {
   // static var _name = "";
   // static var _phone1;
   // static var _phone2;
-  static bool isSecondNumber = false;
   static final _profileformKey = GlobalKey<FormState>();
   static final _phone1Controller = TextEditingController();
-  static final _phone2Controller = TextEditingController();
-  static final _fullNameController = TextEditingController();
   static final _emailController = TextEditingController();
   // static var _email = "";
   static bool _isenabled = false;
   // static var _months = 0;
-  bool _isProfileBtnSave = false;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +51,7 @@ class _AccountState extends State<Account> {
       return ratio;
     }
 
-    ;
+    
 
     return Scaffold(
       body: Stack(
@@ -94,10 +90,10 @@ class _AccountState extends State<Account> {
                                   width: width * 0.45,
                                   height: height * 0.05,
                                   child: Text(
-                                    maxLines: 3,
                                     widget.user.name.toString(),
-                                    style:
-                                        const TextStyle(color: MyColors.blue3,fontSize: 17),
+                                    maxLines: 3,
+                                    style: const TextStyle(
+                                        color: MyColors.blue3, fontSize: 17),
                                   )),
                             )
                           ],
@@ -196,7 +192,7 @@ class _AccountState extends State<Account> {
                                         labelStyle: const TextStyle(
                                             color: MyColors.blue3),
                                         hintText: "Phone Numbers",
-                                        
+
                                         labelText:
                                             widget.user.phone1.toString(),
                                         enabled: _isenabled,
