@@ -13,6 +13,7 @@ class BannerLogic {
   List<Banner> bannersHomeScreen = [];
   List<Banner> bannersBottom = [];
   
+  
   Future getSplashscreen() async {
     response = await http.get(
       Uri.parse("$server$_banner"),
