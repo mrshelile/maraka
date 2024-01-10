@@ -242,7 +242,7 @@ class ProductLogic {
     String filter = "";
     if (category.toLowerCase() != "All".toLowerCase()) {
       filter = "?search=$category";
-    }
+    } 
 
     var response = await http.get(
       Uri.parse(

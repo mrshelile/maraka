@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:swipebuttonflutter/swipebuttonflutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+// import 'dart:html' as html;
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Splashcreen extends StatefulWidget {
   const Splashcreen({Key? key}) : super(key: key);
@@ -35,7 +37,8 @@ class _SplashcreenState extends State<Splashcreen> {
   Future<String> makeBanners() async {
     var logic = BannerLogic();
 
-    await logic.getSplashscreen();
+    var splashscreenFuture = logic.getSplashscreen();
+    await splashscreenFuture;
 
     if (logic.response != null) {
       if (logic.response.statusCode == 200) {
@@ -51,14 +54,15 @@ class _SplashcreenState extends State<Splashcreen> {
           imageCarousel = Carousel(
             dotBgColor: Colors.transparent,
             dotSize: 0,
-    
             images: logic.bannersSplashScreen
                 .map(
                   (i) => GestureDetector(
                     onTap: () async {
                       // print(i);
                       // ignore: deprecated_member_use
-                      if (!await launch("http://${i.url}")) {
+
+                      //  html.window.open("http://${i.url}", 'new_tab');
+                      if (!await launchUrl(Uri.parse("http://${i.url}"))) {
                         print("failed launching");
                       } else {
                         print("should launch");
@@ -70,9 +74,15 @@ class _SplashcreenState extends State<Splashcreen> {
                           height:
                               MediaQuery.of(context).copyWith().size.height *
                                   0.35,
-                          child: Image.network(
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) =>
+                                const SpinKitThreeInOut(
+                              color: Color.fromARGB(255, 12, 131, 125),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                             // fit:BoxFit.scaleDown,
-                            i.display,
+                            imageUrl: i.display,
                           ),
                         ),
                         SizedBox(
@@ -118,153 +128,113 @@ class _SplashcreenState extends State<Splashcreen> {
             painter: BackgroundDesign(),
             child: Container(),
           ),
-          FutureBuilder<String>(
-              future: makeBanners(),
-              builder: (context, AsyncSnapshot<String> snapshot) {
-                if (snapshot.hasData) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: <Widget>[
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: MediaQuery.of(context).copyWith().size.height * 0.05,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      width: MediaQuery.of(context).copyWith().size.width * 0.1,
+                    ),
+                    Row(
+                      children: [
                         SizedBox(
-                          height:
-                              MediaQuery.of(context).copyWith().size.height *
-                                  0.05,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              width:
-                                  MediaQuery.of(context).copyWith().size.width *
-                                      0.1,
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                    height: MediaQuery.of(context)
-                                            .copyWith()
-                                            .size
-                                            .height *
-                                        0.2,
-                                    width: MediaQuery.of(context)
-                                            .copyWith()
-                                            .size
-                                            .width *
-                                        0.23,
-                                    child: Image.asset(
-                                      "assets/iconlogo.png",
-                                    )),
-                                Container(
-                                  padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                            .copyWith()
-                                            .size
-                                            .height *
-                                        0.06,
-                                    left: MediaQuery.of(context)
-                                            .copyWith()
-                                            .size
-                                            .width *
-                                        0.15,
-                                  ),
-                                  width: MediaQuery.of(context)
-                                          .copyWith()
-                                          .size
-                                          .width *
-                                      0.62,
-                                  child: const Text(
-                                    "Shopping made easy, buy and sell anything, anytime",
-                                    style: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        color:
-                                            Color.fromARGB(255, 243, 243, 243),
-                                        fontSize: 12),
-                                    maxLines: 3,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height:
-                              MediaQuery.of(context).copyWith().size.height *
-                                  0.07,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left:
-                                  MediaQuery.of(context).copyWith().size.width *
-                                      0.005,
-                              bottom: MediaQuery.of(context)
-                                      .copyWith()
-                                      .size
-                                      .height *
-                                  0.05),
-                          child: const Text(
-                            "Buy and Sell for free",
-                            style:
-                                TextStyle(color: MyColors.brown3, fontSize: 22),
-                          ),
-                        ),
-                        Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50)),
                             height:
                                 MediaQuery.of(context).copyWith().size.height *
-                                    0.4,
+                                    0.2,
                             width:
                                 MediaQuery.of(context).copyWith().size.width *
-                                    0.6,
-                            child: imageCarousel),
-                        SizedBox(
-                          height:
-                              MediaQuery.of(context).copyWith().size.height *
-                                  0.05,
-                        ),
-                        SwipingButton(
-                          height: MediaQuery.of(context).copyWith().size.width *
-                              0.1,
-                          text: "Swipe To Get Started",
+                                    0.23,
+                            child: Image.asset(
+                              "assets/iconlogo.png",
+                            )),
+                        Container(
                           padding: EdgeInsets.only(
-                              left:
-                                  MediaQuery.of(context).copyWith().size.width *
-                                      0.14,
-                              right:
-                                  MediaQuery.of(context).copyWith().size.width *
-                                      0.15),
-                          swipeButtonColor: MyColors.blue2,
-                          backgroundColor: MyColors.blue3,
-                          swipePercentageNeeded: 0.3,
-                          onSwipeCallback: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Home(
-                                          currentIndex: 0,
-                                          user: User(),
-                                        )));
-                          },
+                            bottom:
+                                MediaQuery.of(context).copyWith().size.height *
+                                    0.06,
+                            left: MediaQuery.of(context).copyWith().size.width *
+                                0.15,
+                          ),
+                          width: MediaQuery.of(context).copyWith().size.width *
+                              0.62,
+                          child: const Text(
+                            "Shopping made easy, buy and sell anything, anytime",
+                            style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                color: Color.fromARGB(255, 243, 243, 243),
+                                fontSize: 12),
+                            maxLines: 3,
+                          ),
                         ),
                       ],
                     ),
-                  );
-                } else {
-                  return Column(
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: <Widget>[
-                      SizedBox(
-                        height:
-                            MediaQuery.of(context).copyWith().size.height * 0.3,
-                      ),
-                      const SpinKitSpinningLines(
-                          color: Color.fromARGB(255, 12, 131, 125),
-                          size: 180.0),
-                      const Text("Checking Internet")
-                    ],
-                  );
-                }
-              }),
+                  ],
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).copyWith().size.height * 0.07,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      left:
+                          MediaQuery.of(context).copyWith().size.width * 0.005,
+                      bottom:
+                          MediaQuery.of(context).copyWith().size.height * 0.05),
+                  child: const Text(
+                    "Buy and Sell for free",
+                    style: TextStyle(color: MyColors.brown3, fontSize: 22),
+                  ),
+                ),
+                Container(
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(50)),
+                    height: MediaQuery.of(context).copyWith().size.height * 0.4,
+                    width: MediaQuery.of(context).copyWith().size.width * 0.6,
+                    child: FutureBuilder<String>(
+                      future: makeBanners(),
+                      builder: (context, AsyncSnapshot<String> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const SpinKitThreeInOut(
+                            color: Color.fromARGB(255, 12, 131, 125),
+                          );
+                        } else if (snapshot.hasError) {
+                          return const SizedBox();
+                        } else {
+                          return imageCarousel;
+                        }
+                      },
+                    )),
+                SizedBox(
+                  height: MediaQuery.of(context).copyWith().size.height * 0.05,
+                ),
+                SwipingButton(
+                  height: MediaQuery.of(context).copyWith().size.width * 0.1,
+                  text: "Swipe To Get Started",
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).copyWith().size.width * 0.14,
+                      right:
+                          MediaQuery.of(context).copyWith().size.width * 0.15),
+                  swipeButtonColor: MyColors.blue2,
+                  backgroundColor: MyColors.blue3,
+                  swipePercentageNeeded: 0.3,
+                  onSwipeCallback: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Home(
+                                  currentIndex: 0,
+                                  user: User(),
+                                )));
+                  },
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
