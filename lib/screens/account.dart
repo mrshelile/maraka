@@ -1,3 +1,4 @@
+import 'package:maraka/logic/sendVisitor.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/home.dart';
@@ -20,16 +21,12 @@ class _AccountState extends State<Account> {
   // static var _name = "";
   // static var _phone1;
   // static var _phone2;
-  static bool isSecondNumber = false;
   static final _profileformKey = GlobalKey<FormState>();
   static final _phone1Controller = TextEditingController();
-  static final _phone2Controller = TextEditingController();
-  static final _fullNameController = TextEditingController();
   static final _emailController = TextEditingController();
   // static var _email = "";
   static bool _isenabled = false;
   // static var _months = 0;
-  bool _isProfileBtnSave = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +51,7 @@ class _AccountState extends State<Account> {
       return ratio;
     }
 
-    ;
+    
 
     return Scaffold(
       body: Stack(
@@ -89,25 +86,15 @@ class _AccountState extends State<Account> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(left: width * 0.1),
-                              child: Container(
-                                width: width * 0.45,
-                                child: TextFormField(
-                                  controller: _fullNameController,
-                                  decoration: InputDecoration(
-                                    labelStyle:
-                                        TextStyle(color: MyColors.blue3),
-                                    hintText: "full Names",
-                                    labelText: widget.user.name,
-                                    enabled: false,
-                                    border: InputBorder.none,
-                                  ),
-                                  validator: (String? value) {
-                                    return value == null || value.isEmpty
-                                        ? 'Enter Your Full Names'
-                                        : null;
-                                  },
-                                ),
-                              ),
+                              child: SizedBox(
+                                  width: width * 0.45,
+                                  height: height * 0.05,
+                                  child: Text(
+                                    widget.user.name.toString(),
+                                    maxLines: 3,
+                                    style: const TextStyle(
+                                        color: MyColors.blue3, fontSize: 17),
+                                  )),
                             )
                           ],
                         ),
@@ -140,22 +127,32 @@ class _AccountState extends State<Account> {
                                           EdgeInsets.only(left: width * 0.1),
                                       child: Text(
                                         "Personal Information",
-                                        style: TextStyle(fontSize: 
-                                        MediaQuery.of(context).copyWith().size.width*0.05
-                                        ),
+                                        style: TextStyle(
+                                            fontSize: MediaQuery.of(context)
+                                                    .copyWith()
+                                                    .size
+                                                    .width *
+                                                0.05),
                                       ),
                                     ),
                                     TextButton(
                                       child: Text(
                                         "Sign Out",
-                                        style:
-                                            TextStyle(color: MyColors.blue3,
-                                         fontSize: MediaQuery.of(context).copyWith().size.width*0.05  
-                                            ),
+                                        style: TextStyle(
+                                            color: MyColors.blue3,
+                                            fontSize: MediaQuery.of(context)
+                                                    .copyWith()
+                                                    .size
+                                                    .width *
+                                                0.05),
                                       ),
-                                      onPressed: () {
+                                      onPressed: () async {
                                         widget.user.removeAll();
-                                        print(widget.user.jwt);
+                                        debugPrint(widget.user.jwt.toString());
+                                        Visitor visitor = Visitor();
+                                        await visitor.createVisitor().timeout(
+                                            const Duration(seconds: 5));
+                                        // ignore: use_build_context_synchronously
                                         Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
@@ -192,9 +189,10 @@ class _AccountState extends State<Account> {
                                         //     color: MyColors.blue3,
                                         //   ),
                                         // ),
-                                        labelStyle:
-                                            const TextStyle(color: MyColors.blue3),
+                                        labelStyle: const TextStyle(
+                                            color: MyColors.blue3),
                                         hintText: "Phone Numbers",
+
                                         labelText:
                                             widget.user.phone1.toString(),
                                         enabled: _isenabled,
@@ -208,7 +206,7 @@ class _AccountState extends State<Account> {
                                     ),
                                   ),
                                 ),
-                                
+
                                 Padding(
                                   padding: EdgeInsets.only(left: width * 0.1),
                                   child: SizedBox(
@@ -221,8 +219,8 @@ class _AccountState extends State<Account> {
                                           Icons.email,
                                           color: MyColors.brown3,
                                         ),
-                                        labelStyle:
-                                            const TextStyle(color: MyColors.blue3),
+                                        labelStyle: const TextStyle(
+                                            color: MyColors.blue3),
                                         hintText: "Email Address",
                                         labelText: widget.user.email,
                                         enabled: false,
@@ -240,7 +238,7 @@ class _AccountState extends State<Account> {
                                 const Divider(
                                   color: MyColors.brown2,
                                 ),
-                                
+
                                 // Rowrrrr
                               ],
                             ),

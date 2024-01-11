@@ -5,8 +5,10 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get_connect/http/src/exceptions/exceptions.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
@@ -14,7 +16,6 @@ import 'package:maraka/logic/constants.dart';
 import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:maraka/themes/sideClipDesign.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 // ignore: must_be_immutable
@@ -33,22 +34,43 @@ class _CreateAdState extends State<CreateAd> {
   List<File> imageFileList = [];
   bool isBtnDisabled = false;
   void selectImages() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: true, allowedExtensions: ['jpg', 'png', 'jpeg']);
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.image, allowMultiple: true
+            // allowMultiple: true, allowedExtensions: ['jpg', 'png', 'jpeg']
+            );
 
     if (result != null) {
-      setState(() {
-        imageFileList = result.paths.map((path) => File(path!)).toList();
-      });
+      if (result.files.length <= 5) {
+        if (result.files.every((element) => element.size <= 3750000)) {
+          setState(() {
+            _error = "";
+            imageFileList = result.paths.map((path) => File(path!)).toList();
+          });
+        } else {
+          setState(() {
+            _error = "image is too large";
+          });
+        }
+      } else {
+        setState(() {
+          _error = "maximum of 5 images";
+        });
+      }
     }
   }
   //V EDIT
 
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _modelController = TextEditingController();
+  final _makeController = TextEditingController();
+  final _mileageController = TextEditingController();
+  final _fuelController = TextEditingController();
+  final _yearController = TextEditingController();
   final _priceController = TextEditingController();
   final _descriptionController = TextEditingController();
   final List<String> _pageCategories = [];
+  final List<String> _transmissionList = ["Auto", "Manual"];
   var uuid = const Uuid();
   var _error = '';
   bool _loading = false;
@@ -58,7 +80,7 @@ class _CreateAdState extends State<CreateAd> {
   );
 
   // ignore: prefer_typing_uninitialized_variables
-  var _dropdownValue;
+  var _dropdownValue, _transmissionValue;
   @override
   void initState() {
     for (var element in categories) {
@@ -72,20 +94,249 @@ class _CreateAdState extends State<CreateAd> {
     int countBtnDisable = 0;
     final width = MediaQuery.of(context).copyWith().size.width;
     final height = MediaQuery.of(context).copyWith().size.height;
+    Widget name = Container(
+      padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+      child: TextFormField(
+        controller: _nameController,
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.title,
+            color: MyColors.brown2,
+            size: width * 0.04,
+          ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Name',
+        ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Name Cannot be empty'
+              : null;
+        },
+      ),
+    );
+    Widget UploadField = GestureDetector(
+      onTap: (){
+         selectImages();
+      },
+      child: Container(
+        padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+        child: TextFormField(
+          readOnly: true,
+          enableInteractiveSelection: false,
+          enabled: false,
+          textInputAction: TextInputAction.next,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.image,
+              color: MyColors.brown2,
+              size: width * 0.04,
+            ),
+            labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+            labelText: 'Chosse Image',
+          ),
+         
+        ),
+      ),
+    );
+    Widget model = Container(
+      padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+      child: TextFormField(
+        controller: _modelController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.model_training_outlined,
+            color: MyColors.brown2,
+            size: width * 0.04,
+          ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Model',
+        ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Field Cannot be empty'
+              : null;
+        },
+      ),
+    );
+    Widget make = Container(
+      padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+      width: width,
+      child: TextFormField(
+        controller: _makeController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.type_specimen,
+            color: MyColors.brown2,
+            size: width * 0.04,
+          ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Make',
+        ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Field Cannot be empty'
+              : null;
+        },
+      ),
+    );
+    Widget mileage = Container(
+      padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+      width: width,
+      child: TextFormField(
+        controller: _mileageController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.travel_explore_outlined,
+            color: MyColors.brown2,
+            size: width * 0.04,
+          ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Mileage',
+        ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Field Cannot be empty'
+              : null;
+        },
+      ),
+    );
+    Widget fuel = Container(
+      padding: EdgeInsets.only(left: width * 0.1),
+      width: width,
+      child: TextFormField(
+        controller: _fuelController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.ramp_left_outlined,
+            color: MyColors.brown2,
+            size: width * 0.042,
+          ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Fuel Type',
+        ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Field Cannot be empty'
+              : null;
+        },
+      ),
+    );
+    Widget year = Container(
+      padding: EdgeInsets.only(left: width * 0.1),
+      width: width,
+      child: TextFormField(
+        controller: _yearController,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          FilteringTextInputFormatter.digitsOnly
+        ],
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.calendar_today,
+            color: MyColors.brown2,
+            size: width * 0.04,
+          ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Year',
+        ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Field Cannot be empty'
+              : null;
+        },
+      ),
+    );
+    Widget transmission = Container(
+      padding: EdgeInsets.only(left: width * 0.1),
+      width: width,
+      child: DropdownButton(
+        value: _transmissionValue,
+        hint: Text(
+          "Transmission",
+          style: TextStyle(fontSize: width * 0.04, color: MyColors.brown3),
+        ),
+        // Down Arrow Icon
+        icon: const Icon(
+          Icons.keyboard_arrow_down,
+        ),
+        underline: Container(),
+        items: _transmissionList.map((String item) {
+          return DropdownMenuItem(
+            value: item.toLowerCase(),
+            child: Text(item),
+          );
+        }).toList(),
+        onChanged: (value) {
+          setState(() {
+            _transmissionValue = value;
+          });
+        },
+      ),
+    );
+    Widget price = Container(
+      padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+      child: TextFormField(
+        controller: _priceController,
+        textInputAction: TextInputAction.next,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          FilteringTextInputFormatter.digitsOnly
+        ],
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.amp_stories,
+            color: MyColors.brown2,
+            size: width * 0.04,
+          ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Price',
+          hintText: "M",
+        ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Price Cannot be empty'
+              : null;
+        },
+      ),
+    );
+    Widget description = Container(
+      padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
+      child: TextFormField(
+        controller: _descriptionController,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.description,
+            color: MyColors.brown2,
+            size: width * 0.04,
+          ),
+          labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+          labelText: 'Description',
+        ),
+        validator: (String? value) {
+          return value == null || value.trim().isEmpty
+              ? 'Descrition Cannot be empty'
+              : null;
+        },
+      ),
+    );
     return Scaffold(
-      floatingActionButton: SingleChildScrollView(
-        child: FloatingActionButton(
-            tooltip: 'Save',
-            backgroundColor: MyColors.blue2,
-            foregroundColor: MyColors.gold,
-            onPressed: isBtnDisabled
-                ? null
-                : () async {
-                    if (_formKey.currentState!.validate()) {
-                      setState(() {
-                        isBtnDisabled = true;
-                        countBtnDisable++;
-                      });
+      floatingActionButton: FloatingActionButton(
+          tooltip: 'Save',
+          backgroundColor: MyColors.blue2,
+          foregroundColor: MyColors.gold,
+          onPressed: isBtnDisabled
+              ? null
+              : () async {
+                  if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      isBtnDisabled = true;
+                      countBtnDisable++;
+                    });
+                    var car;
+                    if (imageFileList.isNotEmpty) {
                       if (_dropdownValue != null && countBtnDisable < 2) {
                         if (mounted) {
                           setState(() {
@@ -95,12 +346,13 @@ class _CreateAdState extends State<CreateAd> {
                         List<int> imageIds = [];
                         ProductLogic logic = ProductLogic();
                         int i = 0;
+
                         try {
                           for (var element in imageFileList) {
-                            if (i <= 2) {
+                            if (i <= 4) {
                               var res = await logic
                                   .postImages(element, element.path)
-                                  .timeout(const Duration(seconds: 25),
+                                  .timeout(const Duration(minutes: 1),
                                       onTimeout: () => throw TimeoutException(
                                           'Can\'t upload image'));
                               if (res.statusCode == 201) {
@@ -109,26 +361,51 @@ class _CreateAdState extends State<CreateAd> {
                             }
                             i++;
                           }
+                          // debugPrint(imageIds.toString());
                           if (imageIds.isNotEmpty) {
+                            if (_dropdownValue.toString().toLowerCase() ==
+                                "cars") {
+                              if (_transmissionValue != null) {
+                                var carRes = await logic.postCar(
+                                    fuel: _fuelController.text,
+                                    make: _makeController.text,
+                                    mileage: _mileageController.text,
+                                    model: _modelController.text,
+                                    transmition: _transmissionValue,
+                                    year: _yearController.text);
+
+                                if (carRes.statusCode == 201) {
+                                  car = jsonDecode(carRes.body)["id"];
+                                } else {
+                                  car = -1;
+                                  throw Exception("failed to create car");
+                                }
+                              } else {
+                                throw UnauthorizedException();
+                              }
+                            }
                             var response = await logic
                                 .postProduct(
                                     Product(
+                                      id1: 0,
+                                      views: 0,
                                         title: _nameController.text.trim(),
                                         description:
                                             _descriptionController.text.trim(),
                                         price: _priceController.text.trim(),
                                         expiryDate: DateTime.now()
-                                            .add(const Duration(days: 31)),
+                                            .add(const Duration(days: 93)),
                                         id2: '',
                                         seller: Seller(),
                                         images: [],
                                         imageUrls: imageIds,
                                         category: _dropdownValue),
-                                    widget.owner.id)
+                                    widget.owner.id,
+                                    car)
                                 .timeout(const Duration(seconds: 25),
                                     onTimeout: () => throw TimeoutException(
                                         'Can\'t create product'));
-                            // print(response.statusCode);
+
                             if (response.statusCode == 201) {
                               if (mounted) {
                                 setState(() {
@@ -148,17 +425,20 @@ class _CreateAdState extends State<CreateAd> {
                                           )));
                               // Navigator.pop(context);
                             } else {
-                              if (mounted) {
-                                setState(() {
-                                  _loading = false;
-                                  _error = "failed";
-                                  isBtnDisabled = false;
-                                  countBtnDisable = 0;
-                                });
-                              }
+                              throw Exception("product not created");
                             }
                           }
+                        } on UnauthorizedException {
+                          if (mounted) {
+                            setState(() {
+                              _loading = false;
+                              _error = "Transmission not chosen";
+                              isBtnDisabled = false;
+                              countBtnDisable = 0;
+                            });
+                          }
                         } catch (e) {
+                          debugPrint(e.toString());
                           if (mounted) {
                             setState(() {
                               _loading = false;
@@ -175,14 +455,22 @@ class _CreateAdState extends State<CreateAd> {
                             setState(() {
                               _loading = false;
                               isBtnDisabled = false;
+                              countBtnDisable = 0;
                             });
                           });
                         }
                       }
+                    } else {
+                      setState(() {
+                        _loading = false;
+                        _error = "Choose Image";
+                        countBtnDisable = 0;
+                        isBtnDisabled = false;
+                      });
                     }
-                  },
-            child: const Icon(Icons.done)),
-      ),
+                  }
+                },
+          child: const Icon(Icons.done)),
       body: Stack(
         children: <Widget>[
           CustomPaint(
@@ -198,6 +486,7 @@ class _CreateAdState extends State<CreateAd> {
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   imageFileList.isNotEmpty
                       ? Padding(
@@ -238,130 +527,41 @@ class _CreateAdState extends State<CreateAd> {
                             // if ()
                             child: SvgPicture.asset(
                               "assets/upload.svg",
-                              semanticsLabel: "Profile Image",
+                              semanticsLabel: "Image",
                               fit: BoxFit.scaleDown,
                               width: width * 0.35,
                               height: height * 0.25,
                             ),
                           ),
                         ),
-                  Padding(
-                      padding: EdgeInsets.only(
-                          left: width * 0.25, top: height * 0.001),
-                      child: IconButton(
-                        onPressed: () async {
-                          selectImages();
-                        },
-                        icon: const Icon(
-                          Icons.upload_file,
-                          color: MyColors.goldenBrown,
-                          size: 30,
-                        ),
-                      )),
-                  Padding(
-                    padding: EdgeInsets.only(top: height * 0.03),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).copyWith().size.width *
-                              0.1),
-                      child: SizedBox(
-                        width:
-                            MediaQuery.of(context).copyWith().size.width * 0.8,
-                        child: TextFormField(
-                          controller: _nameController,
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(
-                              Icons.title,
-                              color: MyColors.brown2,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: MyColors.blue2, width: 2.0),
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
-                            labelStyle: const TextStyle(color: MyColors.brown3),
-                            labelText: 'Name',
-                          ),
-                          validator: (String? value) {
-                            return value == null || value.isEmpty
-                                ? 'Name Cannot be empty'
-                                : null;
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: height * 0.05),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).copyWith().size.width *
-                              0.1),
-                      child: SizedBox(
-                        width:
-                            MediaQuery.of(context).copyWith().size.width * 0.8,
-                        child: TextFormField(
-                          controller: _priceController,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true),
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(
-                              Icons.amp_stories,
-                              color: MyColors.brown2,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: MyColors.blue2, width: 2.0),
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
-                            labelStyle: const TextStyle(color: MyColors.brown3),
-                            labelText: 'Price',
-                            hintText: "M",
-                          ),
-                          validator: (String? value) {
-                            return value == null || value.isEmpty
-                                ? 'Price Cannot be empty'
-                                : null;
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: height * 0.05),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).copyWith().size.width *
-                              0.1),
-                      child: SizedBox(
-                        width:
-                            MediaQuery.of(context).copyWith().size.width * 0.8,
-                        child: TextFormField(
-                          controller: _descriptionController,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(
-                              Icons.description,
-                              color: MyColors.brown2,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: MyColors.blue2, width: 2.0),
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
-                            labelStyle: const TextStyle(color: MyColors.brown3),
-                            labelText: 'Description',
-                          ),
-                          validator: (String? value) {
-                            return value == null || value.isEmpty
-                                ? 'Name Cannot be empty'
-                                : null;
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Padding(
+                  //     padding: EdgeInsets.only(
+                  //         left: width * 0.25, top: height * 0.001),
+                  //     child: IconButton(
+                  //       onPressed: () async {
+                  //         selectImages();
+                  //       },
+                  //       icon: const Icon(
+                  //         Icons.upload_file,
+                  //         color: MyColors.goldenBrown,
+                  //         size: 30,
+                  //       ),
+                  //     )),
+                  UploadField,
+                  if (_dropdownValue.toString().toLowerCase() != 'cars') ...[
+                    name,
+                    description,
+                  ],
+                  price,
+                  if (_dropdownValue.toString().toLowerCase() == 'cars') ...[
+                    year,
+                    model,
+                    make,
+                    fuel,
+                    mileage,
+                    description,
+                    transmission
+                  ],
                   Padding(
                     padding:
                         EdgeInsets.only(top: height * 0.03, bottom: height * 0),
@@ -374,11 +574,15 @@ class _CreateAdState extends State<CreateAd> {
                               0.51,
                           child: DropdownButton(
                             value: _dropdownValue,
-                            hint: const Text("Choose a Category"),
+                            hint: Text(
+                              "Choose a Category",
+                              style: TextStyle(fontSize: width * 0.04),
+                            ),
                             // Down Arrow Icon
-                            icon: const Icon(Icons.keyboard_arrow_down),
-                            items:
-                                _pageCategories.sublist(1).map((String items) {
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down,
+                            ),
+                            items: _pageCategories.map((String items) {
                               return DropdownMenuItem(
                                 value: items,
                                 child: Text(items),

@@ -1,25 +1,41 @@
+import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:maraka/logic/store.dart';
 import 'package:maraka/screens/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:maraka/service/background_service.dart';
 
 // void main() {
 //   runApp(MyApp());
 // }
-void main() {
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import 'logic/constants.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // BackgroundService.start();
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(MyApp());
+    runApp(const MyApp());
   });
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp();
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final store = Get.put(StoreController());
+
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       child: MaterialApp(
         title: 'Maraka',
@@ -36,7 +52,7 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blueGrey,
         ),
-        home: Splashcreen(),
+        home: const Splashcreen(),
 
         // home: CarouselSelectWidgetSample(),
       ),

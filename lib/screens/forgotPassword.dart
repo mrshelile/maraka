@@ -157,6 +157,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   else{
                                     setState(() {
                                       _errorMessage ="email does not exist";
+                                          _loading = false;
                                     });
                                
                                     }

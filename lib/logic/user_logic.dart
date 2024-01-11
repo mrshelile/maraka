@@ -156,7 +156,7 @@ class User {
       await _storeToken(jwt);
       await _storeEmail(email.toString());
     }
-    print(response);
+  
     return response;
     //  if(response.staus)
     //

@@ -10,24 +10,33 @@ class Product {
   String? description;
   List<ImageStrapi>? images;
   Seller? seller;
-  int? id1;
+  int id1;
   String id2;
   bool isLiked = false;
   var createdAt;
   var expiryDate;
   List<int>? imageUrls;
+  var car;
+  int views = 0;
   Product(
       {required this.title,
       required this.description,
       required this.price,
-      this.id1,
+      required this.id1,
+      this.car,
       this.createdAt,
       this.imageUrls,
+      required this.views,
       required this.expiryDate,
       required this.id2,
       required this.seller,
       required this.images,
       required this.category});
+  @override
+  String toString() {
+    // TODO: implement toString
+    return title??car['model'];
+  }
 }
 
 class Seller {

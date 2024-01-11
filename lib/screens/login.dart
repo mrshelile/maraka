@@ -38,7 +38,8 @@ class _LoginState extends State<Login> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: LayoutBuilder(builder: (context, constraints) {
-        print(constraints);
+       
+       
         return Stack(
           children: <Widget>[
             CustomPaint(
@@ -61,9 +62,9 @@ class _LoginState extends State<Login> {
                         height:
                             MediaQuery.of(context).copyWith().size.height * 0.3,
                         width:
-                            MediaQuery.of(context).copyWith().size.width * 0.6,
+                            MediaQuery.of(context).copyWith().size.width * 0.4,
                         child: Image.asset(
-                          "assets/maraka.png",
+                          "assets/iconlogo.png",
                         ),
                       ),
                     ),
@@ -77,6 +78,7 @@ class _LoginState extends State<Login> {
                         child: TextFormField(
                           controller: _emailController,
                           decoration: const InputDecoration(
+                            
                             hintText: "Enter Your Email Address",
                             prefixIcon: Icon(
                               Icons.email_outlined,
@@ -84,6 +86,7 @@ class _LoginState extends State<Login> {
                             ),
                             labelStyle: TextStyle(color: MyColors.brown3),
                             border: UnderlineInputBorder(),
+                            
                             labelText: 'Enter your email',
                           ),
                           keyboardType: TextInputType.emailAddress,
@@ -193,7 +196,7 @@ class _LoginState extends State<Login> {
                                   if (user.response.statusCode != null) {
                                     if (user.response.statusCode == 200) {
                                       if (user.is_confirmed) {
-                                        // print(user.is_confirmed);
+                                        
                                         // ignore: use_build_context_synchronously
                                         Navigator.pushReplacement(
                                             context,
@@ -222,7 +225,7 @@ class _LoginState extends State<Login> {
                                     }
                                   }
                                 } catch (error) {
-                                  // ignore: avoid_print
+                               
 
                                   setState(() {
                                     _errorMessage =
@@ -250,29 +253,22 @@ class _LoginState extends State<Login> {
                         children: <Widget>[
                           const Text(
                             "Don't Have an Account?",
-                            style: TextStyle(color: MyColors.brown3),
+                            style: TextStyle(color: MyColors.brown3,fontSize: 15),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: MediaQuery.of(context)
-                                        .copyWith()
-                                        .size
-                                        .width *
-                                    0.01),
-                            child: TextButton(
-                              child: const Text(
-                                "Sign up",
-                                style: TextStyle(
-                                  color: MyColors.blue3,
-                                ),
+                          TextButton(
+                            child: const Text(
+                              "Sign up",
+                              style: TextStyle(
+                                color: MyColors.blue3,
+                                fontSize: 16
                               ),
-                              onPressed: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Registration()));
-                              },
                             ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Registration()));
+                            },
                           ),
                           if (constraints.maxWidth >= 600)
                             Padding(
@@ -284,7 +280,7 @@ class _LoginState extends State<Login> {
                                       0.01),
                               child: TextButton(
                                 onPressed: () {
-                                  Navigator.pushReplacement(
+                                  Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
@@ -303,7 +299,7 @@ class _LoginState extends State<Login> {
                       Padding(
                         padding: EdgeInsets.only(
                             left: MediaQuery.of(context).copyWith().size.width *
-                                0.33),
+                                0.3),
                         child: TextButton(
                           onPressed: () {
                             Navigator.pushReplacement(
@@ -313,7 +309,7 @@ class _LoginState extends State<Login> {
                           },
                           child: const Text(
                             "Forgot Password?",
-                            style: TextStyle(color: MyColors.blue3),
+                            style: TextStyle(color: MyColors.blue3,fontSize: 17),
                           ),
                         ),
                       ),

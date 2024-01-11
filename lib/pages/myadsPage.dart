@@ -1,4 +1,6 @@
+import 'package:get/get.dart';
 import 'package:maraka/logic/products_logic.dart';
+import 'package:maraka/logic/store.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/models/products.dart';
@@ -24,6 +26,7 @@ class _MyAdsState extends State<MyAds> {
     var logic = ProductLogic();
     List<Product> ad = await logic.getMyAds(widget.owner);
     myads = ad;
+
     return ad;
   }
 
@@ -31,6 +34,7 @@ class _MyAdsState extends State<MyAds> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).copyWith().size.height;
     var width = MediaQuery.of(context).copyWith().size.width;
+    final store = Get.find<StoreController>();
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -40,47 +44,46 @@ class _MyAdsState extends State<MyAds> {
           ),
           Column(
             children: <Widget>[
-              // SizedBox(
-              //   height: height * 0.17,
-              // ),
-
               Padding(
-                padding: EdgeInsets.only(top: height * 0.0, right: width * 0.6),
+                padding:
+                    EdgeInsets.only(top: height * 0.0, right: width * 0.65),
                 child: SizedBox(
-                  height: height * 0.22,
-                  width: width * 0.35,
+                  height: height * 0.2,
+                  width: width * 0.2,
                   child: Image.asset(
-                    "assets/maraka.png",
+                    "assets/iconlogo.png",
                   ),
                 ),
               ),
               FutureBuilder<dynamic>(
-                future: myAdsList(),
+                future: store.setMyproducts(widget.owner),
                 builder: (context, snapshot) {
+                  // print(snapshot.data);
                   if (snapshot.hasData) {
-                    return SizedBox(
-                      // decoration: BoxDecoration(
-                      //     border: Border.all(color: Colors.black)),
-                      height: height * 0.68,
-                      width: width,
-                      child: GridView.builder(
-                          itemCount: myads.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  //childAspectRatio: 2,
-                                  mainAxisExtent: 280,
-                                  mainAxisSpacing: 12,
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 10),
-                          itemBuilder: (context, index) => ProductsItem(
-                                isFavouritedPage: false,
-                                owner: widget.owner,
-                                isFavouriteclicked: false,
-                                isFavouriteBtn: false,
-                                product: myads[index],
-                                recents: Recents.generateMyAds(myads)[index],
-                              )),
-                    );
+                    return GetBuilder(init: store,builder: (_) {
+                      return SizedBox(
+                        // decoration: BoxDecoration(
+                        //     border: Border.all(color: Colors.black)),
+                        height: height * 0.69,
+                        width: width,
+                        child: GridView.builder(
+                            itemCount: store.myProducts.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    //childAspectRatio: 2,
+                                    mainAxisExtent: 280,
+                                    mainAxisSpacing: 12,
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 10),
+                            itemBuilder: (context, index) => ProductsItem(
+                                  isFavouritedPage: false,
+                                  owner: widget.owner,
+                                  isFavouriteclicked: false,
+                                  isFavouriteBtn: false,
+                                  product: index,
+                                )),
+                      );
+                    });
                   } else {
                     return const Text("");
                   }

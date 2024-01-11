@@ -1,16 +1,20 @@
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maraka/logic/banner_logic.dart';
-import 'package:maraka/logic/sendVisitor.dart';
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/logic/constants.dart';
+import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:swipebuttonflutter/swipebuttonflutter.dart';
+import 'package:page_transition/page_transition.dart';
+// import 'package:swipebuttonflutter/swipebuttonflutter.dart';
+import 'package:swipeable_button_view/swipeable_button_view.dart';
 import 'package:url_launcher/url_launcher.dart';
+// import 'dart:html' as html;
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Splashcreen extends StatefulWidget {
   const Splashcreen({Key? key}) : super(key: key);
@@ -29,14 +33,16 @@ class _SplashcreenState extends State<Splashcreen> {
     images: [
       SvgPicture.asset("assets/undraw_empty_cart_co35.svg"),
     ],
+    // options: CarouselOptions(),
   );
 
+  bool isFinished = false;
+
   Future<String> makeBanners() async {
-    Visitor visitor = Visitor();
-    await visitor.createVisitor().timeout(const Duration(seconds: 5));
     var logic = BannerLogic();
 
-    await logic.getSplashscreen();
+    var splashscreenFuture = logic.getSplashscreen();
+    await splashscreenFuture;
 
     if (logic.response != null) {
       if (logic.response.statusCode == 200) {
@@ -58,14 +64,44 @@ class _SplashcreenState extends State<Splashcreen> {
                     onTap: () async {
                       // print(i);
                       // ignore: deprecated_member_use
-                      if (!await launch("http://${i.url}")) {
+
+                      //  html.window.open("http://${i.url}", 'new_tab');
+                      if (!await launchUrl(Uri.parse("http://${i.url}"))) {
                         print("failed launching");
                       } else {
                         print("should launch");
                       }
                     },
-                    child: Image.network(
-                      i.display,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height:
+                              MediaQuery.of(context).copyWith().size.height *
+                                  0.35,
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) =>
+                                const SpinKitThreeInOut(
+                              color: Color.fromARGB(255, 12, 131, 125),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                            // fit:BoxFit.scaleDown,
+                            imageUrl: i.display,
+                          ),
+                        ),
+                        SizedBox(
+                            height:
+                                MediaQuery.of(context).copyWith().size.height *
+                                    0.05,
+                            child: Text(
+                              i.owner.toString(),
+                              style: TextStyle(
+                                  fontSize:
+                                      getProportionateScreenWidth(17, context)),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ))
+                      ],
                     ),
                   ),
                 )
@@ -96,217 +132,148 @@ class _SplashcreenState extends State<Splashcreen> {
             painter: BackgroundDesign(),
             child: Container(),
           ),
-          FutureBuilder<String>(
-              future: makeBanners(),
-              builder: (context, AsyncSnapshot<String> snapshot) {
-                if (snapshot.hasData) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: <Widget>[
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: MediaQuery.of(context).copyWith().size.height * 0.05,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      width: MediaQuery.of(context).copyWith().size.width * 0.1,
+                    ),
+                    Row(
+                      children: [
                         SizedBox(
-                          height:
-                              MediaQuery.of(context).copyWith().size.height *
-                                  0.05,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              width:
-                                  MediaQuery.of(context).copyWith().size.width *
-                                      0.1,
-                            ),
-                            SizedBox(
-                                height: MediaQuery.of(context)
-                                        .copyWith()
-                                        .size
-                                        .height *
-                                    0.2,
-                                width: MediaQuery.of(context)
-                                        .copyWith()
-                                        .size
-                                        .width *
-                                    0.3,
-                                child: Image.asset(
-                                  "assets/maraka.png",
-                                )),
-                          ],
-                        ),
-                        SizedBox(
-                          height:
-                              MediaQuery.of(context).copyWith().size.height *
-                                  0.07,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left:
-                                  MediaQuery.of(context).copyWith().size.width *
-                                      0.14,
-                              bottom: MediaQuery.of(context)
-                                      .copyWith()
-                                      .size
-                                      .height *
-                                  0.05),
-                          child: const Text(
-                            "Shopping made easy, buy and/sell anything, anytime",
-                            style:
-                                TextStyle(color: MyColors.brown3, fontSize: 20),
-                          ),
-                        ),
-                        Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50)),
                             height:
                                 MediaQuery.of(context).copyWith().size.height *
-                                    0.4,
+                                    0.2,
                             width:
                                 MediaQuery.of(context).copyWith().size.width *
-                                    0.6,
-                            child: imageCarousel),
-                        SizedBox(
-                          height:
-                              MediaQuery.of(context).copyWith().size.height *
-                                  0.05,
-                        ),
-                        SwipingButton(
-                          height: MediaQuery.of(context).copyWith().size.width *
-                              0.1,
-                          text: "Swipe To Get Started",
+                                    0.23,
+                            child: Image.asset(
+                              "assets/iconlogo.png",
+                            )),
+                        Container(
                           padding: EdgeInsets.only(
-                              left:
-                                  MediaQuery.of(context).copyWith().size.width *
-                                      0.14,
-                              right:
-                                  MediaQuery.of(context).copyWith().size.width *
-                                      0.15),
-                          swipeButtonColor: MyColors.blue2,
-                          backgroundColor: MyColors.blue3,
-                          swipePercentageNeeded: 0.3,
-                          onSwipeCallback: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Home(
-                                          currentIndex: 0,
-                                          user: User(),
-                                        )));
-                          },
+                            bottom:
+                                MediaQuery.of(context).copyWith().size.height *
+                                    0.06,
+                            left: MediaQuery.of(context).copyWith().size.width *
+                                0.15,
+                          ),
+                          width: MediaQuery.of(context).copyWith().size.width *
+                              0.62,
+                          child: const Text(
+                            "Shopping made easy, buy and sell anything, anytime",
+                            style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                color: Color.fromARGB(255, 243, 243, 243),
+                                fontSize: 12),
+                            maxLines: 3,
+                          ),
                         ),
                       ],
                     ),
-                  );
-                } else {
-                  return Column(
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: <Widget>[
-                      SizedBox(
-                        height:
-                            MediaQuery.of(context).copyWith().size.height * 0.3,
-                      ),
-                      const SpinKitSpinningLines(
-                          color: Color.fromARGB(255, 12, 131, 125),
-                          size: 180.0),
-                      const Text("Checking Internet")
-                    ],
-                  );
-                }
-                // else {
-                //   return Padding(
-                //     padding: EdgeInsets.only(
-                //         top:
-                //             MediaQuery.of(context).copyWith().size.height * 0.3,
-                //         left: MediaQuery.of(context).copyWith().size.width *
-                //             0.15),
-                //     child: Column(
-                //       children: [
-                //         Container(
-                //           height:
-                //               MediaQuery.of(context).copyWith().size.height *
-                //                   0.3,
-                //           width: MediaQuery.of(context).copyWith().size.width *
-                //               0.6,
-                //           child: SvgPicture.asset("assets/internet.svg",
-                //               semanticsLabel: "Security Image"),
-                //         ),
-                //         Padding(
-                //           padding: EdgeInsets.only(
-                //               top: MediaQuery.of(context)
-                //                       .copyWith()
-                //                       .size
-                //                       .height *
-                //                   0.01),
-                //           child: Text("Oops looks like there is no internet"),
-                //         ),
-                //         Padding(
-                //             padding: EdgeInsets.only(
-                //                 left: MediaQuery.of(context)
-                //                         .copyWith()
-                //                         .size
-                //                         .width *
-                //                     0.1,
-                //                 top: MediaQuery.of(context)
-                //                         .copyWith()
-                //                         .size
-                //                         .height *
-                //                     0.03),
-                //             child: Container(
-                //               width:
-                //                   MediaQuery.of(context).copyWith().size.width *
-                //                       0.35,
-                //               decoration: BoxDecoration(
-                //                   color: MyColors.blue3,
-                //                   boxShadow: [
-                //                     BoxShadow(
-                //                         color: Colors.grey.withOpacity(0.6),
-                //                         spreadRadius: 2,
-                //                         blurRadius: 5,
-                //                         offset: const Offset(0, 5))
-                //                   ],
-                //                   border: Border.all(color: MyColors.blue2),
-                //                   borderRadius: BorderRadius.circular(10)),
-                //               child: TextButton(
-                //                 onPressed: () {
-                //                   print("object");
-                //                    Navigator.pushReplacement(
-                //                   context,
-                //                   MaterialPageRoute(
-                //                       builder: (context) => MyApp()));
-                //                 },
-                //                 child: const Text(
-                //                   "Retry",
-                //                   style: TextStyle(
-                //                       color: Colors.white, fontSize: 15),
-                //                 ),
-                //               ),
-                //             )),
-                //       ],
-                //     ),
-                //   );
-                // }
-              }),
+                  ],
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).copyWith().size.height * 0.07,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      left:
+                          MediaQuery.of(context).copyWith().size.width * 0.005,
+                      bottom:
+                          MediaQuery.of(context).copyWith().size.height * 0.05),
+                  child: const Text(
+                    "Buy and Sell for free",
+                    style: TextStyle(color: MyColors.brown3, fontSize: 22),
+                  ),
+                ),
+                Container(
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(50)),
+                    height: MediaQuery.of(context).copyWith().size.height * 0.4,
+                    width: MediaQuery.of(context).copyWith().size.width * 0.6,
+                    child: FutureBuilder<String>(
+                      future: makeBanners(),
+                      builder: (context, AsyncSnapshot<String> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const SpinKitThreeInOut(
+                            color: Color.fromARGB(255, 12, 131, 125),
+                          );
+                        } else if (snapshot.hasError) {
+                          return const SizedBox();
+                        } else {
+                          return imageCarousel;
+                        }
+                      },
+                    )),
+                SizedBox(
+                  height: MediaQuery.of(context).copyWith().size.height * 0.05,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(
+                      MediaQuery.of(context).copyWith().size.width * 0.1),
+                  child: SwipeableButtonView(
+                    buttonText: 'Swipe To Get Started',
+                    buttonWidget: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Color.fromARGB(255, 92, 219, 166),
+                    ),
+                    activeColor: Color.fromARGB(255, 153, 193, 226),
+                    isFinished: isFinished,
+                    onWaitingProcess: () {
+                      Future.delayed(Duration(seconds: 1), () {
+                        setState(() {
+                          isFinished = true;
+                        });
+                      });
+                    },
+                    onFinish: () {
+                      setState(() {
+                        isFinished = false;
+                      });
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Home(
+                                    currentIndex: 0,
+                                    user: User(),
+                                  )));
+                      //TODO: For reverse ripple effect animation
+                    },
+                  ),
+                )
+                // SwipingButton(
+                //   height: MediaQuery.of(context).copyWith().size.width * 0.1,
+                //   text: "Swipe To Get Started",
+                //   padding: EdgeInsets.only(
+                //       left: MediaQuery.of(context).copyWith().size.width * 0.14,
+                //       right:
+                //           MediaQuery.of(context).copyWith().size.width * 0.15),
+                //   swipeButtonColor: MyColors.blue2,
+                //   backgroundColor: MyColors.blue3,
+                //   swipePercentageNeeded: 0.3,
+                //   onSwipeCallback: () {
+                //     Navigator.pushReplacement(
+                //         context,
+                //         MaterialPageRoute(
+                //             builder: (context) => Home(
+                //                   currentIndex: 0,
+                //                   user: User(),
+                //                 )));
+                //   },
+                // ),
+              ],
+            ),
+          )
         ],
       ),
     );
   }
 }
-
-// class InitializationApp extends StatelessWidget {
-//   final Future _initFuture = Init.initialize();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Initialization',
-//       home: FutureBuilder(
-//         future: _initFuture,
-//         builder: (context, snapshot) {
-//           if (snapshot.connectionState == ConnectionState.done) {
-//             return HomePage();
-//           } else {
-//             return SplashScreen();
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }

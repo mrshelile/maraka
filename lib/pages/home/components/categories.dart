@@ -11,32 +11,36 @@ import '../../../size_config.dart';
 class Categories extends StatelessWidget {
   final store = Get.put(StoreController());
   User owner;
-  Categories({Key? key,required this.owner}) : super(key: key);
+  Categories({Key? key, required this.owner}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).copyWith().size.width;
+    var height = MediaQuery.of(context).copyWith().size.height;
     return Padding(
-        padding: EdgeInsets.all(getProportionateScreenWidth(20, context)),
-        child: SizedBox(
-          height: getProportionateScreenWidth(80, context),
-          child: ListView.builder(
-              physics: const ScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                      left: getProportionateScreenWidth(20, context)),
-                  child: CategoryCard(
-                    icon: categories[index]["icon"],
-                    text: categories[index]["text"],
-                    press: () {
-                      store.selectCategory(categories[index]["text"],owner);
-                    },
-                  ),
-                );
-              }),
-        ));
+      padding: EdgeInsets.only(left: getProportionateScreenWidth(38, context)),
+      child: SizedBox(
+        height: getProportionateScreenWidth(85, context),
+        child: ListView.builder(
+            physics: const ScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemCount: categories.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.only(right: width * 0.05),
+                child: CategoryCard(
+                  icon: categories[index]["icon"],
+                  text: categories[index]["text"],
+                  press: () async {
+                    
+                    await store.selectCategory(
+                        categories[index]["text"], owner);
+                  },
+                ),
+              );
+            }),
+      ),
+    );
   }
 }
 
@@ -56,7 +60,7 @@ class CategoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: SizedBox(
-        width: MediaQuery.of(context).copyWith().size.width * 0.2,
+        width: MediaQuery.of(context).copyWith().size.width * 0.38,
         child: Column(
           children: [
             Container(
@@ -65,30 +69,21 @@ class CategoryCard extends StatelessWidget {
               height: getProportionateScreenWidth(60, context),
               width: MediaQuery.of(context).copyWith().size.width,
               decoration: BoxDecoration(
-                boxShadow: const [
-                  BoxShadow(
-                      color: Color.fromARGB(209, 218, 213, 213),
-                      spreadRadius: 5,
-                      blurRadius: 6,
-                      offset: Offset(0, 3))
-                ],
-                color: Color.fromARGB(255, 169, 208, 235).withOpacity(0.7),
+                color:
+                    const Color.fromARGB(255, 169, 208, 235).withOpacity(0.7),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: SvgPicture.asset(icon!),
             ),
-            const SizedBox(height: 5),
+            SizedBox(height: getProportionateScreenHeight(2, context)),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SizedBox(
-                // height: getProportionateScreenHeight(51, context),
                 child: Text(
                   text!,
-                  // maxLines: 3,
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                      fontSize:
-                          MediaQuery.of(context).copyWith().size.width * 0.02,
+                      fontSize: getProportionateScreenWidth(15.2, context),
                       fontWeight: FontWeight.bold),
                 ),
               ),

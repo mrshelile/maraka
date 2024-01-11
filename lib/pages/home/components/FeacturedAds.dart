@@ -5,7 +5,7 @@ import 'package:maraka/logic/banner_logic.dart';
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/logic/sendVisitor.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+// import 'dart:html' as html;
 import '../../../size_config.dart';
 import 'section_title.dart';
 
@@ -49,6 +49,7 @@ class FeacturedAds extends StatelessWidget {
                           image: item.imgUrl,
                           name: item.owner,
                           press: () async {
+                            // html.window.open("http://${item.url}", 'new_tab');
                             await launchUrl(Uri.parse("http://" + item.url));
                           },
                         ),
@@ -83,7 +84,7 @@ class SpecialOfferCard extends StatelessWidget {
           width: getProportionateScreenWidth(142, context),
           height: getProportionateScreenWidth(80, context),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(5),
             child: Stack(
               children: [
                 SizedBox(
@@ -106,24 +107,29 @@ class SpecialOfferCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: getProportionateScreenWidth(15.0, context),
-                    vertical: getProportionateScreenWidth(10, context),
-                  ),
-                  child: Text.rich(
-                    TextSpan(
-                      style: const TextStyle(color: Colors.white),
-                      children: [
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenWidth(15.0, context),
+                      vertical: getProportionateScreenWidth(10, context),
+                    ),
+                    child: Center(
+                      child: Text.rich(
                         TextSpan(
-                          text: "$name\n",
-                          style: TextStyle(
-                            fontSize: getProportionateScreenWidth(18, context),
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: const TextStyle(color: Colors.white),
+                          children: [
+                            TextSpan(
+                              text: "$name\n",
+                              style: TextStyle(
+                                fontSize:
+                                    getProportionateScreenWidth(18, context),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            // TextSpan(text: "$numOfBrands Brands")
+                          ],
                         ),
-                        // TextSpan(text: "$numOfBrands Brands")
-                      ],
+                      ),
                     ),
                   ),
                 ),

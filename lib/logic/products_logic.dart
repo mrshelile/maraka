@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_launcher_icons/utils.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/ImageStrapi.dart';
 import 'package:maraka/models/product.dart';
@@ -9,6 +9,8 @@ import 'package:maraka/logic/constants.dart';
 import 'package:uuid/uuid.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
+import 'package:platform_device_id/platform_device_id.dart';
+import 'package:crypto/crypto.dart';
 
 class ProductLogic {
   List<Product> products = [];
@@ -16,6 +18,8 @@ class ProductLogic {
   List<Product> favourites = [];
   final String _allProducts = "/product";
   final _productCreate = '/product-create';
+  final _carCreate = '/car';
+  final String _productViewer = "/product-viewer";
   final String _userProduct = "/user-product/";
   // ignore: prefer_typing_uninitialized_variables
   var response;
@@ -37,9 +41,95 @@ class ProductLogic {
     return response;
   }
 
-  Future postProduct(Product ad, int id) async {
+  Future deleteProduct(var id) async {
+    Map<String, String> headers = {
+      "dataType": "json",
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    var response = await http.delete(
+      Uri.parse(
+          // ignore: prefer_interpolation_to_compose_strings
+          "$server$_productCreate/$id"),
+      headers: headers,
+    );
+    return response;
+  }
+
+  Future updateCar(
+      {String? model,
+      var year,
+      String? fuel,
+      String? make,
+      String? mileage,
+      String? transmition,
+      var car}) async {
+    Map<String, String> headers = {
+      "dataType": "json",
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    var data = {};
+    if (model != null || model.toString() != '') {
+      data['model'] = model;
+    }
+    if (year != null || year.toString() != '') {
+      data['year'] = year;
+    }
+    if (fuel != null || fuel.toString() != '') {
+      data['fuel'] = fuel;
+    }
+    if (make != null || make.toString() != '') {
+      data['make'] = make;
+    }
+    if (mileage != null || mileage.toString() != '') {
+      data['kilos'] = mileage;
+    }
+    if (transmition != null || transmition.toString() != '') {
+      data[' transmission'] = transmition;
+    }
+    var response = await http.patch(Uri.parse(
+            // ignore: prefer_interpolation_to_compose_strings
+            "$server$_carCreate/$car"),
+        headers: headers,
+        body: jsonEncode(data),
+        encoding: Encoding.getByName("utf-8"));
+
+    return response;
+  }
+
+  Future updateProduct(Product product, var car) async {
+    Map<String, String> headers = {
+      "dataType": "json",
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    var preparedData = {
+      "price": product.price,
+      "description": product.description,
+    };
+    if (product.imageUrls!.isNotEmpty) {
+      preparedData['display'] = product.imageUrls;
+    }
+    if (product.category.toString().toLowerCase() != "cars") {
+      if (product.title.toString().isNotEmpty) {
+        preparedData['name'] = product.title.toString();
+      }
+    } else {
+      if (car != null || car != -1) {
+        preparedData['car'] = car;
+      }
+    }
+
+    var response = await http.patch(Uri.parse(
+            // ignore: prefer_interpolation_to_compose_strings
+            "$server$_productCreate/${product.id1}"),
+        headers: headers,
+        body: jsonEncode(preparedData),
+        encoding: Encoding.getByName("utf-8"));
+
+    return response;
+  }
+
+  Future postProduct(Product ad, int id, var car) async {
     var uuid = const Uuid();
-    // print(DateTime.now().add(const Duration(days: 31)));
     Map<String, String> headers = {
       "dataType": "json",
       'Content-Type': 'application/json; charset=UTF-8',
@@ -49,26 +139,111 @@ class ProductLogic {
       "category": ad.category,
       "description": ad.description,
       "price": ad.price,
-      "expire_date": DateTime.now().add(const Duration(days: 31)).toString(),
+      "expire_date": DateTime.now().add(const Duration(days: 93)).toString(),
       'identifier': uuid.v4(),
       'owner': id,
       'display': ad.imageUrls
     };
+    if (car != null || car != -1) {
+      data['car'] = car;
+    }
+
     response = await http.post(Uri.parse(server + _productCreate),
+        headers: headers,
+        body: jsonEncode(data),
+        encoding: Encoding.getByName("utf-8"));
+
+    return response;
+  }
+
+  Future postCar(
+      {required String model,
+      required var year,
+      required String fuel,
+      required String make,
+      required String mileage,
+      required String transmition}) async {
+    var uuid = const Uuid();
+    Map<String, String> headers = {
+      "dataType": "json",
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    var data = {
+      "model": model,
+      "make": make,
+      "year": year,
+      "fuel": fuel,
+      "kilos": mileage,
+      "transmission": transmition
+    };
+
+    response = await http.post(Uri.parse(server + _carCreate),
         headers: headers,
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
     return response;
   }
+
   // List<Product> getOwnerProducts(List<Product> items) {
   //   return Null;
   // }
+  Future createProductViews(int product) async {
+    String? deviceId = await PlatformDeviceId.getDeviceId;
 
-  Future<List<Product>> getProducts(User ownerModel, String category) async {
+    var bytes = utf8.encode(deviceId.toString());
+
+    var digest = sha256.convert(bytes);
+
+    var data = {"veiwer_hash": digest.toString(), "product": product};
+    var res = await http
+        .get(Uri.parse("$server$_productViewer?search=${digest.toString()}"));
+    var response;
+
+    if (res.statusCode == 200) {
+      if ((jsonDecode(res.body) as List).isEmpty) {
+        response = await http.post(
+          Uri.parse(
+              // ignore: prefer_interpolation_to_compose_strings
+              "$server$_productViewer"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(data),
+        );
+
+        return response;
+      } else {
+        bool found = false;
+        for (var element in jsonDecode(res.body)) {
+          if (element['product'] == product) {
+            found = true;
+          }
+        }
+        if (!found) {
+          response = await http.post(
+            Uri.parse(
+                // ignore: prefer_interpolation_to_compose_strings
+                "$server$_productViewer"),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(data),
+          );
+
+          return response;
+        }
+      }
+    }
+
+    return res;
+  }
+
+  Future<List<Product>> getProducts(String category) async {
     String filter = "";
     if (category.toLowerCase() != "All".toLowerCase()) {
       filter = "?search=$category";
     }
+
     var response = await http.get(
       Uri.parse(
           // ignore: prefer_interpolation_to_compose_strings
@@ -96,13 +271,15 @@ class ProductLogic {
 
         List imagesJson = item['display'];
         List<ImageStrapi> images = [];
-
         for (var element in imagesJson) {
           images.add(ImageStrapi(url: element['image']));
         }
 
+        int viewers = item['viewers'].length;
+
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
           products.add(Product(
+              views: viewers,
               id1: id1,
               id2: id2,
               title: name,
@@ -110,16 +287,44 @@ class ProductLogic {
               seller: seller,
               images: images,
               price: price,
+              car: item['car'],
               expiryDate: DateTime.parse(expire_date),
               createdAt: DateTime.parse(createAt),
               description: description));
         }
       }
-
-      return products;
+      // print();
+      return _quicksortByCreatedAt(products);
     } else {
-      throw Null;
+      return [];
     }
+  }
+
+  List<Product> _quicksortByCreatedAt(List<Product> products) {
+    if (products.length <= 1) {
+      return products;
+    }
+
+    final pivot = products[products.length ~/ 2].createdAt;
+    final List<Product> left = [];
+    final List<Product> middle = [];
+    final List<Product> right = [];
+
+    for (final product in products) {
+      if (product.createdAt.isAfter(pivot)) {
+        left.add(product);
+      } else if (product.createdAt == pivot) {
+        middle.add(product);
+      } else {
+        right.add(product);
+      }
+    }
+
+    return [
+      ..._quicksortByCreatedAt(left),
+      ...middle,
+      ..._quicksortByCreatedAt(right)
+    ];
   }
 
   Future<List<Product>> getMyAds(User owner) async {
@@ -155,12 +360,27 @@ class ProductLogic {
         List imagesJson = item['display'];
         List<ImageStrapi> images = [];
 
+        var res = await http.get(
+          Uri.parse("$server$_productViewer"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        );
+        int viewers = 0;
+        if (res.statusCode == 200) {
+          for (var element in jsonDecode(res.body)) {
+            if (element['product'] == id1) {
+              viewers++;
+            }
+          }
+        }
+
         for (var element in imagesJson) {
           images.add(ImageStrapi(url: element['image']));
-          
         }
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
           myAds.add(Product(
+              views: viewers,
               id1: id1,
               id2: id2,
               title: name,
@@ -169,11 +389,11 @@ class ProductLogic {
               seller: seller,
               images: images,
               price: price,
+              car: item['car'],
               expiryDate: DateTime.parse(expire_date),
               description: description));
         }
       }
-      // print(myAds[0].images![0].url);
       return myAds;
     } else {
       throw Null;

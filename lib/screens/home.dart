@@ -18,6 +18,7 @@ class Home extends StatefulWidget {
       : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomeState createState() => _HomeState();
 }
 
@@ -73,7 +74,7 @@ class _HomeState extends State<Home> {
 
           if (index == 1 || index == 2) {
             if (widget.user.email == null) {
-              Navigator.pushReplacement(context,
+              Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const Login()));
             } else {
               if (widget.user.email != null) {
