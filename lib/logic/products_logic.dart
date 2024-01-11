@@ -242,7 +242,7 @@ class ProductLogic {
     String filter = "";
     if (category.toLowerCase() != "All".toLowerCase()) {
       filter = "?search=$category";
-    } 
+    }
 
     var response = await http.get(
       Uri.parse(
@@ -275,20 +275,8 @@ class ProductLogic {
           images.add(ImageStrapi(url: element['image']));
         }
 
-        // var res = await http.get(
-        //   Uri.parse("$server$_productViewer"),
-        //   headers: <String, String>{
-        //     'Content-Type': 'application/json; charset=UTF-8',
-        //   },
-        // );
         int viewers = item['viewers'].length;
-        // if (res.statusCode == 200) {
-        //   for (var element in jsonDecode(res.body)) {
-        //     if (element['product'] == id1) {
-        //       viewers++;
-        //     }
-        //   }
-        // }
+
         if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
           products.add(Product(
               views: viewers,

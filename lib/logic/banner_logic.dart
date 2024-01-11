@@ -80,29 +80,14 @@ class BannerLogic {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-
+      var imagesFuture = <Future>[];
       for (var item in data) {
-        var imag = '';
-        var res = await http.get(
-          Uri.parse(item['display']),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-        );
-
-        if (res.statusCode == 200) {
-          imag = jsonDecode(res.body)['image'];
-        }
-        Banner ad = Banner(
-          id: item['id'],
-          url: item['link'],
-          owner: item['owner'],
-          expire_date: item['expire_date'],
-          splashscreen: item['splashscreen'],
-          home: item['home'],
-          display: imag,
-          imgUrl: imag,
-        );
+        imagesFuture.add(fetchImage(item['display']));
+      }
+      List images = await Future.wait(imagesFuture);
+      for (var i = 0; i < data.length; i++) {
+        var item = data[i];
+        Banner ad = createbannerFromData(item, images[i]);
         if (ad.home == true) {
           bannersHomeScreen.add(ad);
         }
@@ -112,6 +97,7 @@ class BannerLogic {
     }
   }
 
+// this banner is not displayed on UI
   Future getBottomBanner() async {
     response = await http.get(
       Uri.parse("$server$_bannerBottom"),
