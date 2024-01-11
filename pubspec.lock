@@ -632,6 +632,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.4"
+  page_transition:
+    dependency: "direct main"
+    description:
+      name: page_transition
+      sha256: dee976b1f23de9bbef5cd512fe567e9f6278caee11f5eaca9a2115c19dc49ef6
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   path:
     dependency: transitive
     description:
@@ -981,14 +989,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  swipebuttonflutter:
+  swipeable_button_view:
     dependency: "direct main"
     description:
-      name: swipebuttonflutter
-      sha256: "7e05c0161c53ea801176ed04eb373bb5adc3cc07f4d35c8043d81783078c2034"
+      name: swipeable_button_view
+      sha256: "6fbe3fe9084d849828fa49bf1f5d48a107f7797e3c7eff41aa61541c0b6d97f2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "0.0.2"
   synchronized:
     dependency: transitive
     description:

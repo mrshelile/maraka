@@ -36,7 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_svg: ^1.1.6
-  swipebuttonflutter: ^1.0.0
+  # swipebuttonflutter: ^1.0.0
   bottom_navy_bar: ^6.0.0
   get: ^4.6.5
   search_widget: ^1.0.2
@@ -80,6 +80,9 @@ dependencies:
   fluttertoast: ^8.2.2
   socket_io_client: ^2.0.3+1
   cached_network_image: ^3.2.3
+  swipeable_button_view: ^0.0.2
+  page_transition: ^2.1.0
+  # flutter_swipe_button: ^2.1.1+1
   # rename_app: ^1.0.0
 
 
