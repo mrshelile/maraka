@@ -22,7 +22,7 @@ class _ProductListState extends State<ProductList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: getProportionateScreenHeight(350, context),
+      height: getProportionateScreenHeight(400, context),
       child: ListView(
         children: [
           Padding(

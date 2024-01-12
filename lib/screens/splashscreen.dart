@@ -225,10 +225,10 @@ class _SplashcreenState extends State<Splashcreen> {
                       Icons.arrow_forward_ios_rounded,
                       color: Color.fromARGB(255, 92, 219, 166),
                     ),
-                    activeColor: Color.fromARGB(255, 153, 193, 226),
+                    activeColor: const Color.fromARGB(255, 153, 193, 226),
                     isFinished: isFinished,
                     onWaitingProcess: () {
-                      Future.delayed(Duration(seconds: 1), () {
+                      Future.delayed(const Duration(seconds: 1), () {
                         setState(() {
                           isFinished = true;
                         });
@@ -245,7 +245,6 @@ class _SplashcreenState extends State<Splashcreen> {
                                     currentIndex: 0,
                                     user: User(),
                                   )));
-                      //TODO: For reverse ripple effect animation
                     },
                   ),
                 )

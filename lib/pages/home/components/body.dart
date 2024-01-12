@@ -31,16 +31,15 @@ class _BodyState extends State<Body> {
         alignment: WrapAlignment.start,
         runAlignment: WrapAlignment.start,
         crossAxisAlignment: WrapCrossAlignment.start,
-        runSpacing: getProportionateScreenHeight(13, context),
+        runSpacing: getProportionateScreenHeight(16, context),
         children: [
-          SizedBox(
-            height: getProportionateScreenHeight(10, context),
+          // HomeHeader(
+          //   owner: widget.owner,
+          // ),
+          Container(
+            height: getProportionateScreenHeight(0, context),
           ),
-          HomeHeader(
-            owner: widget.owner,
-          ),
-          SizedBox(height: getProportionateScreenWidth(10, context)),
-          DiscountBanner(),
+          const DiscountBanner(),
           SizedBox(height: getProportionateScreenWidth(10, context)),
           GetBuilder(
             init: store,
