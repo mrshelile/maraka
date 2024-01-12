@@ -305,18 +305,23 @@ class ProductLogic {
       return products;
     }
 
-    final pivot = products[products.length ~/ 2].createdAt;
+    final pivotIndex = _getMedianOfThree(products);
+    final pivot = products[pivotIndex].createdAt;
+
     final List<Product> left = [];
     final List<Product> middle = [];
     final List<Product> right = [];
 
-    for (final product in products) {
-      if (product.createdAt.isAfter(pivot)) {
-        left.add(product);
-      } else if (product.createdAt == pivot) {
-        middle.add(product);
+    for (int i = 0; i < products.length; i++) {
+      if (i == pivotIndex) {
+        middle.add(products[i]);
       } else {
-        right.add(product);
+        final comparison = products[i].createdAt.compareTo(pivot);
+        if (comparison > 0) {
+          left.add(products[i]);
+        } else {
+          right.add(products[i]);
+        }
       }
     }
 
@@ -325,6 +330,33 @@ class ProductLogic {
       ...middle,
       ..._quicksortByCreatedAt(right)
     ];
+  }
+
+  int _getMedianOfThree(List<Product> products) {
+    const first = 0;
+    final middle = products.length ~/ 2;
+    final last = products.length - 1;
+
+    if ((products[first].createdAt.compareTo(products[middle].createdAt) <= 0 &&
+            products[first].createdAt.compareTo(products[last].createdAt) >=
+                0) ||
+        (products[first].createdAt.compareTo(products[middle].createdAt) >= 0 &&
+            products[first].createdAt.compareTo(products[last].createdAt) <=
+                0)) {
+      return first;
+    } else if ((products[middle]
+                    .createdAt
+                    .compareTo(products[first].createdAt) <=
+                0 &&
+            products[middle].createdAt.compareTo(products[last].createdAt) >=
+                0) ||
+        (products[middle].createdAt.compareTo(products[first].createdAt) >= 0 &&
+            products[middle].createdAt.compareTo(products[last].createdAt) <=
+                0)) {
+      return middle;
+    } else {
+      return last;
+    }
   }
 
   Future<List<Product>> getMyAds(User owner) async {
