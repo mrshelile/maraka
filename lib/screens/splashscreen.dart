@@ -25,6 +25,21 @@ class Splashcreen extends StatefulWidget {
 
 class _SplashcreenState extends State<Splashcreen> {
   User user = User();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Future.delayed(const Duration(seconds: 14), () {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Home(
+                    currentIndex: 0,
+                    user: User(),
+                  )));
+    });
+  }
 
   Widget imageCarousel = Carousel(
     boxFit: BoxFit.fill,
@@ -213,61 +228,39 @@ class _SplashcreenState extends State<Splashcreen> {
                         }
                       },
                     )),
-                SizedBox(
-                  height: MediaQuery.of(context).copyWith().size.height * 0.05,
-                ),
-                Padding(
-                  padding: EdgeInsets.all(
-                      MediaQuery.of(context).copyWith().size.width * 0.1),
-                  child: SwipeableButtonView(
-                    buttonText: 'Swipe To Get Started',
-                    buttonWidget: const Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      color: Color.fromARGB(255, 92, 219, 166),
-                    ),
-                    activeColor: const Color.fromARGB(255, 153, 193, 226),
-                    isFinished: isFinished,
-                    onWaitingProcess: () {
-                      Future.delayed(const Duration(seconds: 1), () {
-                        setState(() {
-                          isFinished = true;
-                        });
-                      });
-                    },
-                    onFinish: () {
-                      setState(() {
-                        isFinished = false;
-                      });
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Home(
-                                    currentIndex: 0,
-                                    user: User(),
-                                  )));
-                    },
-                  ),
-                )
-                // SwipingButton(
-                //   height: MediaQuery.of(context).copyWith().size.width * 0.1,
-                //   text: "Swipe To Get Started",
-                //   padding: EdgeInsets.only(
-                //       left: MediaQuery.of(context).copyWith().size.width * 0.14,
-                //       right:
-                //           MediaQuery.of(context).copyWith().size.width * 0.15),
-                //   swipeButtonColor: MyColors.blue2,
-                //   backgroundColor: MyColors.blue3,
-                //   swipePercentageNeeded: 0.3,
-                //   onSwipeCallback: () {
-                //     Navigator.pushReplacement(
-                //         context,
-                //         MaterialPageRoute(
-                //             builder: (context) => Home(
-                //                   currentIndex: 0,
-                //                   user: User(),
-                //                 )));
-                //   },
-                // ),
+                
+                // Padding(
+                //   padding: EdgeInsets.all(
+                //       MediaQuery.of(context).copyWith().size.width * 0.1),
+                //   child: SwipeableButtonView(
+                //     buttonText: 'Swipe To Get Started',
+                //     buttonWidget: const Icon(
+                //       Icons.arrow_forward_ios_rounded,
+                //       color: Color.fromARGB(255, 92, 219, 166),
+                //     ),
+                //     activeColor: const Color.fromARGB(255, 153, 193, 226),
+                //     isFinished: isFinished,
+                //     onWaitingProcess: () {
+                //       Future.delayed(const Duration(seconds: 1), () {
+                //         setState(() {
+                //           isFinished = true;
+                //         });
+                //       });
+                //     },
+                //     onFinish: () {
+                //       setState(() {
+                //         isFinished = false;
+                //       });
+                //       Navigator.pushReplacement(
+                //           context,
+                //           MaterialPageRoute(
+                //               builder: (context) => Home(
+                //                     currentIndex: 0,
+                //                     user: User(),
+                //                   )));
+                //     },
+                //   ),
+                // )
               ],
             ),
           )

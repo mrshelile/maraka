@@ -27,7 +27,7 @@ class BannerLogic {
     }
   }
 
-  Future getSplashscreen() async {
+  Future<List<Banner>?> getSplashscreen() async {
     response = await http.get(
       Uri.parse("$server$_banner"),
       headers: <String, String>{
@@ -43,6 +43,7 @@ class BannerLogic {
         imagesFuture.add(fetchImage(item['display']));
       }
       List images = await Future.wait(imagesFuture);
+      
       for (int i = 0; i < data.length; i++) {
         var item = data[i];
         Banner ad = createbannerFromData(item, images[i]);
@@ -52,8 +53,8 @@ class BannerLogic {
         }
       }
       bannersSplashScreen.shuffle();
-
-      return response;
+      return bannersSplashScreen;
+      // return response;
     }
   }
 

@@ -31,7 +31,7 @@ class _BodyState extends State<Body> {
         alignment: WrapAlignment.start,
         runAlignment: WrapAlignment.start,
         crossAxisAlignment: WrapCrossAlignment.start,
-        runSpacing: getProportionateScreenHeight(16, context),
+        runSpacing: getProportionateScreenHeight(19, context),
         children: [
           // HomeHeader(
           //   owner: widget.owner,
