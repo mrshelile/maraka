@@ -22,10 +22,13 @@ class StoreController extends GetxController {
     super.onInit();
     final logic = ProductLogic();
     ishomeProductsLoading = true;
-    var res = await logic.getProducts(selectedCategory);
-    setProducts(res);
-    ishomeProductsLoading = false;
-    update();
+    try {
+      var res = await logic.getProducts(selectedCategory);
+      setProducts(res);
+    } finally {
+      ishomeProductsLoading = false;
+      update();
+    }
   }
 
   void pageUp() {
@@ -78,7 +81,7 @@ class StoreController extends GetxController {
     update();
     var logic = ProductLogic();
     ishomeProductsLoading = true;
-      
+
     List<Product> products =
         await logic.getProducts(selectedCategory.toLowerCase());
     setProducts(products);
@@ -123,7 +126,7 @@ class StoreController extends GetxController {
 
   void onchangeCategory(User owner) async {
     var logic = ProductLogic();
-  
+
     List<Product> products1 =
         await logic.getProducts(selectedCategory.toLowerCase());
     setProducts(products1);
@@ -151,9 +154,12 @@ class StoreController extends GetxController {
 
       // products.shuffle();
     }
-
-    products = productsFromdb;
+    if (products != productsFromdb) {
+      products = productsFromdb;
+    }
     pageFilter();
-    update();
+    if (products != productsFromdb) {
+      update();
+    }
   }
 }
