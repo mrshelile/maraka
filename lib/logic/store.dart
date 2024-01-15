@@ -12,6 +12,7 @@ class StoreController extends GetxController {
   List<Product> productsFromdb = [];
   List<Product> products = [];
   List<Product> myProducts = [];
+
   int currentPageProduct = 1;
   int pageStart = 0;
   int pageEnd = pageSize;
@@ -77,6 +78,9 @@ class StoreController extends GetxController {
   }
 
   Future selectCategory(String value, User owner) async {
+    if (selectedCategory != value) {
+      productsFromdb = [];
+    }
     selectedCategory = value;
     update();
     var logic = ProductLogic();
@@ -135,11 +139,10 @@ class StoreController extends GetxController {
     // return products;
   }
 
-  void setProducts(List<Product> data) {
-    productsFromdb = [];
-
-    for (Product element in data) {
-      productsFromdb.add(Product(
+  List<Product> subSetProducts(List<Product> data) {
+    List<Product> results = [];
+    for (var element in data) {
+      var product = Product(
           id1: element.id1,
           views: element.views,
           title: element.title,
@@ -150,16 +153,23 @@ class StoreController extends GetxController {
           seller: element.seller,
           images: element.images,
           car: element.car,
-          category: element.category));
+          category: element.category);
+      bool doesExist = productsFromdb.any((element) =>
+          element.id1 == product.id1 || element.id2 == product.id2);
+      if (!doesExist) {
+        results.add(product);
+      }
+    }
+    return results;
+  }
 
-      // products.shuffle();
+  void setProducts(List<Product> data) {
+    if (selectedCategory == categories[0]['text']) {
+      productsFromdb = subSetProducts(data);
+    } else {
+      subSetProducts(data);
     }
-    if (products != productsFromdb) {
-      products = productsFromdb;
-    }
+
     pageFilter();
-    if (products != productsFromdb) {
-      update();
-    }
   }
 }
