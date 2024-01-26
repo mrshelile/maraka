@@ -51,21 +51,21 @@ class _SplashcreenState extends State<Splashcreen> {
     //   });
     //   showSnackbar();
     // }
-    // Future.delayed(const Duration(seconds: 12), () {
-    //   if (store.productsFromdb.isEmpty) {
-    //     setState(() {
-    //       initError = "No internet restart app";
-    //     });
-    //     showSnackbar();
-    //   }
-    //   Navigator.pushReplacement(
-    //       context,
-    //       MaterialPageRoute(
-    //           builder: (context) => Home(
-    //                 currentIndex: 0,
-    //                 user: User(),
-    //               )));
-    // });
+    Future.delayed(const Duration(seconds: 12), () {
+      if (store.productsFromdb.isEmpty) {
+        setState(() {
+          initError = "No internet restart app";
+        });
+        showSnackbar();
+      }
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Home(
+                    currentIndex: 0,
+                    user: User(),
+                  )));
+    });
   }
 
   void showSnackbar() {
@@ -125,38 +125,19 @@ class _SplashcreenState extends State<Splashcreen> {
                           print("should launch");
                         }
                       },
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height:
-                                MediaQuery.of(context).copyWith().size.height *
-                                    0.35,
-                            child: CachedNetworkImage(
-                              placeholder: (context, url) =>
-                                  const SpinKitThreeInOut(
-                                color: Color.fromARGB(255, 12, 131, 125),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                              // fit:BoxFit.scaleDown,
-                              imageUrl: i.display,
-                            ),
+                      child: SizedBox(
+                        height: MediaQuery.of(context).copyWith().size.height *
+                            0.35,
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) =>
+                              const SpinKitThreeInOut(
+                            color: Color.fromARGB(255, 12, 131, 125),
                           ),
-                          SizedBox(
-                              height: MediaQuery.of(context)
-                                      .copyWith()
-                                      .size
-                                      .height *
-                                  0.05,
-                              child: Text(
-                                i.owner.toString(),
-                                style: TextStyle(
-                                    fontSize: getProportionateScreenWidth(
-                                        17, context)),
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                        ],
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                          // fit:BoxFit.scaleDown,
+                          imageUrl: i.display,
+                        ),
                       ),
                     ),
                   )
@@ -194,7 +175,6 @@ class _SplashcreenState extends State<Splashcreen> {
           SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              
               children: <Widget>[
                 SizedBox(
                   height: MediaQuery.of(context).copyWith().size.height * 0.05,
