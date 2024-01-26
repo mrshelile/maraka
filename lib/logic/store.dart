@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/constants.dart';
@@ -12,22 +14,24 @@ class StoreController extends GetxController {
   List<Product> productsFromdb = [];
   List<Product> products = [];
   List<Product> myProducts = [];
-
   int currentPageProduct = 1;
   int pageStart = 0;
   int pageEnd = pageSize;
   bool ishomeProductsLoading = false;
-
+  String onitError = "";
   @override
   onInit() async {
     super.onInit();
     final logic = ProductLogic();
-    ishomeProductsLoading = true;
+    // ishomeProductsLoading = true;
     try {
       var res = await logic.getProducts(selectedCategory);
       setProducts(res);
+    } catch (e) {
+      onitError = e.toString();
+      update();
     } finally {
-      ishomeProductsLoading = false;
+      // ishomeProductsLoading = false;
       update();
     }
   }
@@ -78,9 +82,6 @@ class StoreController extends GetxController {
   }
 
   Future selectCategory(String value, User owner) async {
-    if (selectedCategory != value) {
-      productsFromdb = [];
-    }
     selectedCategory = value;
     update();
     var logic = ProductLogic();
@@ -139,10 +140,11 @@ class StoreController extends GetxController {
     // return products;
   }
 
-  List<Product> subSetProducts(List<Product> data) {
-    List<Product> results = [];
-    for (var element in data) {
-      var product = Product(
+  void setProducts(List<Product> data) {
+    productsFromdb = [];
+
+    for (Product element in data) {
+      productsFromdb.add(Product(
           id1: element.id1,
           views: element.views,
           title: element.title,
@@ -153,23 +155,16 @@ class StoreController extends GetxController {
           seller: element.seller,
           images: element.images,
           car: element.car,
-          category: element.category);
-      bool doesExist = productsFromdb.any((element) =>
-          element.id1 == product.id1 || element.id2 == product.id2);
-      if (!doesExist) {
-        results.add(product);
-      }
-    }
-    return results;
-  }
+          category: element.category));
 
-  void setProducts(List<Product> data) {
-    if (selectedCategory == categories[0]['text']) {
-      productsFromdb = subSetProducts(data);
-    } else {
-      subSetProducts(data);
+      // products.shuffle();
     }
-
+    if (products != productsFromdb) {
+      products = productsFromdb;
+    }
     pageFilter();
+    if (products != productsFromdb) {
+      update();
+    }
   }
 }

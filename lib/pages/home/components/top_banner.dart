@@ -24,7 +24,7 @@ class _DiscountBannerState extends State<DiscountBanner> {
   @override
   void initState() {
     super.initState();
-    _bannerFuture = makeBanner();
+    // _bannerFuture = makeBanner();
   }
 
   Widget imageCarousel = CarouselSlider(
@@ -108,13 +108,16 @@ class _DiscountBannerState extends State<DiscountBanner> {
     return logic.response;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: makeBanner(),
         builder: ((context, snapshot) {
-          return imageCarousel;
+          return GestureDetector(
+              onTap: () async {
+                setState(() {});
+              },
+              child: imageCarousel);
         }));
   }
 }

@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:maraka/logic/banner_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/size_config.dart';
@@ -15,6 +19,9 @@ import 'package:swipeable_button_view/swipeable_button_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'dart:html' as html;
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:http/http.dart' as http;
+import '../logic/constants.dart';
+import '../logic/store.dart';
 
 class Splashcreen extends StatefulWidget {
   const Splashcreen({Key? key}) : super(key: key);
@@ -25,20 +32,50 @@ class Splashcreen extends StatefulWidget {
 
 class _SplashcreenState extends State<Splashcreen> {
   User user = User();
+  final store = Get.find<StoreController>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String initError = "";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    Future.delayed(const Duration(seconds: 12), () {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Home(
-                    currentIndex: 0,
-                    user: User(),
-                  )));
-    });
+    // try {
+    //   http.get(Uri.parse(server)).timeout(Duration(seconds: 8),
+    //       onTimeout: () async {
+    //     throw TimeoutException('No Internet');
+    //   });
+    // } catch (e) {
+    //   setState(() {
+    //     initError = e.toString();
+    //   });
+    //   showSnackbar();
+    // }
+    // Future.delayed(const Duration(seconds: 12), () {
+    //   if (store.productsFromdb.isEmpty) {
+    //     setState(() {
+    //       initError = "No internet restart app";
+    //     });
+    //     showSnackbar();
+    //   }
+    //   Navigator.pushReplacement(
+    //       context,
+    //       MaterialPageRoute(
+    //           builder: (context) => Home(
+    //                 currentIndex: 0,
+    //                 user: User(),
+    //               )));
+    // });
+  }
+
+  void showSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(initError),
+        duration: const Duration(seconds: 5),
+        backgroundColor: Color.fromARGB(255, 8, 8, 8),
+      ),
+    );
   }
 
   Widget imageCarousel = Carousel(
@@ -56,81 +93,87 @@ class _SplashcreenState extends State<Splashcreen> {
   Future<String> makeBanners() async {
     var logic = BannerLogic();
 
-    var splashscreenFuture = logic.getSplashscreen();
-    await splashscreenFuture;
+    try {
+      var splashscreenFuture = logic.getSplashscreen();
+      await splashscreenFuture;
 
-    if (logic.response != null) {
-      if (logic.response.statusCode == 200) {
-        List imgs = [];
-        // List banner = [];
-        for (var item in logic.bannersSplashScreen) {
-          // bool skip = false;
-          if (item.display != null) {
-            imgs.add(item);
+      if (logic.response != null) {
+        if (logic.response.statusCode == 200) {
+          List imgs = [];
+          // List banner = [];
+          for (var item in logic.bannersSplashScreen) {
+            // bool skip = false;
+            if (item.display != null) {
+              imgs.add(item);
+            }
           }
-        }
-        if (imgs.isNotEmpty) {
-          imageCarousel = Carousel(
-            dotBgColor: Colors.transparent,
-            dotSize: 0,
-            images: logic.bannersSplashScreen
-                .map(
-                  (i) => GestureDetector(
-                    onTap: () async {
-                      // print(i);
-                      // ignore: deprecated_member_use
+          if (imgs.isNotEmpty) {
+            imageCarousel = Carousel(
+              dotBgColor: Colors.transparent,
+              dotSize: 0,
+              images: logic.bannersSplashScreen
+                  .map(
+                    (i) => GestureDetector(
+                      onTap: () async {
+                        // print(i);
+                        // ignore: deprecated_member_use
 
-                      //  html.window.open("http://${i.url}", 'new_tab');
-                      if (!await launchUrl(Uri.parse("http://${i.url}"))) {
-                        print("failed launching");
-                      } else {
-                        print("should launch");
-                      }
-                    },
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height:
-                              MediaQuery.of(context).copyWith().size.height *
-                                  0.35,
-                          child: CachedNetworkImage(
-                            placeholder: (context, url) =>
-                                const SpinKitThreeInOut(
-                              color: Color.fromARGB(255, 12, 131, 125),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                            // fit:BoxFit.scaleDown,
-                            imageUrl: i.display,
-                          ),
-                        ),
-                        SizedBox(
+                        //  html.window.open("http://${i.url}", 'new_tab');
+                        if (!await launchUrl(Uri.parse("http://${i.url}"))) {
+                          print("failed launching");
+                        } else {
+                          print("should launch");
+                        }
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
                             height:
                                 MediaQuery.of(context).copyWith().size.height *
-                                    0.05,
-                            child: Text(
-                              i.owner.toString(),
-                              style: TextStyle(
-                                  fontSize:
-                                      getProportionateScreenWidth(17, context)),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                            ))
-                      ],
+                                    0.35,
+                            child: CachedNetworkImage(
+                              placeholder: (context, url) =>
+                                  const SpinKitThreeInOut(
+                                color: Color.fromARGB(255, 12, 131, 125),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                              // fit:BoxFit.scaleDown,
+                              imageUrl: i.display,
+                            ),
+                          ),
+                          SizedBox(
+                              height: MediaQuery.of(context)
+                                      .copyWith()
+                                      .size
+                                      .height *
+                                  0.05,
+                              child: Text(
+                                i.owner.toString(),
+                                style: TextStyle(
+                                    fontSize: getProportionateScreenWidth(
+                                        17, context)),
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                        ],
+                      ),
                     ),
-                  ),
-                )
-                .toList(),
-          );
-        }
+                  )
+                  .toList(),
+            );
+          }
 
-        return logic.response.toString();
+          return logic.response.toString();
+        } else {
+          debugPrint("not ok status");
+          return "";
+        }
       } else {
-        debugPrint("not ok status");
+        debugPrint("no Response");
         return "";
       }
-    } else {
-      debugPrint("no Response");
+    } catch (e) {
       return "";
     }
     // return '';
@@ -141,6 +184,7 @@ class _SplashcreenState extends State<Splashcreen> {
     // makeBanners();
 
     return Scaffold(
+      key: _scaffoldKey,
       body: Stack(
         children: <Widget>[
           CustomPaint(
@@ -149,6 +193,8 @@ class _SplashcreenState extends State<Splashcreen> {
           ),
           SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              
               children: <Widget>[
                 SizedBox(
                   height: MediaQuery.of(context).copyWith().size.height * 0.05,
@@ -209,10 +255,13 @@ class _SplashcreenState extends State<Splashcreen> {
                   ),
                 ),
                 Container(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).copyWith().size.height * 0.07,
+                    ),
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(50)),
-                    height: MediaQuery.of(context).copyWith().size.height * 0.4,
-                    width: MediaQuery.of(context).copyWith().size.width * 0.6,
+                    height: MediaQuery.of(context).copyWith().size.height * 0.6,
+                    width: MediaQuery.of(context).copyWith().size.width * 0.85,
                     child: FutureBuilder<String>(
                       future: makeBanners(),
                       builder: (context, AsyncSnapshot<String> snapshot) {
@@ -228,39 +277,6 @@ class _SplashcreenState extends State<Splashcreen> {
                         }
                       },
                     )),
-                
-                // Padding(
-                //   padding: EdgeInsets.all(
-                //       MediaQuery.of(context).copyWith().size.width * 0.1),
-                //   child: SwipeableButtonView(
-                //     buttonText: 'Swipe To Get Started',
-                //     buttonWidget: const Icon(
-                //       Icons.arrow_forward_ios_rounded,
-                //       color: Color.fromARGB(255, 92, 219, 166),
-                //     ),
-                //     activeColor: const Color.fromARGB(255, 153, 193, 226),
-                //     isFinished: isFinished,
-                //     onWaitingProcess: () {
-                //       Future.delayed(const Duration(seconds: 1), () {
-                //         setState(() {
-                //           isFinished = true;
-                //         });
-                //       });
-                //     },
-                //     onFinish: () {
-                //       setState(() {
-                //         isFinished = false;
-                //       });
-                //       Navigator.pushReplacement(
-                //           context,
-                //           MaterialPageRoute(
-                //               builder: (context) => Home(
-                //                     currentIndex: 0,
-                //                     user: User(),
-                //                   )));
-                //     },
-                //   ),
-                // )
               ],
             ),
           )
