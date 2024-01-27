@@ -228,7 +228,7 @@ class _SplashcreenState extends State<Splashcreen> {
                       left:
                           MediaQuery.of(context).copyWith().size.width * 0.005,
                       bottom:
-                          MediaQuery.of(context).copyWith().size.height * 0.05),
+                          MediaQuery.of(context).copyWith().size.height * 0.03),
                   child: const Text(
                     "Buy and Sell for free",
                     style: TextStyle(color: MyColors.brown3, fontSize: 22),
@@ -236,11 +236,11 @@ class _SplashcreenState extends State<Splashcreen> {
                 ),
                 Container(
                     padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).copyWith().size.height * 0.07,
+                      top: MediaQuery.of(context).copyWith().size.height * 0.03,
                     ),
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(50)),
-                    height: MediaQuery.of(context).copyWith().size.height * 0.6,
+                    height: MediaQuery.of(context).copyWith().size.height * 0.5,
                     width: MediaQuery.of(context).copyWith().size.width * 0.85,
                     child: FutureBuilder<String>(
                       future: makeBanners(),
