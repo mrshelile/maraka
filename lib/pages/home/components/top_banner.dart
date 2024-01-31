@@ -67,34 +67,26 @@ class _DiscountBannerState extends State<DiscountBanner> {
           }
           imageCarousel = Container(
             decoration: BoxDecoration(
+
               borderRadius: BorderRadius.circular(
                   20), // Adjust the radius as per your requirement
             ),
-            width: double.infinity,
+            // width: double.infinity,
             child: CarouselSlider(
               items: imgs
-                  .map((item) => Container(
-                        width: double.infinity,
-                        margin: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(159, 242, 243, 245),
-                          borderRadius: BorderRadius.circular(20.0),
-                          image: DecorationImage(
-                            image: CachedNetworkImageProvider(item.display),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        child: CachedNetworkImage(
-                          imageUrl: item.display,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              const SpinKitThreeInOut(
-                            color: Color.fromARGB(255, 12, 131, 125),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
-                      ))
+                  .map((item) => ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: CachedNetworkImage(
+                      imageUrl: item.display,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          const SpinKitThreeInOut(
+                        color: Color.fromARGB(255, 12, 131, 125),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+                  ))
                   .toList(),
               options: CarouselOptions(
                   height: 200,
@@ -122,14 +114,10 @@ class _DiscountBannerState extends State<DiscountBanner> {
     return FutureBuilder(
         future: makeBanner(),
         builder: ((context, snapshot) {
-          return GestureDetector(
-              onTap: () async {
-                setState(() {});
-              },
-              child: Container(
-                  margin: EdgeInsets.all(5),
-                  width: MediaQuery.of(context).copyWith().size.width * 1,
-                  child: ClipRRect(borderRadius:BorderRadius.circular(30),child: imageCarousel)));
+          return Container(
+              margin: const EdgeInsets.all(14),
+              width: MediaQuery.of(context).copyWith().size.width * 1,
+              child: imageCarousel);
         }));
   }
 }
