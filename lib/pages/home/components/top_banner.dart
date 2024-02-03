@@ -65,43 +65,35 @@ class _DiscountBannerState extends State<DiscountBanner> {
               imgs.add(item);
             }
           }
-          imageCarousel = Container(
-            decoration: BoxDecoration(
-
-              borderRadius: BorderRadius.circular(
-                  20), // Adjust the radius as per your requirement
-            ),
-            // width: double.infinity,
-            child: CarouselSlider(
-              items: imgs
-                  .map((item) => ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: CachedNetworkImage(
-                      imageUrl: item.display,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          const SpinKitThreeInOut(
-                        color: Color.fromARGB(255, 12, 131, 125),
-                      ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
+          imageCarousel = CarouselSlider(
+            items: imgs
+                .map((item) => ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: CachedNetworkImage(
+                    imageUrl: item.display,
+                    fit: BoxFit.contain,
+                    placeholder: (context, url) =>
+                        const SpinKitThreeInOut(
+                      color: Color.fromARGB(255, 12, 131, 125),
                     ),
-                  ))
-                  .toList(),
-              options: CarouselOptions(
-                  height: 200,
-                  aspectRatio: 15 / 9,
-                  viewportFraction: 1.0,
-                  initialPage: 0,
-                  enableInfiniteScroll: true,
-                  reverse: false,
-                  autoPlay: true,
-                  autoPlayInterval: const Duration(seconds: 3),
-                  autoPlayAnimationDuration: const Duration(microseconds: 200),
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  enlargeCenterPage: true,
-                  scrollDirection: Axis.horizontal),
-            ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
+                ))
+                .toList(),
+            options: CarouselOptions(
+                height: 200,
+                aspectRatio: 15 / 9,
+                viewportFraction: 1.0,
+                initialPage: 0,
+                enableInfiniteScroll: true,
+                reverse: false,
+                autoPlay: true,
+                autoPlayInterval: const Duration(seconds: 3),
+                autoPlayAnimationDuration: const Duration(microseconds: 200),
+                autoPlayCurve: Curves.fastOutSlowIn,
+                enlargeCenterPage: true,
+                scrollDirection: Axis.horizontal),
           );
         }
       }
