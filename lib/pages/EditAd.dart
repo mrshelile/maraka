@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 // import 'package:carousel_pro/carousel_pro.dart';
-import 'package:carousel_pro/carousel_pro.dart';
+// import 'package:carousel_pro/carousel_pro.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -480,18 +480,19 @@ class _EditAdFormState extends State<EditAdForm> {
                     SizedBox(
                         width: width,
                         height: height * 0.3,
-                        child: Carousel(
-                          autoplay: true,
-                          dotBgColor: Colors.transparent,
-                          dotSize: 0,
-                          boxFit: BoxFit.cover,
-                          // borderRadius: true,
-                          images: imageFileList.isEmpty
-                              ? imgs
-                              : imageFileList
-                                  .map((e) => Image.file(e))
-                                  .toList(),
-                        ))
+                        // child: Carousel(
+                        //   autoplay: true,
+                        //   dotBgColor: Colors.transparent,
+                        //   dotSize: 0,
+                        //   boxFit: BoxFit.cover,
+                        //   // borderRadius: true,
+                        //   images: imageFileList.isEmpty
+                        //       ? imgs
+                        //       : imageFileList
+                        //           .map((e) => Image.file(e))
+                        //           .toList(),
+                        // )
+                        )
                   ],
                 ),
                 Padding(

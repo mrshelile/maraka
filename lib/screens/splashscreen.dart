@@ -1,4 +1,4 @@
-import 'package:carousel_pro/carousel_pro.dart';
+// import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maraka/logic/banner_logic.dart';
@@ -26,15 +26,15 @@ class Splashcreen extends StatefulWidget {
 class _SplashcreenState extends State<Splashcreen> {
   User user = User();
 
-  Widget imageCarousel = Carousel(
-    boxFit: BoxFit.fill,
-    dotBgColor: Colors.transparent,
-    dotSize: 0,
-    images: [
-      SvgPicture.asset("assets/undraw_empty_cart_co35.svg"),
-    ],
-    // options: CarouselOptions(),
-  );
+  // Widget imageCarousel = Carousel(
+  //   boxFit: BoxFit.fill,
+  //   dotBgColor: Colors.transparent,
+  //   dotSize: 0,
+  //   images: [
+  //     SvgPicture.asset("assets/undraw_empty_cart_co35.svg"),
+  //   ],
+  //   // options: CarouselOptions(),
+  // );
 
   bool isFinished = false;
 
@@ -55,58 +55,58 @@ class _SplashcreenState extends State<Splashcreen> {
           }
         }
         if (imgs.isNotEmpty) {
-          imageCarousel = Carousel(
-            dotBgColor: Colors.transparent,
-            dotSize: 0,
-            images: logic.bannersSplashScreen
-                .map(
-                  (i) => GestureDetector(
-                    onTap: () async {
-                      // print(i);
-                      // ignore: deprecated_member_use
+          // imageCarousel = Carousel(
+          //   dotBgColor: Colors.transparent,
+          //   dotSize: 0,
+          //   images: logic.bannersSplashScreen
+          //       .map(
+          //         (i) => GestureDetector(
+          //           onTap: () async {
+          //             // print(i);
+          //             // ignore: deprecated_member_use
 
-                      //  html.window.open("http://${i.url}", 'new_tab');
-                      if (!await launchUrl(Uri.parse("http://${i.url}"))) {
-                        print("failed launching");
-                      } else {
-                        print("should launch");
-                      }
-                    },
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height:
-                              MediaQuery.of(context).copyWith().size.height *
-                                  0.35,
-                          child: CachedNetworkImage(
-                            placeholder: (context, url) =>
-                                const SpinKitThreeInOut(
-                              color: Color.fromARGB(255, 12, 131, 125),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                            // fit:BoxFit.scaleDown,
-                            imageUrl: i.display,
-                          ),
-                        ),
-                        SizedBox(
-                            height:
-                                MediaQuery.of(context).copyWith().size.height *
-                                    0.05,
-                            child: Text(
-                              i.owner.toString(),
-                              style: TextStyle(
-                                  fontSize:
-                                      getProportionateScreenWidth(17, context)),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                            ))
-                      ],
-                    ),
-                  ),
-                )
-                .toList(),
-          );
+          //             //  html.window.open("http://${i.url}", 'new_tab');
+          //             if (!await launchUrl(Uri.parse("http://${i.url}"))) {
+          //               print("failed launching");
+          //             } else {
+          //               print("should launch");
+          //             }
+          //           },
+          //           child: Column(
+          //             children: [
+          //               SizedBox(
+          //                 height:
+          //                     MediaQuery.of(context).copyWith().size.height *
+          //                         0.35,
+          //                 child: CachedNetworkImage(
+          //                   placeholder: (context, url) =>
+          //                       const SpinKitThreeInOut(
+          //                     color: Color.fromARGB(255, 12, 131, 125),
+          //                   ),
+          //                   errorWidget: (context, url, error) =>
+          //                       const Icon(Icons.error),
+          //                   // fit:BoxFit.scaleDown,
+          //                   imageUrl: i.display,
+          //                 ),
+          //               ),
+          //               SizedBox(
+          //                   height:
+          //                       MediaQuery.of(context).copyWith().size.height *
+          //                           0.05,
+          //                   child: Text(
+          //                     i.owner.toString(),
+          //                     style: TextStyle(
+          //                         fontSize:
+          //                             getProportionateScreenWidth(17, context)),
+          //                     maxLines: 3,
+          //                     overflow: TextOverflow.ellipsis,
+          //                   ))
+          //             ],
+          //           ),
+          //         ),
+          //       )
+          //       .toList(),
+          // );
         }
 
         return logic.response.toString();
@@ -209,7 +209,8 @@ class _SplashcreenState extends State<Splashcreen> {
                         } else if (snapshot.hasError) {
                           return const SizedBox();
                         } else {
-                          return imageCarousel;
+                          return SizedBox();
+                          // return imageCarousel;
                         }
                       },
                     )),

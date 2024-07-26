@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_pro/carousel_pro.dart';
+// import 'package:carousel_pro/carousel_pro.dart';
 import 'package:maraka/models/banner.dart' as Banner1;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';

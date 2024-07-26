@@ -28,7 +28,7 @@ class CustomAppBar extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(60),
                   ),
-                  primary: MyColors.blue2,
+                  // primary: MyColors.blue2,
                   backgroundColor: Colors.white,
                   padding: EdgeInsets.zero,
                 ),

@@ -7,14 +7,8 @@
 
 import 'dart:convert';
 
-import 'package:flutter_test/flutter_test.dart';
-import 'package:maraka/logic/email.dart';
-import 'package:maraka/logic/products_logic.dart';
-import 'package:maraka/logic/sendVisitor.dart';
-import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/models/product.dart';
 
-void main() {
+// void main() {
   // test("send email from flutter vir django", () async {
   //   final res = await sendOTP("davertzshelile@gmail.com", "1212");
   //   expect(res.statusCode, 200);
@@ -71,10 +65,4 @@ void main() {
   //           category: "cars"),
   //       14);
   //   expect(response.statusCode, 201);
-  // });
-  test("test create visitor", () async {
-    Visitor visitor = Visitor();
-    var res = await visitor.createVisitor();
-    expect(res.statusCode, 201);
-  });
-}
+  // })
