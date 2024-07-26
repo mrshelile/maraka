@@ -1,5 +1,5 @@
+import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_pro/carousel_pro.dart';
 
 class Banner extends StatefulWidget {
   const Banner({Key? key}) : super(key: key);
@@ -11,13 +11,13 @@ class Banner extends StatefulWidget {
 class _BannerState extends State<Banner> {
   @override
   Widget build(BuildContext context) {
-    Widget image_carousel = Carousel(
+    Widget image_carousel = AnotherCarousel(
       images: const [
-    NetworkImage(
-        'https://cdn-images-1.medium.com/max/2000/1*GqdzzfB_BHorv7V2NV7Jgg.jpeg'),
-    NetworkImage(
-        'https://cdn-images-1.medium.com/max/2000/1*wnIEgP1gNMrK5gZU7QS0-A.jpeg'),
-    ExactAssetImage("assets/images/LaunchImage.jpg")
+        NetworkImage(
+            'https://cdn-images-1.medium.com/max/2000/1*GqdzzfB_BHorv7V2NV7Jgg.jpeg'),
+        NetworkImage(
+            'https://cdn-images-1.medium.com/max/2000/1*wnIEgP1gNMrK5gZU7QS0-A.jpeg'),
+        ExactAssetImage("assets/images/LaunchImage.jpg")
       ],
     );
     var width = MediaQuery.of(context).copyWith().size.width;

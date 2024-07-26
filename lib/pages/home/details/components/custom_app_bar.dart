@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/color.dart';
 
-
 class CustomAppBar extends StatelessWidget {
   // final double rating;
 
@@ -16,19 +15,18 @@ class CustomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding:
-            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20,context)),
+        padding: EdgeInsets.symmetric(
+            horizontal: getProportionateScreenWidth(20, context)),
         child: Row(
           children: [
             SizedBox(
-              height: getProportionateScreenWidth(40,context),
-              width: getProportionateScreenWidth(40,context),
+              height: getProportionateScreenWidth(40, context),
+              width: getProportionateScreenWidth(40, context),
               child: TextButton(
                 style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
+                  foregroundColor: MyColors.blue2, shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(60),
                   ),
-                  primary: MyColors.blue2,
                   backgroundColor: Colors.white,
                   padding: EdgeInsets.zero,
                 ),

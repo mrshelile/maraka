@@ -8,7 +8,7 @@ class Recents {
   String? category;
   String? description;
   String? car;
-  Recents({this.name, this.price, this.imgUrl, this.detailUrl,this.car});
+  Recents({this.name, this.price, this.imgUrl, this.detailUrl, this.car});
 
   // static List<Recents> generateFavourites() {
   //   return [

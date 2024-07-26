@@ -1,19 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter_launcher_icons/utils.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/ImageStrapi.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/logic/constants.dart';
+import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 import 'package:uuid/uuid.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
-import 'package:platform_device_id/platform_device_id.dart';
+// import 'package:platform_device_id/platform_device_id.dart';
 import 'package:crypto/crypto.dart';
 
 class ProductLogic {
-  List<Product> products = [];
+  List<Product> products = <Product>[].obs;
   List<Product> myAds = [];
   List<Product> favourites = [];
   final String _allProducts = "/product";
@@ -163,7 +165,7 @@ class ProductLogic {
       required String make,
       required String mileage,
       required String transmition}) async {
-    var uuid = const Uuid();
+    // var uuid = const Uuid();
     Map<String, String> headers = {
       "dataType": "json",
       'Content-Type': 'application/json; charset=UTF-8',
@@ -187,18 +189,17 @@ class ProductLogic {
   // List<Product> getOwnerProducts(List<Product> items) {
   //   return Null;
   // }
-  Future createProductViews(int product) async {
-    String? deviceId = await PlatformDeviceId.getDeviceId;
-
+  Future<http.Response> createProductViews(Product product) async {
+    // String? deviceId = await PlatformDeviceId.getDeviceId;
+    final deviceId = await MobileDeviceIdentifier().getDeviceId();
     var bytes = utf8.encode(deviceId.toString());
 
     var digest = sha256.convert(bytes);
 
-    var data = {"veiwer_hash": digest.toString(), "product": product};
-    var res = await http
+    var data = {"veiwer_hash": digest.toString(), "product": product.id1};
+    final res = await http
         .get(Uri.parse("$server$_productViewer?search=${digest.toString()}"));
-    var response;
-
+    http.Response response;
     if (res.statusCode == 200) {
       if ((jsonDecode(res.body) as List).isEmpty) {
         response = await http.post(
@@ -214,10 +215,19 @@ class ProductLogic {
         return response;
       } else {
         bool found = false;
+        bool veiwerFound = false;
         for (var element in jsonDecode(res.body)) {
-          if (element['product'] == product) {
+          if (element['product'] == product.id1) {
             found = true;
           }
+          if (element['veiwer_hash'] == digest.toString()) {
+            veiwerFound = true;
+            print("hello ***********");
+          }
+        }
+        if (!veiwerFound) {
+          product.views += 1;
+          print("Viewer not found ");
         }
         if (!found) {
           response = await http.post(
@@ -243,73 +253,73 @@ class ProductLogic {
     if (category.toLowerCase() != "All".toLowerCase()) {
       filter = "?search=$category";
     }
+    try {
+      var response = await http.get(
+        Uri.parse(
+            // ignore: prefer_interpolation_to_compose_strings
+            "$server$_allProducts$filter"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
 
-    var response = await http.get(
-      Uri.parse(
-          // ignore: prefer_interpolation_to_compose_strings
-          "$server$_allProducts$filter"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
 
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+        for (var item in data) {
+          var id1 = item['id'];
+          var id2 = item['identifier'];
 
-      for (var item in data) {
-        var id1 = item['id'];
-        var id2 = item['identifier'];
+          var name = item['name'];
+          var createAt = item['created'];
+          var category = item['category'];
+          var description = item['description'];
+          var price = item['price'];
+          var expireDate = item['expire_date'];
+          var owner = item['owner'];
+          Seller seller = Seller(url: owner);
 
-        var name = item['name'];
-        var createAt = item['created'];
-        var category = item['category'];
-        var description = item['description'];
-        var price = item['price'];
-        var expire_date = item['expire_date'];
-        var owner = item['owner'];
-        Seller seller = Seller(url: owner);
+          List imagesJson = item['display'];
+          List<ImageStrapi> images = [];
+          for (var element in imagesJson) {
+            images.add(ImageStrapi(url: element['image']));
+          }
 
-        List imagesJson = item['display'];
-        List<ImageStrapi> images = [];
-        for (var element in imagesJson) {
-          images.add(ImageStrapi(url: element['image']));
+          int viewers = item['viewers'].length;
+
+          if (DateTime.now().isBefore(DateTime.parse(expireDate))) {
+            products.add(Product(
+                views: viewers,
+                id1: id1,
+                id2: id2,
+                title: name,
+                category: category.toString().toLowerCase(),
+                seller: seller,
+                images: images,
+                price: price,
+                car: item['car'],
+                expiryDate: DateTime.parse(expireDate),
+                createdAt: DateTime.parse(createAt),
+                description: description));
+          }
         }
-
-        // var res = await http.get(
-        //   Uri.parse("$server$_productViewer"),
-        //   headers: <String, String>{
-        //     'Content-Type': 'application/json; charset=UTF-8',
-        //   },
-        // );
-        int viewers = item['viewers'].length;
-        // if (res.statusCode == 200) {
-        //   for (var element in jsonDecode(res.body)) {
-        //     if (element['product'] == id1) {
-        //       viewers++;
-        //     }
-        //   }
-        // }
-        if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
-          products.add(Product(
-              views: viewers,
-              id1: id1,
-              id2: id2,
-              title: name,
-              category: category.toString().toLowerCase(),
-              seller: seller,
-              images: images,
-              price: price,
-              car: item['car'],
-              expiryDate: DateTime.parse(expire_date),
-              createdAt: DateTime.parse(createAt),
-              description: description));
-        }
+        // print();
+        return _quicksortByCreatedAt(products);
+      } else {
+        return [];
       }
-      // print();
-      return _quicksortByCreatedAt(products);
-    } else {
-      return [];
+    } catch (e) {
+      Get.snackbar("NETWORK ERROR", "Please check your network Connection",
+          duration: const Duration(minutes: 5),
+          isDismissible: false,
+          icon: const Icon(Icons.error),
+          mainButton: TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text("Ok")));
     }
+    return [];
   }
 
   List<Product> _quicksortByCreatedAt(List<Product> products) {
@@ -361,7 +371,7 @@ class ProductLogic {
         var category = item['category'];
         var description = item['description'];
         var price = item['price'];
-        var expire_date = item['expire_date'];
+        var expireDate = item['expire_date'];
         // var owner = item['owner'];
         Seller seller = Seller(
             fullNames: owner.name,
@@ -390,7 +400,7 @@ class ProductLogic {
         for (var element in imagesJson) {
           images.add(ImageStrapi(url: element['image']));
         }
-        if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
+        if (DateTime.now().isBefore(DateTime.parse(expireDate))) {
           myAds.add(Product(
               views: viewers,
               id1: id1,
@@ -402,7 +412,7 @@ class ProductLogic {
               images: images,
               price: price,
               car: item['car'],
-              expiryDate: DateTime.parse(expire_date),
+              expiryDate: DateTime.parse(expireDate),
               description: description));
         }
       }

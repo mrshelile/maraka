@@ -277,8 +277,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                         Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const Login()));
+                                                builder: (context) => Login()));
                                       } else {
                                         setState(() {
                                           _errorMessage = "failed try again";
@@ -339,7 +338,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const Login()));
+                                          builder: (context) => Login()));
                                 },
                               ),
                             )

@@ -1,12 +1,23 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:convert';
 import 'dart:core';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/logic/email.dart';
 import 'package:otp/otp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class User {
+class UserController extends GetxController {
+  User? _user;
+
+  bool get isAuthenticated => (_user != null || _user?.email != null);
+
+  User? get user => _user;
+}
+
+class User extends GetxController {
   bool canUpdatePassword = false;
   String? name;
   String? email = '';
@@ -17,13 +28,9 @@ class User {
   var otp;
   int id = 0;
   // bool isValidatedAcc = false;
-  // ignore: non_constant_identifier_names
-  bool is_confirmed = false;
-  // ignore: non_constant_identifier_names
-  bool is_blocked = false;
-  // ignore: prefer_typing_uninitialized_variables
+  bool isConfirmed = false;
+  bool isBlocked = false;
   var jwt;
-  // ignore: prefer_typing_uninitialized_variables
   var response;
 
   final _login = "/auth/login/";
@@ -31,6 +38,9 @@ class User {
   final _userUrl = "/list_users";
   final _userPasswordReset = "/reset-password";
   final _updatePasswordUrl = "/update-password";
+
+  bool get isAuthenticated => email != null;
+
   User(
       {this.name,
       this.email,
@@ -38,6 +48,22 @@ class User {
       this.phone2,
       this.password,
       this.jwt});
+
+  void init(User user) {
+    name = user.name;
+    email = user.email;
+    phone1 = user.phone1;
+    phone2 = user.phone2;
+    password = user.password;
+    subscription = user.subscription;
+    otp = user.otp;
+    id = user.id;
+    isConfirmed = user.isConfirmed;
+    isBlocked = user.isBlocked;
+    jwt = user.jwt;
+    response = user.response;
+  }
+
   Future removeAll() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
@@ -149,14 +175,14 @@ class User {
         phone1 = int.parse(jsonDecode(response.body)['user']['phone1']);
       }
 
-      is_blocked = jsonDecode(response.body)['user']['is_active'] ?? false;
-      is_confirmed = jsonDecode(response.body)['user']['validated'] ?? false;
+      isBlocked = jsonDecode(response.body)['user']['is_active'] ?? false;
+      isConfirmed = jsonDecode(response.body)['user']['validated'] ?? false;
       id = jsonDecode(response.body)['user']['id'];
       password = null;
       await _storeToken(jwt);
       await _storeEmail(email.toString());
     }
-  
+
     return response;
     //  if(response.staus)
     //

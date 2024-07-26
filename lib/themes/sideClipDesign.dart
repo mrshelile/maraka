@@ -14,10 +14,10 @@ class TopRightClip1 extends CustomPainter {
         begin: Alignment.topLeft,
         end: Alignment.centerRight,
         colors: [MyColors.blue3, MyColors.blue1]).createShader(rect);
-    
+
     path.moveTo(size.width * 0.5, 0);
     path.quadraticBezierTo(
-        size.width*0.5, size.height * 0.3, size.width, size.height*0.3);
+        size.width * 0.5, size.height * 0.3, size.width, size.height * 0.3);
     // path.quadraticBezierTo(
     //     size.width, 0, size.width, 0);
     //     path.quadraticBezierTo(
@@ -35,6 +35,7 @@ class TopRightClip1 extends CustomPainter {
     return true;
   }
 }
+
 class TopRightClip2 extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -48,10 +49,10 @@ class TopRightClip2 extends CustomPainter {
         begin: Alignment.topLeft,
         end: Alignment.centerRight,
         colors: [MyColors.blue1, MyColors.blue3]).createShader(rect);
-    
+
     path.moveTo(size.width * 0.52, 0);
     path.quadraticBezierTo(
-        size.width*0.6, size.height * 0.3, size.width, size.height*0.28);
+        size.width * 0.6, size.height * 0.3, size.width, size.height * 0.28);
     // path.quadraticBezierTo(
     //     size.width, 0, size.width, 0);
     //     path.quadraticBezierTo(

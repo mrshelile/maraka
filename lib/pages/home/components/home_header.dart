@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:maraka/logic/user_logic.dart';
 
 import '../../../size_config.dart';
 import 'search_field.dart';
 
+// ignore: must_be_immutable
 class HomeHeader extends StatelessWidget {
-  User owner;
-  HomeHeader({Key? key, required this.owner}) : super(key: key);
+  const HomeHeader({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: getProportionateScreenWidth(38, context)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      margin: EdgeInsets.only(top: getProportionateScreenWidth(10, context)),
+      // padding: EdgeInsets.symmetric(
+      //     vertical: getProportionateScreenWidth(10, context),
+      //     horizontal: getProportionateScreenWidth(40, context)),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SearchField(owner: owner,),
+          SearchField(
+              // owner: owner,
+              ),
         ],
       ),
     );

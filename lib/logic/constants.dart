@@ -18,9 +18,9 @@ List<Map<String, dynamic>> categories = [
   {"icon": "assets/mindeset.svg", "text": "Miscellaneous"},
 ];
 int pageSize = 50;
-var server = "https://maraka.co.ls/buyandsellDjango-apis";
+// var server = "https://maraka.co.ls/buyandsellDjango-apis";
 // var server = "http://10.4.5.220:8000/buyandsellDjango-apis";
-// var server = "https://ntateshelile.pythonanywhere.com/buyandsellDjango-apis";
+var server = "https://ntateshelile.pythonanywhere.com/buyandsellDjango-apis";
 // var ws_server = "http://192.168.0.100:3000";
 const kAnimationDuration = Duration(milliseconds: 200);
 

@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/screens/EnterOTP.dart';
+import 'package:maraka/screens/enter_opt.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/login.dart';
 import 'package:maraka/themes/color.dart';
@@ -20,9 +21,9 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
-  String _errorMessage='';
-    bool _loading = false;
-      final _loader = const SpinKitFoldingCube(
+  String _errorMessage = '';
+  bool _loading = false;
+  final _loader = const SpinKitFoldingCube(
     color: MyColors.blue3,
     size: 80,
     // duration: Duration(milliseconds: 1000),
@@ -46,24 +47,27 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(
-                            left:
-                                MediaQuery.of(context).copyWith().size.width * 0.05,
+                            left: MediaQuery.of(context).copyWith().size.width *
+                                0.05,
                             top: MediaQuery.of(context).copyWith().size.height *
                                 0.2),
                         child: SizedBox(
                           height:
-                              MediaQuery.of(context).copyWith().size.height * 0.3,
-                          width: MediaQuery.of(context).copyWith().size.width * 0.6,
+                              MediaQuery.of(context).copyWith().size.height *
+                                  0.3,
+                          width: MediaQuery.of(context).copyWith().size.width *
+                              0.6,
                           child: SvgPicture.asset("assets/update.svg",
                               semanticsLabel: "update Image"),
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            left:
-                                MediaQuery.of(context).copyWith().size.width * 0.1),
+                            left: MediaQuery.of(context).copyWith().size.width *
+                                0.1),
                         child: SizedBox(
-                          width: MediaQuery.of(context).copyWith().size.width * 0.8,
+                          width: MediaQuery.of(context).copyWith().size.width *
+                              0.8,
                           child: TextFormField(
                             controller: _emailController,
                             decoration: const InputDecoration(
@@ -94,11 +98,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           ),
                         ),
                       ),
-                  
                       Padding(
                         padding: EdgeInsets.only(
-                            left:
-                                MediaQuery.of(context).copyWith().size.width * 0.1,
+                            left: MediaQuery.of(context).copyWith().size.width *
+                                0.1,
                             top: MediaQuery.of(context).copyWith().size.height *
                                 0.01),
                         child: Text(
@@ -108,13 +111,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ),
                       Padding(
                           padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).copyWith().size.width *
-                                  0.3,
-                              top: MediaQuery.of(context).copyWith().size.height *
+                              left:
+                                  MediaQuery.of(context).copyWith().size.width *
+                                      0.3,
+                              top: MediaQuery.of(context)
+                                      .copyWith()
+                                      .size
+                                      .height *
                                   0.04),
                           child: Container(
                             width:
-                                MediaQuery.of(context).copyWith().size.width * 0.35,
+                                MediaQuery.of(context).copyWith().size.width *
+                                    0.35,
                             decoration: BoxDecoration(
                                 color: MyColors.blue3,
                                 boxShadow: [
@@ -131,59 +139,53 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 if (_formKey.currentState!.validate()) {
                                   User? tempUser =
                                       User(email: _emailController.text.trim());
-                                    setState(() {
+                                  setState(() {
                                     _loading = true;
                                   });
-                                 try {
-                                      await tempUser.resetPassword().timeout(const Duration(seconds: 20),
+                                  try {
+                                    await tempUser.resetPassword().timeout(
+                                        const Duration(seconds: 20),
                                         onTimeout: () => throw TimeoutException(
                                             'Can\'t send email'));
-                                  if (tempUser.canUpdatePassword) {
-                                    setState(() {
-                                      _errorMessage ="";
-                                       _loading = false;
-                                    });
-                                    // ignore: avoid_print
-                                    print(tempUser.canUpdatePassword);
-                                    // ignore: use_build_context_synchronously
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => OTP(
-                                                  user: tempUser!,
-                                                  isRegister: false,
-                                                )));
-                                  }
-                                  else{
-                                    setState(() {
-                                      _errorMessage ="email does not exist";
-                                          _loading = false;
-                                    });
-                               
+                                    if (tempUser.canUpdatePassword) {
+                                      setState(() {
+                                        _errorMessage = "";
+                                        _loading = false;
+                                      });
+                                      // ignore: avoid_print
+                                      print(tempUser.canUpdatePassword);
+                                      Get.off(() => OTP(
+                                            user: tempUser!,
+                                            isRegister: false,
+                                          ));
+                                    } else {
+                                      setState(() {
+                                        _errorMessage = "email does not exist";
+                                        _loading = false;
+                                      });
                                     }
-                                 } catch (error) {
+                                  } catch (error) {
                                     setState(() {
                                       _errorMessage =
                                           "failed!! check if your email is correct";
                                       _loading = false;
-                                
-                                      tempUser= null;
+
+                                      tempUser = null;
                                     });
-                                 }
-                               
+                                  }
                                 }
                               },
                               child: const Text(
                                 "Reset",
-                                style: TextStyle(color: Colors.white, fontSize: 15),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 15),
                               ),
                             ),
                           )),
-                   
                       Padding(
                         padding: EdgeInsets.only(
-                            left:
-                                MediaQuery.of(context).copyWith().size.width * 0.25,
+                            left: MediaQuery.of(context).copyWith().size.width *
+                                0.25,
                             top: MediaQuery.of(context).copyWith().size.height *
                                 0.01),
                         child: Row(
@@ -194,19 +196,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left:
-                                      MediaQuery.of(context).copyWith().size.width *
-                                          0.01),
+                                  left: MediaQuery.of(context)
+                                          .copyWith()
+                                          .size
+                                          .width *
+                                      0.01),
                               child: TextButton(
                                 child: const Text(
                                   "Login",
                                   style: TextStyle(color: MyColors.blue3),
                                 ),
                                 onPressed: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const Login()));
+                                  Get.off(() => Login());
                                 },
                               ),
                             )
@@ -216,14 +217,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ],
                   ),
                   if (_loading)
-                  Container(
-                    width: MediaQuery.of(context).copyWith().size.width,
-                    height: MediaQuery.of(context).copyWith().size.height,
-                    color: Colors.white.withOpacity(0.92),
-                    child: Center(
-                      child: _loader,
+                    Container(
+                      width: MediaQuery.of(context).copyWith().size.width,
+                      height: MediaQuery.of(context).copyWith().size.height,
+                      color: Colors.white.withOpacity(0.92),
+                      child: Center(
+                        child: _loader,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),

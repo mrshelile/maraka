@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:maraka/logic/products_logic.dart';
-
 import 'package:maraka/logic/store.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
@@ -10,6 +9,7 @@ import 'package:get/get.dart';
 import '../../../size_config.dart';
 import 'section_title.dart';
 
+// ignore: must_be_immutable
 class PopularProducts extends StatefulWidget {
   User owner;
   PopularProducts({Key? key, required this.owner}) : super(key: key);
@@ -24,8 +24,8 @@ class _PopularProductsState extends State<PopularProducts> {
   Future<List<Product>> makeProductList() async {
     var logic = ProductLogic();
 
-    List<Product> products = await logic.getProducts(
-        store.selectedCategory.toLowerCase());
+    List<Product> products =
+        await logic.getProducts(store.selectedCategory.toLowerCase());
     store.setProducts(products);
     return products;
   }
@@ -73,7 +73,8 @@ class _PopularProductsState extends State<PopularProducts> {
                                                 .toLowerCase()
                                                 .toString())
                                         ? ProductCard(
-                                            product: store.productsFromdb[index])
+                                            product:
+                                                store.productsFromdb[index])
                                         : Container();
                                 // return const SizedBox
                                 //     .shrink(); // here by default width and height is 0

@@ -2,13 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:maraka/logic/banner_logic.dart';
-import 'package:maraka/logic/constants.dart';
-import 'package:maraka/logic/sendVisitor.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+// import 'dart:html' as html;
 import '../../../size_config.dart';
 import 'section_title.dart';
 
+// ignore: must_be_immutable
 class FeacturedAds extends StatelessWidget {
   FeacturedAds({
     Key? key,
@@ -49,6 +48,7 @@ class FeacturedAds extends StatelessWidget {
                           image: item.imgUrl,
                           name: item.owner,
                           press: () async {
+                            // html.window.open("http://${item.url}", 'new_tab');
                             await launchUrl(Uri.parse("http://" + item.url));
                           },
                         ),

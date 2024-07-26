@@ -25,7 +25,6 @@ Future verifyOTP(User user, otp) async {
       .get(Uri.parse("$server$_userUrl?search=${user.email.toString()}"));
 
   if (response.statusCode == 200) {
- 
     if (jsonDecode(response.body).isNotEmpty) {
       if (jsonDecode(response.body)[0]['otp'].toString() == otp.toString()) {
         isvalid = true;

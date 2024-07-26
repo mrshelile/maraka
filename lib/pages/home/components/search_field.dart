@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/store.dart';
-import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/themes/color.dart';
 
 import '../../../size_config.dart';
 
+// ignore: must_be_immutable
 class SearchField extends StatefulWidget {
-  User owner;
-  SearchField({Key? key, required this.owner}) : super(key: key);
+  const SearchField({Key? key}) : super(key: key);
 
   @override
   State<SearchField> createState() => _SearchFieldState();
 }
 
 class _SearchFieldState extends State<SearchField> {
-  final store = Get.find<StoreController>();
+  final StoreController store = Get.find();
   @override
   void initState() {
     store.search = "";

@@ -1,15 +1,10 @@
-import 'dart:math';
-import 'dart:ui';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/store.dart';
 import 'package:maraka/models/product.dart';
-import 'package:maraka/pages/home/details/details_screen.dart';
-import 'package:maraka/screens/componets/productPreview.dart';
-import 'package:maraka/size_config.dart';
+import 'package:maraka/screens/componets/product_preview.dart';
 import 'package:maraka/themes/color.dart';
 
 // import 'Product.dart';
@@ -32,14 +27,14 @@ class ListProductCard extends StatelessWidget {
         builder: (controller) {
           return GestureDetector(
             onTap: () async {
-              await logic.createProductViews(product.id1);
-              // ignore: use_build_context_synchronously
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ProductPreview(
-                            product: product,
-                          )));
+              await logic.createProductViews(product);
+              Get.to(() => ProductPreview(product: product));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => ProductPreview(
+              //               product: product,
+              //             )));
             },
             child: Padding(
               padding: EdgeInsets.only(
@@ -47,7 +42,7 @@ class ListProductCard extends StatelessWidget {
               child: Container(
                   width: width * 0.3,
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 226, 226, 226),
+                    color: const Color.fromARGB(255, 226, 226, 226),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Stack(
@@ -57,7 +52,7 @@ class ListProductCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AspectRatio(
-                            aspectRatio: 0.8,
+                            aspectRatio: 0.83,
                             child: Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
@@ -78,7 +73,7 @@ class ListProductCard extends StatelessWidget {
                             aspectRatio: 3,
                             child: Container(
                               // color: Colors.redAccent,
-                              padding: EdgeInsets.only(left: 5),
+                              padding: const EdgeInsets.only(left: 5),
                               child: Wrap(
                                 // direction: Axis.vertical,
                                 alignment: WrapAlignment.start,
@@ -105,7 +100,9 @@ class ListProductCard extends StatelessWidget {
                                           fontWeight: FontWeight.w500),
                                     ),
                                   ),
-                                  SizedBox(height: 3,),
+                                  const SizedBox(
+                                    height: 3,
+                                  ),
                                   SizedBox(
                                     width: width * 0.6,
                                     child: Text(
@@ -139,12 +136,14 @@ class ListProductCard extends StatelessWidget {
                         child: badges.Badge(
                           badgeStyle: const badges.BadgeStyle(
                               badgeColor: MyColors.blue3),
-                          badgeContent: Text(
-                            product.views <= 99
-                                ? product.views.toString()
-                                : "99+",
-                            style: const TextStyle(
-                                fontSize: 12, color: Colors.white),
+                          badgeContent: Obx(
+                            () => Text(
+                              product.views <= 99
+                                  ? product.views.toString()
+                                  : "99+",
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.white),
+                            ),
                           ),
                           child: const Icon(
                             Icons.visibility_rounded,

@@ -22,7 +22,9 @@ class Body extends StatelessWidget {
                 product: product,
                 pressOnSeeMore: () {},
               ),
-              SizedBox(height: MediaQuery.of(context).copyWith().size.height*0.05,)
+              SizedBox(
+                height: MediaQuery.of(context).copyWith().size.height * 0.05,
+              )
             ],
           ),
         ),

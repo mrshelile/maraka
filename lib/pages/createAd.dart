@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/exceptions/exceptions.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
@@ -116,8 +117,8 @@ class _CreateAdState extends State<CreateAd> {
       ),
     );
     Widget UploadField = GestureDetector(
-      onTap: (){
-         selectImages();
+      onTap: () {
+        selectImages();
       },
       child: Container(
         padding: EdgeInsets.only(left: width * 0.1, top: height * 0.005),
@@ -132,10 +133,10 @@ class _CreateAdState extends State<CreateAd> {
               color: MyColors.brown2,
               size: width * 0.04,
             ),
-            labelStyle: TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
+            labelStyle:
+                TextStyle(color: MyColors.brown3, fontSize: width * 0.04),
             labelText: 'Chosse Image',
           ),
-         
         ),
       ),
     );
@@ -387,8 +388,8 @@ class _CreateAdState extends State<CreateAd> {
                             var response = await logic
                                 .postProduct(
                                     Product(
-                                      id1: 0,
-                                      views: 0,
+                                        id1: 0,
+                                        views: 0,
                                         title: _nameController.text.trim(),
                                         description:
                                             _descriptionController.text.trim(),
@@ -416,13 +417,14 @@ class _CreateAdState extends State<CreateAd> {
                               }
 
                               if (!mounted) return;
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Home(
-                                            user: widget.owner,
-                                            currentIndex: 1,
-                                          )));
+                              Get.off(() => Home(currentIndex: 1));
+                              // Navigator.pushReplacement(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => Home(
+                              //               user: widget.owner,
+                              //               currentIndex: 1,
+                              //             )));
                               // Navigator.pop(context);
                             } else {
                               throw Exception("product not created");

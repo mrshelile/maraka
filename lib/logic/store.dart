@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
-import 'package:maraka/pages/home/components/List_productPage.dart';
 
 class StoreController extends GetxController {
-  var selectedCategory = "Cars";
+  final _selectedCategory = "Cars".obs;
   var search = '';
   List<Product> productsFromdb = [];
   List<Product> products = [];
@@ -16,6 +14,12 @@ class StoreController extends GetxController {
   int pageStart = 0;
   int pageEnd = pageSize;
   bool ishomeProductsLoading = false;
+
+  String get selectedCategory => _selectedCategory.value;
+
+  set selectedCategory(String value) {
+    _selectedCategory.value = value;
+  }
 
   @override
   onInit() async {
@@ -78,7 +82,7 @@ class StoreController extends GetxController {
     update();
     var logic = ProductLogic();
     ishomeProductsLoading = true;
-      
+
     List<Product> products =
         await logic.getProducts(selectedCategory.toLowerCase());
     setProducts(products);
@@ -123,7 +127,7 @@ class StoreController extends GetxController {
 
   void onchangeCategory(User owner) async {
     var logic = ProductLogic();
-  
+
     List<Product> products1 =
         await logic.getProducts(selectedCategory.toLowerCase());
     setProducts(products1);

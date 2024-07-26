@@ -66,7 +66,7 @@ class _OTPState extends State<OTP> {
                         child: SizedBox(
                           width: MediaQuery.of(context).copyWith().size.width *
                               0.8,
-                          child: Text("Check email for OTP code"),
+                          child: const Text("Check email for OTP code"),
                         ),
                       ),
                       Padding(
@@ -141,7 +141,7 @@ class _OTPState extends State<OTP> {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const Login()));
+                                          builder: (context) => Login()));
                                 }
                               } else {
                                 // ignore: duplicate_ignore
@@ -198,7 +198,7 @@ class _OTPState extends State<OTP> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Login()));
+                                      builder: (context) => Login()));
                             },
                           ),
                         )

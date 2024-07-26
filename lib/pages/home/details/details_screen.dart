@@ -3,9 +3,10 @@ import 'package:maraka/models/product.dart';
 import 'components/body.dart';
 import 'components/custom_app_bar.dart';
 
+// ignore: must_be_immutable
 class DetailsScreen extends StatefulWidget {
   Product agrs;
-  DetailsScreen({Key? key,required this.agrs}) : super(key: key);
+  DetailsScreen({Key? key, required this.agrs}) : super(key: key);
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();

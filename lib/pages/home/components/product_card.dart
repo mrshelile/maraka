@@ -2,8 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:maraka/models/product.dart';
-import 'package:maraka/pages/home/details/details_screen.dart';
-import 'package:maraka/screens/componets/productPreview.dart';
+import 'package:maraka/screens/componets/product_preview.dart';
 import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/color.dart';
 

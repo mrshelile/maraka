@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:maraka/models/ImageStrapi.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,7 +18,14 @@ class Product {
   var expiryDate;
   List<int>? imageUrls;
   var car;
-  int views = 0;
+  final RxInt _views = 0.obs;
+
+  set views(int value) {
+    _views.value = value;
+  }
+
+  int get views => _views.value;
+
   Product(
       {required this.title,
       required this.description,
@@ -26,16 +34,18 @@ class Product {
       this.car,
       this.createdAt,
       this.imageUrls,
-      required this.views,
+      required int views,
       required this.expiryDate,
       required this.id2,
       required this.seller,
       required this.images,
-      required this.category});
+      required this.category}) {
+    this.views = views;
+  }
   @override
   String toString() {
     // TODO: implement toString
-    return title??car['model'];
+    return title ?? car['model'];
   }
 }
 
