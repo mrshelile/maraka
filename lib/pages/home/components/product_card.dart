@@ -46,14 +46,14 @@ class ProductCard extends StatelessWidget {
                     color: const Color.fromARGB(255, 226, 226, 226),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Stack(
+                  child: Column(
                     children: [
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AspectRatio(
-                            aspectRatio: 0.8,
+                            aspectRatio: 0.9,
                             child: Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
@@ -84,7 +84,7 @@ class ProductCard extends StatelessWidget {
                                 // crossAxisAlignment: WrapCrossAlignment.center,
                                 // textDirection: TextDirection.rtl,
                                 // verticalDirection: VerticalDirection.up,
-                                children: <Widget>[
+                                children: [
                                   SizedBox(
                                     width: width * 0.453,
                                     child: Text(
@@ -117,40 +117,45 @@ class ProductCard extends StatelessWidget {
                                       style: TextStyle(fontSize: width * 0.04),
                                     ),
                                   ),
-                                  Text(
-                                    "M${product.price.toString()}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: MyColors.blue2,
-                                        fontSize: width * 0.04),
-                                  ),
                                 ],
                               ),
                             ),
                           )
                         ],
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 3,
-                        child: badges.Badge(
-                          badgeStyle: const badges.BadgeStyle(
-                              badgeColor: MyColors.blue3),
-                          badgeContent: Text(
-                            product.views <= 99
-                                ? product.views.toString()
-                                : "99+",
-                            style: const TextStyle(
-                                fontSize: 12, color: Colors.white),
-                          ),
-                          child: const Icon(
-                            Icons.visibility_rounded,
-                            size: 25,
-                            color: MyColors.green2,
-                          ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Row(
+                          // mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "M${product.priceStr}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: MyColors.blue2,
+                                  fontSize: width * 0.04),
+                            ),
+                            badges.Badge(
+                              badgeStyle: const badges.BadgeStyle(
+                                  badgeColor: MyColors.blue3),
+                              badgeContent: Text(
+                                product.views <= 99
+                                    ? product.views.toString()
+                                    : "99+",
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                              ),
+                              child: const Icon(
+                                Icons.visibility_rounded,
+                                size: 25,
+                                color: MyColors.green2,
+                              ),
+                            ),
+                          ],
                         ),
-                      )
+                      ),
                     ],
                   )),
             ),

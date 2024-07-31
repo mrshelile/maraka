@@ -18,6 +18,21 @@ class Product {
   List<int>? imageUrls;
   var car;
   int views = 0;
+
+  String get priceStr {
+    String pStr = price.toString();
+    String a = '';
+    int start = pStr.length - 3;
+    if (start <= 0) {
+      return pStr;
+    }
+    for (; start > 0; start -= 3) {
+      a = " ${pStr.substring(start, start + 3)}$a";
+    }
+    a = "${pStr.substring(0, start + 3)}$a";
+    return a;
+  }
+
   Product(
       {required this.title,
       required this.description,
@@ -35,7 +50,7 @@ class Product {
   @override
   String toString() {
     // TODO: implement toString
-    return title??car['model'];
+    return title ?? car['model'];
   }
 }
 
