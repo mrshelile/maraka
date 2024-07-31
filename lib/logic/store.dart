@@ -1,13 +1,12 @@
-import 'dart:async';
-
 import 'package:get/get.dart';
-import 'package:maraka/logic/constants.dart';
-import 'package:maraka/logic/products_logic.dart';
-import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/models/product.dart';
+
+import '../models/product.dart';
+import 'constants.dart';
+import 'products_logic.dart';
+import 'user_logic.dart';
 
 class StoreController extends GetxController {
-  var selectedCategory = "Cars";
+  final _selectedCategory = "Cars".obs;
   var search = '';
   List<Product> productsFromdb = [];
   List<Product> products = [];
@@ -16,22 +15,22 @@ class StoreController extends GetxController {
   int pageStart = 0;
   int pageEnd = pageSize;
   bool ishomeProductsLoading = false;
-  String onitError = "";
+
+  String get selectedCategory => _selectedCategory.value;
+
+  set selectedCategory(String value) {
+    _selectedCategory.value = value;
+  }
+
   @override
   onInit() async {
     super.onInit();
     final logic = ProductLogic();
-    // ishomeProductsLoading = true;
-    try {
-      var res = await logic.getProducts(selectedCategory);
-      setProducts(res);
-    } catch (e) {
-      onitError = e.toString();
-      update();
-    } finally {
-      // ishomeProductsLoading = false;
-      update();
-    }
+    ishomeProductsLoading = true;
+    var res = await logic.getProducts(selectedCategory);
+    setProducts(res);
+    ishomeProductsLoading = false;
+    update();
   }
 
   void pageUp() {
@@ -157,12 +156,9 @@ class StoreController extends GetxController {
 
       // products.shuffle();
     }
-    if (products != productsFromdb) {
-      products = productsFromdb;
-    }
+
+    products = productsFromdb;
     pageFilter();
-    if (products != productsFromdb) {
-      update();
-    }
+    update();
   }
 }

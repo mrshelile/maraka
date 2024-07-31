@@ -3,10 +3,9 @@ import 'package:get/get.dart';
 import 'package:maraka/logic/store.dart';
 
 import '../../../size_config.dart';
-import 'back_temp_list_product.dart';
 import 'categories.dart';
+import 'products_grid.dart';
 import 'top_banner.dart';
-import 'home_header.dart';
 
 // ignore: must_be_immutable
 class Body extends StatefulWidget {
@@ -26,11 +25,11 @@ class _BodyState extends State<Body> {
       child: Wrap(
         runSpacing: getProportionateScreenHeight(8, context),
         children: [
-          const HomeHeader(),
+          // const HomeHeader(),
           SizedBox(height: getProportionateScreenWidth(8, context)),
           const DiscountBanner(),
           SizedBox(height: getProportionateScreenWidth(8, context)),
-          const Categories(),
+          Categories(),
           const ProductList(),
         ],
       ),
