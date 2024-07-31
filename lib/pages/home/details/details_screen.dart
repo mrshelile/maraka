@@ -4,8 +4,8 @@ import 'components/body.dart';
 import 'components/custom_app_bar.dart';
 
 class DetailsScreen extends StatefulWidget {
-  Product agrs;
-  DetailsScreen({Key? key,required this.agrs}) : super(key: key);
+  final Product agrs;
+  const DetailsScreen({Key? key, required this.agrs}) : super(key: key);
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -20,7 +20,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       backgroundColor: const Color(0xFFF5F6F9),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-        child: CustomAppBar(),
+        child: const CustomAppBar(),
       ),
       body: Body(product: widget.agrs),
     );

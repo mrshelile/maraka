@@ -2,8 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:maraka/models/product.dart';
-import 'package:maraka/pages/home/details/details_screen.dart';
-import 'package:maraka/screens/componets/productPreview.dart';
+import 'package:maraka/screens/componets/product_preview.dart';
 import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/color.dart';
 
@@ -45,7 +44,7 @@ class ProductCard extends StatelessWidget {
                       EdgeInsets.all(getProportionateScreenWidth(20, context)),
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: Color.fromARGB(68, 102, 99, 99),
+                        color: const Color.fromARGB(68, 102, 99, 99),
                         width: 0.8,
                         style: BorderStyle.solid),
                     color: const Color.fromARGB(221, 199, 211, 211)

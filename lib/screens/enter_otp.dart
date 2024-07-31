@@ -1,8 +1,7 @@
-// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
-
+import 'package:get/get.dart';
 import 'package:maraka/logic/email.dart';
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/screens/updatePassword.dart';
+import 'package:maraka/screens/update_password.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/login.dart';
 import 'package:maraka/themes/color.dart';
@@ -17,7 +16,7 @@ class OTP extends StatefulWidget {
       : super(key: key);
 
   @override
-  _OTPState createState() => _OTPState();
+  State<OTP> createState() => _OTPState();
 }
 
 class _OTPState extends State<OTP> {
@@ -64,9 +63,8 @@ class _OTPState extends State<OTP> {
                             left: MediaQuery.of(context).copyWith().size.width *
                                 0.1),
                         child: SizedBox(
-                          width: MediaQuery.of(context).copyWith().size.width *
-                              0.8,
-                          child: Text("Check email for OTP code"),
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: const Text("Check email for OTP code"),
                         ),
                       ),
                       Padding(
@@ -138,10 +136,11 @@ class _OTPState extends State<OTP> {
                               if (widget.isRegister && isvalid) {
                                 var res = await validateAcc(widget.user);
                                 if (res.statusCode == 200) {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const Login()));
+                                  Get.off(() => const Login());
+                                  // Navigator.pushReplacement(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => Login()));
                                 }
                               } else {
                                 // ignore: duplicate_ignore
@@ -150,13 +149,18 @@ class _OTPState extends State<OTP> {
                                     _errorMessage = "";
                                   });
 
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => UpdatePassword(
-                                                user: widget.user,
-                                                OTP: _otpController.text.trim(),
-                                              )));
+                                  Get.off(() => UpdatePassword(
+                                        user: widget.user,
+                                        otp: _otpController.text.trim(),
+                                      ));
+
+                                  // Navigator.pushReplacement(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => UpdatePassword(
+                                  //               user: widget.user,
+                                  //               otp: _otpController.text.trim(),
+                                  //             )));
                                 } else {
                                   setState(() {
                                     _errorMessage = "OTP is incorrect";
@@ -198,7 +202,7 @@ class _OTPState extends State<OTP> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Login()));
+                                      builder: (context) => Login()));
                             },
                           ),
                         )

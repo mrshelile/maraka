@@ -4,7 +4,6 @@ import 'package:maraka/logic/store.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/size_config.dart';
 
-
 class ProductDescription extends StatelessWidget {
   ProductDescription({
     Key? key,
@@ -21,37 +20,47 @@ class ProductDescription extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20,context)),
+          padding: EdgeInsets.symmetric(
+              horizontal: getProportionateScreenWidth(20, context)),
           child: Text(
             product.title.toString(),
-            style: Theme.of(context).textTheme.headline6,
+            // style: Theme.of(context).textTheme.headline6,
           ),
         ),
         Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20,context)),
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: MediaQuery.of(context).copyWith().size.height*0.02,),
-              Text(product.seller!.fullNames.toString(),style: const TextStyle(color: Colors.black),),
-              Text(product.seller!.email.toString(),style: const TextStyle(color: Colors.black),),
-              Text(product.seller!.phone1.toString(),style: const TextStyle(color: Colors.black),),
-              SizedBox(height: MediaQuery.of(context).copyWith().size.height*0.01,),
-            ],
-          )
-        ),
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(20, context)),
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: MediaQuery.of(context).copyWith().size.height * 0.02,
+                ),
+                Text(
+                  product.seller!.fullNames.toString(),
+                  style: const TextStyle(color: Colors.black),
+                ),
+                Text(
+                  product.seller!.email.toString(),
+                  style: const TextStyle(color: Colors.black),
+                ),
+                Text(
+                  product.seller!.phone1.toString(),
+                  style: const TextStyle(color: Colors.black),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).copyWith().size.height * 0.01,
+                ),
+              ],
+            )),
         Padding(
           padding: EdgeInsets.only(
-            left: getProportionateScreenWidth(20,context),
-            right: getProportionateScreenWidth(64,context),
+            left: getProportionateScreenWidth(20, context),
+            right: getProportionateScreenWidth(64, context),
           ),
           child: Text(
             product.description.toString(),
-            
           ),
         ),
-        
       ],
     );
   }

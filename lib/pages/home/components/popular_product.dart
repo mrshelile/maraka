@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:maraka/logic/products_logic.dart';
 
 import 'package:maraka/logic/store.dart';
-import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/pages/home/components/product_card.dart';
 
@@ -11,21 +10,20 @@ import '../../../size_config.dart';
 import 'section_title.dart';
 
 class PopularProducts extends StatefulWidget {
-  User owner;
-  PopularProducts({Key? key, required this.owner}) : super(key: key);
+  const PopularProducts({super.key});
 
   @override
   State<PopularProducts> createState() => _PopularProductsState();
 }
 
 class _PopularProductsState extends State<PopularProducts> {
-  final store = Get.find<StoreController>();
+  StoreController store = Get.find();
 
   Future<List<Product>> makeProductList() async {
     var logic = ProductLogic();
 
-    List<Product> products = await logic.getProducts(
-        store.selectedCategory.toLowerCase());
+    List<Product> products =
+        await logic.getProducts(store.selectedCategory.toLowerCase());
     store.setProducts(products);
     return products;
   }
@@ -73,7 +71,8 @@ class _PopularProductsState extends State<PopularProducts> {
                                                 .toLowerCase()
                                                 .toString())
                                         ? ProductCard(
-                                            product: store.productsFromdb[index])
+                                            product:
+                                                store.productsFromdb[index])
                                         : Container();
                                 // return const SizedBox
                                 //     .shrink(); // here by default width and height is 0

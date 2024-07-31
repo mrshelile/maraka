@@ -5,14 +5,14 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'dart:convert';
+// import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:maraka/logic/email.dart';
-import 'package:maraka/logic/products_logic.dart';
-import 'package:maraka/logic/sendVisitor.dart';
-import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/models/product.dart';
+// import 'package:maraka/logic/email.dart';
+// import 'package:maraka/logic/products_logic.dart';
+import 'package:maraka/logic/send_visitor.dart';
+// import 'package:maraka/logic/user_logic.dart';
+// import 'package:maraka/models/product.dart';
 
 void main() {
   // test("send email from flutter vir django", () async {

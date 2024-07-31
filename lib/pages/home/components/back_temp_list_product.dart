@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:maraka/pages/home/components/ListProductCard.dart';
+import 'package:maraka/pages/home/components/list_product_card.dart';
 import 'package:maraka/pages/home/components/section_title.dart';
 
 import '../../../logic/products_logic.dart';
 import '../../../logic/store.dart';
-import '../../../logic/user_logic.dart';
 import '../../../models/product.dart';
 import '../../../size_config.dart';
 import '../../../themes/color.dart';
 
 class ProductList extends StatefulWidget {
-  User owner;
-  ProductList({Key? key, required this.owner}) : super(key: key);
+  const ProductList({Key? key}) : super(key: key);
 
   @override
   State<ProductList> createState() => _ProductListState();
@@ -26,9 +21,11 @@ class _ProductListState extends State<ProductList> {
   Future<List<Product>> makeProductList() async {
     var logic = ProductLogic();
 
-    List<Product> products = await logic.getProducts(
-         store.selectedCategory.toLowerCase());
-    store.setProducts(products,);
+    List<Product> products =
+        await logic.getProducts(store.selectedCategory.toLowerCase());
+    store.setProducts(
+      products,
+    );
     return products;
   }
 
@@ -77,10 +74,11 @@ class _ProductListState extends State<ProductList> {
                                                       .toLowerCase()
                                                       .toString())
                                               ? ListProductCard(
-                                                  product:
-                                                      store.productsFromdb[index])
+                                                  product: store
+                                                      .productsFromdb[index])
                                               : Container()
-                                          : store.productsFromdb[index].car['model']
+                                          : store.productsFromdb[index]
+                                                      .car['model']
                                                       .toString()
                                                       .toLowerCase()
                                                       .contains(store.search
@@ -92,8 +90,8 @@ class _ProductListState extends State<ProductList> {
                                                       .contains(store.search
                                                           .toLowerCase())
                                               ? ListProductCard(
-                                                  product:
-                                                      store.productsFromdb[index])
+                                                  product: store
+                                                      .productsFromdb[index])
                                               : Container();
                                 },
                               ),
@@ -112,7 +110,7 @@ class _ProductListState extends State<ProductList> {
               color: MyColors.blue3,
               shape: CircleBorder(),
               onPressed: () {},
-              child: Icon(
+              child: const Icon(
                 Icons.arrow_back,
                 color: Colors.white,
               ),
@@ -125,7 +123,7 @@ class _ProductListState extends State<ProductList> {
               color: MyColors.blue3,
               shape: CircleBorder(),
               onPressed: () {},
-              child: Icon(
+              child: const Icon(
                 Icons.arrow_forward,
                 color: Colors.white,
               ),

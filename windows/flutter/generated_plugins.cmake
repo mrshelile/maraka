@@ -3,8 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  platform_device_id_windows
-  r_get_ip
+  file_selector_windows
   url_launcher_windows
 )
 

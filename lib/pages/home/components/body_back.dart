@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:maraka/logic/constants.dart';
-import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/store.dart';
-import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/models/product.dart';
-import 'package:maraka/pages/home/components/List_product.dart';
 import 'package:maraka/themes/color.dart';
 
 import '../../../size_config.dart';
+import 'back_temp_list_product.dart';
 import 'categories.dart';
 import 'top_banner.dart';
 import 'home_header.dart';
 
 class Body extends StatefulWidget {
-  User owner;
-  Body({Key? key, required this.owner}) : super(key: key);
+  // User owner;
+  Body({
+    Key? key,
+  }) : super(key: key);
   @override
   State<Body> createState() => _BodyState();
 }
@@ -41,22 +38,22 @@ class _BodyState extends State<Body> {
                   SizedBox(
                     height: getProportionateScreenHeight(10, context),
                   ),
-                  HomeHeader(
-                    owner: widget.owner,
-                  ),
+                  const HomeHeader(
+                      // owner: widget.owner,
+                      ),
                   SizedBox(height: getProportionateScreenWidth(10, context)),
                   DiscountBanner(),
                   SizedBox(height: getProportionateScreenWidth(10, context)),
-                  Categories(
-                    owner: widget.owner,
-                  ),
+                  const Categories(
+                      // owner: widget.owner,
+                      ),
                   SizedBox(
                     height: getProportionateScreenHeight(10, context),
                   ),
                   // pages[current],
-                  ProductList(
-                    owner: widget.owner,
-                  ),
+                  const ProductList(
+                      // owner: widget.owner,
+                      ),
 
                   // SizedBox(height: getProportionateScreenWidth(20, context)),
                 ],

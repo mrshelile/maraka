@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/store.dart';
-import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/themes/color.dart';
-
 import '../../../size_config.dart';
 
 class SearchField extends StatefulWidget {
-  User owner;
-  SearchField({Key? key, required this.owner}) : super(key: key);
+  SearchField({super.key});
 
   @override
   State<SearchField> createState() => _SearchFieldState();
@@ -16,6 +12,7 @@ class SearchField extends StatefulWidget {
 
 class _SearchFieldState extends State<SearchField> {
   final store = Get.find<StoreController>();
+
   @override
   void initState() {
     store.search = "";

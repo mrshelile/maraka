@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
-import 'package:maraka/pages/home/components/List_productPage.dart';
 
 class StoreController extends GetxController {
   var selectedCategory = "Cars";
@@ -16,16 +16,22 @@ class StoreController extends GetxController {
   int pageStart = 0;
   int pageEnd = pageSize;
   bool ishomeProductsLoading = false;
-
+  String onitError = "";
   @override
   onInit() async {
     super.onInit();
     final logic = ProductLogic();
-    ishomeProductsLoading = true;
-    var res = await logic.getProducts(selectedCategory);
-    setProducts(res);
-    ishomeProductsLoading = false;
-    update();
+    // ishomeProductsLoading = true;
+    try {
+      var res = await logic.getProducts(selectedCategory);
+      setProducts(res);
+    } catch (e) {
+      onitError = e.toString();
+      update();
+    } finally {
+      // ishomeProductsLoading = false;
+      update();
+    }
   }
 
   void pageUp() {
@@ -78,7 +84,7 @@ class StoreController extends GetxController {
     update();
     var logic = ProductLogic();
     ishomeProductsLoading = true;
-      
+
     List<Product> products =
         await logic.getProducts(selectedCategory.toLowerCase());
     setProducts(products);
@@ -123,7 +129,7 @@ class StoreController extends GetxController {
 
   void onchangeCategory(User owner) async {
     var logic = ProductLogic();
-  
+
     List<Product> products1 =
         await logic.getProducts(selectedCategory.toLowerCase());
     setProducts(products1);
@@ -151,9 +157,12 @@ class StoreController extends GetxController {
 
       // products.shuffle();
     }
-
-    products = productsFromdb;
+    if (products != productsFromdb) {
+      products = productsFromdb;
+    }
     pageFilter();
-    update();
+    if (products != productsFromdb) {
+      update();
+    }
   }
 }

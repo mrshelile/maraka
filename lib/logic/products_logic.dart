@@ -1,15 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter_launcher_icons/utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/ImageStrapi.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/logic/constants.dart';
+import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 import 'package:uuid/uuid.dart';
-// ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 import 'package:crypto/crypto.dart';
 
 class ProductLogic {
@@ -163,7 +161,7 @@ class ProductLogic {
       required String make,
       required String mileage,
       required String transmition}) async {
-    var uuid = const Uuid();
+    // var uuid = const Uuid();
     Map<String, String> headers = {
       "dataType": "json",
       'Content-Type': 'application/json; charset=UTF-8',
@@ -188,7 +186,7 @@ class ProductLogic {
   //   return Null;
   // }
   Future createProductViews(int product) async {
-    String? deviceId = await PlatformDeviceId.getDeviceId;
+    String? deviceId = await MobileDeviceIdentifier().getDeviceId();
 
     var bytes = utf8.encode(deviceId.toString());
 
@@ -305,18 +303,23 @@ class ProductLogic {
       return products;
     }
 
-    final pivot = products[products.length ~/ 2].createdAt;
+    final pivotIndex = _getMedianOfThree(products);
+    final pivot = products[pivotIndex].createdAt;
+
     final List<Product> left = [];
     final List<Product> middle = [];
     final List<Product> right = [];
 
-    for (final product in products) {
-      if (product.createdAt.isAfter(pivot)) {
-        left.add(product);
-      } else if (product.createdAt == pivot) {
-        middle.add(product);
+    for (int i = 0; i < products.length; i++) {
+      if (i == pivotIndex) {
+        middle.add(products[i]);
       } else {
-        right.add(product);
+        final comparison = products[i].createdAt.compareTo(pivot);
+        if (comparison > 0) {
+          left.add(products[i]);
+        } else {
+          right.add(products[i]);
+        }
       }
     }
 
@@ -325,6 +328,33 @@ class ProductLogic {
       ...middle,
       ..._quicksortByCreatedAt(right)
     ];
+  }
+
+  int _getMedianOfThree(List<Product> products) {
+    const first = 0;
+    final middle = products.length ~/ 2;
+    final last = products.length - 1;
+
+    if ((products[first].createdAt.compareTo(products[middle].createdAt) <= 0 &&
+            products[first].createdAt.compareTo(products[last].createdAt) >=
+                0) ||
+        (products[first].createdAt.compareTo(products[middle].createdAt) >= 0 &&
+            products[first].createdAt.compareTo(products[last].createdAt) <=
+                0)) {
+      return first;
+    } else if ((products[middle]
+                    .createdAt
+                    .compareTo(products[first].createdAt) <=
+                0 &&
+            products[middle].createdAt.compareTo(products[last].createdAt) >=
+                0) ||
+        (products[middle].createdAt.compareTo(products[first].createdAt) >= 0 &&
+            products[middle].createdAt.compareTo(products[last].createdAt) <=
+                0)) {
+      return middle;
+    } else {
+      return last;
+    }
   }
 
   Future<List<Product>> getMyAds(User owner) async {

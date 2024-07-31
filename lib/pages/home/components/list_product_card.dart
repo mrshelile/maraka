@@ -1,15 +1,10 @@
-import 'dart:math';
-import 'dart:ui';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/store.dart';
 import 'package:maraka/models/product.dart';
-import 'package:maraka/pages/home/details/details_screen.dart';
-import 'package:maraka/screens/componets/productPreview.dart';
-import 'package:maraka/size_config.dart';
+import 'package:maraka/screens/componets/product_preview.dart';
 import 'package:maraka/themes/color.dart';
 
 // import 'Product.dart';
@@ -23,10 +18,11 @@ class ListProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final store = Get.find<StoreController>();
+    final StoreController store = Get.find();
     final logic = ProductLogic();
     var width = MediaQuery.of(context).copyWith().size.width;
     var height = MediaQuery.of(context).copyWith().size.height;
+
     return GetBuilder(
         init: store,
         builder: (controller) {
@@ -47,7 +43,7 @@ class ListProductCard extends StatelessWidget {
               child: Container(
                   width: width * 0.3,
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 226, 226, 226),
+                    color: const Color.fromARGB(255, 226, 226, 226),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Stack(
@@ -78,7 +74,7 @@ class ListProductCard extends StatelessWidget {
                             aspectRatio: 3,
                             child: Container(
                               // color: Colors.redAccent,
-                              padding: EdgeInsets.only(left: 5),
+                              padding: const EdgeInsets.only(left: 5),
                               child: Wrap(
                                 // direction: Axis.vertical,
                                 alignment: WrapAlignment.start,
@@ -105,7 +101,9 @@ class ListProductCard extends StatelessWidget {
                                           fontWeight: FontWeight.w500),
                                     ),
                                   ),
-                                  SizedBox(height: 3,),
+                                  const SizedBox(
+                                    height: 3,
+                                  ),
                                   SizedBox(
                                     width: width * 0.6,
                                     child: Text(

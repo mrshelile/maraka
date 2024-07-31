@@ -1,19 +1,16 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings
-
 import 'package:flutter/material.dart';
 import 'package:maraka/logic/banner_logic.dart';
-import 'package:maraka/logic/constants.dart';
-import 'package:maraka/logic/sendVisitor.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'dart:html' as html;
 import '../../../size_config.dart';
 import 'section_title.dart';
 
+// ignore: must_be_immutable
 class FeacturedAds extends StatelessWidget {
   FeacturedAds({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   List<dynamic> banners = [];
+
   Future getFeatureAds() async {
     // Visitor visitor = Visitor();
     // await visitor.createVisitor();

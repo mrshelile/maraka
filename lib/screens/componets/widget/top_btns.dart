@@ -3,12 +3,11 @@ import 'package:get/get.dart';
 import 'package:maraka/logic/products_logic.dart';
 import 'package:maraka/logic/store.dart';
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/models/product.dart';
-import 'package:maraka/pages/EditAd.dart';
-import 'package:maraka/screens/home.dart';
+import 'package:maraka/pages/edit_ad.dart';
 
 import 'package:maraka/themes/color.dart';
 
+// ignore: must_be_immutable
 class TopBTnsProductPreview extends StatefulWidget {
   int product;
   User owner;
@@ -63,9 +62,7 @@ class _TopBTnsProductPreviewState extends State<TopBTnsProductPreview> {
                           MaterialPageRoute(
                               builder: (context) => EditAdForm(
                                     product: store.myProducts[widget.product],
-                                    owner: widget.owner,
                                   )));
-                 
                     },
                     icon: const Icon(
                       Icons.edit_note_rounded,

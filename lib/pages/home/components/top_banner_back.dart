@@ -1,14 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:maraka/logic/banner_logic.dart';
-import 'package:maraka/logic/constants.dart';
-import 'package:maraka/themes/color.dart';
-
-import '../../../size_config.dart';
 
 class DiscountBanner extends StatefulWidget {
   const DiscountBanner({
@@ -110,9 +105,9 @@ class _DiscountBannerState extends State<DiscountBanner> {
 
   Widget buuildBannerCarousel(List<dynamic>? imgs) {
     if (imgs == null || imgs.isEmpty) {
-      return SizedBox();
+      return const SizedBox();
     }
-    return SizedBox();
+    return const SizedBox();
   }
 
   @override

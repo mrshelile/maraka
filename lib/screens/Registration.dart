@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/screens/EnterOTP.dart';
 import 'package:maraka/themes/background.dart';
-import 'package:maraka/screens/home.dart';
 import 'package:maraka/screens/login.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +9,13 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:email_validator/email_validator.dart';
 
+import 'enter_otp.dart';
+
 class Registration extends StatefulWidget {
-  Registration({Key? key}) : super(key: key);
+  const Registration({super.key});
 
   @override
-  _RegistrationState createState() => _RegistrationState();
+  State<Registration> createState() => _RegistrationState();
 }
 
 class _RegistrationState extends State<Registration> {
@@ -335,13 +335,15 @@ class _RegistrationState extends State<Registration> {
                                         _errorMessage = "";
                                       });
                                       // ignore: use_build_context_synchronously
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => OTP(
-                                                    isRegister: true,
-                                                    user: user,
-                                                  )));
+                                      Get.off(() =>
+                                          OTP(isRegister: true, user: user));
+                                      // Navigator.pushReplacement(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) => OTP(
+                                      //               isRegister: true,
+                                      //               user: user,
+                                      //             )));
                                     }
                                   }
                                 } catch (error) {
@@ -371,7 +373,7 @@ class _RegistrationState extends State<Registration> {
                             0.01),
                     child: Row(
                       children: <Widget>[
-                        Text(
+                        const Text(
                           "Have An Account?",
                           style: TextStyle(color: MyColors.brown3),
                         ),
@@ -381,15 +383,16 @@ class _RegistrationState extends State<Registration> {
                                   MediaQuery.of(context).copyWith().size.width *
                                       0.01),
                           child: TextButton(
-                            child: Text(
+                            child: const Text(
                               "Login",
                               style: TextStyle(color: MyColors.blue3),
                             ),
                             onPressed: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Login()));
+                              Get.off(() => const Login());
+                              // Navigator.pushReplacement(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => const Login()));
                             },
                           ),
                         )

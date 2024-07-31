@@ -4,18 +4,19 @@ import 'package:get/get.dart';
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/logic/store.dart';
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/themes/color.dart';
 
 import '../../../size_config.dart';
 
 class Categories extends StatelessWidget {
-  final store = Get.put(StoreController());
-  User owner;
-  Categories({Key? key, required this.owner}) : super(key: key);
+  // User owner;
+  const Categories({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    StoreController store = Get.find();
+    User owner = Get.find();
     var width = MediaQuery.of(context).copyWith().size.width;
-    var height = MediaQuery.of(context).copyWith().size.height;
+    // var height = MediaQuery.of(context).copyWith().size.height;
+
     return Padding(
       padding: EdgeInsets.only(left: getProportionateScreenWidth(38, context)),
       child: SizedBox(
@@ -32,7 +33,6 @@ class Categories extends StatelessWidget {
                   icon: categories[index]["icon"],
                   text: categories[index]["text"],
                   press: () async {
-                    
                     await store.selectCategory(
                         categories[index]["text"], owner);
                   },
