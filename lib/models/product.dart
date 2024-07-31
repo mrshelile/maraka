@@ -16,7 +16,7 @@ class Product {
   var createdAt;
   var expiryDate;
   List<int>? imageUrls;
-  var car;
+  Map<String, dynamic>? car;
   int views = 0;
 
   String get priceStr {
@@ -49,8 +49,7 @@ class Product {
       required this.category});
   @override
   String toString() {
-    // TODO: implement toString
-    return title ?? car['model'];
+    return title ?? car?['model'];
   }
 }
 

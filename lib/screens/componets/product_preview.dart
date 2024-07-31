@@ -68,7 +68,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                 left: getProportionateScreenWidth(25, context)),
             width: width * 0.95,
             child: Text(
-              "Transmission: ${widget.product.car != null ? widget.product.car['transmission'] : ''}",
+              "Transmission: ${widget.product.car != null ? widget.product.car!['transmission'] : ''}",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -80,7 +80,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                 left: getProportionateScreenWidth(25, context)),
             width: width * 0.95,
             child: Text(
-              "Mileage: ${widget.product.car != null ? widget.product.car['kilos'] : ''}Km",
+              "Mileage: ${widget.product.car != null ? widget.product.car!['kilos'] : ''}Km",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -92,7 +92,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                 left: getProportionateScreenWidth(25, context)),
             width: width * 0.95,
             child: Text(
-              "Fuel: ${widget.product.car != null ? widget.product.car['fuel'] : ''}",
+              "Fuel: ${widget.product.car != null ? widget.product.car!['fuel'] : ''}",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -216,7 +216,7 @@ class _ProductPreviewState extends State<ProductPreview> {
                                   store.selectedCategory.toLowerCase() ==
                                               "cars" &&
                                           widget.product.car != null
-                                      ? "${widget.product.car['make']}, ${widget.product.car['model']}, ${widget.product.car['year']}"
+                                      ? "${widget.product.car!['make']}, ${widget.product.car!['model']}, ${widget.product.car!['year']}"
                                       : widget.product.title!,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,

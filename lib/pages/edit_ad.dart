@@ -36,12 +36,12 @@ class _EditAdFormState extends State<EditAdForm> {
     _descriptionController.text = widget.product.description.toString();
     _priceController.text = widget.product.price.toString();
     if (widget.product.category.toString().toLowerCase() == 'cars') {
-      _fuelController.text = widget.product.car['fuel'] ?? '';
-      _makeController.text = widget.product.car['make'] ?? '';
-      _mileageController.text = widget.product.car['kilos'] ?? '';
-      _modelController.text = widget.product.car['model'] ?? '';
-      _yearController.text = widget.product.car['year'].toString();
-      _transmissionValue = widget.product.car['transmission'] ?? '';
+      _fuelController.text = widget.product.car!['fuel'] ?? '';
+      _makeController.text = widget.product.car!['make'] ?? '';
+      _mileageController.text = widget.product.car!['kilos'] ?? '';
+      _modelController.text = widget.product.car!['model'] ?? '';
+      _yearController.text = widget.product.car!['year'].toString();
+      _transmissionValue = widget.product.car!['transmission'] ?? '';
     }
     super.initState();
   }
@@ -373,7 +373,7 @@ class _EditAdFormState extends State<EditAdForm> {
               if (widget.product.category.toString().toLowerCase() == 'cars') {
                 var car_res = await logic
                     .updateCar(
-                        car: widget.product.car['id'],
+                        car: widget.product.car!['id'],
                         model: _modelController.text,
                         year: _yearController.text,
                         fuel: _fuelController.text,
@@ -385,17 +385,17 @@ class _EditAdFormState extends State<EditAdForm> {
                             throw TimeoutException('Can\'t create a Car'));
                 if (car_res.statusCode == 200) {
                   car = jsonDecode(car_res.body)["id"];
-                  // widget.product.car['model'] =
+                  // widget.product.car!['model'] =
                   //     _modelController.text;
-                  // widget.product.car['year'] =
+                  // widget.product.car!['year'] =
                   //     _yearController.text;
-                  // widget.product.car['fuel'] =
+                  // widget.product.car!['fuel'] =
                   //     _fuelController.text;
-                  // widget.product.car['make'] =
+                  // widget.product.car!['make'] =
                   //     _makeController.text;
-                  // widget.product.car['kilos'] =
+                  // widget.product.car!['kilos'] =
                   //     _mileageController.text;
-                  // widget.product.car['transmission'] =
+                  // widget.product.car!['transmission'] =
                   //     _transmissionValue;
                 } else {
                   car = -1;

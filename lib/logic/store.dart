@@ -98,11 +98,11 @@ class StoreController extends GetxController {
     if (search.isNotEmpty) {
       if (selectedCategory.toLowerCase() == 'cars') {
         for (var element in temp) {
-          if (element.car['model']
+          if (element.car!['model']
                   .toString()
                   .toLowerCase()
                   .contains(search.toLowerCase()) ||
-              element.car['make']
+              element.car!['make']
                   .toString()
                   .toLowerCase()
                   .contains(search.toLowerCase())) {

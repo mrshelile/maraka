@@ -73,7 +73,7 @@ class _ProductsItemState extends State<ProductsItem> {
                         store.myProducts[widget.product].category!
                                     .toLowerCase() ==
                                 "cars"
-                            ? "${store.myProducts[widget.product].car['year'].toString()} ${store.myProducts[widget.product].car['make'].toString()} ${store.myProducts[widget.product].car['model'].toString()}"
+                            ? "${store.myProducts[widget.product].car?['year'].toString()} ${store.myProducts[widget.product].car?['make'].toString()} ${store.myProducts[widget.product].car?['model'].toString()}"
                             : store.myProducts[widget.product].title!
                                 .toString(),
                         maxLines: 2,

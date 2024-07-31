@@ -55,15 +55,38 @@ class ProductCard extends StatelessWidget {
                           AspectRatio(
                             aspectRatio: 0.9,
                             child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(
-                                      product.images![0].url,
-                                    )),
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15)),
+                              // decoration: BoxDecoration(
+                              //   image: DecorationImage(
+                              //       fit: BoxFit.cover,
+                              //       image: NetworkImage(
+                              //         product.images![0].url,
+
+                              //       )),
+                              //   borderRadius: const BorderRadius.only(
+                              //       topLeft: Radius.circular(15),
+                              //       topRight: Radius.circular(15)),
+                              // ),
+                              child: Image.network(
+                                product.images![0].url,
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  }
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      value:
+                                          loadingProgress.expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                    ),
+                                  );
+                                },
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
@@ -91,7 +114,7 @@ class ProductCard extends StatelessWidget {
                                       store.selectedCategory.toLowerCase() ==
                                                   "cars" &&
                                               product.car != null
-                                          ? "${product.car['make']} ${product.car['model']} ${product.car['year']}"
+                                          ? "${product.car?['make']} ${product.car?['model']} ${product.car?['year']}"
                                           : "${product.title}",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
@@ -111,7 +134,7 @@ class ProductCard extends StatelessWidget {
                                       store.selectedCategory.toLowerCase() ==
                                                   "cars" &&
                                               product.car != null
-                                          ? "${product.car['kilos']}Km  | ${product.car['transmission']}  | ${product.car['fuel']}"
+                                          ? "${product.car?['kilos']}Km  | ${product.car?['transmission']}  | ${product.car?['fuel']}"
                                           : "${product.description}",
                                       maxLines: 1,
                                       style: TextStyle(fontSize: width * 0.04),
