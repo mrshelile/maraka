@@ -6,10 +6,10 @@ import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/ImageStrapi.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/logic/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 import 'package:crypto/crypto.dart';
 
 class ProductLogic {
@@ -184,13 +184,24 @@ class ProductLogic {
     return response;
   }
 
+  Future<String> _getViewerDeviceId() async {
+    final prefs = await SharedPreferences.getInstance();
+    const key = 'viewer_device_id';
+    var deviceId = prefs.getString(key);
+    if (deviceId == null || deviceId.isEmpty) {
+      deviceId = const Uuid().v4();
+      await prefs.setString(key, deviceId);
+    }
+    return deviceId;
+  }
+
   // List<Product> getOwnerProducts(List<Product> items) {
   //   return Null;
   // }
   Future createProductViews(int product) async {
-    String? deviceId = await PlatformDeviceId.getDeviceId;
+    String deviceId = await _getViewerDeviceId();
 
-    var bytes = utf8.encode(deviceId.toString());
+    var bytes = utf8.encode(deviceId);
 
     var digest = sha256.convert(bytes);
 
