@@ -1,50 +1,49 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:get/get.dart';
 import 'package:maraka/logic/user_logic.dart';
 
-import 'package:maraka/pages/myadsPage.dart';
+import 'package:maraka/pages/myads_page.dart';
 import 'package:maraka/screens/account.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
 
-import '../pages/home/homePage.dart';
+import '../pages/home/home_page.dart';
 import 'login.dart';
 
 class Home extends StatefulWidget {
-  User user;
   int currentIndex = 0;
-  Home({Key? key, required this.user, required this.currentIndex})
-      : super(key: key);
+  Home({super.key, required this.currentIndex});
 
   @override
   // ignore: library_private_types_in_public_api
-  _HomeState createState() => _HomeState();
+  State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   @override
   void initState() {
-    // TODO: implement initState
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final _ktabsPages = <Widget>[
-      HomePage(
-        owner: widget.user,
-      ),
+    User user = Get.find();
+
+    final ktabsPages = <Widget>[
+      const HomePage(
+          // owner: widget.user,
+          ),
       // FavouritesPage(
       //   owner: widget.user,
       // ),
-      MyAds(
-        owner: widget.user,
-      ),
+      const MyAds(
+          // owner: widget.user,
+          ),
       Account(
         currentIndex: widget.currentIndex,
-        user: widget.user,
+        // user: widget.user,
       ),
     ];
 
@@ -57,7 +56,7 @@ class _HomeState extends State<Home> {
           //   child: Container(),
           // ),
 
-          _ktabsPages[widget.currentIndex],
+          ktabsPages[widget.currentIndex],
           // CustomNavBar(),
           //Categories(),
         ],
@@ -73,11 +72,12 @@ class _HomeState extends State<Home> {
           // print(widget.user.email);
 
           if (index == 1 || index == 2) {
-            if (widget.user.email == null) {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Login()));
+            if (!user.isAuthenticated) {
+              Get.to(() => Login(pageTo: index));
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => const Login()));
             } else {
-              if (widget.user.email != null) {
+              if (user.email != null) {
                 setState(() {
                   widget.currentIndex = index;
                 });
@@ -85,7 +85,7 @@ class _HomeState extends State<Home> {
             }
           }
           if (index != 1 || index != 2 || index != 3) {
-            if (widget.user.email != null) {
+            if (user.email != null) {
               setState(() {
                 widget.currentIndex = index;
               });

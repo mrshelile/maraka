@@ -1,91 +1,188 @@
-import 'dart:math';
-
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:maraka/logic/products_logic.dart';
+import 'package:maraka/logic/store.dart';
 import 'package:maraka/models/product.dart';
-import 'package:maraka/pages/home/details/details_screen.dart';
-import 'package:maraka/screens/componets/productPreview.dart';
-import 'package:maraka/size_config.dart';
+import 'package:maraka/screens/componets/product_preview.dart';
 import 'package:maraka/themes/color.dart';
 
 // import 'Product.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
-    Key? key,
-    this.width = 140,
-    this.aspectRetio = 1.02,
+    super.key,
     required this.product,
-  }) : super(key: key);
-
-  final double width, aspectRetio;
+  });
   final Product product;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: getProportionateScreenWidth(20, context)),
-      child: SizedBox(
-        width: getProportionateScreenWidth(width, context),
-        child: GestureDetector(
-          onTap: () => {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProductPreview(
-                          product: product,
-                        )))
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AspectRatio(
-                aspectRatio: 1.02,
-                child: Container(
-                  padding:
-                      EdgeInsets.all(getProportionateScreenWidth(20, context)),
+    final StoreController store = Get.find();
+    final logic = ProductLogic();
+    var width = MediaQuery.of(context).copyWith().size.width;
+    var height = MediaQuery.of(context).copyWith().size.height;
+
+    return GetBuilder(
+        init: store,
+        builder: (controller) {
+          return GestureDetector(
+            onTap: () async {
+              await logic.createProductViews(product.id1);
+              // ignore: use_build_context_synchronously
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProductPreview(
+                            product: product,
+                          )));
+            },
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: width * 0.04, right: width * 0.02, top: height * 0.03),
+              child: Container(
+                  width: width * 0.3,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Color.fromARGB(68, 102, 99, 99),
-                        width: 0.8,
-                        style: BorderStyle.solid),
-                    color: const Color.fromARGB(221, 199, 211, 211)
-                        .withOpacity(0.1),
+                    color: const Color.fromARGB(255, 226, 226, 226),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Hero(
-                    tag: product.id1.toString() +
-                        Random().nextInt(90).toString(),
-                    child: Image.network(product.images![0].url),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: MediaQuery.of(context).copyWith().size.height * 0.1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product.title.toString(),
-                      // style: TextStyle(color: Colors.black),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    ),
-                    Text(
-                      "M${product.price}",
-                      style: TextStyle(
-                        fontSize: getProportionateScreenWidth(18, context),
-                        fontWeight: FontWeight.w600,
-                        color: MyColors.blue4,
+                  child: Column(
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AspectRatio(
+                            aspectRatio: 0.9,
+                            child: Container(
+                              // decoration: BoxDecoration(
+                              //   image: DecorationImage(
+                              //       fit: BoxFit.cover,
+                              //       image: NetworkImage(
+                              //         product.images![0].url,
+
+                              //       )),
+                              //   borderRadius: const BorderRadius.only(
+                              //       topLeft: Radius.circular(15),
+                              //       topRight: Radius.circular(15)),
+                              // ),
+                              child: Image.network(
+                                product.images![0].url,
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  }
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      value:
+                                          loadingProgress.expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                    ),
+                                  );
+                                },
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 1,
+                          ),
+                          AspectRatio(
+                            aspectRatio: 3,
+                            child: Container(
+                              // color: Colors.redAccent,
+                              padding: const EdgeInsets.only(left: 5),
+                              child: Wrap(
+                                // direction: Axis.vertical,
+                                alignment: WrapAlignment.start,
+                                spacing: 6.0,
+                                runAlignment: WrapAlignment.start,
+                                // runSpacing: 8.0,
+                                // crossAxisAlignment: WrapCrossAlignment.center,
+                                // textDirection: TextDirection.rtl,
+                                // verticalDirection: VerticalDirection.up,
+                                children: [
+                                  SizedBox(
+                                    width: width * 0.453,
+                                    child: Text(
+                                      store.selectedCategory.toLowerCase() ==
+                                                  "cars" &&
+                                              product.car != null
+                                          ? "${product.car?['make']} ${product.car?['model']} ${product.car?['year']}"
+                                          : "${product.title}",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontSize: width * 0.04,
+                                          color: MyColors.black,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 3,
+                                  ),
+                                  SizedBox(
+                                    width: width * 0.6,
+                                    child: Text(
+                                      overflow: TextOverflow.ellipsis,
+                                      store.selectedCategory.toLowerCase() ==
+                                                  "cars" &&
+                                              product.car != null
+                                          ? "${product.car?['kilos']}Km  | ${product.car?['transmission']}  | ${product.car?['fuel']}"
+                                          : "${product.description}",
+                                      maxLines: 1,
+                                      style: TextStyle(fontSize: width * 0.04),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Row(
+                          // mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "M${product.priceStr}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: MyColors.blue2,
+                                  fontSize: width * 0.04),
+                            ),
+                            badges.Badge(
+                              badgeStyle: const badges.BadgeStyle(
+                                  badgeColor: MyColors.blue3),
+                              badgeContent: Text(
+                                product.views <= 99
+                                    ? product.views.toString()
+                                    : "99+",
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                              ),
+                              child: const Icon(
+                                Icons.visibility_rounded,
+                                size: 25,
+                                color: MyColors.green2,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+            ),
+          );
+        });
   }
 }

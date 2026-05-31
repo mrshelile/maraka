@@ -1,4 +1,5 @@
-import 'package:maraka/logic/sendVisitor.dart';
+import 'package:get/get.dart';
+import 'package:maraka/logic/send_visitor.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/home.dart';
@@ -8,13 +9,11 @@ import 'package:flutter_svg/svg.dart';
 
 // ignore: must_be_immutable
 class Account extends StatefulWidget {
-  int currentIndex;
-  User user;
-  Account({Key? key, required this.currentIndex, required this.user})
-      : super(key: key);
+  final int currentIndex;
+  const Account({super.key, required this.currentIndex});
 
   @override
-  _AccountState createState() => _AccountState();
+  State<Account> createState() => _AccountState();
 }
 
 class _AccountState extends State<Account> {
@@ -28,30 +27,31 @@ class _AccountState extends State<Account> {
   static bool _isenabled = false;
   // static var _months = 0;
 
+  User user = Get.find();
+
+  double subscriptionProgressBar() {
+    var ratio = 0.0;
+    if (user.subscription != null) {
+      if (user.subscription!.isBefore(DateTime.now())) {
+        var subcrip =
+            user.subscription!.millisecondsSinceEpoch / (1000).floorToDouble();
+        var now =
+            (DateTime.now().millisecondsSinceEpoch / 1000).floorToDouble();
+        var difference = subcrip - now;
+        ratio = difference / subcrip;
+      } else {
+        ratio = 0.0;
+      }
+    }
+    // ignore: avoid_print
+
+    return ratio;
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).copyWith().size.height;
     var width = MediaQuery.of(context).copyWith().size.width;
-    double subscriptionProgressBar() {
-      var ratio = 0.0;
-      if (widget.user.subscription != null) {
-        if (widget.user.subscription!.isBefore(DateTime.now())) {
-          var subcrip = widget.user.subscription!.millisecondsSinceEpoch /
-              (1000).floorToDouble();
-          var now =
-              (DateTime.now().millisecondsSinceEpoch / 1000).floorToDouble();
-          var difference = subcrip - now;
-          ratio = difference / subcrip;
-        } else {
-          ratio = 0.0;
-        }
-      }
-      // ignore: avoid_print
-
-      return ratio;
-    }
-
-    
 
     return Scaffold(
       body: Stack(
@@ -69,35 +69,33 @@ class _AccountState extends State<Account> {
                     Padding(
                       padding:
                           EdgeInsets.only(top: height * 0.1, left: width * 0),
-                      child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: width * 0,
-                              ),
-                              child: SvgPicture.asset(
-                                "assets/profile.svg",
-                                semanticsLabel: "Profile Image",
-                                fit: BoxFit.scaleDown,
-                                width: width * 0.35,
-                                height: height * 0.25,
-                              ),
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: width * 0,
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(left: width * 0.1),
-                              child: SizedBox(
-                                  width: width * 0.45,
-                                  height: height * 0.05,
-                                  child: Text(
-                                    widget.user.name.toString(),
-                                    maxLines: 3,
-                                    style: const TextStyle(
-                                        color: MyColors.blue3, fontSize: 17),
-                                  )),
-                            )
-                          ],
-                        ),
+                            child: SvgPicture.asset(
+                              "assets/profile.svg",
+                              semanticsLabel: "Profile Image",
+                              fit: BoxFit.scaleDown,
+                              width: width * 0.35,
+                              height: height * 0.25,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: width * 0.1),
+                            child: SizedBox(
+                                width: width * 0.45,
+                                height: height * 0.05,
+                                child: Text(
+                                  user.name.toString(),
+                                  maxLines: 3,
+                                  style: const TextStyle(
+                                      color: MyColors.blue3, fontSize: 17),
+                                )),
+                          )
+                        ],
                       ),
                     ),
                     Padding(
@@ -147,19 +145,21 @@ class _AccountState extends State<Account> {
                                                 0.05),
                                       ),
                                       onPressed: () async {
-                                        widget.user.removeAll();
-                                        debugPrint(widget.user.jwt.toString());
+                                        user.removeAll();
+                                        debugPrint(user.jwt.toString());
                                         Visitor visitor = Visitor();
                                         await visitor.createVisitor().timeout(
                                             const Duration(seconds: 5));
                                         // ignore: use_build_context_synchronously
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => Home(
-                                                      currentIndex: 0,
-                                                      user: widget.user,
-                                                    )));
+                                        Get.off(() => Home(
+                                              currentIndex: 0,
+                                            ));
+                                        // Navigator.pushReplacement(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) => Home(
+                                        //               currentIndex: 0,
+                                        //             )));
                                       },
                                     ),
                                   ],
@@ -193,8 +193,7 @@ class _AccountState extends State<Account> {
                                             color: MyColors.blue3),
                                         hintText: "Phone Numbers",
 
-                                        labelText:
-                                            widget.user.phone1.toString(),
+                                        labelText: user.phone1.toString(),
                                         enabled: _isenabled,
                                         border: InputBorder.none,
                                       ),
@@ -222,7 +221,7 @@ class _AccountState extends State<Account> {
                                         labelStyle: const TextStyle(
                                             color: MyColors.blue3),
                                         hintText: "Email Address",
-                                        labelText: widget.user.email,
+                                        labelText: user.email,
                                         enabled: false,
                                         border: InputBorder.none,
                                       ),
@@ -260,15 +259,15 @@ class _AccountState extends State<Account> {
       //       _isProfileBtnSave = !_isProfileBtnSave;
       //       _isenabled = !_isenabled;
       //       if (_phone1Controller.text.isNotEmpty)
-      //         widget.user.phone1 = int.parse(_phone1Controller.text);
+      //         user.phone1 = int.parse(_phone1Controller.text);
       //       if (_phone2Controller.text.isNotEmpty)
-      //         widget.user.phone2 = int.parse(_phone2Controller.text);
+      //         user.phone2 = int.parse(_phone2Controller.text);
       //       if (!_isProfileBtnSave) {
       //         _phone2Controller.clear();
       //         _phone1Controller.clear();
       //       }
       //     });
-      //     var res = await widget.user.updateDetails();
+      //     var res = await user.updateDetails();
       //   },
       //   tooltip: 'edit Profile',
       //   backgroundColor: MyColors.blue3,

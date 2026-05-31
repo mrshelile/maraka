@@ -1,18 +1,21 @@
 import 'dart:async';
 
+import 'package:get/get.dart';
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/screens/EnterOTP.dart';
-import 'package:maraka/screens/Registration.dart';
+import 'package:maraka/screens/registration.dart';
 import 'package:maraka/themes/background.dart';
-import 'package:maraka/screens/forgotPassword.dart';
+import 'package:maraka/screens/forgot_password.dart';
 import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:email_validator/email_validator.dart';
 
+import 'enter_otp.dart';
+
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  final int pageTo;
+  const Login({super.key, this.pageTo = 0});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -32,14 +35,12 @@ class _LoginState extends State<Login> {
     // duration: Duration(milliseconds: 1000),
   );
   // ignore: prefer_typing_uninitialized_variables
-  var user;
+  // User? user;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: LayoutBuilder(builder: (context, constraints) {
-       
-       
         return Stack(
           children: <Widget>[
             CustomPaint(
@@ -78,7 +79,6 @@ class _LoginState extends State<Login> {
                         child: TextFormField(
                           controller: _emailController,
                           decoration: const InputDecoration(
-                            
                             hintText: "Enter Your Email Address",
                             prefixIcon: Icon(
                               Icons.email_outlined,
@@ -86,7 +86,6 @@ class _LoginState extends State<Login> {
                             ),
                             labelStyle: TextStyle(color: MyColors.brown3),
                             border: UnderlineInputBorder(),
-                            
                             labelText: 'Enter your email',
                           ),
                           keyboardType: TextInputType.emailAddress,
@@ -177,7 +176,7 @@ class _LoginState extends State<Login> {
                           child: TextButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                user = User(
+                                User tempUser = User(
                                     email: _emailController.text.trim(),
                                     password: _passwordController.text.trim());
                                 // CircularProgressIndicator();
@@ -185,7 +184,7 @@ class _LoginState extends State<Login> {
                                   _loading = true;
                                 });
                                 try {
-                                  await user.login().timeout(
+                                  await tempUser.login().timeout(
                                       const Duration(seconds: 25),
                                       onTimeout: () => throw TimeoutException(
                                           'Can\'t connect to internet'));
@@ -193,45 +192,39 @@ class _LoginState extends State<Login> {
                                     _errorMessage = "";
                                     _loading = false;
                                   });
-                                  if (user.response.statusCode != null) {
-                                    if (user.response.statusCode == 200) {
-                                      if (user.is_confirmed) {
-                                        
-                                        // ignore: use_build_context_synchronously
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => Home(
-                                                      currentIndex: 0,
-                                                      user: user,
-                                                    )));
+                                  if (tempUser.response.statusCode != null) {
+                                    if (tempUser.response.statusCode == 200) {
+                                      if (tempUser.isConfirmed) {
+                                        // Get.snackbar("title", tempUser.email!);
+                                        User user = Get.find();
+                                        user.init(tempUser);
+                                        Get.off(() => Home(
+                                              currentIndex: widget.pageTo,
+                                              // user: user,
+                                            ));
                                       } else {
                                         _errorMessage =
                                             "Your Account is not validated";
+                                        Get.off(
+                                          () => OTP(
+                                              user: tempUser, isRegister: true),
+                                        );
                                         // ignore: use_build_context_synchronously
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => OTP(
-                                                    user: user,
-                                                    isRegister: true)));
                                         // user = null;
                                       }
                                     } else {
                                       setState(() {
-                                        user = null;
+                                        // user = null;
                                         _errorMessage = "Invalid credentials";
                                       });
                                     }
                                   }
                                 } catch (error) {
-                               
-
                                   setState(() {
                                     _errorMessage =
                                         "Opps looks like there is no internet";
                                     _loading = false;
-                                    user = null;
+                                    // user = null;
                                   });
                                 } finally {}
                               }
@@ -253,21 +246,17 @@ class _LoginState extends State<Login> {
                         children: <Widget>[
                           const Text(
                             "Don't Have an Account?",
-                            style: TextStyle(color: MyColors.brown3,fontSize: 15),
+                            style:
+                                TextStyle(color: MyColors.brown3, fontSize: 15),
                           ),
                           TextButton(
                             child: const Text(
                               "Sign up",
                               style: TextStyle(
-                                color: MyColors.blue3,
-                                fontSize: 16
-                              ),
+                                  color: MyColors.blue3, fontSize: 16),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Registration()));
+                              Get.to(Registration());
                             },
                           ),
                           if (constraints.maxWidth >= 600)
@@ -280,11 +269,7 @@ class _LoginState extends State<Login> {
                                       0.01),
                               child: TextButton(
                                 onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ForgotPassword()));
+                                  Get.to(const ForgotPassword());
                                 },
                                 child: const Text(
                                   "Forgot Password?",
@@ -302,14 +287,12 @@ class _LoginState extends State<Login> {
                                 0.3),
                         child: TextButton(
                           onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ForgotPassword()));
+                            Get.off(() => const ForgotPassword());
                           },
                           child: const Text(
                             "Forgot Password?",
-                            style: TextStyle(color: MyColors.blue3,fontSize: 17),
+                            style:
+                                TextStyle(color: MyColors.blue3, fontSize: 17),
                           ),
                         ),
                       ),
@@ -329,14 +312,9 @@ class _LoginState extends State<Login> {
             GestureDetector(
               onTap: () {
                 FocusScope.of(context).requestFocus(FocusNode());
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        maintainState: false,
-                        builder: (context) => Home(
-                              currentIndex: 0,
-                              user: user ?? User(),
-                            )));
+                Get.off(() => Home(
+                      currentIndex: 0,
+                    ));
               },
               child: Padding(
                 padding: EdgeInsets.only(

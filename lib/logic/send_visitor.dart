@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
 class Visitor {
-  var _visitorUrl = "/visitor";
+  final _visitorUrl = "/visitor";
   Future createVisitor() async {
     /// Initialize Ip Address
     dynamic data;

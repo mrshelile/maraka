@@ -27,7 +27,7 @@ class BannerLogic {
     }
   }
 
-  Future getSplashscreen() async {
+  Future<List<Banner>?> getSplashscreen() async {
     response = await http.get(
       Uri.parse("$server$_banner"),
       headers: <String, String>{
@@ -43,6 +43,7 @@ class BannerLogic {
         imagesFuture.add(fetchImage(item['display']));
       }
       List images = await Future.wait(imagesFuture);
+
       for (int i = 0; i < data.length; i++) {
         var item = data[i];
         Banner ad = createbannerFromData(item, images[i]);
@@ -52,9 +53,10 @@ class BannerLogic {
         }
       }
       bannersSplashScreen.shuffle();
-
-      return response;
+      return bannersSplashScreen;
+      // return response;
     }
+    return null;
   }
 
   Banner createbannerFromData(var item, image) {
@@ -70,7 +72,7 @@ class BannerLogic {
     );
   }
 
-  Future getHomeScreenTop() async {
+  Future<List<Banner>?> getHomeScreenTop() async {
     response = await http.get(
       Uri.parse("$server$_banner"),
       headers: <String, String>{
@@ -81,20 +83,38 @@ class BannerLogic {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       var imagesFuture = <Future>[];
+
       for (var item in data) {
         imagesFuture.add(fetchImage(item['display']));
       }
+
       List images = await Future.wait(imagesFuture);
-      for (var i = 0; i < data.length; i++) {
-        var item = data[i];
-        Banner ad = createbannerFromData(item, images[i]);
-        if (ad.home == true) {
-          bannersHomeScreen.add(ad);
-        }
+      try {
+        await Future.wait(
+            List<Future>.from(data.asMap().entries.map((entry) async {
+          var item = entry.value;
+          var image = images[entry.key];
+          Banner ad = createbannerFromData(item, image);
+          if (ad.home == true) {
+            bannersHomeScreen.add(ad);
+          }
+        })));
+      } catch (e) {
+        print('Error in async operations: $e');
       }
+
+      // for (var i = 0; i < data.length; i++) {
+      //   var item = data[i];
+      //   Banner ad = createbannerFromData(item, images[i]);
+      //   if (ad.home == true) {
+      //     bannersHomeScreen.add(ad);
+      //   }
+      // }
       bannersHomeScreen.shuffle();
-      return response;
+      return bannersHomeScreen;
+      // return response;
     }
+    return null;
   }
 
 // this banner is not displayed on UI
