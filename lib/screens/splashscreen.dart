@@ -9,7 +9,6 @@ import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:page_transition/page_transition.dart';
 // import 'package:swipebuttonflutter/swipebuttonflutter.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -244,7 +243,6 @@ class _SplashcreenState extends State<Splashcreen> {
                           MaterialPageRoute(
                               builder: (context) => Home(
                                     currentIndex: 0,
-                                    user: User(),
                                   )));
                       //TODO: For reverse ripple effect animation
                     },

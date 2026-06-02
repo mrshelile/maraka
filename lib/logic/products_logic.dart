@@ -6,6 +6,7 @@ import 'package:maraka/models/ImageStrapi.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/logic/constants.dart';
 import 'package:mobile_device_identifier/mobile_device_identifier.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:crypto/crypto.dart';
@@ -197,7 +198,7 @@ class ProductLogic {
   //   return Null;
   // }
   Future createProductViews(int product) async {
-    String? deviceId = await MobileDeviceIdentifier().getDeviceId();
+    final deviceId = await MobileDeviceIdentifier().getDeviceId() ?? '';
 
     var bytes = utf8.encode(deviceId);
 

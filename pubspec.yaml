@@ -52,7 +52,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   badges: ^3.1.2
   cached_network_image: ^3.3.1
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.1.2
   file_picker: ^8.0.5
   another_carousel_pro: ^1.0.2
   email_validator: ^3.0.0
