@@ -9,6 +9,9 @@ class Promotion {
     required this.title,
     required this.description,
     required this.badge,
+    required this.offer,
+    required this.validUntil,
+    required this.terms,
     required this.icon,
     required this.backgroundColor,
     required this.accentColor,
@@ -17,6 +20,9 @@ class Promotion {
   final String title;
   final String description;
   final String badge;
+  final String offer;
+  final String validUntil;
+  final List<String> terms;
   final IconData icon;
   final Color backgroundColor;
   final Color accentColor;
@@ -27,6 +33,13 @@ const List<Promotion> mockPromotions = [
     title: 'Weekend Deals',
     description: 'Save on selected listings from local sellers.',
     badge: 'Hot offers',
+    offer: 'Up to 30% off selected electronics, fashion, and home listings.',
+    validUntil: '30 June 2026',
+    terms: [
+      'Available while promoted listings are active.',
+      'Discounts are confirmed directly with the seller.',
+      'Backend promotion ID placeholder: promo_weekend_001.',
+    ],
     icon: Icons.local_offer_outlined,
     backgroundColor: Color(0xffe9f6f2),
     accentColor: MyColors.blue2,
@@ -35,6 +48,13 @@ const List<Promotion> mockPromotions = [
     title: 'Boost Your Ad',
     description: 'Featured placement for new marketplace posts.',
     badge: 'Seller promo',
+    offer: 'Get your first promoted ad placement free for 24 hours.',
+    validUntil: '15 July 2026',
+    terms: [
+      'One promotion per seller account in the mock flow.',
+      'Promotion applies to newly created listings only.',
+      'Backend promotion ID placeholder: promo_seller_002.',
+    ],
     icon: Icons.campaign_outlined,
     backgroundColor: Color(0xfffff4df),
     accentColor: MyColors.orange1,
@@ -43,6 +63,13 @@ const List<Promotion> mockPromotions = [
     title: 'Fresh Arrivals',
     description: 'Discover newly listed products near you.',
     badge: 'New today',
+    offer: 'Browse fresh local listings added in the last 48 hours.',
+    validUntil: 'Ongoing',
+    terms: [
+      'Shown products will come from backend promotion rules later.',
+      'Mock data is currently used for frontend testing.',
+      'Backend promotion ID placeholder: promo_arrivals_003.',
+    ],
     icon: Icons.auto_awesome_outlined,
     backgroundColor: Color(0xffeef2ff),
     accentColor: MyColors.blue3,
@@ -70,6 +97,15 @@ class _PromotionsBannerState extends State<PromotionsBanner> {
     });
   }
 
+  void _openPromotion(Promotion promotion) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PromotionDetailsPage(promotion: promotion),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isClosed || widget.promotions.isEmpty) {
@@ -89,6 +125,7 @@ class _PromotionsBannerState extends State<PromotionsBanner> {
               (promotion) => _PromotionCard(
                 promotion: promotion,
                 onClose: _closeBanner,
+                onTap: () => _openPromotion(promotion),
               ),
             )
             .toList(),
@@ -110,117 +147,308 @@ class _PromotionCard extends StatelessWidget {
   const _PromotionCard({
     required this.promotion,
     required this.onClose,
+    required this.onTap,
   });
 
   final Promotion promotion;
   final VoidCallback onClose;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: getProportionateScreenWidth(18, context),
-        vertical: getProportionateScreenHeight(14, context),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(
+          horizontal: getProportionateScreenWidth(18, context),
+          vertical: getProportionateScreenHeight(14, context),
+        ),
+        decoration: BoxDecoration(
+          color: promotion.backgroundColor,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: promotion.accentColor.withOpacity(0.24)),
+        ),
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  right: getProportionateScreenWidth(28, context)),
+              child: Row(
+                children: [
+                  Container(
+                    height: getProportionateScreenWidth(52, context),
+                    width: getProportionateScreenWidth(52, context),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.78),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Icon(
+                      promotion.icon,
+                      color: promotion.accentColor,
+                      size: getProportionateScreenWidth(28, context),
+                    ),
+                  ),
+                  SizedBox(width: getProportionateScreenWidth(14, context)),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: getProportionateScreenWidth(9, context),
+                            vertical: getProportionateScreenHeight(3, context),
+                          ),
+                          decoration: BoxDecoration(
+                            color: promotion.accentColor.withOpacity(0.14),
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: Text(
+                            promotion.badge,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: promotion.accentColor,
+                              fontSize:
+                                  getProportionateScreenWidth(11, context),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                            height: getProportionateScreenHeight(7, context)),
+                        Text(
+                          promotion.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: MyColors.brown3,
+                            fontSize: getProportionateScreenWidth(17, context),
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        SizedBox(
+                            height: getProportionateScreenHeight(3, context)),
+                        Text(
+                          promotion.description,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: MyColors.brown3.withOpacity(0.72),
+                            fontSize:
+                                getProportionateScreenWidth(12.5, context),
+                            height: 1.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              right: 0,
+              top: 0,
+              child: IconButton(
+                constraints: BoxConstraints.tightFor(
+                  height: getProportionateScreenWidth(32, context),
+                  width: getProportionateScreenWidth(32, context),
+                ),
+                padding: EdgeInsets.zero,
+                tooltip: 'Close promotions',
+                onPressed: onClose,
+                icon: Icon(
+                  Icons.close,
+                  color: MyColors.brown3.withOpacity(0.72),
+                  size: getProportionateScreenWidth(18, context),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-      decoration: BoxDecoration(
-        color: promotion.backgroundColor,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: promotion.accentColor.withOpacity(0.24)),
+    );
+  }
+}
+
+class PromotionDetailsPage extends StatelessWidget {
+  const PromotionDetailsPage({
+    super.key,
+    required this.promotion,
+  });
+
+  final Promotion promotion;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: promotion.accentColor,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        title: Text(promotion.title),
       ),
-      child: Stack(
+      body: ListView(
+        padding: EdgeInsets.all(getProportionateScreenWidth(18, context)),
         children: [
-          Padding(
-            padding: EdgeInsets.only(
-                right: getProportionateScreenWidth(28, context)),
-            child: Row(
+          Container(
+            padding: EdgeInsets.all(getProportionateScreenWidth(18, context)),
+            decoration: BoxDecoration(
+              color: promotion.backgroundColor,
+              borderRadius: BorderRadius.circular(18),
+              border:
+                  Border.all(color: promotion.accentColor.withOpacity(0.24)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: getProportionateScreenWidth(52, context),
-                  width: getProportionateScreenWidth(52, context),
+                  height: getProportionateScreenWidth(58, context),
+                  width: getProportionateScreenWidth(58, context),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.78),
-                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white.withOpacity(0.82),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: Icon(
                     promotion.icon,
                     color: promotion.accentColor,
-                    size: getProportionateScreenWidth(28, context),
+                    size: getProportionateScreenWidth(32, context),
                   ),
                 ),
-                SizedBox(width: getProportionateScreenWidth(14, context)),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: getProportionateScreenWidth(9, context),
-                          vertical: getProportionateScreenHeight(3, context),
-                        ),
-                        decoration: BoxDecoration(
-                          color: promotion.accentColor.withOpacity(0.14),
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                        child: Text(
-                          promotion.badge,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: promotion.accentColor,
-                            fontSize: getProportionateScreenWidth(11, context),
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                          height: getProportionateScreenHeight(7, context)),
-                      Text(
-                        promotion.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: MyColors.brown3,
-                          fontSize: getProportionateScreenWidth(17, context),
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      SizedBox(
-                          height: getProportionateScreenHeight(3, context)),
-                      Text(
-                        promotion.description,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: MyColors.brown3.withOpacity(0.72),
-                          fontSize: getProportionateScreenWidth(12.5, context),
-                          height: 1.2,
-                        ),
-                      ),
-                    ],
+                SizedBox(height: getProportionateScreenHeight(16, context)),
+                Text(
+                  promotion.badge,
+                  style: TextStyle(
+                    color: promotion.accentColor,
+                    fontSize: getProportionateScreenWidth(13, context),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SizedBox(height: getProportionateScreenHeight(8, context)),
+                Text(
+                  promotion.offer,
+                  style: TextStyle(
+                    color: MyColors.brown3,
+                    fontSize: getProportionateScreenWidth(22, context),
+                    fontWeight: FontWeight.w800,
+                    height: 1.15,
+                  ),
+                ),
+                SizedBox(height: getProportionateScreenHeight(10, context)),
+                Text(
+                  promotion.description,
+                  style: TextStyle(
+                    color: MyColors.brown3.withOpacity(0.72),
+                    fontSize: getProportionateScreenWidth(14, context),
+                    height: 1.35,
                   ),
                 ),
               ],
             ),
           ),
-          Positioned(
-            right: 0,
-            top: 0,
-            child: IconButton(
-              constraints: BoxConstraints.tightFor(
-                height: getProportionateScreenWidth(32, context),
-                width: getProportionateScreenWidth(32, context),
+          SizedBox(height: getProportionateScreenHeight(18, context)),
+          _PromotionInfoRow(
+            icon: Icons.event_available_outlined,
+            label: 'Valid until',
+            value: promotion.validUntil,
+            color: promotion.accentColor,
+          ),
+          SizedBox(height: getProportionateScreenHeight(18, context)),
+          Text(
+            'Promotion terms',
+            style: TextStyle(
+              color: MyColors.brown3,
+              fontSize: getProportionateScreenWidth(18, context),
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          SizedBox(height: getProportionateScreenHeight(10, context)),
+          ...promotion.terms.map(
+            (term) => Padding(
+              padding: EdgeInsets.only(
+                bottom: getProportionateScreenHeight(9, context),
               ),
-              padding: EdgeInsets.zero,
-              tooltip: 'Close promotions',
-              onPressed: onClose,
-              icon: Icon(
-                Icons.close,
-                color: MyColors.brown3.withOpacity(0.72),
-                size: getProportionateScreenWidth(18, context),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.check_circle_outline,
+                    color: promotion.accentColor,
+                    size: getProportionateScreenWidth(18, context),
+                  ),
+                  SizedBox(width: getProportionateScreenWidth(9, context)),
+                  Expanded(
+                    child: Text(
+                      term,
+                      style: TextStyle(
+                        color: MyColors.brown3.withOpacity(0.78),
+                        fontSize: getProportionateScreenWidth(13.5, context),
+                        height: 1.3,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PromotionInfoRow extends StatelessWidget {
+  const _PromotionInfoRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(getProportionateScreenWidth(14, context)),
+      decoration: BoxDecoration(
+        color: const Color(0xfff6f7f9),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: color,
+            size: getProportionateScreenWidth(24, context),
+          ),
+          SizedBox(width: getProportionateScreenWidth(12, context)),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  color: MyColors.brown3.withOpacity(0.58),
+                  fontSize: getProportionateScreenWidth(12, context),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(height: getProportionateScreenHeight(2, context)),
+              Text(
+                value,
+                style: TextStyle(
+                  color: MyColors.brown3,
+                  fontSize: getProportionateScreenWidth(15, context),
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
           ),
         ],
       ),
