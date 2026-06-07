@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:maraka/logic/store.dart';
 
 import '../../../size_config.dart';
-import '../promotions.dart';
 import 'categories.dart';
 import 'products_grid.dart';
 import 'top_banner.dart';
@@ -27,8 +26,6 @@ class _BodyState extends State<Body> {
         runSpacing: getProportionateScreenHeight(8, context),
         children: [
           // const HomeHeader(),
-          const PromotionsBanner(),
-          SizedBox(height: getProportionateScreenWidth(8, context)),
           const DiscountBanner(),
           SizedBox(height: getProportionateScreenWidth(8, context)),
           Categories(),

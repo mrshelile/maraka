@@ -441,7 +441,7 @@ class _EditAdFormState extends State<EditAdForm> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => Home(
-                              currentIndex: 1,
+                              currentIndex: 2,
                               // user: widget.owner,
                             )));
                 // Navigator.pop(context);

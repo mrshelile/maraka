@@ -3,6 +3,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/user_logic.dart';
+import 'package:maraka/pages/home/promotions.dart';
 
 import 'package:maraka/pages/myads_page.dart';
 import 'package:maraka/screens/account.dart';
@@ -35,6 +36,7 @@ class _HomeState extends State<Home> {
       const HomePage(
           // owner: widget.user,
           ),
+      const PromotionsPage(),
       // FavouritesPage(
       //   owner: widget.user,
       // ),
@@ -71,7 +73,7 @@ class _HomeState extends State<Home> {
           // await widget.user.retrieveEmail();
           // print(widget.user.email);
 
-          if (index == 1 || index == 2) {
+          if (index == 2 || index == 3) {
             if (!user.isAuthenticated) {
               Get.to(() => Login(pageTo: index));
               // Navigator.push(context,
@@ -84,12 +86,10 @@ class _HomeState extends State<Home> {
               }
             }
           }
-          if (index != 1 || index != 2 || index != 3) {
-            if (user.email != null) {
-              setState(() {
-                widget.currentIndex = index;
-              });
-            }
+          if (index == 0 || index == 1) {
+            setState(() {
+              widget.currentIndex = index;
+            });
           }
         },
         items: <BottomNavyBarItem>[
@@ -97,6 +97,12 @@ class _HomeState extends State<Home> {
             icon: const Icon(Icons.apps),
             title: const Text('Home'),
             activeColor: MyColors.blue2,
+            textAlign: TextAlign.center,
+          ),
+          BottomNavyBarItem(
+            icon: const Icon(Icons.local_offer_outlined),
+            title: const Text('Promotions'),
+            activeColor: MyColors.orange1,
             textAlign: TextAlign.center,
           ),
           // BottomNavyBarItem(

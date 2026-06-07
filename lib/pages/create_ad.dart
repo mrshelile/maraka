@@ -418,13 +418,13 @@ class _CreateAdState extends State<CreateAd> {
 
                               if (!mounted) return;
                               Get.off(() => Home(
-                                    currentIndex: 1,
+                                    currentIndex: 2,
                                   ));
                               // Navigator.pushReplacement(
                               //     context,
                               //     MaterialPageRoute(
                               //         builder: (context) => Home(
-                              //               currentIndex: 1,
+                              //               currentIndex: 2,
                               //             )));
                               // Navigator.pop(context);
                             } else {

@@ -146,12 +146,12 @@ class _PromotionsBannerState extends State<PromotionsBanner> {
 class _PromotionCard extends StatelessWidget {
   const _PromotionCard({
     required this.promotion,
-    required this.onClose,
     required this.onTap,
+    this.onClose,
   });
 
   final Promotion promotion;
-  final VoidCallback onClose;
+  final VoidCallback? onClose;
   final VoidCallback onTap;
 
   @override
@@ -247,26 +247,92 @@ class _PromotionCard extends StatelessWidget {
                 ],
               ),
             ),
-            Positioned(
-              right: 0,
-              top: 0,
-              child: IconButton(
-                constraints: BoxConstraints.tightFor(
-                  height: getProportionateScreenWidth(32, context),
-                  width: getProportionateScreenWidth(32, context),
+            if (onClose != null)
+              Positioned(
+                right: 0,
+                top: 0,
+                child: IconButton(
+                  constraints: BoxConstraints.tightFor(
+                    height: getProportionateScreenWidth(32, context),
+                    width: getProportionateScreenWidth(32, context),
+                  ),
+                  padding: EdgeInsets.zero,
+                  tooltip: 'Close promotions',
+                  onPressed: onClose,
+                  icon: Icon(
+                    Icons.close,
+                    color: MyColors.brown3.withOpacity(0.72),
+                    size: getProportionateScreenWidth(18, context),
+                  ),
                 ),
-                padding: EdgeInsets.zero,
-                tooltip: 'Close promotions',
-                onPressed: onClose,
-                icon: Icon(
-                  Icons.close,
-                  color: MyColors.brown3.withOpacity(0.72),
-                  size: getProportionateScreenWidth(18, context),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PromotionsPage extends StatelessWidget {
+  const PromotionsPage({
+    super.key,
+    this.promotions = mockPromotions,
+  });
+
+  final List<Promotion> promotions;
+
+  void _openPromotion(BuildContext context, Promotion promotion) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PromotionDetailsPage(promotion: promotion),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ListView(
+        padding: EdgeInsets.fromLTRB(
+          getProportionateScreenWidth(14, context),
+          getProportionateScreenHeight(14, context),
+          getProportionateScreenWidth(14, context),
+          getProportionateScreenHeight(24, context),
+        ),
+        children: [
+          Text(
+            'Promotions',
+            style: TextStyle(
+              color: MyColors.brown3,
+              fontSize: getProportionateScreenWidth(24, context),
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          SizedBox(height: getProportionateScreenHeight(6, context)),
+          Text(
+            'Mock promotion data for the backend integration.',
+            style: TextStyle(
+              color: MyColors.brown3.withOpacity(0.66),
+              fontSize: getProportionateScreenWidth(13.5, context),
+            ),
+          ),
+          SizedBox(height: getProportionateScreenHeight(16, context)),
+          ...promotions.map(
+            (promotion) => Padding(
+              padding: EdgeInsets.only(
+                bottom: getProportionateScreenHeight(12, context),
+              ),
+              child: SizedBox(
+                height: getProportionateScreenHeight(118, context),
+                child: _PromotionCard(
+                  promotion: promotion,
+                  onTap: () => _openPromotion(context, promotion),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
