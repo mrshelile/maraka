@@ -102,7 +102,7 @@ class _HomeState extends State<Home> {
           BottomNavyBarItem(
             icon: const Icon(Icons.local_offer_outlined),
             title: const Text('Promotions'),
-            activeColor: MyColors.orange1,
+            activeColor: MyColors.blue3,
             textAlign: TextAlign.center,
           ),
           // BottomNavyBarItem(

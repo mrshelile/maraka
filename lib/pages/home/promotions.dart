@@ -121,7 +121,7 @@ const List<Promotion> mockPromotions = [
     ],
     icon: Icons.local_offer_outlined,
     backgroundColor: MyColors.mintcream,
-    accentColor: MyColors.blue2,
+    accentColor: MyColors.blue3,
   ),
   Promotion(
     title: 'Boost Your Ad',
@@ -169,7 +169,7 @@ const List<Promotion> mockPromotions = [
       'Backend promotion ID placeholder: promo_seller_002.',
     ],
     icon: Icons.campaign_outlined,
-    backgroundColor: MyColors.lightgoldenrodyellow,
+    backgroundColor: MyColors.mintcream,
     accentColor: MyColors.blue3,
   ),
   Promotion(
@@ -234,7 +234,7 @@ const List<Promotion> mockPromotions = [
       'Backend promotion ID placeholder: promo_arrivals_003.',
     ],
     icon: Icons.auto_awesome_outlined,
-    backgroundColor: MyColors.honeydew,
+    backgroundColor: MyColors.mintcream,
     accentColor: MyColors.blue3,
   ),
 ];
