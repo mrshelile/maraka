@@ -12,6 +12,7 @@ class Promotion {
     required this.badge,
     required this.offer,
     required this.validUntil,
+    required this.samples,
     required this.terms,
     required this.icon,
     required this.backgroundColor,
@@ -23,22 +24,99 @@ class Promotion {
   final String badge;
   final String offer;
   final String validUntil;
+  final List<PromotionSample> samples;
   final List<String> terms;
   final IconData icon;
   final Color backgroundColor;
   final Color accentColor;
 }
 
+class PromotionSample {
+  const PromotionSample({
+    required this.title,
+    required this.subtitle,
+    required this.price,
+    required this.location,
+    required this.category,
+    required this.owner,
+    required this.condition,
+    required this.contact,
+    required this.actionLabel,
+    required this.details,
+  });
+
+  final String title;
+  final String subtitle;
+  final String price;
+  final String location;
+  final String category;
+  final String owner;
+  final String condition;
+  final String contact;
+  final String actionLabel;
+  final List<String> details;
+}
+
 const List<Promotion> mockPromotions = [
   Promotion(
     title: 'Weekend Deals',
-    description: 'Save on selected listings from local sellers.',
+    description: 'Weekend discounts from Cash Crusaders.',
     badge: 'Hot offers',
-    offer: 'Up to 30% off selected electronics, fashion, and home listings.',
+    offer: 'Sample weekend deals from Cash Crusaders stores.',
     validUntil: '30 June 2026',
+    samples: [
+      PromotionSample(
+        title: 'Cash Crusaders - Samsung 43" Smart TV',
+        subtitle: 'Pre-owned TV with remote and 7 day store warranty.',
+        price: 'M2,899',
+        location: 'Cash Crusaders Maseru Mall',
+        category: 'Electronics',
+        owner: 'Cash Crusaders',
+        condition: 'Pre-owned',
+        contact: '+266 5800 0101',
+        actionLabel: 'Reserve at store',
+        details: [
+          '43 inch LED smart TV with HDMI and USB ports.',
+          'Includes original remote and power cable.',
+          'Store warranty is mocked as 7 days for backend testing.',
+        ],
+      ),
+      PromotionSample(
+        title: 'Cash Crusaders - HP EliteBook Laptop',
+        subtitle: 'Core i5 laptop, 8GB RAM, ready for work or school.',
+        price: 'M3,450',
+        location: 'Cash Crusaders Pioneer Mall',
+        category: 'Computers',
+        owner: 'Cash Crusaders',
+        condition: 'Pre-owned',
+        contact: '+266 5800 0102',
+        actionLabel: 'Ask about laptop',
+        details: [
+          'Intel Core i5 processor with 8GB RAM.',
+          'Mock storage value: 256GB SSD.',
+          'Suitable for office work, school projects, and browsing.',
+        ],
+      ),
+      PromotionSample(
+        title: 'Cash Crusaders - PlayStation 4 Bundle',
+        subtitle: 'Console, controller, and two games included.',
+        price: 'M4,200',
+        location: 'Cash Crusaders City Centre',
+        category: 'Gaming',
+        owner: 'Cash Crusaders',
+        condition: 'Pre-owned',
+        contact: '+266 5800 0103',
+        actionLabel: 'Check availability',
+        details: [
+          'PS4 console with one wireless controller.',
+          'Includes two sample game titles for mock display.',
+          'Backend can later attach images and stock count.',
+        ],
+      ),
+    ],
     terms: [
-      'Available while promoted listings are active.',
-      'Discounts are confirmed directly with the seller.',
+      'Sample prices are placeholder data for frontend testing.',
+      'Final stock and discounts will be confirmed by Cash Crusaders data.',
       'Backend promotion ID placeholder: promo_weekend_001.',
     ],
     icon: Icons.local_offer_outlined,
@@ -47,13 +125,47 @@ const List<Promotion> mockPromotions = [
   ),
   Promotion(
     title: 'Boost Your Ad',
-    description: 'Featured placement for new marketplace posts.',
+    description: 'Featured placement for Sameer\'s Toyota Camry ad.',
     badge: 'Seller promo',
-    offer: 'Get your first promoted ad placement free for 24 hours.',
+    offer: 'Sameer is boosting his Toyota Camry listing for more visibility.',
     validUntil: '15 July 2026',
+    samples: [
+      PromotionSample(
+        title: 'Sameer - Toyota Camry 2012',
+        subtitle: 'Automatic, petrol, neat interior, roadworthy paperwork.',
+        price: 'M78,000',
+        location: 'Maseru West',
+        category: 'Cars',
+        owner: 'Sameer',
+        condition: 'Used',
+        contact: '+266 5900 2200',
+        actionLabel: 'Message Sameer',
+        details: [
+          'Toyota Camry 2012 automatic petrol model.',
+          'Clean interior and daily runner condition.',
+          'Roadworthy paperwork is listed as available in mock data.',
+        ],
+      ),
+      PromotionSample(
+        title: 'Seller contact preview',
+        subtitle: 'Sameer wants serious buyers to call or message in-app.',
+        price: 'Boosted ad',
+        location: 'Featured for 24 hours',
+        category: 'Promotion placement',
+        owner: 'Sameer',
+        condition: 'Active boost',
+        contact: 'In-app message preview',
+        actionLabel: 'Preview contact flow',
+        details: [
+          'Boosted listing appears higher in the mock promotions feed.',
+          'Contact action will later route to chat or seller phone rules.',
+          'This sample helps test seller promotion display states.',
+        ],
+      ),
+    ],
     terms: [
-      'One promotion per seller account in the mock flow.',
-      'Promotion applies to newly created listings only.',
+      'This is dummy seller data while backend promotion records are prepared.',
+      'The boosted placement will later be controlled by paid promotion rules.',
       'Backend promotion ID placeholder: promo_seller_002.',
     ],
     icon: Icons.campaign_outlined,
@@ -62,13 +174,63 @@ const List<Promotion> mockPromotions = [
   ),
   Promotion(
     title: 'Fresh Arrivals',
-    description: 'Discover newly listed products near you.',
+    description: 'New product examples from Game Stores.',
     badge: 'New today',
-    offer: 'Browse fresh local listings added in the last 48 hours.',
+    offer: 'Fresh arrivals sample feed from Game Stores.',
     validUntil: 'Ongoing',
+    samples: [
+      PromotionSample(
+        title: 'Game Stores - Defy Microwave',
+        subtitle: 'Compact microwave, ideal for student rooms and offices.',
+        price: 'M1,099',
+        location: 'Game Maseru',
+        category: 'Appliances',
+        owner: 'Game Stores',
+        condition: 'New',
+        contact: '+266 5800 0301',
+        actionLabel: 'View store item',
+        details: [
+          'Compact Defy microwave sample listing.',
+          'Ideal for offices, student rooms, or small kitchens.',
+          'Backend can later provide stock level and SKU.',
+        ],
+      ),
+      PromotionSample(
+        title: 'Game Stores - Hisense Fridge',
+        subtitle: 'Two-door fridge with freezer compartment.',
+        price: 'M5,499',
+        location: 'Game Maseru',
+        category: 'Appliances',
+        owner: 'Game Stores',
+        condition: 'New',
+        contact: '+266 5800 0302',
+        actionLabel: 'Check store stock',
+        details: [
+          'Two-door Hisense fridge sample product.',
+          'Includes freezer compartment and adjustable shelves.',
+          'Mock data can map to inventory fields later.',
+        ],
+      ),
+      PromotionSample(
+        title: 'Game Stores - JBL Bluetooth Speaker',
+        subtitle: 'Portable speaker with rechargeable battery.',
+        price: 'M799',
+        location: 'Game Maseru',
+        category: 'Audio',
+        owner: 'Game Stores',
+        condition: 'New',
+        contact: '+266 5800 0303',
+        actionLabel: 'View speaker deal',
+        details: [
+          'Portable Bluetooth speaker with rechargeable battery.',
+          'Mock feature: splash resistant casing.',
+          'Useful for testing promoted accessory cards.',
+        ],
+      ),
+    ],
     terms: [
-      'Shown products will come from backend promotion rules later.',
-      'Mock data is currently used for frontend testing.',
+      'Fresh arrivals are mock examples until store inventory is connected.',
+      'Backend will later decide which store products are promoted.',
       'Backend promotion ID placeholder: promo_arrivals_003.',
     ],
     icon: Icons.auto_awesome_outlined,
@@ -362,6 +524,18 @@ class PromotionDetailsPage extends StatelessWidget {
 
   final Promotion promotion;
 
+  void _openSample(BuildContext context, PromotionSample sample) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PromotionSampleDetailsPage(
+          promotion: promotion,
+          sample: sample,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -453,6 +627,28 @@ class PromotionDetailsPage extends StatelessWidget {
               ),
               SizedBox(height: getProportionateScreenHeight(18, context)),
               Text(
+                'Promotion samples',
+                style: TextStyle(
+                  color: MyColors.brown3,
+                  fontSize: getProportionateScreenWidth(18, context),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: getProportionateScreenHeight(10, context)),
+              ...promotion.samples.map(
+                (sample) => Padding(
+                  padding: EdgeInsets.only(
+                    bottom: getProportionateScreenHeight(10, context),
+                  ),
+                  child: _PromotionSampleCard(
+                    sample: sample,
+                    color: promotion.accentColor,
+                    onTap: () => _openSample(context, sample),
+                  ),
+                ),
+              ),
+              SizedBox(height: getProportionateScreenHeight(8, context)),
+              Text(
                 'Promotion terms',
                 style: TextStyle(
                   color: MyColors.brown3,
@@ -487,6 +683,313 @@ class PromotionDetailsPage extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PromotionSampleCard extends StatelessWidget {
+  const _PromotionSampleCard({
+    required this.sample,
+    required this.color,
+    required this.onTap,
+  });
+
+  final PromotionSample sample;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(getProportionateScreenWidth(14, context)),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: color.withOpacity(0.18)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.18),
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: getProportionateScreenWidth(42, context),
+              width: getProportionateScreenWidth(42, context),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                Icons.shopping_bag_outlined,
+                color: color,
+                size: getProportionateScreenWidth(22, context),
+              ),
+            ),
+            SizedBox(width: getProportionateScreenWidth(12, context)),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    sample.title,
+                    style: TextStyle(
+                      color: MyColors.brown3,
+                      fontSize: getProportionateScreenWidth(14.5, context),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: getProportionateScreenHeight(4, context)),
+                  Text(
+                    sample.subtitle,
+                    style: TextStyle(
+                      color: MyColors.brown3.withOpacity(0.7),
+                      fontSize: getProportionateScreenWidth(12.5, context),
+                      height: 1.25,
+                    ),
+                  ),
+                  SizedBox(height: getProportionateScreenHeight(8, context)),
+                  Row(
+                    children: [
+                      Text(
+                        sample.price,
+                        style: TextStyle(
+                          color: color,
+                          fontSize: getProportionateScreenWidth(13.5, context),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: getProportionateScreenWidth(10, context)),
+                      Expanded(
+                        child: Text(
+                          sample.location,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: MyColors.brown3.withOpacity(0.58),
+                            fontSize: getProportionateScreenWidth(12, context),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(width: getProportionateScreenWidth(6, context)),
+            Icon(
+              Icons.chevron_right,
+              color: color,
+              size: getProportionateScreenWidth(22, context),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PromotionSampleDetailsPage extends StatelessWidget {
+  const PromotionSampleDetailsPage({
+    super.key,
+    required this.promotion,
+    required this.sample,
+  });
+
+  final Promotion promotion;
+  final PromotionSample sample;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: MyColors.blue3,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        title: Text(sample.title),
+      ),
+      body: Stack(
+        children: [
+          CustomPaint(
+            painter: BackgroundDesign(),
+            child: Container(),
+          ),
+          ListView(
+            padding: EdgeInsets.all(getProportionateScreenWidth(18, context)),
+            children: [
+              Container(
+                padding:
+                    EdgeInsets.all(getProportionateScreenWidth(18, context)),
+                decoration: BoxDecoration(
+                  color: promotion.backgroundColor,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                      color: promotion.accentColor.withOpacity(0.28)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.18),
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: getProportionateScreenWidth(58, context),
+                      width: getProportionateScreenWidth(58, context),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.82),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        promotion.icon,
+                        color: promotion.accentColor,
+                        size: getProportionateScreenWidth(32, context),
+                      ),
+                    ),
+                    SizedBox(height: getProportionateScreenHeight(16, context)),
+                    Text(
+                      sample.owner,
+                      style: TextStyle(
+                        color: promotion.accentColor,
+                        fontSize: getProportionateScreenWidth(13, context),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: getProportionateScreenHeight(8, context)),
+                    Text(
+                      sample.title,
+                      style: TextStyle(
+                        color: MyColors.brown3,
+                        fontSize: getProportionateScreenWidth(22, context),
+                        fontWeight: FontWeight.bold,
+                        height: 1.15,
+                      ),
+                    ),
+                    SizedBox(height: getProportionateScreenHeight(10, context)),
+                    Text(
+                      sample.subtitle,
+                      style: TextStyle(
+                        color: MyColors.brown3.withOpacity(0.72),
+                        fontSize: getProportionateScreenWidth(14, context),
+                        height: 1.35,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: getProportionateScreenHeight(18, context)),
+              _PromotionInfoRow(
+                icon: Icons.sell_outlined,
+                label: 'Price',
+                value: sample.price,
+                color: promotion.accentColor,
+              ),
+              SizedBox(height: getProportionateScreenHeight(10, context)),
+              _PromotionInfoRow(
+                icon: Icons.category_outlined,
+                label: 'Category',
+                value: sample.category,
+                color: promotion.accentColor,
+              ),
+              SizedBox(height: getProportionateScreenHeight(10, context)),
+              _PromotionInfoRow(
+                icon: Icons.verified_outlined,
+                label: 'Condition',
+                value: sample.condition,
+                color: promotion.accentColor,
+              ),
+              SizedBox(height: getProportionateScreenHeight(10, context)),
+              _PromotionInfoRow(
+                icon: Icons.location_on_outlined,
+                label: 'Location',
+                value: sample.location,
+                color: promotion.accentColor,
+              ),
+              SizedBox(height: getProportionateScreenHeight(10, context)),
+              _PromotionInfoRow(
+                icon: Icons.phone_outlined,
+                label: 'Contact',
+                value: sample.contact,
+                color: promotion.accentColor,
+              ),
+              SizedBox(height: getProportionateScreenHeight(18, context)),
+              Text(
+                'Sample details',
+                style: TextStyle(
+                  color: MyColors.brown3,
+                  fontSize: getProportionateScreenWidth(18, context),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: getProportionateScreenHeight(10, context)),
+              ...sample.details.map(
+                (detail) => Padding(
+                  padding: EdgeInsets.only(
+                    bottom: getProportionateScreenHeight(9, context),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.check_circle_outline,
+                        color: promotion.accentColor,
+                        size: getProportionateScreenWidth(18, context),
+                      ),
+                      SizedBox(width: getProportionateScreenWidth(9, context)),
+                      Expanded(
+                        child: Text(
+                          detail,
+                          style: TextStyle(
+                            color: MyColors.brown3.withOpacity(0.78),
+                            fontSize:
+                                getProportionateScreenWidth(13.5, context),
+                            height: 1.3,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: getProportionateScreenHeight(10, context)),
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: promotion.accentColor,
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(
+                      vertical: getProportionateScreenHeight(13, context),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    sample.actionLabel,
+                    style: TextStyle(
+                      fontSize: getProportionateScreenWidth(14, context),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
