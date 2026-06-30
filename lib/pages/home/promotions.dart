@@ -12,6 +12,9 @@ class Promotion {
     required this.badge,
     required this.offer,
     required this.validUntil,
+    required this.imageAsset,
+    required this.flyerStyle,
+    this.uploadedFlyerUrl,
     required this.samples,
     required this.terms,
     required this.icon,
@@ -24,6 +27,9 @@ class Promotion {
   final String badge;
   final String offer;
   final String validUntil;
+  final String imageAsset;
+  final PromotionFlyerStyle flyerStyle;
+  final String? uploadedFlyerUrl;
   final List<PromotionSample> samples;
   final List<String> terms;
   final IconData icon;
@@ -57,6 +63,12 @@ class PromotionSample {
   final List<String> details;
 }
 
+enum PromotionFlyerStyle {
+  image,
+  cashCrusaders,
+  game,
+}
+
 const List<Promotion> mockPromotions = [
   Promotion(
     title: 'Weekend Deals',
@@ -64,6 +76,8 @@ const List<Promotion> mockPromotions = [
     badge: 'Hot offers',
     offer: 'Sample weekend deals from Cash Crusaders stores.',
     validUntil: '30 June 2026',
+    imageAsset: 'assets/mock_flyers/weekend_deals.webp',
+    flyerStyle: PromotionFlyerStyle.image,
     samples: [
       PromotionSample(
         title: 'Cash Crusaders - Samsung 43" Smart TV',
@@ -129,6 +143,8 @@ const List<Promotion> mockPromotions = [
     badge: 'Seller promo',
     offer: 'Sameer is boosting his Toyota Camry listing for more visibility.',
     validUntil: '15 July 2026',
+    imageAsset: 'assets/car1.jpeg',
+    flyerStyle: PromotionFlyerStyle.image,
     samples: [
       PromotionSample(
         title: 'Sameer - Toyota Camry 2012',
@@ -178,6 +194,8 @@ const List<Promotion> mockPromotions = [
     badge: 'New today',
     offer: 'Fresh arrivals sample feed from Game Stores.',
     validUntil: 'Ongoing',
+    imageAsset: 'assets/mock_flyers/fresh_arrivals.webp',
+    flyerStyle: PromotionFlyerStyle.image,
     samples: [
       PromotionSample(
         title: 'Game Stores - Defy Microwave',
@@ -261,12 +279,7 @@ class _PromotionsBannerState extends State<PromotionsBanner> {
   }
 
   void _openPromotion(Promotion promotion) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PromotionDetailsPage(promotion: promotion),
-      ),
-    );
+    showPromotionDetailsDialog(context, promotion);
   }
 
   @override
@@ -293,7 +306,7 @@ class _PromotionsBannerState extends State<PromotionsBanner> {
             )
             .toList(),
         options: CarouselOptions(
-          height: getProportionateScreenHeight(118, context),
+          height: getProportionateScreenHeight(132, context),
           viewportFraction: 1,
           enableInfiniteScroll: widget.promotions.length > 1,
           autoPlay: widget.promotions.length > 1,
@@ -319,124 +332,171 @@ class _PromotionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(
-          horizontal: getProportionateScreenWidth(18, context),
-          vertical: getProportionateScreenHeight(14, context),
-        ),
-        decoration: BoxDecoration(
-          color: promotion.backgroundColor,
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: promotion.accentColor.withOpacity(0.28)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.18),
-              blurRadius: 5,
-              offset: const Offset(0, 3),
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(14, context),
+        vertical: getProportionateScreenHeight(12, context),
+      ),
+      decoration: BoxDecoration(
+        color: promotion.backgroundColor,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: promotion.accentColor.withOpacity(0.28)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.18),
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+              right: onClose == null
+                  ? 0
+                  : getProportionateScreenWidth(28, context),
             ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  right: getProportionateScreenWidth(28, context)),
-              child: Row(
-                children: [
-                  Container(
-                    height: getProportionateScreenWidth(52, context),
-                    width: getProportionateScreenWidth(52, context),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.78),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      promotion.icon,
-                      color: promotion.accentColor,
-                      size: getProportionateScreenWidth(28, context),
-                    ),
-                  ),
-                  SizedBox(width: getProportionateScreenWidth(14, context)),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: getProportionateScreenWidth(9, context),
-                            vertical: getProportionateScreenHeight(3, context),
-                          ),
-                          decoration: BoxDecoration(
-                            color: promotion.accentColor.withOpacity(0.14),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            promotion.badge,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: promotion.accentColor,
-                              fontSize:
-                                  getProportionateScreenWidth(11, context),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+            child: Row(
+              children: [
+                _PromotionImageButton(
+                  promotion: promotion,
+                  onTap: onTap,
+                ),
+                SizedBox(width: getProportionateScreenWidth(13, context)),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: getProportionateScreenWidth(9, context),
+                          vertical: getProportionateScreenHeight(3, context),
                         ),
-                        SizedBox(
-                            height: getProportionateScreenHeight(7, context)),
-                        Text(
-                          promotion.title,
+                        decoration: BoxDecoration(
+                          color: promotion.accentColor.withOpacity(0.14),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          promotion.badge,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: MyColors.brown3,
-                            fontSize: getProportionateScreenWidth(17, context),
+                            color: promotion.accentColor,
+                            fontSize: getProportionateScreenWidth(11, context),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(
-                            height: getProportionateScreenHeight(3, context)),
-                        Text(
-                          promotion.description,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: MyColors.brown3.withOpacity(0.72),
-                            fontSize:
-                                getProportionateScreenWidth(12.5, context),
-                            height: 1.2,
-                          ),
+                      ),
+                      SizedBox(
+                          height: getProportionateScreenHeight(7, context)),
+                      Text(
+                        promotion.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: MyColors.brown3,
+                          fontSize: getProportionateScreenWidth(17, context),
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            if (onClose != null)
-              Positioned(
-                right: 0,
-                top: 0,
-                child: IconButton(
-                  constraints: BoxConstraints.tightFor(
-                    height: getProportionateScreenWidth(32, context),
-                    width: getProportionateScreenWidth(32, context),
-                  ),
-                  padding: EdgeInsets.zero,
-                  tooltip: 'Close promotions',
-                  onPressed: onClose,
-                  icon: Icon(
-                    Icons.close,
-                    color: MyColors.brown3.withOpacity(0.72),
-                    size: getProportionateScreenWidth(18, context),
+                      ),
+                      SizedBox(
+                          height: getProportionateScreenHeight(3, context)),
+                      Text(
+                        promotion.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: MyColors.brown3.withOpacity(0.72),
+                          fontSize: getProportionateScreenWidth(12.5, context),
+                          height: 1.2,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+              ],
+            ),
+          ),
+          if (onClose != null)
+            Positioned(
+              right: 0,
+              top: 0,
+              child: IconButton(
+                constraints: BoxConstraints.tightFor(
+                  height: getProportionateScreenWidth(32, context),
+                  width: getProportionateScreenWidth(32, context),
+                ),
+                padding: EdgeInsets.zero,
+                tooltip: 'Close promotions',
+                onPressed: onClose,
+                icon: Icon(
+                  Icons.close,
+                  color: MyColors.brown3.withOpacity(0.72),
+                  size: getProportionateScreenWidth(18, context),
+                ),
               ),
-          ],
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PromotionImageButton extends StatelessWidget {
+  const _PromotionImageButton({
+    required this.promotion,
+    required this.onTap,
+  });
+
+  final Promotion promotion;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = getProportionateScreenWidth(92, context);
+
+    return Semantics(
+      button: true,
+      label: promotion.title,
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: SizedBox(
+            height: size,
+            width: size,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                PromotionVisual(
+                  promotion: promotion,
+                  compact: true,
+                ),
+                Positioned(
+                  right: getProportionateScreenWidth(6, context),
+                  bottom: getProportionateScreenWidth(6, context),
+                  child: Container(
+                    height: getProportionateScreenWidth(24, context),
+                    width: getProportionateScreenWidth(24, context),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.92),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.chevron_right,
+                      color: promotion.accentColor,
+                      size: getProportionateScreenWidth(18, context),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -452,12 +512,7 @@ class PromotionsPage extends StatelessWidget {
   final List<Promotion> promotions;
 
   void _openPromotion(BuildContext context, Promotion promotion) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PromotionDetailsPage(promotion: promotion),
-      ),
-    );
+    showPromotionDetailsDialog(context, promotion);
   }
 
   @override
@@ -500,7 +555,7 @@ class PromotionsPage extends StatelessWidget {
                     bottom: getProportionateScreenHeight(12, context),
                   ),
                   child: SizedBox(
-                    height: getProportionateScreenHeight(118, context),
+                    height: getProportionateScreenHeight(132, context),
                     child: _PromotionCard(
                       promotion: promotion,
                       onTap: () => _openPromotion(context, promotion),
@@ -512,6 +567,849 @@ class PromotionsPage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+void showPromotionDetailsDialog(BuildContext context, Promotion promotion) {
+  showDialog<void>(
+    context: context,
+    barrierColor: Colors.black.withOpacity(0.62),
+    builder: (context) => PromotionDetailsDialog(promotion: promotion),
+  );
+}
+
+class PromotionDetailsDialog extends StatelessWidget {
+  const PromotionDetailsDialog({
+    super.key,
+    required this.promotion,
+  });
+
+  final Promotion promotion;
+
+  @override
+  Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final dialogWidth = screenSize.width < 560
+        ? screenSize.width - getProportionateScreenWidth(24, context)
+        : 520.0;
+
+    return Dialog(
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(12, context),
+        vertical: getProportionateScreenHeight(18, context),
+      ),
+      backgroundColor: Colors.transparent,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: screenSize.height * 0.88,
+          maxWidth: dialogWidth,
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(14),
+          child: Material(
+            color: Colors.white,
+            child: Stack(
+              children: [
+                ListView(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  children: [
+                    _PromotionDialogImage(promotion: promotion),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        getProportionateScreenWidth(18, context),
+                        getProportionateScreenHeight(16, context),
+                        getProportionateScreenWidth(18, context),
+                        getProportionateScreenHeight(18, context),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  getProportionateScreenWidth(10, context),
+                              vertical:
+                                  getProportionateScreenHeight(4, context),
+                            ),
+                            decoration: BoxDecoration(
+                              color: promotion.accentColor.withOpacity(0.12),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              promotion.badge,
+                              style: TextStyle(
+                                color: promotion.accentColor,
+                                fontSize:
+                                    getProportionateScreenWidth(12, context),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                              height:
+                                  getProportionateScreenHeight(10, context)),
+                          Text(
+                            promotion.title,
+                            style: TextStyle(
+                              color: MyColors.brown3,
+                              fontSize:
+                                  getProportionateScreenWidth(22, context),
+                              fontWeight: FontWeight.bold,
+                              height: 1.12,
+                            ),
+                          ),
+                          SizedBox(
+                              height: getProportionateScreenHeight(8, context)),
+                          Text(
+                            promotion.offer,
+                            style: TextStyle(
+                              color: MyColors.brown3.withOpacity(0.78),
+                              fontSize:
+                                  getProportionateScreenWidth(14, context),
+                              height: 1.32,
+                            ),
+                          ),
+                          SizedBox(
+                              height:
+                                  getProportionateScreenHeight(14, context)),
+                          _PromotionInfoRow(
+                            icon: Icons.event_available_outlined,
+                            label: 'Valid until',
+                            value: promotion.validUntil,
+                            color: promotion.accentColor,
+                          ),
+                          SizedBox(
+                              height:
+                                  getProportionateScreenHeight(14, context)),
+                          Text(
+                            'Specials in this promotion',
+                            style: TextStyle(
+                              color: MyColors.brown3,
+                              fontSize:
+                                  getProportionateScreenWidth(17, context),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                              height: getProportionateScreenHeight(8, context)),
+                          ...promotion.samples.map(
+                            (sample) => _PromotionDialogDeal(
+                              sample: sample,
+                              color: promotion.accentColor,
+                            ),
+                          ),
+                          SizedBox(
+                              height:
+                                  getProportionateScreenHeight(10, context)),
+                          Text(
+                            'Terms',
+                            style: TextStyle(
+                              color: MyColors.brown3,
+                              fontSize:
+                                  getProportionateScreenWidth(17, context),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                              height: getProportionateScreenHeight(8, context)),
+                          ...promotion.terms.map(
+                            (term) => Padding(
+                              padding: EdgeInsets.only(
+                                bottom:
+                                    getProportionateScreenHeight(8, context),
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.check_circle_outline,
+                                    color: promotion.accentColor,
+                                    size: getProportionateScreenWidth(
+                                        18, context),
+                                  ),
+                                  SizedBox(
+                                      width: getProportionateScreenWidth(
+                                          8, context)),
+                                  Expanded(
+                                    child: Text(
+                                      term,
+                                      style: TextStyle(
+                                        color:
+                                            MyColors.brown3.withOpacity(0.78),
+                                        fontSize: getProportionateScreenWidth(
+                                            13, context),
+                                        height: 1.32,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  right: getProportionateScreenWidth(8, context),
+                  top: getProportionateScreenWidth(8, context),
+                  child: Material(
+                    color: Colors.white.withOpacity(0.94),
+                    shape: const CircleBorder(),
+                    child: IconButton(
+                      constraints: BoxConstraints.tightFor(
+                        height: getProportionateScreenWidth(38, context),
+                        width: getProportionateScreenWidth(38, context),
+                      ),
+                      padding: EdgeInsets.zero,
+                      tooltip: 'Close promotion',
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(
+                        Icons.close,
+                        color: MyColors.brown3,
+                        size: getProportionateScreenWidth(20, context),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PromotionDialogImage extends StatelessWidget {
+  const _PromotionDialogImage({
+    required this.promotion,
+  });
+
+  final Promotion promotion;
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1.28,
+      child: PromotionVisual(promotion: promotion),
+    );
+  }
+}
+
+class PromotionVisual extends StatelessWidget {
+  const PromotionVisual({
+    super.key,
+    required this.promotion,
+    this.compact = false,
+  });
+
+  final Promotion promotion;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    final uploadedFlyerUrl = promotion.uploadedFlyerUrl?.trim();
+    if (uploadedFlyerUrl != null && uploadedFlyerUrl.isNotEmpty) {
+      return _UploadedPromotionFlyer(
+        promotion: promotion,
+        imageUrl: uploadedFlyerUrl,
+        compact: compact,
+      );
+    }
+
+    switch (promotion.flyerStyle) {
+      case PromotionFlyerStyle.cashCrusaders:
+        return _StoreFlyer(
+          promotion: promotion,
+          compact: compact,
+          storeName: 'CASH CRUSADERS',
+          strapline: 'Pre-owned bargains',
+          primaryColor: const Color(0xff006a4e),
+          secondaryColor: const Color(0xfff4c430),
+          surfaceColor: const Color(0xfff7fff8),
+        );
+      case PromotionFlyerStyle.game:
+        return _StoreFlyer(
+          promotion: promotion,
+          compact: compact,
+          storeName: 'GAME',
+          strapline: 'Fresh arrivals',
+          primaryColor: const Color(0xffd71920),
+          secondaryColor: const Color(0xffffd400),
+          surfaceColor: const Color(0xfffffbf0),
+        );
+      case PromotionFlyerStyle.image:
+        return Image.asset(
+          promotion.imageAsset,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => _PromotionImageFallback(
+            promotion: promotion,
+            compact: compact,
+          ),
+        );
+    }
+  }
+}
+
+class _UploadedPromotionFlyer extends StatelessWidget {
+  const _UploadedPromotionFlyer({
+    required this.promotion,
+    required this.imageUrl,
+    required this.compact,
+  });
+
+  final Promotion promotion;
+  final String imageUrl;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.network(
+      imageUrl,
+      fit: BoxFit.cover,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) {
+          return child;
+        }
+
+        return Container(
+          color: promotion.accentColor.withOpacity(0.08),
+          alignment: Alignment.center,
+          child: SizedBox(
+            height: getProportionateScreenWidth(compact ? 20 : 30, context),
+            width: getProportionateScreenWidth(compact ? 20 : 30, context),
+            child: CircularProgressIndicator(
+              strokeWidth: compact ? 2 : 3,
+              color: promotion.accentColor,
+            ),
+          ),
+        );
+      },
+      errorBuilder: (context, error, stackTrace) => _PromotionImageFallback(
+        promotion: promotion,
+        compact: compact,
+      ),
+    );
+  }
+}
+
+class _PromotionImageFallback extends StatelessWidget {
+  const _PromotionImageFallback({
+    required this.promotion,
+    required this.compact,
+  });
+
+  final Promotion promotion;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: promotion.accentColor.withOpacity(0.12),
+      child: Icon(
+        promotion.icon,
+        color: promotion.accentColor,
+        size: getProportionateScreenWidth(compact ? 30 : 48, context),
+      ),
+    );
+  }
+}
+
+class _StoreFlyer extends StatelessWidget {
+  const _StoreFlyer({
+    required this.promotion,
+    required this.compact,
+    required this.storeName,
+    required this.strapline,
+    required this.primaryColor,
+    required this.secondaryColor,
+    required this.surfaceColor,
+  });
+
+  final Promotion promotion;
+  final bool compact;
+  final String storeName;
+  final String strapline;
+  final Color primaryColor;
+  final Color secondaryColor;
+  final Color surfaceColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final height = constraints.maxHeight;
+        final scale = (width / 320).clamp(0.32, 1.45).toDouble();
+        final deals = promotion.samples.take(compact ? 2 : 3).toList();
+
+        return Container(
+          color: surfaceColor,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Positioned(
+                right: -width * 0.16,
+                bottom: -height * 0.2,
+                child: Container(
+                  height: height * 0.52,
+                  width: height * 0.52,
+                  decoration: BoxDecoration(
+                    color: secondaryColor.withOpacity(0.42),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    color: primaryColor,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 14 * scale,
+                      vertical: compact ? 7 * scale : 12 * scale,
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: compact ? 23 * scale : 36 * scale,
+                          width: compact ? 23 * scale : 36 * scale,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: secondaryColor,
+                            borderRadius: BorderRadius.circular(5 * scale),
+                          ),
+                          child: Text(
+                            storeName.substring(0, 1),
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: compact ? 14 * scale : 22 * scale,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8 * scale),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                storeName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: compact ? 13 * scale : 22 * scale,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              if (!compact)
+                                Text(
+                                  strapline,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.86),
+                                    fontSize: 11 * scale,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        10 * scale,
+                        compact ? 6 * scale : 10 * scale,
+                        10 * scale,
+                        9 * scale,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  compact
+                                      ? promotion.title.toUpperCase()
+                                      : promotion.title,
+                                  maxLines: compact ? 1 : 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: primaryColor,
+                                    fontSize: compact ? 10 * scale : 18 * scale,
+                                    fontWeight: FontWeight.w900,
+                                    height: 1.05,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 6 * scale,
+                                  vertical: 3 * scale,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: secondaryColor,
+                                  borderRadius:
+                                      BorderRadius.circular(4 * scale),
+                                ),
+                                child: Text(
+                                  compact ? 'SAVE' : promotion.badge,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: primaryColor,
+                                    fontSize: compact ? 8 * scale : 10 * scale,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: compact ? 5 * scale : 10 * scale),
+                          Expanded(
+                            child: compact
+                                ? Column(
+                                    children: deals
+                                        .map(
+                                          (sample) => Expanded(
+                                            child: _FlyerDealStrip(
+                                              sample: sample,
+                                              primaryColor: primaryColor,
+                                              secondaryColor: secondaryColor,
+                                              scale: scale,
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                  )
+                                : GridView.count(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 8 * scale,
+                                    crossAxisSpacing: 8 * scale,
+                                    childAspectRatio: 1.34,
+                                    padding: EdgeInsets.zero,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    children: deals
+                                        .map(
+                                          (sample) => _FlyerDealTile(
+                                            sample: sample,
+                                            primaryColor: primaryColor,
+                                            secondaryColor: secondaryColor,
+                                            scale: scale,
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                          ),
+                          if (!compact)
+                            Padding(
+                              padding: EdgeInsets.only(top: 8 * scale),
+                              child: Text(
+                                'Valid until ${promotion.validUntil}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: MyColors.brown3.withOpacity(0.64),
+                                  fontSize: 10 * scale,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _FlyerDealStrip extends StatelessWidget {
+  const _FlyerDealStrip({
+    required this.sample,
+    required this.primaryColor,
+    required this.secondaryColor,
+    required this.scale,
+  });
+
+  final PromotionSample sample;
+  final Color primaryColor;
+  final Color secondaryColor;
+  final double scale;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 4 * scale),
+      padding: EdgeInsets.symmetric(horizontal: 6 * scale, vertical: 4 * scale),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5 * scale),
+        border: Border.all(color: primaryColor.withOpacity(0.18)),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.sell_outlined,
+            color: primaryColor,
+            size: 12 * scale,
+          ),
+          SizedBox(width: 5 * scale),
+          Expanded(
+            child: Text(
+              _flyerProductName(sample),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: MyColors.brown3,
+                fontSize: 7.5 * scale,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          Text(
+            sample.price,
+            style: TextStyle(
+              color: primaryColor,
+              fontSize: 8.5 * scale,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FlyerDealTile extends StatelessWidget {
+  const _FlyerDealTile({
+    required this.sample,
+    required this.primaryColor,
+    required this.secondaryColor,
+    required this.scale,
+  });
+
+  final PromotionSample sample;
+  final Color primaryColor;
+  final Color secondaryColor;
+  final double scale;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(9 * scale),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(7 * scale),
+        border: Border.all(color: primaryColor.withOpacity(0.18)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.07),
+            blurRadius: 8 * scale,
+            offset: Offset(0, 3 * scale),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                height: 28 * scale,
+                width: 28 * scale,
+                decoration: BoxDecoration(
+                  color: secondaryColor.withOpacity(0.38),
+                  borderRadius: BorderRadius.circular(6 * scale),
+                ),
+                child: Icon(
+                  _flyerIcon(sample.category),
+                  color: primaryColor,
+                  size: 17 * scale,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 6 * scale,
+                  vertical: 3 * scale,
+                ),
+                decoration: BoxDecoration(
+                  color: primaryColor,
+                  borderRadius: BorderRadius.circular(4 * scale),
+                ),
+                child: Text(
+                  sample.price,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 13 * scale,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8 * scale),
+          Text(
+            _flyerProductName(sample),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: MyColors.brown3,
+              fontSize: 12 * scale,
+              fontWeight: FontWeight.w900,
+              height: 1.08,
+            ),
+          ),
+          SizedBox(height: 4 * scale),
+          Text(
+            sample.subtitle,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: MyColors.brown3.withOpacity(0.62),
+              fontSize: 9 * scale,
+              height: 1.18,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+String _flyerProductName(PromotionSample sample) {
+  final separatorIndex = sample.title.indexOf(' - ');
+  if (separatorIndex == -1) {
+    return sample.title;
+  }
+  return sample.title.substring(separatorIndex + 3);
+}
+
+IconData _flyerIcon(String category) {
+  switch (category) {
+    case 'Electronics':
+      return Icons.tv_outlined;
+    case 'Computers':
+      return Icons.laptop_mac_outlined;
+    case 'Gaming':
+      return Icons.sports_esports_outlined;
+    case 'Appliances':
+      return Icons.kitchen_outlined;
+    case 'Audio':
+      return Icons.speaker_outlined;
+    default:
+      return Icons.local_offer_outlined;
+  }
+}
+
+class _PromotionDialogDeal extends StatelessWidget {
+  const _PromotionDialogDeal({
+    required this.sample,
+    required this.color,
+  });
+
+  final PromotionSample sample;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: getProportionateScreenHeight(8, context)),
+      padding: EdgeInsets.all(getProportionateScreenWidth(12, context)),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.06),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color.withOpacity(0.14)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: getProportionateScreenWidth(40, context),
+            width: getProportionateScreenWidth(40, context),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              Icons.local_offer_outlined,
+              color: color,
+              size: getProportionateScreenWidth(21, context),
+            ),
+          ),
+          SizedBox(width: getProportionateScreenWidth(10, context)),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  sample.title,
+                  style: TextStyle(
+                    color: MyColors.brown3,
+                    fontSize: getProportionateScreenWidth(13.5, context),
+                    fontWeight: FontWeight.bold,
+                    height: 1.18,
+                  ),
+                ),
+                SizedBox(height: getProportionateScreenHeight(4, context)),
+                Text(
+                  sample.subtitle,
+                  style: TextStyle(
+                    color: MyColors.brown3.withOpacity(0.68),
+                    fontSize: getProportionateScreenWidth(12.5, context),
+                    height: 1.26,
+                  ),
+                ),
+                SizedBox(height: getProportionateScreenHeight(7, context)),
+                Row(
+                  children: [
+                    Text(
+                      sample.price,
+                      style: TextStyle(
+                        color: color,
+                        fontSize: getProportionateScreenWidth(13.5, context),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: getProportionateScreenWidth(10, context)),
+                    Expanded(
+                      child: Text(
+                        sample.location,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: MyColors.brown3.withOpacity(0.58),
+                          fontSize: getProportionateScreenWidth(12, context),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
