@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../../size_config.dart';
 import '../../themes/background.dart';
@@ -12,10 +13,9 @@ class Promotion {
     required this.badge,
     required this.offer,
     required this.validUntil,
-    required this.imageAsset,
+      required this.imageAsset,
     required this.flyerStyle,
     this.uploadedFlyerUrl,
-    required this.samples,
     required this.terms,
     required this.icon,
     required this.backgroundColor,
@@ -30,37 +30,10 @@ class Promotion {
   final String imageAsset;
   final PromotionFlyerStyle flyerStyle;
   final String? uploadedFlyerUrl;
-  final List<PromotionSample> samples;
   final List<String> terms;
   final IconData icon;
   final Color backgroundColor;
   final Color accentColor;
-}
-
-class PromotionSample {
-  const PromotionSample({
-    required this.title,
-    required this.subtitle,
-    required this.price,
-    required this.location,
-    required this.category,
-    required this.owner,
-    required this.condition,
-    required this.contact,
-    required this.actionLabel,
-    required this.details,
-  });
-
-  final String title;
-  final String subtitle;
-  final String price;
-  final String location;
-  final String category;
-  final String owner;
-  final String condition;
-  final String contact;
-  final String actionLabel;
-  final List<String> details;
 }
 
 enum PromotionFlyerStyle {
@@ -78,56 +51,6 @@ const List<Promotion> mockPromotions = [
     validUntil: '30 June 2026',
     imageAsset: 'assets/mock_flyers/weekend_deals.webp',
     flyerStyle: PromotionFlyerStyle.image,
-    samples: [
-      PromotionSample(
-        title: 'Cash Crusaders - Samsung 43" Smart TV',
-        subtitle: 'Pre-owned TV with remote and 7 day store warranty.',
-        price: 'M2,899',
-        location: 'Cash Crusaders Maseru Mall',
-        category: 'Electronics',
-        owner: 'Cash Crusaders',
-        condition: 'Pre-owned',
-        contact: '+266 5800 0101',
-        actionLabel: 'Reserve at store',
-        details: [
-          '43 inch LED smart TV with HDMI and USB ports.',
-          'Includes original remote and power cable.',
-          'Store warranty is mocked as 7 days for backend testing.',
-        ],
-      ),
-      PromotionSample(
-        title: 'Cash Crusaders - HP EliteBook Laptop',
-        subtitle: 'Core i5 laptop, 8GB RAM, ready for work or school.',
-        price: 'M3,450',
-        location: 'Cash Crusaders Pioneer Mall',
-        category: 'Computers',
-        owner: 'Cash Crusaders',
-        condition: 'Pre-owned',
-        contact: '+266 5800 0102',
-        actionLabel: 'Ask about laptop',
-        details: [
-          'Intel Core i5 processor with 8GB RAM.',
-          'Mock storage value: 256GB SSD.',
-          'Suitable for office work, school projects, and browsing.',
-        ],
-      ),
-      PromotionSample(
-        title: 'Cash Crusaders - PlayStation 4 Bundle',
-        subtitle: 'Console, controller, and two games included.',
-        price: 'M4,200',
-        location: 'Cash Crusaders City Centre',
-        category: 'Gaming',
-        owner: 'Cash Crusaders',
-        condition: 'Pre-owned',
-        contact: '+266 5800 0103',
-        actionLabel: 'Check availability',
-        details: [
-          'PS4 console with one wireless controller.',
-          'Includes two sample game titles for mock display.',
-          'Backend can later attach images and stock count.',
-        ],
-      ),
-    ],
     terms: [
       'Sample prices are placeholder data for frontend testing.',
       'Final stock and discounts will be confirmed by Cash Crusaders data.',
@@ -138,53 +61,32 @@ const List<Promotion> mockPromotions = [
     accentColor: MyColors.blue3,
   ),
   Promotion(
-    title: 'Boost Your Ad',
-    description: 'Featured placement for Sameer\'s Toyota Camry ad.',
-    badge: 'Seller promo',
-    offer: 'Sameer is boosting his Toyota Camry listing for more visibility.',
-    validUntil: '15 July 2026',
-    imageAsset: 'assets/car1.jpeg',
+    title: 'Weekend Deals 2',
+    description: 'Additional weekend flyer preview.',
+    badge: 'Hot offers',
+    offer: 'Additional weekend flyer preview from the mock flyers folder.',
+    validUntil: '30 June 2026',
+    imageAsset: 'assets/mock_flyers/weekend_deals2.webp',
     flyerStyle: PromotionFlyerStyle.image,
-    samples: [
-      PromotionSample(
-        title: 'Sameer - Toyota Camry 2012',
-        subtitle: 'Automatic, petrol, neat interior, roadworthy paperwork.',
-        price: 'M78,000',
-        location: 'Maseru West',
-        category: 'Cars',
-        owner: 'Sameer',
-        condition: 'Used',
-        contact: '+266 5900 2200',
-        actionLabel: 'Message Sameer',
-        details: [
-          'Toyota Camry 2012 automatic petrol model.',
-          'Clean interior and daily runner condition.',
-          'Roadworthy paperwork is listed as available in mock data.',
-        ],
-      ),
-      PromotionSample(
-        title: 'Seller contact preview',
-        subtitle: 'Sameer wants serious buyers to call or message in-app.',
-        price: 'Boosted ad',
-        location: 'Featured for 24 hours',
-        category: 'Promotion placement',
-        owner: 'Sameer',
-        condition: 'Active boost',
-        contact: 'In-app message preview',
-        actionLabel: 'Preview contact flow',
-        details: [
-          'Boosted listing appears higher in the mock promotions feed.',
-          'Contact action will later route to chat or seller phone rules.',
-          'This sample helps test seller promotion display states.',
-        ],
-      ),
-    ],
     terms: [
-      'This is dummy seller data while backend promotion records are prepared.',
-      'The boosted placement will later be controlled by paid promotion rules.',
-      'Backend promotion ID placeholder: promo_seller_002.',
+      'Additional flyer asset from the mock flyers folder.',
     ],
-    icon: Icons.campaign_outlined,
+    icon: Icons.local_offer_outlined,
+    backgroundColor: MyColors.mintcream,
+    accentColor: MyColors.blue3,
+  ),
+  Promotion(
+    title: 'Weekend Deals 3',
+    description: 'Another weekend flyer preview.',
+    badge: 'Hot offers',
+    offer: 'Another weekend flyer preview from the mock flyers folder.',
+    validUntil: '30 June 2026',
+    imageAsset: 'assets/mock_flyers/weekend_deals3.webp',
+    flyerStyle: PromotionFlyerStyle.image,
+    terms: [
+      'Additional flyer asset from the mock flyers folder.',
+    ],
+    icon: Icons.local_offer_outlined,
     backgroundColor: MyColors.mintcream,
     accentColor: MyColors.blue3,
   ),
@@ -196,60 +98,25 @@ const List<Promotion> mockPromotions = [
     validUntil: 'Ongoing',
     imageAsset: 'assets/mock_flyers/fresh_arrivals.webp',
     flyerStyle: PromotionFlyerStyle.image,
-    samples: [
-      PromotionSample(
-        title: 'Game Stores - Defy Microwave',
-        subtitle: 'Compact microwave, ideal for student rooms and offices.',
-        price: 'M1,099',
-        location: 'Game Maseru',
-        category: 'Appliances',
-        owner: 'Game Stores',
-        condition: 'New',
-        contact: '+266 5800 0301',
-        actionLabel: 'View store item',
-        details: [
-          'Compact Defy microwave sample listing.',
-          'Ideal for offices, student rooms, or small kitchens.',
-          'Backend can later provide stock level and SKU.',
-        ],
-      ),
-      PromotionSample(
-        title: 'Game Stores - Hisense Fridge',
-        subtitle: 'Two-door fridge with freezer compartment.',
-        price: 'M5,499',
-        location: 'Game Maseru',
-        category: 'Appliances',
-        owner: 'Game Stores',
-        condition: 'New',
-        contact: '+266 5800 0302',
-        actionLabel: 'Check store stock',
-        details: [
-          'Two-door Hisense fridge sample product.',
-          'Includes freezer compartment and adjustable shelves.',
-          'Mock data can map to inventory fields later.',
-        ],
-      ),
-      PromotionSample(
-        title: 'Game Stores - JBL Bluetooth Speaker',
-        subtitle: 'Portable speaker with rechargeable battery.',
-        price: 'M799',
-        location: 'Game Maseru',
-        category: 'Audio',
-        owner: 'Game Stores',
-        condition: 'New',
-        contact: '+266 5800 0303',
-        actionLabel: 'View speaker deal',
-        details: [
-          'Portable Bluetooth speaker with rechargeable battery.',
-          'Mock feature: splash resistant casing.',
-          'Useful for testing promoted accessory cards.',
-        ],
-      ),
-    ],
     terms: [
       'Fresh arrivals are mock examples until store inventory is connected.',
       'Backend will later decide which store products are promoted.',
       'Backend promotion ID placeholder: promo_arrivals_003.',
+    ],
+    icon: Icons.auto_awesome_outlined,
+    backgroundColor: MyColors.mintcream,
+    accentColor: MyColors.blue3,
+  ),
+  Promotion(
+    title: 'Fresh Arrivals 2',
+    description: 'Additional fresh arrivals flyer preview.',
+    badge: 'New today',
+    offer: 'Additional fresh arrivals flyer preview from the mock flyers folder.',
+    validUntil: 'Ongoing',
+    imageAsset: 'assets/mock_flyers/fresh_arrivals2.webp',
+    flyerStyle: PromotionFlyerStyle.image,
+    terms: [
+      'Additional flyer asset from the mock flyers folder.',
     ],
     icon: Icons.auto_awesome_outlined,
     backgroundColor: MyColors.mintcream,
@@ -352,72 +219,14 @@ class _PromotionCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          Padding(
-            padding: EdgeInsets.only(
-              right: onClose == null
-                  ? 0
-                  : getProportionateScreenWidth(28, context),
-            ),
-            child: Row(
-              children: [
-                _PromotionImageButton(
-                  promotion: promotion,
-                  onTap: onTap,
-                ),
-                SizedBox(width: getProportionateScreenWidth(13, context)),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: getProportionateScreenWidth(9, context),
-                          vertical: getProportionateScreenHeight(3, context),
-                        ),
-                        decoration: BoxDecoration(
-                          color: promotion.accentColor.withOpacity(0.14),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          promotion.badge,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: promotion.accentColor,
-                            fontSize: getProportionateScreenWidth(11, context),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                          height: getProportionateScreenHeight(7, context)),
-                      Text(
-                        promotion.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: MyColors.brown3,
-                          fontSize: getProportionateScreenWidth(17, context),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                          height: getProportionateScreenHeight(3, context)),
-                      Text(
-                        promotion.description,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: MyColors.brown3.withOpacity(0.72),
-                          fontSize: getProportionateScreenWidth(12.5, context),
-                          height: 1.2,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: InkWell(
+              onTap: onTap,
+              child: PromotionVisual(
+                promotion: promotion,
+                compact: false,
+              ),
             ),
           ),
           if (onClose != null)
@@ -440,64 +249,6 @@ class _PromotionCard extends StatelessWidget {
               ),
             ),
         ],
-      ),
-    );
-  }
-}
-
-class _PromotionImageButton extends StatelessWidget {
-  const _PromotionImageButton({
-    required this.promotion,
-    required this.onTap,
-  });
-
-  final Promotion promotion;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final size = getProportionateScreenWidth(92, context);
-
-    return Semantics(
-      button: true,
-      label: promotion.title,
-      child: Material(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          child: SizedBox(
-            height: size,
-            width: size,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                PromotionVisual(
-                  promotion: promotion,
-                  compact: true,
-                ),
-                Positioned(
-                  right: getProportionateScreenWidth(6, context),
-                  bottom: getProportionateScreenWidth(6, context),
-                  child: Container(
-                    height: getProportionateScreenWidth(24, context),
-                    width: getProportionateScreenWidth(24, context),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.92),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.chevron_right,
-                      color: promotion.accentColor,
-                      size: getProportionateScreenWidth(18, context),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -532,36 +283,21 @@ class PromotionsPage extends StatelessWidget {
               getProportionateScreenHeight(24, context),
             ),
             children: [
-              Text(
-                'Promotions',
-                style: TextStyle(
-                  color: MyColors.brown3,
-                  fontSize: getProportionateScreenWidth(24, context),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: getProportionateScreenHeight(6, context)),
-              Text(
-                'Mock promotion data for the backend integration.',
-                style: TextStyle(
-                  color: MyColors.brown3.withOpacity(0.66),
-                  fontSize: getProportionateScreenWidth(13.5, context),
-                ),
-              ),
-              SizedBox(height: getProportionateScreenHeight(16, context)),
-              ...promotions.map(
-                (promotion) => Padding(
-                  padding: EdgeInsets.only(
-                    bottom: getProportionateScreenHeight(12, context),
-                  ),
-                  child: SizedBox(
-                    height: getProportionateScreenHeight(132, context),
-                    child: _PromotionCard(
-                      promotion: promotion,
-                      onTap: () => _openPromotion(context, promotion),
-                    ),
-                  ),
-                ),
+              GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                crossAxisSpacing: getProportionateScreenWidth(10, context),
+                mainAxisSpacing: getProportionateScreenHeight(10, context),
+                childAspectRatio: 0.82,
+                children: promotions
+                    .map(
+                      (promotion) => _PromotionCard(
+                        promotion: promotion,
+                        onTap: () => _openPromotion(context, promotion),
+                      ),
+                    )
+                    .toList(),
               ),
             ],
           ),
@@ -608,7 +344,7 @@ class PromotionDetailsDialog extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(14),
           child: Material(
-            color: Colors.white,
+            color: Colors.transparent,
             child: Stack(
               children: [
                 ListView(
@@ -616,141 +352,6 @@ class PromotionDetailsDialog extends StatelessWidget {
                   shrinkWrap: true,
                   children: [
                     _PromotionDialogImage(promotion: promotion),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        getProportionateScreenWidth(18, context),
-                        getProportionateScreenHeight(16, context),
-                        getProportionateScreenWidth(18, context),
-                        getProportionateScreenHeight(18, context),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  getProportionateScreenWidth(10, context),
-                              vertical:
-                                  getProportionateScreenHeight(4, context),
-                            ),
-                            decoration: BoxDecoration(
-                              color: promotion.accentColor.withOpacity(0.12),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              promotion.badge,
-                              style: TextStyle(
-                                color: promotion.accentColor,
-                                fontSize:
-                                    getProportionateScreenWidth(12, context),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                              height:
-                                  getProportionateScreenHeight(10, context)),
-                          Text(
-                            promotion.title,
-                            style: TextStyle(
-                              color: MyColors.brown3,
-                              fontSize:
-                                  getProportionateScreenWidth(22, context),
-                              fontWeight: FontWeight.bold,
-                              height: 1.12,
-                            ),
-                          ),
-                          SizedBox(
-                              height: getProportionateScreenHeight(8, context)),
-                          Text(
-                            promotion.offer,
-                            style: TextStyle(
-                              color: MyColors.brown3.withOpacity(0.78),
-                              fontSize:
-                                  getProportionateScreenWidth(14, context),
-                              height: 1.32,
-                            ),
-                          ),
-                          SizedBox(
-                              height:
-                                  getProportionateScreenHeight(14, context)),
-                          _PromotionInfoRow(
-                            icon: Icons.event_available_outlined,
-                            label: 'Valid until',
-                            value: promotion.validUntil,
-                            color: promotion.accentColor,
-                          ),
-                          SizedBox(
-                              height:
-                                  getProportionateScreenHeight(14, context)),
-                          Text(
-                            'Specials in this promotion',
-                            style: TextStyle(
-                              color: MyColors.brown3,
-                              fontSize:
-                                  getProportionateScreenWidth(17, context),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(
-                              height: getProportionateScreenHeight(8, context)),
-                          ...promotion.samples.map(
-                            (sample) => _PromotionDialogDeal(
-                              sample: sample,
-                              color: promotion.accentColor,
-                            ),
-                          ),
-                          SizedBox(
-                              height:
-                                  getProportionateScreenHeight(10, context)),
-                          Text(
-                            'Terms',
-                            style: TextStyle(
-                              color: MyColors.brown3,
-                              fontSize:
-                                  getProportionateScreenWidth(17, context),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(
-                              height: getProportionateScreenHeight(8, context)),
-                          ...promotion.terms.map(
-                            (term) => Padding(
-                              padding: EdgeInsets.only(
-                                bottom:
-                                    getProportionateScreenHeight(8, context),
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Icon(
-                                    Icons.check_circle_outline,
-                                    color: promotion.accentColor,
-                                    size: getProportionateScreenWidth(
-                                        18, context),
-                                  ),
-                                  SizedBox(
-                                      width: getProportionateScreenWidth(
-                                          8, context)),
-                                  Expanded(
-                                    child: Text(
-                                      term,
-                                      style: TextStyle(
-                                        color:
-                                            MyColors.brown3.withOpacity(0.78),
-                                        fontSize: getProportionateScreenWidth(
-                                            13, context),
-                                        height: 1.32,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
                 Positioned(
@@ -793,9 +394,35 @@ class _PromotionDialogImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.28,
-      child: PromotionVisual(promotion: promotion),
+    final uploadedFlyerUrl = promotion.uploadedFlyerUrl?.trim();
+    final flyerChild = uploadedFlyerUrl != null && uploadedFlyerUrl.isNotEmpty
+        ? Image.network(
+            uploadedFlyerUrl,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) => _PromotionImageFallback(
+              promotion: promotion,
+              compact: false,
+            ),
+          )
+        : Image.asset(
+            promotion.imageAsset,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) => _PromotionImageFallback(
+              promotion: promotion,
+              compact: false,
+            ),
+          );
+
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.8,
+      child: PhotoView.customChild(
+        backgroundDecoration: const BoxDecoration(color: Colors.white),
+        minScale: 1.0,
+        maxScale: 3.0,
+        child: SizedBox.expand(
+          child: Center(child: flyerChild),
+        ),
+      ),
     );
   }
 }
@@ -945,7 +572,6 @@ class _StoreFlyer extends StatelessWidget {
         final width = constraints.maxWidth;
         final height = constraints.maxHeight;
         final scale = (width / 320).clamp(0.32, 1.45).toDouble();
-        final deals = promotion.samples.take(compact ? 2 : 3).toList();
 
         return Container(
           color: surfaceColor,
@@ -1076,42 +702,7 @@ class _StoreFlyer extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: compact ? 5 * scale : 10 * scale),
-                          Expanded(
-                            child: compact
-                                ? Column(
-                                    children: deals
-                                        .map(
-                                          (sample) => Expanded(
-                                            child: _FlyerDealStrip(
-                                              sample: sample,
-                                              primaryColor: primaryColor,
-                                              secondaryColor: secondaryColor,
-                                              scale: scale,
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                  )
-                                : GridView.count(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 8 * scale,
-                                    crossAxisSpacing: 8 * scale,
-                                    childAspectRatio: 1.34,
-                                    padding: EdgeInsets.zero,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    children: deals
-                                        .map(
-                                          (sample) => _FlyerDealTile(
-                                            sample: sample,
-                                            primaryColor: primaryColor,
-                                            secondaryColor: secondaryColor,
-                                            scale: scale,
-                                          ),
-                                        )
-                                        .toList(),
-                                  ),
-                          ),
+                          const Spacer(),
                           if (!compact)
                             Padding(
                               padding: EdgeInsets.only(top: 8 * scale),
@@ -1140,280 +731,6 @@ class _StoreFlyer extends StatelessWidget {
   }
 }
 
-class _FlyerDealStrip extends StatelessWidget {
-  const _FlyerDealStrip({
-    required this.sample,
-    required this.primaryColor,
-    required this.secondaryColor,
-    required this.scale,
-  });
-
-  final PromotionSample sample;
-  final Color primaryColor;
-  final Color secondaryColor;
-  final double scale;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 4 * scale),
-      padding: EdgeInsets.symmetric(horizontal: 6 * scale, vertical: 4 * scale),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5 * scale),
-        border: Border.all(color: primaryColor.withOpacity(0.18)),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.sell_outlined,
-            color: primaryColor,
-            size: 12 * scale,
-          ),
-          SizedBox(width: 5 * scale),
-          Expanded(
-            child: Text(
-              _flyerProductName(sample),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: MyColors.brown3,
-                fontSize: 7.5 * scale,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          ),
-          Text(
-            sample.price,
-            style: TextStyle(
-              color: primaryColor,
-              fontSize: 8.5 * scale,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FlyerDealTile extends StatelessWidget {
-  const _FlyerDealTile({
-    required this.sample,
-    required this.primaryColor,
-    required this.secondaryColor,
-    required this.scale,
-  });
-
-  final PromotionSample sample;
-  final Color primaryColor;
-  final Color secondaryColor;
-  final double scale;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(9 * scale),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(7 * scale),
-        border: Border.all(color: primaryColor.withOpacity(0.18)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.07),
-            blurRadius: 8 * scale,
-            offset: Offset(0, 3 * scale),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                height: 28 * scale,
-                width: 28 * scale,
-                decoration: BoxDecoration(
-                  color: secondaryColor.withOpacity(0.38),
-                  borderRadius: BorderRadius.circular(6 * scale),
-                ),
-                child: Icon(
-                  _flyerIcon(sample.category),
-                  color: primaryColor,
-                  size: 17 * scale,
-                ),
-              ),
-              const Spacer(),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 6 * scale,
-                  vertical: 3 * scale,
-                ),
-                decoration: BoxDecoration(
-                  color: primaryColor,
-                  borderRadius: BorderRadius.circular(4 * scale),
-                ),
-                child: Text(
-                  sample.price,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 13 * scale,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 8 * scale),
-          Text(
-            _flyerProductName(sample),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: MyColors.brown3,
-              fontSize: 12 * scale,
-              fontWeight: FontWeight.w900,
-              height: 1.08,
-            ),
-          ),
-          SizedBox(height: 4 * scale),
-          Text(
-            sample.subtitle,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: MyColors.brown3.withOpacity(0.62),
-              fontSize: 9 * scale,
-              height: 1.18,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-String _flyerProductName(PromotionSample sample) {
-  final separatorIndex = sample.title.indexOf(' - ');
-  if (separatorIndex == -1) {
-    return sample.title;
-  }
-  return sample.title.substring(separatorIndex + 3);
-}
-
-IconData _flyerIcon(String category) {
-  switch (category) {
-    case 'Electronics':
-      return Icons.tv_outlined;
-    case 'Computers':
-      return Icons.laptop_mac_outlined;
-    case 'Gaming':
-      return Icons.sports_esports_outlined;
-    case 'Appliances':
-      return Icons.kitchen_outlined;
-    case 'Audio':
-      return Icons.speaker_outlined;
-    default:
-      return Icons.local_offer_outlined;
-  }
-}
-
-class _PromotionDialogDeal extends StatelessWidget {
-  const _PromotionDialogDeal({
-    required this.sample,
-    required this.color,
-  });
-
-  final PromotionSample sample;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: getProportionateScreenHeight(8, context)),
-      padding: EdgeInsets.all(getProportionateScreenWidth(12, context)),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.06),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withOpacity(0.14)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: getProportionateScreenWidth(40, context),
-            width: getProportionateScreenWidth(40, context),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              Icons.local_offer_outlined,
-              color: color,
-              size: getProportionateScreenWidth(21, context),
-            ),
-          ),
-          SizedBox(width: getProportionateScreenWidth(10, context)),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  sample.title,
-                  style: TextStyle(
-                    color: MyColors.brown3,
-                    fontSize: getProportionateScreenWidth(13.5, context),
-                    fontWeight: FontWeight.bold,
-                    height: 1.18,
-                  ),
-                ),
-                SizedBox(height: getProportionateScreenHeight(4, context)),
-                Text(
-                  sample.subtitle,
-                  style: TextStyle(
-                    color: MyColors.brown3.withOpacity(0.68),
-                    fontSize: getProportionateScreenWidth(12.5, context),
-                    height: 1.26,
-                  ),
-                ),
-                SizedBox(height: getProportionateScreenHeight(7, context)),
-                Row(
-                  children: [
-                    Text(
-                      sample.price,
-                      style: TextStyle(
-                        color: color,
-                        fontSize: getProportionateScreenWidth(13.5, context),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(width: getProportionateScreenWidth(10, context)),
-                    Expanded(
-                      child: Text(
-                        sample.location,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: MyColors.brown3.withOpacity(0.58),
-                          fontSize: getProportionateScreenWidth(12, context),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class PromotionDetailsPage extends StatelessWidget {
   const PromotionDetailsPage({
     super.key,
@@ -1421,18 +738,6 @@ class PromotionDetailsPage extends StatelessWidget {
   });
 
   final Promotion promotion;
-
-  void _openSample(BuildContext context, PromotionSample sample) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PromotionSampleDetailsPage(
-          promotion: promotion,
-          sample: sample,
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -1522,374 +827,6 @@ class PromotionDetailsPage extends StatelessWidget {
                 label: 'Valid until',
                 value: promotion.validUntil,
                 color: promotion.accentColor,
-              ),
-              SizedBox(height: getProportionateScreenHeight(18, context)),
-              Text(
-                'Promotion samples',
-                style: TextStyle(
-                  color: MyColors.brown3,
-                  fontSize: getProportionateScreenWidth(18, context),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: getProportionateScreenHeight(10, context)),
-              ...promotion.samples.map(
-                (sample) => Padding(
-                  padding: EdgeInsets.only(
-                    bottom: getProportionateScreenHeight(10, context),
-                  ),
-                  child: _PromotionSampleCard(
-                    sample: sample,
-                    color: promotion.accentColor,
-                    onTap: () => _openSample(context, sample),
-                  ),
-                ),
-              ),
-              SizedBox(height: getProportionateScreenHeight(8, context)),
-              Text(
-                'Promotion terms',
-                style: TextStyle(
-                  color: MyColors.brown3,
-                  fontSize: getProportionateScreenWidth(18, context),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: getProportionateScreenHeight(10, context)),
-              ...promotion.terms.map(
-                (term) => Padding(
-                  padding: EdgeInsets.only(
-                    bottom: getProportionateScreenHeight(9, context),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.check_circle_outline,
-                        color: promotion.accentColor,
-                        size: getProportionateScreenWidth(18, context),
-                      ),
-                      SizedBox(width: getProportionateScreenWidth(9, context)),
-                      Expanded(
-                        child: Text(
-                          term,
-                          style: TextStyle(
-                            color: MyColors.brown3.withOpacity(0.78),
-                            fontSize:
-                                getProportionateScreenWidth(13.5, context),
-                            height: 1.3,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PromotionSampleCard extends StatelessWidget {
-  const _PromotionSampleCard({
-    required this.sample,
-    required this.color,
-    required this.onTap,
-  });
-
-  final PromotionSample sample;
-  final Color color;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(getProportionateScreenWidth(14, context)),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: color.withOpacity(0.18)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.18),
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: getProportionateScreenWidth(42, context),
-              width: getProportionateScreenWidth(42, context),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                Icons.shopping_bag_outlined,
-                color: color,
-                size: getProportionateScreenWidth(22, context),
-              ),
-            ),
-            SizedBox(width: getProportionateScreenWidth(12, context)),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    sample.title,
-                    style: TextStyle(
-                      color: MyColors.brown3,
-                      fontSize: getProportionateScreenWidth(14.5, context),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: getProportionateScreenHeight(4, context)),
-                  Text(
-                    sample.subtitle,
-                    style: TextStyle(
-                      color: MyColors.brown3.withOpacity(0.7),
-                      fontSize: getProportionateScreenWidth(12.5, context),
-                      height: 1.25,
-                    ),
-                  ),
-                  SizedBox(height: getProportionateScreenHeight(8, context)),
-                  Row(
-                    children: [
-                      Text(
-                        sample.price,
-                        style: TextStyle(
-                          color: color,
-                          fontSize: getProportionateScreenWidth(13.5, context),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(width: getProportionateScreenWidth(10, context)),
-                      Expanded(
-                        child: Text(
-                          sample.location,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: MyColors.brown3.withOpacity(0.58),
-                            fontSize: getProportionateScreenWidth(12, context),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: getProportionateScreenWidth(6, context)),
-            Icon(
-              Icons.chevron_right,
-              color: color,
-              size: getProportionateScreenWidth(22, context),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class PromotionSampleDetailsPage extends StatelessWidget {
-  const PromotionSampleDetailsPage({
-    super.key,
-    required this.promotion,
-    required this.sample,
-  });
-
-  final Promotion promotion;
-  final PromotionSample sample;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: MyColors.blue3,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        title: Text(sample.title),
-      ),
-      body: Stack(
-        children: [
-          CustomPaint(
-            painter: BackgroundDesign(),
-            child: Container(),
-          ),
-          ListView(
-            padding: EdgeInsets.all(getProportionateScreenWidth(18, context)),
-            children: [
-              Container(
-                padding:
-                    EdgeInsets.all(getProportionateScreenWidth(18, context)),
-                decoration: BoxDecoration(
-                  color: promotion.backgroundColor,
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(
-                      color: promotion.accentColor.withOpacity(0.28)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.18),
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: getProportionateScreenWidth(58, context),
-                      width: getProportionateScreenWidth(58, context),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.82),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(
-                        promotion.icon,
-                        color: promotion.accentColor,
-                        size: getProportionateScreenWidth(32, context),
-                      ),
-                    ),
-                    SizedBox(height: getProportionateScreenHeight(16, context)),
-                    Text(
-                      sample.owner,
-                      style: TextStyle(
-                        color: promotion.accentColor,
-                        fontSize: getProportionateScreenWidth(13, context),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: getProportionateScreenHeight(8, context)),
-                    Text(
-                      sample.title,
-                      style: TextStyle(
-                        color: MyColors.brown3,
-                        fontSize: getProportionateScreenWidth(22, context),
-                        fontWeight: FontWeight.bold,
-                        height: 1.15,
-                      ),
-                    ),
-                    SizedBox(height: getProportionateScreenHeight(10, context)),
-                    Text(
-                      sample.subtitle,
-                      style: TextStyle(
-                        color: MyColors.brown3.withOpacity(0.72),
-                        fontSize: getProportionateScreenWidth(14, context),
-                        height: 1.35,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: getProportionateScreenHeight(18, context)),
-              _PromotionInfoRow(
-                icon: Icons.sell_outlined,
-                label: 'Price',
-                value: sample.price,
-                color: promotion.accentColor,
-              ),
-              SizedBox(height: getProportionateScreenHeight(10, context)),
-              _PromotionInfoRow(
-                icon: Icons.category_outlined,
-                label: 'Category',
-                value: sample.category,
-                color: promotion.accentColor,
-              ),
-              SizedBox(height: getProportionateScreenHeight(10, context)),
-              _PromotionInfoRow(
-                icon: Icons.verified_outlined,
-                label: 'Condition',
-                value: sample.condition,
-                color: promotion.accentColor,
-              ),
-              SizedBox(height: getProportionateScreenHeight(10, context)),
-              _PromotionInfoRow(
-                icon: Icons.location_on_outlined,
-                label: 'Location',
-                value: sample.location,
-                color: promotion.accentColor,
-              ),
-              SizedBox(height: getProportionateScreenHeight(10, context)),
-              _PromotionInfoRow(
-                icon: Icons.phone_outlined,
-                label: 'Contact',
-                value: sample.contact,
-                color: promotion.accentColor,
-              ),
-              SizedBox(height: getProportionateScreenHeight(18, context)),
-              Text(
-                'Sample details',
-                style: TextStyle(
-                  color: MyColors.brown3,
-                  fontSize: getProportionateScreenWidth(18, context),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: getProportionateScreenHeight(10, context)),
-              ...sample.details.map(
-                (detail) => Padding(
-                  padding: EdgeInsets.only(
-                    bottom: getProportionateScreenHeight(9, context),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.check_circle_outline,
-                        color: promotion.accentColor,
-                        size: getProportionateScreenWidth(18, context),
-                      ),
-                      SizedBox(width: getProportionateScreenWidth(9, context)),
-                      Expanded(
-                        child: Text(
-                          detail,
-                          style: TextStyle(
-                            color: MyColors.brown3.withOpacity(0.78),
-                            fontSize:
-                                getProportionateScreenWidth(13.5, context),
-                            height: 1.3,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: getProportionateScreenHeight(10, context)),
-              SizedBox(
-                width: double.infinity,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: promotion.accentColor,
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(
-                      vertical: getProportionateScreenHeight(13, context),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: Text(
-                    sample.actionLabel,
-                    style: TextStyle(
-                      fontSize: getProportionateScreenWidth(14, context),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
               ),
             ],
           ),
