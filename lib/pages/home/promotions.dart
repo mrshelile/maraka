@@ -13,8 +13,9 @@ class Promotion {
     required this.badge,
     required this.offer,
     required this.validUntil,
-      required this.imageAsset,
+    required this.imageAsset,
     required this.flyerStyle,
+    required this.section,
     this.uploadedFlyerUrl,
     required this.terms,
     required this.icon,
@@ -29,6 +30,7 @@ class Promotion {
   final String validUntil;
   final String imageAsset;
   final PromotionFlyerStyle flyerStyle;
+  final PromotionSection section;
   final String? uploadedFlyerUrl;
   final List<String> terms;
   final IconData icon;
@@ -42,6 +44,12 @@ enum PromotionFlyerStyle {
   game,
 }
 
+enum PromotionSection {
+  storeSpecials,
+  holidays,
+  blackFriday,
+}
+
 const List<Promotion> mockPromotions = [
   Promotion(
     title: 'Weekend Deals',
@@ -51,6 +59,7 @@ const List<Promotion> mockPromotions = [
     validUntil: '30 June 2026',
     imageAsset: 'assets/mock_flyers/weekend_deals.webp',
     flyerStyle: PromotionFlyerStyle.image,
+    section: PromotionSection.storeSpecials,
     terms: [
       'Sample prices are placeholder data for frontend testing.',
       'Final stock and discounts will be confirmed by Cash Crusaders data.',
@@ -61,30 +70,32 @@ const List<Promotion> mockPromotions = [
     accentColor: MyColors.blue3,
   ),
   Promotion(
-    title: 'Weekend Deals 2',
-    description: 'Additional weekend flyer preview.',
-    badge: 'Hot offers',
-    offer: 'Additional weekend flyer preview from the mock flyers folder.',
-    validUntil: '30 June 2026',
+    title: 'Mother\'s Day Specials',
+    description: 'Holiday flyer preview for Mother\'s Day.',
+    badge: 'Holiday',
+    offer: 'Mother\'s Day promotion preview from the mock flyers folder.',
+    validUntil: 'Mother\'s Day season',
     imageAsset: 'assets/mock_flyers/weekend_deals2.webp',
     flyerStyle: PromotionFlyerStyle.image,
+    section: PromotionSection.holidays,
     terms: [
-      'Additional flyer asset from the mock flyers folder.',
+      'Holiday flyer asset from the mock flyers folder.',
     ],
     icon: Icons.local_offer_outlined,
     backgroundColor: MyColors.mintcream,
     accentColor: MyColors.blue3,
   ),
   Promotion(
-    title: 'Weekend Deals 3',
-    description: 'Another weekend flyer preview.',
-    badge: 'Hot offers',
-    offer: 'Another weekend flyer preview from the mock flyers folder.',
-    validUntil: '30 June 2026',
+    title: 'Black Friday Preview',
+    description: 'Black Friday flyer preview.',
+    badge: 'Black Friday',
+    offer: 'Black Friday promotion preview from the mock flyers folder.',
+    validUntil: 'Black Friday season',
     imageAsset: 'assets/mock_flyers/weekend_deals3.webp',
     flyerStyle: PromotionFlyerStyle.image,
+    section: PromotionSection.blackFriday,
     terms: [
-      'Additional flyer asset from the mock flyers folder.',
+      'Black Friday flyer asset from the mock flyers folder.',
     ],
     icon: Icons.local_offer_outlined,
     backgroundColor: MyColors.mintcream,
@@ -98,6 +109,7 @@ const List<Promotion> mockPromotions = [
     validUntil: 'Ongoing',
     imageAsset: 'assets/mock_flyers/fresh_arrivals.webp',
     flyerStyle: PromotionFlyerStyle.image,
+    section: PromotionSection.storeSpecials,
     terms: [
       'Fresh arrivals are mock examples until store inventory is connected.',
       'Backend will later decide which store products are promoted.',
@@ -115,6 +127,7 @@ const List<Promotion> mockPromotions = [
     validUntil: 'Ongoing',
     imageAsset: 'assets/mock_flyers/fresh_arrivals2.webp',
     flyerStyle: PromotionFlyerStyle.image,
+    section: PromotionSection.storeSpecials,
     terms: [
       'Additional flyer asset from the mock flyers folder.',
     ],
@@ -268,6 +281,16 @@ class PromotionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final groupedPromotions = <PromotionSection, List<Promotion>>{
+      for (final section in PromotionSection.values)
+        section: promotions
+            .where((promotion) => promotion.section == section)
+            .toList(),
+    };
+    final visibleSections = PromotionSection.values
+        .where((section) => groupedPromotions[section]!.isNotEmpty)
+        .toList();
+
     return Stack(
       children: [
         CustomPaint(
@@ -283,27 +306,96 @@ class PromotionsPage extends StatelessWidget {
               getProportionateScreenHeight(24, context),
             ),
             children: [
-              GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: getProportionateScreenWidth(10, context),
-                mainAxisSpacing: getProportionateScreenHeight(10, context),
-                childAspectRatio: 0.82,
-                children: promotions
-                    .map(
-                      (promotion) => _PromotionCard(
-                        promotion: promotion,
-                        onTap: () => _openPromotion(context, promotion),
-                      ),
-                    )
-                    .toList(),
-              ),
+              for (final section in visibleSections) ...[
+                _PromotionSectionHeader(section: section),
+                SizedBox(height: getProportionateScreenHeight(10, context)),
+                GridView.count(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: getProportionateScreenWidth(10, context),
+                  mainAxisSpacing: getProportionateScreenHeight(10, context),
+                  childAspectRatio: 0.82,
+                  children: groupedPromotions[section]!
+                      .map(
+                        (promotion) => _PromotionCard(
+                          promotion: promotion,
+                          onTap: () => _openPromotion(context, promotion),
+                        ),
+                      )
+                      .toList(),
+                ),
+                SizedBox(height: getProportionateScreenHeight(18, context)),
+              ],
             ],
           ),
         ),
       ],
     );
+  }
+}
+
+class _PromotionSectionHeader extends StatelessWidget {
+  const _PromotionSectionHeader({
+    required this.section,
+  });
+
+  final PromotionSection section;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          height: getProportionateScreenWidth(34, context),
+          width: getProportionateScreenWidth(34, context),
+          decoration: BoxDecoration(
+            color: MyColors.blue3.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(9),
+          ),
+          child: Icon(
+            _promotionSectionIcon(section),
+            color: MyColors.blue3,
+            size: getProportionateScreenWidth(19, context),
+          ),
+        ),
+        SizedBox(width: getProportionateScreenWidth(10, context)),
+        Expanded(
+          child: Text(
+            _promotionSectionTitle(section),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: MyColors.brown3,
+              fontSize: getProportionateScreenWidth(18, context),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+String _promotionSectionTitle(PromotionSection section) {
+  switch (section) {
+    case PromotionSection.storeSpecials:
+      return 'Store Specials';
+    case PromotionSection.holidays:
+      return 'Holidays';
+    case PromotionSection.blackFriday:
+      return 'Black Friday';
+  }
+}
+
+IconData _promotionSectionIcon(PromotionSection section) {
+  switch (section) {
+    case PromotionSection.storeSpecials:
+      return Icons.storefront_outlined;
+    case PromotionSection.holidays:
+      return Icons.celebration_outlined;
+    case PromotionSection.blackFriday:
+      return Icons.discount_outlined;
   }
 }
 
