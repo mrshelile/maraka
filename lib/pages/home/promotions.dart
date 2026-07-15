@@ -12,6 +12,8 @@ class Promotion {
     required this.description,
     required this.badge,
     required this.offer,
+    required this.promoStartDate,
+    required this.promoEndDate,
     required this.validUntil,
     required this.imageAsset,
     required this.flyerStyle,
@@ -27,6 +29,8 @@ class Promotion {
   final String description;
   final String badge;
   final String offer;
+  final String promoStartDate;
+  final String promoEndDate;
   final String validUntil;
   final String imageAsset;
   final PromotionFlyerStyle flyerStyle;
@@ -36,6 +40,8 @@ class Promotion {
   final IconData icon;
   final Color backgroundColor;
   final Color accentColor;
+
+  String get promoDateRange => '$promoStartDate - $promoEndDate';
 }
 
 enum PromotionFlyerStyle {
@@ -56,6 +62,8 @@ const List<Promotion> mockPromotions = [
     description: 'Weekend discounts from Cash Crusaders.',
     badge: 'Hot offers',
     offer: 'Sample weekend deals from Cash Crusaders stores.',
+    promoStartDate: '26 June 2026',
+    promoEndDate: '30 June 2026',
     validUntil: '30 June 2026',
     imageAsset: 'assets/mock_flyers/weekend_deals.webp',
     flyerStyle: PromotionFlyerStyle.image,
@@ -74,6 +82,8 @@ const List<Promotion> mockPromotions = [
     description: 'Holiday flyer preview for Mother\'s Day.',
     badge: 'Holiday',
     offer: 'Mother\'s Day promotion preview from the mock flyers folder.',
+    promoStartDate: '5 May 2026',
+    promoEndDate: '11 May 2026',
     validUntil: 'Mother\'s Day season',
     imageAsset: 'assets/mock_flyers/weekend_deals2.webp',
     flyerStyle: PromotionFlyerStyle.image,
@@ -90,6 +100,8 @@ const List<Promotion> mockPromotions = [
     description: 'Black Friday flyer preview.',
     badge: 'Black Friday',
     offer: 'Black Friday promotion preview from the mock flyers folder.',
+    promoStartDate: '27 November 2026',
+    promoEndDate: '30 November 2026',
     validUntil: 'Black Friday season',
     imageAsset: 'assets/mock_flyers/weekend_deals3.webp',
     flyerStyle: PromotionFlyerStyle.image,
@@ -106,6 +118,8 @@ const List<Promotion> mockPromotions = [
     description: 'New product examples from Game Stores.',
     badge: 'New today',
     offer: 'Fresh arrivals sample feed from Game Stores.',
+    promoStartDate: '1 July 2026',
+    promoEndDate: '31 July 2026',
     validUntil: 'Ongoing',
     imageAsset: 'assets/mock_flyers/fresh_arrivals.webp',
     flyerStyle: PromotionFlyerStyle.image,
@@ -123,7 +137,10 @@ const List<Promotion> mockPromotions = [
     title: 'Fresh Arrivals 2',
     description: 'Additional fresh arrivals flyer preview.',
     badge: 'New today',
-    offer: 'Additional fresh arrivals flyer preview from the mock flyers folder.',
+    offer:
+        'Additional fresh arrivals flyer preview from the mock flyers folder.',
+    promoStartDate: '12 July 2026',
+    promoEndDate: '31 July 2026',
     validUntil: 'Ongoing',
     imageAsset: 'assets/mock_flyers/fresh_arrivals2.webp',
     flyerStyle: PromotionFlyerStyle.image,
@@ -230,37 +247,94 @@ class _PromotionCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Stack(
+      child: Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: InkWell(
-              onTap: onTap,
-              child: PromotionVisual(
-                promotion: promotion,
-                compact: false,
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: InkWell(
+                      onTap: onTap,
+                      child: PromotionVisual(
+                        promotion: promotion,
+                        compact: false,
+                      ),
+                    ),
+                  ),
+                ),
+                if (onClose != null)
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: IconButton(
+                      constraints: BoxConstraints.tightFor(
+                        height: getProportionateScreenWidth(32, context),
+                        width: getProportionateScreenWidth(32, context),
+                      ),
+                      padding: EdgeInsets.zero,
+                      tooltip: 'Close promotions',
+                      onPressed: onClose,
+                      icon: Icon(
+                        Icons.close,
+                        color: MyColors.brown3.withOpacity(0.72),
+                        size: getProportionateScreenWidth(18, context),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          SizedBox(height: getProportionateScreenHeight(8, context)),
+          _PromotionDateBadge(promotion: promotion),
+        ],
+      ),
+    );
+  }
+}
+
+class _PromotionDateBadge extends StatelessWidget {
+  const _PromotionDateBadge({
+    required this.promotion,
+  });
+
+  final Promotion promotion;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(8, context),
+        vertical: getProportionateScreenHeight(5, context),
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.94),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: promotion.accentColor.withOpacity(0.16)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.calendar_month_outlined,
+            color: promotion.accentColor,
+            size: getProportionateScreenWidth(14, context),
+          ),
+          SizedBox(width: getProportionateScreenWidth(5, context)),
+          Expanded(
+            child: Text(
+              promotion.promoDateRange,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: MyColors.brown3,
+                fontSize: getProportionateScreenWidth(10.5, context),
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          if (onClose != null)
-            Positioned(
-              right: 0,
-              top: 0,
-              child: IconButton(
-                constraints: BoxConstraints.tightFor(
-                  height: getProportionateScreenWidth(32, context),
-                  width: getProportionateScreenWidth(32, context),
-                ),
-                padding: EdgeInsets.zero,
-                tooltip: 'Close promotions',
-                onPressed: onClose,
-                icon: Icon(
-                  Icons.close,
-                  color: MyColors.brown3.withOpacity(0.72),
-                  size: getProportionateScreenWidth(18, context),
-                ),
-              ),
-            ),
         ],
       ),
     );
@@ -315,7 +389,7 @@ class PromotionsPage extends StatelessWidget {
                   crossAxisCount: 2,
                   crossAxisSpacing: getProportionateScreenWidth(10, context),
                   mainAxisSpacing: getProportionateScreenHeight(10, context),
-                  childAspectRatio: 0.82,
+                  childAspectRatio: 0.74,
                   children: groupedPromotions[section]!
                       .map(
                         (promotion) => _PromotionCard(
@@ -447,6 +521,12 @@ class PromotionDetailsDialog extends StatelessWidget {
                   ],
                 ),
                 Positioned(
+                  left: getProportionateScreenWidth(12, context),
+                  right: getProportionateScreenWidth(12, context),
+                  bottom: getProportionateScreenHeight(12, context),
+                  child: _PromotionDatePanel(promotion: promotion),
+                ),
+                Positioned(
                   right: getProportionateScreenWidth(8, context),
                   top: getProportionateScreenWidth(8, context),
                   child: Material(
@@ -477,6 +557,97 @@ class PromotionDetailsDialog extends StatelessWidget {
   }
 }
 
+class _PromotionDatePanel extends StatelessWidget {
+  const _PromotionDatePanel({
+    required this.promotion,
+  });
+
+  final Promotion promotion;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(getProportionateScreenWidth(12, context)),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.95),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.16),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          _PromotionDateItem(
+            label: 'Starts',
+            value: promotion.promoStartDate,
+            color: promotion.accentColor,
+          ),
+          Container(
+            height: getProportionateScreenHeight(34, context),
+            width: 1,
+            margin: EdgeInsets.symmetric(
+              horizontal: getProportionateScreenWidth(12, context),
+            ),
+            color: MyColors.brown3.withOpacity(0.14),
+          ),
+          _PromotionDateItem(
+            label: 'Ends',
+            value: promotion.promoEndDate,
+            color: promotion.accentColor,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PromotionDateItem extends StatelessWidget {
+  const _PromotionDateItem({
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  final String label;
+  final String value;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: getProportionateScreenWidth(11, context),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: getProportionateScreenHeight(3, context)),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: MyColors.brown3,
+              fontSize: getProportionateScreenWidth(13, context),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _PromotionDialogImage extends StatelessWidget {
   const _PromotionDialogImage({
     required this.promotion,
@@ -491,7 +662,8 @@ class _PromotionDialogImage extends StatelessWidget {
         ? Image.network(
             uploadedFlyerUrl,
             fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) => _PromotionImageFallback(
+            errorBuilder: (context, error, stackTrace) =>
+                _PromotionImageFallback(
               promotion: promotion,
               compact: false,
             ),
@@ -499,7 +671,8 @@ class _PromotionDialogImage extends StatelessWidget {
         : Image.asset(
             promotion.imageAsset,
             fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) => _PromotionImageFallback(
+            errorBuilder: (context, error, stackTrace) =>
+                _PromotionImageFallback(
               promotion: promotion,
               compact: false,
             ),
@@ -916,8 +1089,8 @@ class PromotionDetailsPage extends StatelessWidget {
               SizedBox(height: getProportionateScreenHeight(18, context)),
               _PromotionInfoRow(
                 icon: Icons.event_available_outlined,
-                label: 'Valid until',
-                value: promotion.validUntil,
+                label: 'Promotion dates',
+                value: promotion.promoDateRange,
                 color: promotion.accentColor,
               ),
             ],
