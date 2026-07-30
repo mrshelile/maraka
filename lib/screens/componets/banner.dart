@@ -24,10 +24,8 @@ class _BannerState extends State<Banner> {
     var height = MediaQuery.of(context).copyWith().size.height;
     return SizedBox(
       width: width,
-      height: height * 0.1,
-      child: ListView(
-        // children: <Widget>[image_carousel],
-      ),
+      height: height * 0.35,
+      child: image_carousel,
     );
   }
 }

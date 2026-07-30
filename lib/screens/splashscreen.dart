@@ -1,19 +1,12 @@
 // import 'package:carousel_pro/carousel_pro.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:maraka/logic/banner_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/size_config.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-// import 'package:swipebuttonflutter/swipebuttonflutter.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
-import 'package:url_launcher/url_launcher.dart';
-// import 'dart:html' as html;
-import 'package:cached_network_image/cached_network_image.dart';
 
 class Splashcreen extends StatefulWidget {
   const Splashcreen({Key? key}) : super(key: key);

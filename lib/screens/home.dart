@@ -3,7 +3,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/user_logic.dart';
-import 'package:maraka/pages/home/promotions.dart';
+import 'package:maraka/pages/home/promotions_real.dart';
 
 import 'package:maraka/pages/myads_page.dart';
 import 'package:maraka/screens/account.dart';
@@ -34,15 +34,15 @@ class _HomeState extends State<Home> {
 
     final ktabsPages = <Widget>[
       const HomePage(
-          // owner: widget.user,
-          ),
-      const PromotionsPage(),
+        // owner: widget.user,
+      ),
+      const RealPromotionsPage(),
       // FavouritesPage(
       //   owner: widget.user,
       // ),
       const MyAds(
-          // owner: widget.user,
-          ),
+        // owner: widget.user,
+      ),
       Account(
         currentIndex: widget.currentIndex,
         // user: widget.user,
@@ -57,7 +57,6 @@ class _HomeState extends State<Home> {
           //   painter: BackgroundDesign(),
           //   child: Container(),
           // ),
-
           ktabsPages[widget.currentIndex],
           // CustomNavBar(),
           //Categories(),
@@ -113,9 +112,7 @@ class _HomeState extends State<Home> {
           // ),
           BottomNavyBarItem(
             icon: const Icon(Icons.collections_bookmark_outlined),
-            title: const Text(
-              'My Ads',
-            ),
+            title: const Text('My Ads'),
             activeColor: MyColors.green3,
             textAlign: TextAlign.center,
           ),

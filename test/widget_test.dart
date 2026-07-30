@@ -7,10 +7,10 @@
 
 // import 'dart:convert';
 
-import 'package:flutter_test/flutter_test.dart';
+// import 'package:flutter_test/flutter_test.dart';
 // import 'package:maraka/logic/email.dart';
 // import 'package:maraka/logic/products_logic.dart';
-import 'package:maraka/logic/send_visitor.dart';
+// import 'package:maraka/logic/send_visitor.dart';
 // import 'package:maraka/logic/user_logic.dart';
 // import 'package:maraka/models/product.dart';
 
