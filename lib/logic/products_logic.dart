@@ -143,7 +143,7 @@ class ProductLogic {
       'owner': id,
       'display': ad.imageUrls
     };
-    if (car != null || car != -1) {
+    if (car != null && car != -1) {
       data['car'] = car;
     }
 
@@ -249,15 +249,15 @@ class ProductLogic {
   }
 
   Future<List<Product>> getProducts(String category) async {
-    String filter = "";
-    if (category.toLowerCase() != "All".toLowerCase()) {
-      filter = "?search=$category";
-    }
+    final normalizedCategory = category.trim().toLowerCase();
+    final apiCategory = normalizedCategory;
+    final uri = apiCategory == 'all'
+        ? Uri.parse('$server$_allProducts')
+        : Uri.parse('$server$_allProducts')
+            .replace(queryParameters: {'search': apiCategory});
 
     var response = await http.get(
-      Uri.parse(
-          // ignore: prefer_interpolation_to_compose_strings
-          "$server$_allProducts$filter"),
+      uri,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

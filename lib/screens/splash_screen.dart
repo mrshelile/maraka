@@ -25,45 +25,24 @@ class _SplashScreenState extends State<SplashScreen> {
   User user = User();
   final store = Get.find<StoreController>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String initError = "";
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
-    // try {
-    //   http.get(Uri.parse(server)).timeout(Duration(seconds: 8),
-    //       onTimeout: () async {
-    //     throw TimeoutException('No Internet');
-    //   });
-    // } catch (e) {
-    //   setState(() {
-    //     initError = e.toString();
-    //   });
-    //   showSnackbar();
-    // }
-    Future.delayed(const Duration(seconds: 12), () {
-      if (store.productsFromdb.isEmpty) {
-        setState(() {
-          initError = "No internet restart app";
-        });
-        showSnackbar();
-      }
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Home(
-                    currentIndex: 0,
-                  )));
-    });
+    _initializeApp();
   }
 
-  void showSnackbar() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(initError),
-        duration: const Duration(seconds: 5),
-        backgroundColor: Color.fromARGB(255, 8, 8, 8),
+  Future<void> _initializeApp() async {
+    await store.loadProducts();
+
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Home(
+          currentIndex: 0,
+        ),
       ),
     );
   }

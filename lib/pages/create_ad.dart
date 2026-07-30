@@ -11,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/exceptions/exceptions.dart';
 import 'package:maraka/logic/products_logic.dart';
+import 'package:maraka/logic/store.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/models/product.dart';
 import 'package:maraka/logic/constants.dart';
@@ -417,8 +418,12 @@ class _CreateAdState extends State<CreateAd> {
                               }
 
                               if (!mounted) return;
+                              final store = Get.find<StoreController>();
+                              store.selectedCategory =
+                                  _dropdownValue.toString();
+                              await store.loadProducts();
                               Get.off(() => Home(
-                                    currentIndex: 2,
+                                    currentIndex: 0,
                                   ));
                               // Navigator.pushReplacement(
                               //     context,

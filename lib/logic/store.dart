@@ -25,12 +25,25 @@ class StoreController extends GetxController {
   @override
   onInit() async {
     super.onInit();
-    final logic = ProductLogic();
-    ishomeProductsLoading = true;
-    var res = await logic.getProducts(selectedCategory);
-    setProducts(res);
-    ishomeProductsLoading = false;
-    update();
+    await loadProducts();
+  }
+
+  Future<bool> loadProducts() async {
+    try {
+      ishomeProductsLoading = true;
+      update();
+
+      final logic = ProductLogic();
+      final res = await logic.getProducts(selectedCategory);
+      setProducts(res);
+      ishomeProductsLoading = false;
+      update();
+      return true;
+    } catch (e) {
+      ishomeProductsLoading = false;
+      update();
+      return false;
+    }
   }
 
   void pageUp() {
@@ -81,14 +94,22 @@ class StoreController extends GetxController {
   Future selectCategory(String value, User owner) async {
     selectedCategory = value;
     update();
-    var logic = ProductLogic();
     ishomeProductsLoading = true;
-
-    List<Product> products =
-        await logic.getProducts(selectedCategory.toLowerCase());
-    setProducts(products);
-    ishomeProductsLoading = false;
+    products = [];
+    productsFromdb = [];
     update();
+
+    try {
+      final logic = ProductLogic();
+      final loadedProducts = await logic.getProducts(selectedCategory);
+      setProducts(loadedProducts);
+    } catch (e) {
+      products = [];
+      productsFromdb = [];
+    } finally {
+      ishomeProductsLoading = false;
+      update();
+    }
   }
 
   void searchNow(String value) {
