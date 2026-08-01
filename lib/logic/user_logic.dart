@@ -28,6 +28,7 @@ class User extends GetxController {
   // bool isValidatedAcc = false;
   bool isConfirmed = false;
   bool isBlocked = false;
+  bool isSuperuser = false;
   var jwt;
   var response;
 
@@ -58,6 +59,7 @@ class User extends GetxController {
     id = user.id;
     isConfirmed = user.isConfirmed;
     isBlocked = user.isBlocked;
+    isSuperuser = user.isSuperuser;
     jwt = user.jwt;
     response = user.response;
   }
@@ -175,6 +177,7 @@ class User extends GetxController {
 
       isBlocked = jsonDecode(response.body)['user']['is_active'] ?? false;
       isConfirmed = jsonDecode(response.body)['user']['validated'] ?? false;
+      isSuperuser = jsonDecode(response.body)['user']['is_superuser'] ?? false;
       id = jsonDecode(response.body)['user']['id'];
       password = null;
       await _storeToken(jwt);
@@ -253,6 +256,15 @@ class User extends GetxController {
     }
     return response;
   }
+}
+
+Future<Map<String, String>> authenticatedHeaders({bool json = true}) async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('jwt');
+  return {
+    if (json) 'Content-Type': 'application/json; charset=UTF-8',
+    if (token != null && token.isNotEmpty) 'Authorization': 'Token $token',
+  };
 }
 
 

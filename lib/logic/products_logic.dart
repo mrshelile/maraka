@@ -31,6 +31,7 @@ class ProductLogic {
     stream.cast();
     var length = await image.length();
     var req = http.MultipartRequest('POST', Uri.parse("$server/multi-image"));
+    req.headers.addAll(await authenticatedHeaders(json: false));
     var multiport = http.MultipartFile("image", stream, length,
         filename: name, contentType: MediaType('images', 'png'));
     req.files.add(multiport);
@@ -41,10 +42,7 @@ class ProductLogic {
   }
 
   Future deleteProduct(var id) async {
-    Map<String, String> headers = {
-      "dataType": "json",
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
+    final headers = await authenticatedHeaders();
     var response = await http.delete(
       Uri.parse(
           // ignore: prefer_interpolation_to_compose_strings
@@ -62,10 +60,7 @@ class ProductLogic {
       String? mileage,
       String? transmition,
       var car}) async {
-    Map<String, String> headers = {
-      "dataType": "json",
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
+    final headers = await authenticatedHeaders();
     var data = {};
     if (model != null || model.toString() != '') {
       data['model'] = model;
@@ -96,10 +91,7 @@ class ProductLogic {
   }
 
   Future updateProduct(Product product, var car) async {
-    Map<String, String> headers = {
-      "dataType": "json",
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
+    final headers = await authenticatedHeaders();
     var preparedData = {
       "price": product.price,
       "description": product.description,
@@ -129,10 +121,7 @@ class ProductLogic {
 
   Future postProduct(Product ad, int id, var car) async {
     var uuid = const Uuid();
-    Map<String, String> headers = {
-      "dataType": "json",
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
+    final headers = await authenticatedHeaders();
     var data = {
       "name": ad.title,
       "category": ad.category,
@@ -163,10 +152,7 @@ class ProductLogic {
       required String mileage,
       required String transmition}) async {
     // var uuid = const Uuid();
-    Map<String, String> headers = {
-      "dataType": "json",
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
+    final headers = await authenticatedHeaders();
     var data = {
       "model": model,
       "make": make,
@@ -374,9 +360,7 @@ class ProductLogic {
 
     var response = await http.get(
       Uri.parse("$server$_userProduct$filter"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: await authenticatedHeaders(),
     );
 
     if (response.statusCode == 200) {

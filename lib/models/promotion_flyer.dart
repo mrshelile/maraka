@@ -4,6 +4,7 @@ class PromotionFlyer {
   final int id;
   final String type; // Always "promotion"
   final String title; // Owner name
+  final String promotionType;
   final String link; // URL to open when tapped
   final String imageUrl; // Absolute URL to the promotion image
   final bool splashscreen; // Show on splash/startup
@@ -15,6 +16,7 @@ class PromotionFlyer {
     required this.id,
     required this.type,
     required this.title,
+    required this.promotionType,
     required this.link,
     required this.imageUrl,
     required this.splashscreen,
@@ -41,6 +43,7 @@ class PromotionFlyer {
       id: json['id'] as int? ?? 0,
       type: json['type'] as String? ?? 'promotion',
       title: json['title'] as String? ?? 'Promotion',
+      promotionType: json['promotion_type'] as String? ?? 'customizable',
       link: json['link'] as String? ?? '',
       imageUrl: json['image_url'] as String? ?? '',
       splashscreen: json['splashscreen'] as bool? ?? false,

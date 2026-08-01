@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:maraka/logic/store.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/pages/create_ad.dart';
+import 'package:maraka/pages/create_promotion.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/componets/widget/products_item.dart';
 import 'package:maraka/themes/color.dart';
@@ -94,25 +95,29 @@ class _MyAdsState extends State<MyAds> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.to(() => CreateAd(
-                owner: owner,
-              ));
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => CreateAd(
-          //               owner: owner,
-          //             )));
-        },
-        tooltip: "Create Ad",
-        backgroundColor: MyColors.blue3,
-        foregroundColor: MyColors.brown3,
-        child: const Icon(
-          Icons.create,
-          color: Colors.white,
-        ),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (owner.isSuperuser) ...[
+            FloatingActionButton.small(
+              heroTag: 'create-promotion',
+              onPressed: () => Get.to(() => const CreatePromotionPage()),
+              tooltip: 'Create promotion',
+              backgroundColor: MyColors.gold,
+              foregroundColor: MyColors.brown3,
+              child: const Icon(Icons.local_offer_outlined),
+            ),
+            const SizedBox(height: 12),
+          ],
+          FloatingActionButton(
+            heroTag: 'create-ad',
+            onPressed: () => Get.to(() => CreateAd(owner: owner)),
+            tooltip: "Create Ad",
+            backgroundColor: MyColors.blue3,
+            foregroundColor: MyColors.brown3,
+            child: const Icon(Icons.create, color: Colors.white),
+          ),
+        ],
       ),
     );
   }
