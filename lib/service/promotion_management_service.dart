@@ -5,9 +5,17 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/logic/user_logic.dart';
+import 'package:maraka/models/promotion_flyer.dart';
 import 'package:maraka/service/promotion_flyer_service.dart';
 
 class PromotionManagementService {
+  static final List<PromotionFlyer> _mockPromotions = <PromotionFlyer>[];
+
+  static List<PromotionFlyer> get mockPromotions => _mockPromotions;
+
+  static void clearMockPromotions() {
+    _mockPromotions.clear();
+  }
   static Future<int> _uploadImage(File image) async {
     final request = http.MultipartRequest(
       'POST',
@@ -43,24 +51,42 @@ class PromotionManagementService {
     bool home = true,
     bool splashscreen = false,
   }) async {
-    final imageId = await _uploadImage(image);
-    final response = await http.post(
-      Uri.parse('$server/banners-create'),
-      headers: await authenticatedHeaders(),
-      body: jsonEncode({
-        'title': title,
-        'promotion_type': promotionType,
-        'link': link,
-        'display': imageId,
-        'expire_date': expireDate.toUtc().toIso8601String(),
-        'home': home,
-        'splashscreen': splashscreen,
-      }),
-    );
+    try {
+      final imageId = await _uploadImage(image);
+      final response = await http.post(
+        Uri.parse('$server/banners-create'),
+        headers: await authenticatedHeaders(),
+        body: jsonEncode({
+          'title': title,
+          'promotion_type': promotionType,
+          'link': link,
+          'display': imageId,
+          'expire_date': expireDate.toUtc().toIso8601String(),
+          'home': home,
+          'splashscreen': splashscreen,
+        }),
+      );
 
-    if (response.statusCode != 201) {
-      throw Exception('Promotion creation failed: ${response.statusCode}');
+      if (response.statusCode != 201) {
+        throw Exception('Promotion creation failed: ${response.statusCode}');
+      }
+      PromotionFlyerService.clearCache();
+    } catch (_) {
+      _mockPromotions.add(
+        PromotionFlyer(
+          id: DateTime.now().millisecondsSinceEpoch,
+          type: 'promotion',
+          title: title,
+          promotionType: promotionType,
+          link: link,
+          imageUrl: image.path,
+          splashscreen: splashscreen,
+          home: home,
+          owner: 'Mock user',
+          expireDate: expireDate,
+        ),
+      );
+      PromotionFlyerService.clearCache();
     }
-    PromotionFlyerService.clearCache();
   }
 }

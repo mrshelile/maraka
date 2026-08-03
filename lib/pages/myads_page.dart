@@ -98,17 +98,15 @@ class _MyAdsState extends State<MyAds> {
       floatingActionButton: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (owner.isSuperuser) ...[
-            FloatingActionButton.small(
-              heroTag: 'create-promotion',
-              onPressed: () => Get.to(() => const CreatePromotionPage()),
-              tooltip: 'Create promotion',
-              backgroundColor: MyColors.gold,
-              foregroundColor: MyColors.brown3,
-              child: const Icon(Icons.local_offer_outlined),
-            ),
-            const SizedBox(height: 12),
-          ],
+          FloatingActionButton.small(
+            heroTag: 'create-promotion',
+            onPressed: () => Get.to(() => const CreatePromotionPage()),
+            tooltip: 'Create promotion',
+            backgroundColor: MyColors.gold,
+            foregroundColor: MyColors.brown3,
+            child: const Icon(Icons.local_offer_outlined),
+          ),
+          const SizedBox(height: 12),
           FloatingActionButton(
             heroTag: 'create-ad',
             onPressed: () => Get.to(() => CreateAd(owner: owner)),

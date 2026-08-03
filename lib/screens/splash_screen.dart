@@ -21,15 +21,33 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver {
   User user = User();
   final store = Get.find<StoreController>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late Future<String> _bannerFuture;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _bannerFuture = makeBanners();
     _initializeApp();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _bannerFuture = makeBanners();
+      });
+    }
   }
 
   Future<void> _initializeApp() async {
@@ -61,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<String> makeBanners() async {
     try {
-      final flyers = await PromotionFlyerService.fetchSplashScreenFlyers();
+      final flyers = await PromotionFlyerService.fetchSplashScreenFlyers(forceRefresh: true);
 
       if (flyers.isNotEmpty) {
         imageCarousel = AnotherCarousel(
@@ -185,7 +203,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     height: MediaQuery.of(context).copyWith().size.height * 0.5,
                     width: MediaQuery.of(context).copyWith().size.width * 0.85,
                     child: FutureBuilder<String>(
-                      future: makeBanners(),
+                      future: _bannerFuture,
                       builder: (context, AsyncSnapshot<String> snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {

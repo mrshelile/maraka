@@ -39,14 +39,35 @@ class RealPromotionsBanner extends StatefulWidget {
   State<RealPromotionsBanner> createState() => _RealPromotionsBannerState();
 }
 
-class _RealPromotionsBannerState extends State<RealPromotionsBanner> {
+class _RealPromotionsBannerState extends State<RealPromotionsBanner>
+    with WidgetsBindingObserver {
   bool _isClosed = false;
   late Future<List<PromotionFlyer>> _flyersFuture;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _flyersFuture = PromotionFlyerService.fetchHomePageFlyers();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _refreshFlyers();
+    }
+  }
+
+  void _refreshFlyers() {
+    setState(() {
+      _flyersFuture = PromotionFlyerService.fetchHomePageFlyers(forceRefresh: true);
+    });
   }
 
   void _closeBanner() {
@@ -263,8 +284,9 @@ class _PromotionCarouselState extends State<_PromotionCarousel> {
   }
 }
 
-class _RealPromotionCard extends StatelessWidget {
-  const _RealPromotionCard({
+class HomePromotionCard extends StatelessWidget {
+  const HomePromotionCard({
+    super.key,
     required this.flyer,
     required this.onClose,
     required this.onTap,
@@ -289,32 +311,22 @@ class _RealPromotionCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(2, context),
       ),
-      padding: EdgeInsets.symmetric(
-        horizontal: getProportionateScreenWidth(14, context),
-        vertical: getProportionateScreenHeight(12, context),
-      ),
-      decoration: BoxDecoration(
-        color: MyColors.mintcream,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: MyColors.blue3.withOpacity(0.28)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.18),
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: InkWell(
-                      onTap: onTap,
+      child: Card(
+        elevation: 7,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Stack(
+                  children: [
+                    Positioned.fill(
                       child: CachedNetworkImage(
                         imageUrl: flyer.imageUrl,
                         fit: BoxFit.cover,
@@ -340,133 +352,176 @@ class _RealPromotionCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
-                ),
-                Positioned(
-                  left: 0,
-                  top: 0,
-                  child: Container(
-                    margin: EdgeInsets.all(getProportionateScreenWidth(8, context)),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: getProportionateScreenWidth(8, context),
-                      vertical: getProportionateScreenHeight(4, context),
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.9),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      'Live offer',
-                      style: TextStyle(
-                        color: MyColors.brown3,
-                        fontSize: getProportionateScreenWidth(10, context),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: IconButton(
-                    constraints: BoxConstraints.tightFor(
-                      height: getProportionateScreenWidth(32, context),
-                      width: getProportionateScreenWidth(32, context),
-                    ),
-                    padding: EdgeInsets.zero,
-                    tooltip: 'Close promotions',
-                    onPressed: onClose,
-                    icon: Icon(
-                      Icons.close,
-                      color: MyColors.brown3.withOpacity(0.72),
-                      size: getProportionateScreenWidth(18, context),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    padding: EdgeInsets.all(getProportionateScreenWidth(10, context)),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withOpacity(0.65),
-                        ],
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                    Positioned(
+                      left: getProportionateScreenWidth(10, context),
+                      top: getProportionateScreenWidth(10, context),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: getProportionateScreenWidth(8, context),
+                          vertical: getProportionateScreenHeight(4, context),
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.95),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          'Live offer',
                           style: TextStyle(
-                            color: Colors.white,
-                            fontSize: getProportionateScreenWidth(12, context),
+                            color: MyColors.brown3,
+                            fontSize: getProportionateScreenWidth(10, context),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: getProportionateScreenHeight(2, context)),
-                        Text(
-                          subtitle,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.9),
-                            fontSize: getProportionateScreenWidth(10, context),
+                      ),
+                    ),
+                    Positioned(
+                      right: getProportionateScreenWidth(8, context),
+                      top: getProportionateScreenWidth(8, context),
+                      child: IconButton(
+                        constraints: BoxConstraints.tightFor(
+                          height: getProportionateScreenWidth(34, context),
+                          width: getProportionateScreenWidth(34, context),
+                        ),
+                        padding: EdgeInsets.zero,
+                        tooltip: 'Close promotions',
+                        onPressed: onClose,
+                        icon: Icon(
+                          Icons.close_rounded,
+                          color: Colors.white.withOpacity(0.92),
+                          size: getProportionateScreenWidth(18, context),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(getProportionateScreenWidth(12, context)),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.75),
+                            ],
                           ),
                         ),
-                      ],
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: getProportionateScreenWidth(13, context),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: getProportionateScreenHeight(4, context)),
+                            Text(
+                              subtitle,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(0.9),
+                                fontSize: getProportionateScreenWidth(11, context),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          SizedBox(height: getProportionateScreenHeight(8, context)),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(
-              horizontal: getProportionateScreenWidth(8, context),
-              vertical: getProportionateScreenHeight(5, context),
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.94),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: MyColors.blue3.withOpacity(0.16)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.calendar_month_outlined,
-                  color: MyColors.blue3,
-                  size: getProportionateScreenWidth(14, context),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                  getProportionateScreenWidth(12, context),
+                  getProportionateScreenHeight(10, context),
+                  getProportionateScreenWidth(12, context),
+                  getProportionateScreenHeight(12, context),
                 ),
-                SizedBox(width: getProportionateScreenWidth(5, context)),
-                Expanded(
-                  child: Text(
-                    expiryLabel,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: MyColors.brown3,
-                      fontSize: getProportionateScreenWidth(10.5, context),
-                      fontWeight: FontWeight.bold,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.calendar_month_outlined,
+                      color: MyColors.blue3,
+                      size: getProportionateScreenWidth(15, context),
                     ),
-                  ),
+                    SizedBox(width: getProportionateScreenWidth(6, context)),
+                    Expanded(
+                      child: Text(
+                        expiryLabel,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: MyColors.brown3,
+                          fontSize: getProportionateScreenWidth(11, context),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: getProportionateScreenWidth(8, context)),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: getProportionateScreenWidth(10, context),
+                        vertical: getProportionateScreenHeight(5, context),
+                      ),
+                      decoration: BoxDecoration(
+                        color: MyColors.blue3.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Open',
+                            style: TextStyle(
+                              color: MyColors.blue3,
+                              fontSize: getProportionateScreenWidth(11, context),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: getProportionateScreenWidth(4, context)),
+                          Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: getProportionateScreenWidth(11, context),
+                            color: MyColors.blue3,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
+    );
+  }
+}
+
+class _RealPromotionCard extends StatelessWidget {
+  const _RealPromotionCard({
+    required this.flyer,
+    required this.onClose,
+    required this.onTap,
+  });
+
+  final PromotionFlyer flyer;
+  final VoidCallback onClose;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return HomePromotionCard(
+      flyer: flyer,
+      onClose: onClose,
+      onTap: onTap,
     );
   }
 }
@@ -478,18 +533,33 @@ class RealPromotionsPage extends StatefulWidget {
   State<RealPromotionsPage> createState() => _RealPromotionsPageState();
 }
 
-class _RealPromotionsPageState extends State<RealPromotionsPage> {
+class _RealPromotionsPageState extends State<RealPromotionsPage>
+    with WidgetsBindingObserver {
   late Future<List<PromotionFlyer>> _flyersFuture;
   bool _isGridView = true;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _loadFlyers();
   }
 
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _loadFlyers();
+    }
+  }
+
   void _loadFlyers() {
-    _flyersFuture = PromotionFlyerService.fetchPromotionFlyers();
+    _flyersFuture = PromotionFlyerService.fetchPromotionFlyers(forceRefresh: true);
     setState(() {});
   }
 

@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/models/promotion_flyer.dart';
+import 'package:maraka/service/promotion_management_service.dart';
 
 /// Service for fetching promotion flyers from the Django backend
 class PromotionFlyerService {
@@ -59,6 +60,14 @@ class PromotionFlyerService {
       }
     }
 
+    final mockPromotions = PromotionManagementService.mockPromotions;
+    if (mockPromotions.isNotEmpty && !forceRefresh) {
+      final combined = <PromotionFlyer>[...mockPromotions];
+      _cachedFlyers = combined;
+      _cacheTime = DateTime.now();
+      return combined;
+    }
+
     try {
       final url = Uri.parse('$server$promotionEndpoint');
       final response = await http
@@ -75,40 +84,55 @@ class PromotionFlyerService {
       if (response.statusCode == 200) {
         final decoded = jsonDecode(response.body);
         final flyers = parseFlyers(decoded);
+        final combinedFlyers = <PromotionFlyer>[...mockPromotions];
+
+        for (final flyer in flyers) {
+          final alreadyExists = combinedFlyers.any(
+            (existing) => existing.id == flyer.id && existing.title == flyer.title,
+          );
+          if (!alreadyExists) {
+            combinedFlyers.add(flyer);
+          }
+        }
 
         // Sort by expire date (soonest first)
-        flyers.sort((a, b) {
+        combinedFlyers.sort((a, b) {
           if (a.expireDate == null) return 1;
           if (b.expireDate == null) return -1;
           return a.expireDate!.compareTo(b.expireDate!);
         });
 
         // Update cache
-        _cachedFlyers = flyers;
+        _cachedFlyers = combinedFlyers;
         _cacheTime = DateTime.now();
 
-        return flyers;
+        return combinedFlyers;
       } else {
         throw Exception(
           'Failed to fetch promotions: ${response.statusCode} ${response.reasonPhrase}',
         );
       }
     } catch (e) {
-      // Return an empty list instead of crashing the promotions UI when the backend
-      // returns an unexpected payload or is temporarily unavailable.
-      return <PromotionFlyer>[];
+      final fallbackFlyers = mockPromotions.isNotEmpty ? [...mockPromotions] : <PromotionFlyer>[];
+      _cachedFlyers = fallbackFlyers;
+      _cacheTime = DateTime.now();
+      return fallbackFlyers;
     }
   }
 
   /// Fetch promotion flyers for splash screen (splashscreen == true)
-  static Future<List<PromotionFlyer>> fetchSplashScreenFlyers() async {
-    final flyers = await fetchPromotionFlyers();
+  static Future<List<PromotionFlyer>> fetchSplashScreenFlyers({
+    bool forceRefresh = false,
+  }) async {
+    final flyers = await fetchPromotionFlyers(forceRefresh: forceRefresh);
     return flyers.where((flyer) => flyer.splashscreen).toList();
   }
 
   /// Fetch promotion flyers for home page (home == true)
-  static Future<List<PromotionFlyer>> fetchHomePageFlyers() async {
-    final flyers = await fetchPromotionFlyers();
+  static Future<List<PromotionFlyer>> fetchHomePageFlyers({
+    bool forceRefresh = false,
+  }) async {
+    final flyers = await fetchPromotionFlyers(forceRefresh: forceRefresh);
     return flyers.where((flyer) => flyer.home).toList();
   }
 
@@ -124,6 +148,11 @@ class PromotionFlyerService {
   static void clearCache() {
     _cachedFlyers = null;
     _cacheTime = null;
+  }
+
+  static void clearMockPromotions() {
+    PromotionManagementService.clearMockPromotions();
+    clearCache();
   }
 
   /// Get full API endpoint URL
