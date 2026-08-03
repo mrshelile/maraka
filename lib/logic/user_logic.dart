@@ -1,11 +1,42 @@
 import 'dart:convert';
 import 'dart:core';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/logic/email.dart';
 import 'package:otp/otp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+Map<String, dynamic> _extractPayload(Map<String, dynamic> payload) {
+  if (payload.containsKey('user') && payload['user'] is Map) {
+    return Map<String, dynamic>.from(payload['user'] as Map);
+  }
+  return payload;
+}
+
+Map<String, dynamic> buildLoginPayload(String loginIdentifier, String? password) {
+  final normalizedIdentifier = loginIdentifier.trim();
+  return <String, dynamic>{
+    'username': normalizedIdentifier,
+    'email': normalizedIdentifier,
+    'password': password ?? '',
+  };
+}
+
+Map<String, dynamic> buildLocalPartLoginPayload(String loginIdentifier, String? password) {
+  final normalizedIdentifier = loginIdentifier.trim();
+  if (!normalizedIdentifier.contains('@')) {
+    return buildLoginPayload(normalizedIdentifier, password);
+  }
+
+  final localPart = normalizedIdentifier.split('@').first;
+  return <String, dynamic>{
+    'username': localPart,
+    'email': normalizedIdentifier,
+    'password': password ?? '',
+  };
+}
 
 class UserController extends GetxController {
   User? _user;
@@ -23,14 +54,14 @@ class User extends GetxController {
   late int? phone2;
   String? password = '';
   DateTime? subscription;
-  var otp;
+  dynamic otp;
   int id = 0;
   // bool isValidatedAcc = false;
   bool isConfirmed = false;
   bool isBlocked = false;
   bool isSuperuser = false;
-  var jwt;
-  var response;
+  dynamic jwt;
+  dynamic response;
 
   final _login = "/auth/login/";
   final _register = "/auth_user";
@@ -69,6 +100,50 @@ class User extends GetxController {
     await prefs.clear();
     email = null;
     jwt = null;
+    isSuperuser = false;
+    isConfirmed = false;
+    isBlocked = false;
+  }
+
+  Future<void> restoreSession() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    isSuperuser = prefs.getBool('is_superuser') ?? false;
+    isConfirmed = prefs.getBool('is_confirmed') ?? false;
+    isBlocked = prefs.getBool('is_blocked') ?? false;
+    final storedEmail = prefs.getString('email');
+    if (storedEmail != null && storedEmail.isNotEmpty) {
+      email = storedEmail;
+    }
+    final storedJwt = prefs.getString('jwt');
+    if (storedJwt != null && storedJwt.isNotEmpty) {
+      jwt = storedJwt;
+    }
+  }
+
+  Future<void> persistSession() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('is_superuser', isSuperuser);
+    await prefs.setBool('is_confirmed', isConfirmed);
+    await prefs.setBool('is_blocked', isBlocked);
+    if (email != null) {
+      await prefs.setString('email', email!);
+    }
+    if (jwt != null) {
+      await prefs.setString('jwt', jwt.toString());
+    }
+  }
+
+  void applyLoginPayload(Map<String, dynamic> payload) {
+    final userPayload = _extractPayload(payload);
+    name = userPayload['full_name']?.toString();
+    final phone = userPayload['phone1'];
+    if (phone != null) {
+      phone1 = int.tryParse(phone.toString());
+    }
+    isBlocked = userPayload['is_active'] ?? false;
+    isConfirmed = userPayload['validated'] ?? false;
+    isSuperuser = userPayload['is_superuser'] ?? false;
+    id = int.tryParse(userPayload['id']?.toString() ?? '0') ?? 0;
   }
 
   Future retrieveToken() async {
@@ -87,19 +162,6 @@ class User extends GetxController {
   Future _storeOTP(String value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('otp', value);
-  }
-
-  Future _retrieveOTP(String value) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var value = prefs.getString('otp');
-
-    jsonEncode(value).toString().isEmpty ||
-            // ignore: unrelated_type_equality_checks
-            jsonEncode(value) == 0 ||
-            otp == null
-        ? otp = null
-        : otp = jsonEncode(value);
-    return prefs;
   }
 
   Future _storeToken(String value) async {
@@ -156,32 +218,59 @@ class User extends GetxController {
   }
 
   Future login() async {
-    Map data = {'username': email, 'password': password};
+    final loginIdentifier = email?.trim() ?? '';
+    const bool _debugLogin = true;
+    final headers = <String, String>{'Content-Type': 'application/json; charset=UTF-8'};
+
+    var data = buildLoginPayload(loginIdentifier, password);
+
+    if (_debugLogin && kDebugMode) {
+      print('DEBUG: Login attempt payload: ' + jsonEncode(data));
+    }
 
     response = await http.post(Uri.parse(server + _login),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
+        headers: headers,
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
 
-    if (response.statusCode == 200) {
-      // isValidatedAcc = jsonDecode(response.body)['user']['validated'];
-
-      jwt = jsonDecode(response.body)['token'];
-      name = jsonDecode(response.body)['user']['full_name'];
-
-      if (jsonDecode(response.body)['user']['phone1'] != null) {
-        phone1 = int.parse(jsonDecode(response.body)['user']['phone1']);
+    if (_debugLogin && kDebugMode) {
+      try {
+        print('DEBUG: Login response: status=${response.statusCode} body=${response.body}');
+      } catch (e) {
+        print('DEBUG: Login response - could not read body: $e');
       }
+    }
 
-      isBlocked = jsonDecode(response.body)['user']['is_active'] ?? false;
-      isConfirmed = jsonDecode(response.body)['user']['validated'] ?? false;
-      isSuperuser = jsonDecode(response.body)['user']['is_superuser'] ?? false;
-      id = jsonDecode(response.body)['user']['id'];
+    if (response.statusCode != 200 && loginIdentifier.contains('@')) {
+      data = buildLocalPartLoginPayload(loginIdentifier, password);
+      if (_debugLogin && kDebugMode) {
+        print('DEBUG: Fallback login payload: ' + jsonEncode(data));
+      }
+      response = await http.post(Uri.parse(server + _login),
+          headers: headers,
+          body: jsonEncode(data),
+          encoding: Encoding.getByName("utf-8"));
+      if (_debugLogin && kDebugMode) {
+        try {
+          print('DEBUG: Fallback login response: status=${response.statusCode} body=${response.body}');
+        } catch (e) {
+          print('DEBUG: Fallback login response - could not read body: $e');
+        }
+      }
+    }
+
+    if (response.statusCode == 200) {
+      final decodedBody = jsonDecode(response.body);
+      final payload = decodedBody is Map<String, dynamic>
+          ? decodedBody
+          : Map<String, dynamic>.from(decodedBody as Map);
+
+      jwt = payload['token'];
+      applyLoginPayload(payload);
       password = null;
-      await _storeToken(jwt);
+      await _storeToken(jwt.toString());
       await _storeEmail(email.toString());
+      await persistSession();
     }
 
     return response;

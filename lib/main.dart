@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(StoreController());
-    Get.put(User());
+    final user = Get.put(User());
+    user.restoreSession();
 
     return GetMaterialApp(
       title: 'Maraka',

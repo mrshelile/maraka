@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
+import 'promotions_real.dart';
 import '../../size_config.dart';
 import '../../themes/background.dart';
 import '../../themes/color.dart';
@@ -735,13 +736,8 @@ class PromotionVisual extends StatelessWidget {
           surfaceColor: const Color(0xfffffbf0),
         );
       case PromotionFlyerStyle.image:
-        return Image.asset(
-          promotion.imageAsset,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => _PromotionImageFallback(
-            promotion: promotion,
-            compact: compact,
-          ),
+        return PromotionAssetImage(
+          assetPath: promotion.imageAsset,
         );
     }
   }

@@ -1,14 +1,45 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:maraka/logic/constants.dart';
 import 'package:maraka/models/promotion_flyer.dart';
 
 /// Service for fetching promotion flyers from the Django backend
-/// Backend URL: http://192.168.1.59:8000/buyandsellDjango-apis/promotion-flyers
 class PromotionFlyerService {
-  // Backend API base URL - can be configured via environment or settings
-  static const String backendBaseUrl = 'http://192.168.1.59:8000';
-  static const String promotionEndpoint =
-      '/buyandsellDjango-apis/promotion-flyers';
+  static const String promotionEndpoint = '/promotion-flyers';
+
+  static List<PromotionFlyer> parseFlyers(dynamic payload) {
+    if (payload is List) {
+      return payload
+          .whereType<Map<String, dynamic>>()
+          .map(PromotionFlyer.fromJson)
+          .where((flyer) => flyer.isActive)
+          .toList();
+    }
+
+    if (payload is Map<String, dynamic>) {
+      final data = payload['results'];
+      if (data is List) {
+        return data
+            .whereType<Map<String, dynamic>>()
+            .map(PromotionFlyer.fromJson)
+            .where((flyer) => flyer.isActive)
+            .toList();
+      }
+    }
+
+    if (payload is Map) {
+      final data = payload['results'];
+      if (data is List) {
+        return data
+            .whereType<Map<String, dynamic>>()
+            .map(PromotionFlyer.fromJson)
+            .where((flyer) => flyer.isActive)
+            .toList();
+      }
+    }
+
+    return <PromotionFlyer>[];
+  }
 
   // Cache promotion flyers to avoid excessive API calls
   static List<PromotionFlyer>? _cachedFlyers;
@@ -29,7 +60,7 @@ class PromotionFlyerService {
     }
 
     try {
-      final url = Uri.parse('$backendBaseUrl$promotionEndpoint');
+      final url = Uri.parse('$server$promotionEndpoint');
       final response = await http
           .get(url)
           .timeout(
@@ -42,16 +73,8 @@ class PromotionFlyerService {
           );
 
       if (response.statusCode == 200) {
-        // Parse JSON response
-        final List<dynamic> jsonData = jsonDecode(response.body);
-
-        // Convert to PromotionFlyer objects and filter active ones
-        final flyers = jsonData
-            .map(
-              (item) => PromotionFlyer.fromJson(item as Map<String, dynamic>),
-            )
-            .where((flyer) => flyer.isActive) // Only active promotions
-            .toList();
+        final decoded = jsonDecode(response.body);
+        final flyers = parseFlyers(decoded);
 
         // Sort by expire date (soonest first)
         flyers.sort((a, b) {
@@ -71,7 +94,9 @@ class PromotionFlyerService {
         );
       }
     } catch (e) {
-      throw Exception('Error fetching promotions: $e');
+      // Return an empty list instead of crashing the promotions UI when the backend
+      // returns an unexpected payload or is temporarily unavailable.
+      return <PromotionFlyer>[];
     }
   }
 
@@ -101,9 +126,6 @@ class PromotionFlyerService {
     _cacheTime = null;
   }
 
-  /// Update backend base URL (useful for switching between dev/prod)
-  static String getBackendBaseUrl() => backendBaseUrl;
-
   /// Get full API endpoint URL
-  static String getFullApiUrl() => '$backendBaseUrl$promotionEndpoint';
+  static String getFullApiUrl() => '$server$promotionEndpoint';
 }

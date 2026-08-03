@@ -1,11 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:maraka/models/promotion_flyer.dart';
 import 'package:maraka/service/promotion_flyer_service.dart';
 import '../../size_config.dart';
 import '../../themes/background.dart';
 import '../../themes/color.dart';
+
+class PromotionAssetImage extends StatelessWidget {
+  const PromotionAssetImage({super.key, required this.assetPath});
+
+  final String assetPath;
+
+  @override
+  Widget build(BuildContext context) {
+    if (assetPath.toLowerCase().endsWith('.svg')) {
+      return SvgPicture.asset(
+        assetPath,
+        fit: BoxFit.cover,
+      );
+    }
+
+    return Image.asset(
+      assetPath,
+      fit: BoxFit.cover,
+    );
+  }
+}
 
 /// Real-time promotion flyers fetched from Django backend API
 /// Shows actual promotions managed by admins instead of mock data
@@ -66,10 +88,7 @@ class _RealPromotionsBannerState extends State<RealPromotionsBanner> {
           Positioned.fill(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
-              child: Image.asset(
-                'assets/sale.svg',
-                fit: BoxFit.cover,
-              ),
+              child: PromotionAssetImage(assetPath: 'assets/sale.svg'),
             ),
           ),
           Positioned(

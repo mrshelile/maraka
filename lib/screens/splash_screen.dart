@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:maraka/logic/banner_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
+import 'package:maraka/service/promotion_flyer_service.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
@@ -60,73 +60,46 @@ class _SplashScreenState extends State<SplashScreen> {
   bool isFinished = false;
 
   Future<String> makeBanners() async {
-    var logic = BannerLogic();
-
     try {
-      var splashscreenFuture = logic.getSplashscreen();
-      await splashscreenFuture;
+      final flyers = await PromotionFlyerService.fetchSplashScreenFlyers();
 
-      if (logic.response != null) {
-        if (logic.response.statusCode == 200) {
-          List imgs = [];
-          // List banner = [];
-          for (var item in logic.bannersSplashScreen) {
-            // bool skip = false;
-            if (item.display != null) {
-              imgs.add(item);
-            }
-          }
-          if (imgs.isNotEmpty) {
-            imageCarousel = AnotherCarousel(
-              dotBgColor: Colors.transparent,
-              dotSize: 0,
-              images: logic.bannersSplashScreen
-                  .map(
-                    (i) => GestureDetector(
-                      onTap: () async {
-                        // print(i);
-                        // ignore: deprecated_member_use
-
-                        //  html.window.open("http://${i.url}", 'new_tab');
-                        if (!await launchUrl(Uri.parse("http://${i.url}"))) {
-                          print("failed launching");
-                        } else {
-                          print("should launch");
-                        }
-                      },
-                      child: SizedBox(
-                        height: MediaQuery.of(context).copyWith().size.height *
-                            0.35,
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) =>
-                              const SpinKitThreeInOut(
-                            color: Color.fromARGB(255, 12, 131, 125),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                          // fit:BoxFit.scaleDown,
-                          imageUrl: i.display,
-                        ),
+      if (flyers.isNotEmpty) {
+        imageCarousel = AnotherCarousel(
+          dotBgColor: Colors.transparent,
+          dotSize: 0,
+          images: flyers
+              .map(
+                (flyer) => GestureDetector(
+                  onTap: () async {
+                    final link = flyer.link.trim();
+                    if (link.isNotEmpty) {
+                      final uri = Uri.tryParse(link);
+                      if (uri != null && await canLaunchUrl(uri)) {
+                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                      }
+                    }
+                  },
+                  child: SizedBox(
+                    height: MediaQuery.of(context).copyWith().size.height * 0.35,
+                    child: CachedNetworkImage(
+                      placeholder: (context, url) => const SpinKitThreeInOut(
+                        color: Color.fromARGB(255, 12, 131, 125),
                       ),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      imageUrl: flyer.imageUrl,
                     ),
-                  )
-                  .toList(),
-            );
-          }
-
-          return logic.response.toString();
-        } else {
-          debugPrint("not ok status");
-          return "";
-        }
-      } else {
-        debugPrint("no Response");
-        return "";
+                  ),
+                ),
+              )
+              .toList(),
+        );
       }
+
+      return flyers.isNotEmpty ? 'loaded' : '';
     } catch (e) {
-      return "";
+      debugPrint('Error loading splash promotions: $e');
+      return '';
     }
-    // return '';
   }
 
   @override

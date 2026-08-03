@@ -9,7 +9,6 @@ import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:email_validator/email_validator.dart';
 
 import 'enter_otp.dart';
 
@@ -92,12 +91,9 @@ class _LoginState extends State<Login> {
                           textInputAction: TextInputAction.next,
                           validator: (String? value) {
                             if (value == null || value.trim().isEmpty) {
-                              return "Email Address is empty";
-                            } else if (!EmailValidator.validate(value.trim())) {
-                              return "Invalid Email Format";
-                            } else {
-                              return null;
+                              return "Username or email is empty";
                             }
+                            return null;
                           },
                         ),
                       ),
@@ -179,6 +175,7 @@ class _LoginState extends State<Login> {
                                 User tempUser = User(
                                     email: _emailController.text.trim(),
                                     password: _passwordController.text.trim());
+                                tempUser.email = _emailController.text.trim();
                                 // CircularProgressIndicator();
                                 setState(() {
                                   _loading = true;
@@ -256,7 +253,7 @@ class _LoginState extends State<Login> {
                                   color: MyColors.blue3, fontSize: 16),
                             ),
                             onPressed: () {
-                              Get.to(Registration());
+                              Get.to(const Registration());
                             },
                           ),
                           if (constraints.maxWidth >= 600)

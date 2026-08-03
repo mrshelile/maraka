@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:maraka/models/banner.dart';
 import 'package:maraka/logic/constants.dart';
@@ -7,6 +8,20 @@ import 'package:maraka/logic/constants.dart';
 class BannerLogic {
   final String _banner = "/banners";
   final String _bannerBottom = "/featured-ads";
+
+  String resolveImageUrl(Map<String, dynamic> item) {
+    final display = item['display'];
+    if (display is String && display.trim().isNotEmpty) {
+      return display;
+    }
+
+    final imageUrl = item['image_url'];
+    if (imageUrl is String && imageUrl.trim().isNotEmpty) {
+      return imageUrl;
+    }
+
+    return '';
+  }
   // ignore: prefer_typing_uninitialized_variables
   var response;
   List<Banner> bannersSplashScreen = [];
@@ -40,7 +55,12 @@ class BannerLogic {
 
       var imagesFuture = <Future>[];
       for (var item in data) {
-        imagesFuture.add(fetchImage(item['display']));
+        final imageUrl = resolveImageUrl(item);
+        if (imageUrl.isNotEmpty) {
+          imagesFuture.add(fetchImage(imageUrl));
+        } else {
+          imagesFuture.add(Future.value(''));
+        }
       }
       List images = await Future.wait(imagesFuture);
 
@@ -85,7 +105,12 @@ class BannerLogic {
       var imagesFuture = <Future>[];
 
       for (var item in data) {
-        imagesFuture.add(fetchImage(item['display']));
+        final imageUrl = resolveImageUrl(item);
+        if (imageUrl.isNotEmpty) {
+          imagesFuture.add(fetchImage(imageUrl));
+        } else {
+          imagesFuture.add(Future.value(''));
+        }
       }
 
       List images = await Future.wait(imagesFuture);
@@ -100,7 +125,7 @@ class BannerLogic {
           }
         })));
       } catch (e) {
-        print('Error in async operations: $e');
+        debugPrint('Error in async operations: $e');
       }
 
       // for (var i = 0; i < data.length; i++) {
