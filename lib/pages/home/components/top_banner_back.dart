@@ -7,8 +7,8 @@ import 'package:maraka/logic/banner_logic.dart';
 
 class DiscountBanner extends StatefulWidget {
   const DiscountBanner({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<DiscountBanner> createState() => _DiscountBannerState();

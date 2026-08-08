@@ -5,10 +5,10 @@ import 'package:maraka/size_config.dart';
 
 class TopRoundedContainer extends StatelessWidget {
   const TopRoundedContainer({
-    Key? key,
+    super.key,
     required this.color,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Color color;
   final Widget child;

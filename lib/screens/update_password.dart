@@ -237,7 +237,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 color: MyColors.blue3,
                                 boxShadow: [
                                   BoxShadow(
-                                      color: Colors.grey.withOpacity(0.6),
+                                      color: Colors.grey.withOpacity( 0.6),
                                       spreadRadius: 2,
                                       blurRadius: 5,
                                       offset: const Offset(0, 5))
@@ -353,7 +353,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                     Container(
                       width: MediaQuery.of(context).copyWith().size.width,
                       height: MediaQuery.of(context).copyWith().size.height,
-                      color: Colors.white.withOpacity(0.92),
+                      color: Colors.white.withOpacity( 0.92),
                       child: Center(
                         child: _loader,
                       ),

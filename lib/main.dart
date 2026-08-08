@@ -13,21 +13,23 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // BackgroundService.start();
 
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((_) {
-    runApp(const MyApp());
-  });
+  final user = User();
+  await user.restoreSession();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  runApp(MyApp(user: user));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final User user;
+
+  const MyApp({super.key, required this.user});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     Get.put(StoreController());
-    final user = Get.put(User());
-    user.restoreSession();
+    Get.put(user, permanent: true);
 
     return GetMaterialApp(
       title: 'Maraka',

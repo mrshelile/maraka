@@ -48,34 +48,34 @@ class Recents {
   // }
   static List<Recents> generateFavourites(List<Product> items) {
     List<Recents> products = [];
-    items.forEach((element) {
+    for (var element in items) {
       products.add(Recents(
           name: element.title,
-          price: "M " + element.price.toString(),
+          price: "M ${element.price}",
           imgUrl: element.images![0].url));
-    });
+    }
     return products;
   }
 
   static List<Recents> generateMyAds(List<Product> items) {
     List<Recents> products = [];
-    items.forEach((element) {
+    for (var element in items) {
       products.add(Recents(
           name: element.title,
-          price: "M " + element.price.toString(),
+          price: "M ${element.price}",
           imgUrl: element.images![0].url));
-    });
+    }
     return products;
   }
 
   static List<Recents> generateHome(List<Product> items) {
     List<Recents> products = [];
-    items.forEach((element) {
+    for (var element in items) {
       products.add(Recents(
           name: element.title,
-          price: "M " + element.price.toString(),
+          price: "M ${element.price}",
           imgUrl: element.images![0].url));
-    });
+    }
     return products;
   }
 }

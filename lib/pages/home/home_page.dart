@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();

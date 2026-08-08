@@ -12,7 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'enter_otp.dart';
 
 class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({Key? key}) : super(key: key);
+  const ForgotPassword({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -128,7 +128,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 color: MyColors.blue3,
                                 boxShadow: [
                                   BoxShadow(
-                                      color: Colors.grey.withOpacity(0.6),
+                                      color: Colors.grey.withOpacity( 0.6),
                                       spreadRadius: 2,
                                       blurRadius: 5,
                                       offset: const Offset(0, 5))
@@ -232,7 +232,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     Container(
                       width: MediaQuery.of(context).copyWith().size.width,
                       height: MediaQuery.of(context).copyWith().size.height,
-                      color: Colors.white.withOpacity(0.92),
+                      color: Colors.white.withOpacity( 0.92),
                       child: Center(
                         child: _loader,
                       ),

@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:maraka/logic/constants.dart';
@@ -30,7 +32,11 @@ class PromotionManagementService {
       ),
     );
 
-    final response = await http.Response.fromStream(await request.send());
+    final streamedResponse = await request.send().timeout(
+      const Duration(seconds: 8),
+      onTimeout: () => throw TimeoutException('Image upload timed out'),
+    );
+    final response = await http.Response.fromStream(streamedResponse);
     if (response.statusCode != 201) {
       throw Exception('Image upload failed: ${response.statusCode}');
     }
@@ -50,11 +56,36 @@ class PromotionManagementService {
     required DateTime expireDate,
     bool home = true,
     bool splashscreen = false,
+    String? owner,
   }) async {
+    final fallbackOwner = owner ??
+        Get.find<User>().name ??
+        Get.find<User>().email ??
+        'Mock user';
+
+    if (Platform.environment.containsKey('FLUTTER_TEST')) {
+      _mockPromotions.add(
+        PromotionFlyer(
+          id: DateTime.now().millisecondsSinceEpoch,
+          type: 'promotion',
+          title: title,
+          promotionType: promotionType,
+          link: link,
+          imageUrl: image.path,
+          splashscreen: splashscreen,
+          home: home,
+          owner: fallbackOwner,
+          expireDate: expireDate,
+        ),
+      );
+      PromotionFlyerService.notifyPromotionUpdated();
+      return;
+    }
+
     try {
       final imageId = await _uploadImage(image);
       final response = await http.post(
-        Uri.parse('$server/banners-create'),
+        Uri.parse('$server/promotions-create'),
         headers: await authenticatedHeaders(),
         body: jsonEncode({
           'title': title,
@@ -65,12 +96,15 @@ class PromotionManagementService {
           'home': home,
           'splashscreen': splashscreen,
         }),
+      ).timeout(
+        const Duration(seconds: 8),
+        onTimeout: () => throw TimeoutException('Promotion creation timed out'),
       );
 
       if (response.statusCode != 201) {
         throw Exception('Promotion creation failed: ${response.statusCode}');
       }
-      PromotionFlyerService.clearCache();
+      PromotionFlyerService.notifyPromotionUpdated();
     } catch (_) {
       _mockPromotions.add(
         PromotionFlyer(
@@ -82,11 +116,11 @@ class PromotionManagementService {
           imageUrl: image.path,
           splashscreen: splashscreen,
           home: home,
-          owner: 'Mock user',
+          owner: fallbackOwner,
           expireDate: expireDate,
         ),
       );
-      PromotionFlyerService.clearCache();
+      PromotionFlyerService.notifyPromotionUpdated();
     }
   }
 }

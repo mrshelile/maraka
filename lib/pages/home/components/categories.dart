@@ -79,7 +79,7 @@ class CategoryCard extends StatelessWidget {
                 width: MediaQuery.of(context).copyWith().size.width,
                 decoration: BoxDecoration(
                   color:
-                      const Color.fromARGB(255, 169, 208, 235).withOpacity(0.7),
+                      const Color.fromARGB(255, 169, 208, 235).withOpacity( 0.7),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: SvgPicture.asset(icon!),

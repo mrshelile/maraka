@@ -23,7 +23,7 @@ import 'package:uuid/uuid.dart';
 // ignore: must_be_immutable
 class CreateAd extends StatefulWidget {
   User owner;
-  CreateAd({Key? key, required this.owner}) : super(key: key);
+  CreateAd({super.key, required this.owner});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -637,7 +637,7 @@ class _CreateAdState extends State<CreateAd> {
             Container(
               width: width,
               height: height,
-              decoration: BoxDecoration(color: Colors.white.withOpacity(0.8)),
+              decoration: BoxDecoration(color: Colors.white.withOpacity( 0.8)),
               child: Center(child: _loader),
             )
         ],

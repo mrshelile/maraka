@@ -5,7 +5,7 @@ import 'components/custom_app_bar.dart';
 
 class DetailsScreen extends StatefulWidget {
   final Product agrs;
-  const DetailsScreen({Key? key, required this.agrs}) : super(key: key);
+  const DetailsScreen({super.key, required this.agrs});
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();

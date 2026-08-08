@@ -17,11 +17,11 @@ class AdminPromotionService {
       final body = jsonDecode(resp.body);
       return body['id'] as int;
     }
-    throw Exception('Image upload failed: ${resp}');
+    throw Exception('Image upload failed: $resp');
   }
 
-  /// Create a banner (promotion)
-  static Future<http.Response> createBanner({
+  /// Create a promotion using the backend Promotion model endpoint.
+  static Future<http.Response> createPromotion({
     required String token,
     required String title,
     required String promotionType,
@@ -31,7 +31,7 @@ class AdminPromotionService {
     required bool splashscreen,
     required bool home,
   }) async {
-    final uri = Uri.parse('$server/banners-create');
+    final uri = Uri.parse('$server/promotions-create');
     final body = {
       'title': title,
       'promotion_type': promotionType,

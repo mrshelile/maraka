@@ -11,8 +11,7 @@ import 'package:maraka/themes/color.dart';
 class TopBTnsProductPreview extends StatefulWidget {
   int product;
   User owner;
-  TopBTnsProductPreview({Key? key, required this.product, required this.owner})
-      : super(key: key);
+  TopBTnsProductPreview({super.key, required this.product, required this.owner});
 
   @override
   State<TopBTnsProductPreview> createState() => _TopBTnsProductPreviewState();

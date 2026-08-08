@@ -4,7 +4,7 @@ import 'package:maraka/logic/store.dart';
 import '../../../size_config.dart';
 
 class SearchField extends StatefulWidget {
-  SearchField({super.key});
+  const SearchField({super.key});
 
   @override
   State<SearchField> createState() => _SearchFieldState();
@@ -26,7 +26,7 @@ class _SearchFieldState extends State<SearchField> {
     return Container(
       width: sizeConfig.screenWidth * 0.8,
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 224, 229, 240).withOpacity(0.9),
+        color: const Color.fromARGB(255, 224, 229, 240).withOpacity( 0.9),
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextField(

@@ -11,7 +11,7 @@ import '../../logic/store.dart';
 // ignore: must_be_immutable
 class ProductPreview extends StatefulWidget {
   Product product;
-  ProductPreview({Key? key, required this.product}) : super(key: key);
+  ProductPreview({super.key, required this.product});
 
   @override
   // ignore: library_private_types_in_public_api

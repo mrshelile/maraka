@@ -20,7 +20,7 @@ import 'package:maraka/themes/color.dart';
 // ignore: must_be_immutable
 class EditAdForm extends StatefulWidget {
   Product product;
-  EditAdForm({Key? key, required this.product});
+  EditAdForm({Key? key, required this.product}) : super(key: key);
 
   @override
   State<EditAdForm> createState() => _EditAdFormState();
@@ -339,7 +339,7 @@ class _EditAdFormState extends State<EditAdForm> {
       floatingActionButton: FloatingActionButton(
         tooltip: 'Save',
         backgroundColor: MyColors.blue2,
-        foregroundColor: Color.fromARGB(255, 253, 253, 251),
+        foregroundColor: const Color.fromARGB(255, 253, 253, 251),
         child: const Icon(Icons.done),
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
@@ -371,7 +371,7 @@ class _EditAdFormState extends State<EditAdForm> {
               }
 
               if (widget.product.category.toString().toLowerCase() == 'cars') {
-                var car_res = await logic
+                var carRes = await logic
                     .updateCar(
                         car: widget.product.car!['id'],
                         model: _modelController.text,
@@ -383,8 +383,8 @@ class _EditAdFormState extends State<EditAdForm> {
                     .timeout(const Duration(minutes: 1),
                         onTimeout: () =>
                             throw TimeoutException('Can\'t create a Car'));
-                if (car_res.statusCode == 200) {
-                  car = jsonDecode(car_res.body)["id"];
+                if (carRes.statusCode == 200) {
+                  car = jsonDecode(carRes.body)["id"];
                   // widget.product.car!['model'] =
                   //     _modelController.text;
                   // widget.product.car!['year'] =
@@ -460,7 +460,7 @@ class _EditAdFormState extends State<EditAdForm> {
           }
         },
       ),
-      backgroundColor: Color.fromARGB(255, 236, 235, 232),
+      backgroundColor: const Color.fromARGB(255, 236, 235, 232),
       body: GetBuilder(
           init: store,
           builder: (_) {

@@ -162,7 +162,7 @@ class _LoginState extends State<Login> {
                               color: MyColors.blue3,
                               boxShadow: [
                                 BoxShadow(
-                                    color: Colors.grey.withOpacity(0.6),
+                                    color: Colors.grey.withOpacity( 0.6),
                                     spreadRadius: 2,
                                     blurRadius: 5,
                                     offset: const Offset(0, 5))
@@ -301,7 +301,7 @@ class _LoginState extends State<Login> {
               Container(
                 width: MediaQuery.of(context).copyWith().size.width,
                 height: MediaQuery.of(context).copyWith().size.height,
-                color: Colors.white.withOpacity(0.8),
+                color: Colors.white.withOpacity( 0.8),
                 child: Center(
                   child: _loader,
                 ),

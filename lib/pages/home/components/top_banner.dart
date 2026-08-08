@@ -20,6 +20,6 @@ class _DiscountBannerState extends State<DiscountBanner> {
   Widget build(BuildContext context) {
     // Display real promotion flyers from Django backend
     // Falls back to static banner if no promotions available
-    return RealPromotionsBanner();
+    return const RealPromotionsBanner();
   }
 }

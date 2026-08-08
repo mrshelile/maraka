@@ -14,14 +14,13 @@ class ProductsItem extends StatefulWidget {
   User owner;
   Function? getData;
   ProductsItem(
-      {Key? key,
+      {super.key,
       this.getData,
       required this.isFavouritedPage,
       required this.owner,
       required this.product,
       required this.isFavouriteclicked,
-      required this.isFavouriteBtn})
-      : super(key: key);
+      required this.isFavouriteBtn});
 
   @override
   State<ProductsItem> createState() => _ProductsItemState();

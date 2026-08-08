@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
 
 class Splashcreen extends StatefulWidget {
-  const Splashcreen({Key? key}) : super(key: key);
+  const Splashcreen({super.key});
 
   @override
   _SplashcreenState createState() => _SplashcreenState();
@@ -201,7 +201,7 @@ class _SplashcreenState extends State<Splashcreen> {
                         } else if (snapshot.hasError) {
                           return const SizedBox();
                         } else {
-                          return SizedBox();
+                          return const SizedBox();
                           // return imageCarousel;
                         }
                       },
@@ -218,10 +218,10 @@ class _SplashcreenState extends State<Splashcreen> {
                       Icons.arrow_forward_ios_rounded,
                       color: Color.fromARGB(255, 92, 219, 166),
                     ),
-                    activeColor: Color.fromARGB(255, 153, 193, 226),
+                    activeColor: const Color.fromARGB(255, 153, 193, 226),
                     isFinished: isFinished,
                     onWaitingProcess: () {
-                      Future.delayed(Duration(seconds: 1), () {
+                      Future.delayed(const Duration(seconds: 1), () {
                         setState(() {
                           isFinished = true;
                         });

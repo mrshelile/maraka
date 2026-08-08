@@ -32,9 +32,9 @@ List<Product> demoProducts = [
 
     ],
     colors: [
-      Color(0xFFF6625E),
-      Color(0xFF836DB8),
-      Color(0xFFDECB9C),
+      const Color(0xFFF6625E),
+      const Color(0xFF836DB8),
+      const Color(0xFFDECB9C),
       Colors.white,
     ],
     title: "Wireless Controller for PS4™",
@@ -50,9 +50,9 @@ List<Product> demoProducts = [
       "assets/4a18cd7fd6e2aab3ed6b0c0583b28bf2.jpg",
     ],
     colors: [
-      Color(0xFFF6625E),
-      Color(0xFF836DB8),
-      Color(0xFFDECB9C),
+      const Color(0xFFF6625E),
+      const Color(0xFF836DB8),
+      const Color(0xFFDECB9C),
       Colors.white,
     ],
     title: "Nike Sport White - Man Pant",

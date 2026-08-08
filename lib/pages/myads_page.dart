@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:maraka/logic/store.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/pages/create_ad.dart';
-import 'package:maraka/pages/create_promotion.dart';
+import 'package:maraka/pages/promotions_dashboard.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/componets/widget/products_item.dart';
 import 'package:maraka/themes/color.dart';
@@ -20,21 +20,14 @@ class MyAds extends StatefulWidget {
 }
 
 class _MyAdsState extends State<MyAds> {
-  User owner = Get.find();
-  // List<Product> myads = [];
-  // Future<List<Product>> myAdsList() async {
-  //   var logic = ProductLogic();
-  //   List<Product> ad = await logic.getMyAds(owner);
-  //   myads = ad;
-
-  //   return ad;
-  // }
+  final User owner = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).copyWith().size.height;
-    var width = MediaQuery.of(context).copyWith().size.width;
     final store = Get.find<StoreController>();
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -45,8 +38,7 @@ class _MyAdsState extends State<MyAds> {
           Column(
             children: <Widget>[
               Padding(
-                padding:
-                    EdgeInsets.only(top: height * 0.0, right: width * 0.65),
+                padding: EdgeInsets.only(top: height * 0.0, right: width * 0.65),
                 child: SizedBox(
                   height: height * 0.2,
                   width: width * 0.2,
@@ -55,41 +47,56 @@ class _MyAdsState extends State<MyAds> {
                   ),
                 ),
               ),
-              FutureBuilder<dynamic>(
-                future: store.setMyproducts(owner),
-                builder: (context, snapshot) {
-                  // print(snapshot.data);
-                  if (snapshot.hasData) {
-                    return GetBuilder(
+              Expanded(
+                child: FutureBuilder<dynamic>(
+                  future: store.setMyproducts(owner),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (snapshot.hasData) {
+                      return GetBuilder<StoreController>(
                         init: store,
                         builder: (_) {
-                          return SizedBox(
-                            // decoration: BoxDecoration(
-                            //     border: Border.all(color: Colors.black)),
-                            height: height * 0.69,
-                            width: width,
-                            child: GridView.builder(
-                                itemCount: store.myProducts.length,
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        //childAspectRatio: 2,
-                                        mainAxisExtent: 280,
-                                        mainAxisSpacing: 12,
-                                        crossAxisCount: 2,
-                                        crossAxisSpacing: 10),
-                                itemBuilder: (context, index) => ProductsItem(
-                                      isFavouritedPage: false,
-                                      owner: owner,
-                                      isFavouriteclicked: false,
-                                      isFavouriteBtn: false,
-                                      product: index,
-                                    )),
+                          if (store.myProducts.isEmpty) {
+                            return Center(
+                              child: Text(
+                                'No ads found. Create one to manage it here.',
+                                style: TextStyle(
+                                  color: MyColors.brown3.withOpacity( 0.8),
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            );
+                          }
+
+                          return GridView.builder(
+                            padding: const EdgeInsets.fromLTRB(14, 0, 14, 20),
+                            itemCount: store.myProducts.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              mainAxisExtent: 280,
+                              mainAxisSpacing: 12,
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                            ),
+                            itemBuilder: (context, index) => ProductsItem(
+                              isFavouritedPage: false,
+                              owner: owner,
+                              isFavouriteclicked: false,
+                              isFavouriteBtn: false,
+                              product: index,
+                            ),
                           );
-                        });
-                  } else {
-                    return const Text("");
-                  }
-                },
+                        },
+                      );
+                    }
+
+                    return const SizedBox.shrink();
+                  },
+                ),
               ),
             ],
           ),
@@ -99,9 +106,9 @@ class _MyAdsState extends State<MyAds> {
         mainAxisSize: MainAxisSize.min,
         children: [
           FloatingActionButton.small(
-            heroTag: 'create-promotion',
-            onPressed: () => Get.to(() => const CreatePromotionPage()),
-            tooltip: 'Create promotion',
+            heroTag: 'promotions-dashboard',
+            onPressed: () => Get.to(() => const PromotionsDashboardPage()),
+            tooltip: 'Promotions dashboard',
             backgroundColor: MyColors.gold,
             foregroundColor: MyColors.brown3,
             child: const Icon(Icons.local_offer_outlined),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DrawerMenuWidget extends StatelessWidget {
+  const DrawerMenuWidget({super.key});
+
   @override
   Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 50),
@@ -8,11 +10,11 @@ class DrawerMenuWidget extends StatelessWidget {
         children: [
           Column(
             children: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+              IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 70),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 70),
             child: Column(
               children: [
                 Text(
@@ -26,7 +28,7 @@ class DrawerMenuWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             child: Column(
               children: [
-                IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
               ],
             ),
           ),

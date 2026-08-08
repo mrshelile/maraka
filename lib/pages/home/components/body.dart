@@ -4,14 +4,15 @@ import 'package:maraka/logic/store.dart';
 
 import '../../../size_config.dart';
 import 'categories.dart';
+import 'feactured_ads.dart';
 import 'products_grid.dart';
 import 'top_banner.dart';
 
 // ignore: must_be_immutable
 class Body extends StatefulWidget {
   const Body({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
   State<Body> createState() => _BodyState();
 }
@@ -27,6 +28,8 @@ class _BodyState extends State<Body> {
         children: [
           // const HomeHeader(),
           const DiscountBanner(),
+          SizedBox(height: getProportionateScreenWidth(8, context)),
+          FeacturedAds(),
           SizedBox(height: getProportionateScreenWidth(8, context)),
           Categories(),
           const ProductList(),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/service/promotion_management_service.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/themes/color.dart';
@@ -18,24 +19,19 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _linkController = TextEditingController();
+  final _promotionTypeController = TextEditingController();
   File? _image;
   DateTime? _expireDate;
-  String _promotionType = 'fresh_arrivals';
   bool _home = true;
   bool _splashscreen = false;
   bool _saving = false;
   String _error = '';
 
-  static const _types = <String, String>{
-    'fresh_arrivals': 'Fresh Arrivals',
-    'monthend_specials': 'Monthend Specials',
-    'customizable': 'Customizable Promo',
-  };
-
   @override
   void dispose() {
     _titleController.dispose();
     _linkController.dispose();
+    _promotionTypeController.dispose();
     super.dispose();
   }
 
@@ -81,14 +77,19 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
       _error = '';
     });
     try {
+      final user = Get.find<User>();
+      final promotionType = _promotionTypeController.text.trim().isEmpty
+          ? 'Customizable Promo'
+          : _promotionTypeController.text.trim();
       await PromotionManagementService.createPromotion(
         image: _image!,
         title: _titleController.text.trim(),
-        promotionType: _promotionType,
+        promotionType: promotionType,
         link: _linkController.text.trim(),
         expireDate: _expireDate!,
         home: _home,
         splashscreen: _splashscreen,
+        owner: user.name ?? user.email,
       );
       if (mounted) {
         Get.back();
@@ -125,11 +126,11 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                   Container(
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.92),
+                      color: Colors.white.withOpacity( 0.92),
                       borderRadius: BorderRadius.circular(18),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.16),
+                          color: Colors.grey.withOpacity( 0.16),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -138,7 +139,7 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Create a fresh promotion',
                           style: TextStyle(
                             color: MyColors.brown3,
@@ -150,7 +151,7 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                         Text(
                           'Add a flyer that will appear in the app and catch attention.',
                           style: TextStyle(
-                            color: MyColors.brown3.withOpacity(0.7),
+                            color: MyColors.brown3.withOpacity( 0.7),
                             fontSize: 13,
                           ),
                         ),
@@ -163,7 +164,7 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                           ),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: MyColors.blue3,
-                            side: BorderSide(color: MyColors.blue3.withOpacity(0.4)),
+                            side: BorderSide(color: MyColors.blue3.withOpacity( 0.4)),
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -179,16 +180,15 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                               : null,
                         ),
                         const SizedBox(height: 16),
-                        DropdownButtonFormField<String>(
-                          value: _promotionType,
-                          decoration: const InputDecoration(labelText: 'Promotion type'),
-                          items: _types.entries
-                              .map((entry) => DropdownMenuItem(
-                                    value: entry.key,
-                                    child: Text(entry.value),
-                                  ))
-                              .toList(),
-                          onChanged: (value) => setState(() => _promotionType = value!),
+                        TextFormField(
+                          controller: _promotionTypeController,
+                          decoration: const InputDecoration(
+                            labelText: 'Promotion type',
+                            helperText: 'Enter a custom promotion category or name',
+                          ),
+                          validator: (value) => value == null || value.trim().isEmpty
+                              ? 'Enter a promotion type'
+                              : null,
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
@@ -205,7 +205,7 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                               : 'Expires ${_expireDate!.toLocal().toString().split(' ').first}'),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: MyColors.blue3,
-                            side: BorderSide(color: MyColors.blue3.withOpacity(0.4)),
+                            side: BorderSide(color: MyColors.blue3.withOpacity( 0.4)),
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),

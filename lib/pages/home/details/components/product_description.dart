@@ -6,10 +6,10 @@ import 'package:maraka/size_config.dart';
 
 class ProductDescription extends StatelessWidget {
   ProductDescription({
-    Key? key,
+    super.key,
     required this.product,
     this.pressOnSeeMore,
-  }) : super(key: key);
+  });
   final store = Get.find<StoreController>();
   final Product product;
   final GestureTapCallback? pressOnSeeMore;

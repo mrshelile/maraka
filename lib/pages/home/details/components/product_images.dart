@@ -6,9 +6,9 @@ import 'package:maraka/themes/color.dart';
 
 class ProductImages extends StatefulWidget {
   const ProductImages({
-    Key? key,
+    super.key,
     required this.product,
-  }) : super(key: key);
+  });
 
   final Product product;
 
@@ -63,7 +63,7 @@ class _ProductImagesState extends State<ProductImages> {
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
               color:
-                  MyColors.blue2.withOpacity(selectedImage == index ? 1 : 0)),
+                  MyColors.blue2.withOpacity( selectedImage == index ? 1 : 0)),
         ),
         // child: Image.asset(widget.product.images[index]),
         child: Image.network(widget.product.images![index].url),

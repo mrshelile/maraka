@@ -41,7 +41,11 @@ Map<String, dynamic> buildLocalPartLoginPayload(String loginIdentifier, String? 
 class UserController extends GetxController {
   User? _user;
 
-  bool get isAuthenticated => (_user != null || _user?.email != null);
+  bool get isAuthenticated {
+    final emailValue = _user?.email?.trim();
+    final jwtValue = _user?.jwt?.toString().trim();
+    return _user != null && emailValue != null && emailValue.isNotEmpty && jwtValue != null && jwtValue.isNotEmpty;
+  }
 
   User? get user => _user;
 }
@@ -49,10 +53,10 @@ class UserController extends GetxController {
 class User extends GetxController {
   bool canUpdatePassword = false;
   String? name;
-  String? email = '';
+  String? email;
   late int? phone1;
   late int? phone2;
-  String? password = '';
+  String? password;
   DateTime? subscription;
   dynamic otp;
   int id = 0;
@@ -69,7 +73,11 @@ class User extends GetxController {
   final _userPasswordReset = "/reset-password";
   final _updatePasswordUrl = "/update-password";
 
-  bool get isAuthenticated => email != null;
+  bool get isAuthenticated {
+    final emailValue = email?.trim();
+    final jwtValue = jwt?.toString().trim();
+    return emailValue != null && emailValue.isNotEmpty && jwtValue != null && jwtValue.isNotEmpty;
+  }
 
   User(
       {this.name,
@@ -110,13 +118,16 @@ class User extends GetxController {
     isSuperuser = prefs.getBool('is_superuser') ?? false;
     isConfirmed = prefs.getBool('is_confirmed') ?? false;
     isBlocked = prefs.getBool('is_blocked') ?? false;
+
     final storedEmail = prefs.getString('email');
-    if (storedEmail != null && storedEmail.isNotEmpty) {
-      email = storedEmail;
-    }
     final storedJwt = prefs.getString('jwt');
-    if (storedJwt != null && storedJwt.isNotEmpty) {
+
+    if (storedEmail != null && storedEmail.trim().isNotEmpty && storedJwt != null && storedJwt.trim().isNotEmpty) {
+      email = storedEmail;
       jwt = storedJwt;
+    } else {
+      email = null;
+      jwt = null;
     }
   }
 
@@ -219,13 +230,13 @@ class User extends GetxController {
 
   Future login() async {
     final loginIdentifier = email?.trim() ?? '';
-    const bool _debugLogin = true;
+    const bool debugLogin = true;
     final headers = <String, String>{'Content-Type': 'application/json; charset=UTF-8'};
 
     var data = buildLoginPayload(loginIdentifier, password);
 
-    if (_debugLogin && kDebugMode) {
-      print('DEBUG: Login attempt payload: ' + jsonEncode(data));
+    if (debugLogin && kDebugMode) {
+      print('DEBUG: Login attempt payload: ${jsonEncode(data)}');
     }
 
     response = await http.post(Uri.parse(server + _login),
@@ -233,7 +244,7 @@ class User extends GetxController {
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
 
-    if (_debugLogin && kDebugMode) {
+    if (debugLogin && kDebugMode) {
       try {
         print('DEBUG: Login response: status=${response.statusCode} body=${response.body}');
       } catch (e) {
@@ -243,14 +254,14 @@ class User extends GetxController {
 
     if (response.statusCode != 200 && loginIdentifier.contains('@')) {
       data = buildLocalPartLoginPayload(loginIdentifier, password);
-      if (_debugLogin && kDebugMode) {
-        print('DEBUG: Fallback login payload: ' + jsonEncode(data));
+      if (debugLogin && kDebugMode) {
+        print('DEBUG: Fallback login payload: ${jsonEncode(data)}');
       }
       response = await http.post(Uri.parse(server + _login),
           headers: headers,
           body: jsonEncode(data),
           encoding: Encoding.getByName("utf-8"));
-      if (_debugLogin && kDebugMode) {
+      if (debugLogin && kDebugMode) {
         try {
           print('DEBUG: Fallback login response: status=${response.statusCode} body=${response.body}');
         } catch (e) {

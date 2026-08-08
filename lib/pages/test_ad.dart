@@ -24,7 +24,7 @@ class _TestAdPageState extends State<TestAdPage> {
       imageFileList.addAll(selectedImages);
     }
     print("=========================================================");
-    print("Image List Length:" + imageFileList.length.toString());
+    print("Image List Length:${imageFileList.length}");
     print(
         "======================================================================================================");
     setState(() {});

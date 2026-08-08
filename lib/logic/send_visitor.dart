@@ -11,7 +11,7 @@ class Visitor {
   Future createVisitor() async {
     /// Initialize Ip Address
     dynamic data;
-    var response;
+    http.Response response;
     try {
       var ipAddress = IpAddress(type: RequestType.json);
 

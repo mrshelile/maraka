@@ -24,7 +24,7 @@ class _AccountState extends State<Account> {
   static final _phone1Controller = TextEditingController();
   static final _emailController = TextEditingController();
   // static var _email = "";
-  static bool _isenabled = false;
+  static final bool _isenabled = false;
   // static var _months = 0;
 
   User user = Get.find();

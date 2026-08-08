@@ -5,7 +5,7 @@ import '../../service/admin_promotion_service.dart';
 
 class PromotionsManagePage extends StatefulWidget {
   final String token;
-  const PromotionsManagePage({Key? key, required this.token}) : super(key: key);
+  const PromotionsManagePage({super.key, required this.token});
 
   @override
   State<PromotionsManagePage> createState() => _PromotionsManagePageState();
@@ -16,7 +16,7 @@ class _PromotionsManagePageState extends State<PromotionsManagePage> {
   final _titleCtl = TextEditingController();
   final _linkCtl = TextEditingController();
   final _expireCtl = TextEditingController();
-  String _promotionType = 'customizable';
+  final _promotionTypeCtl = TextEditingController();
   bool _splash = false;
   bool _home = true;
   File? _pickedImage;
@@ -42,10 +42,13 @@ class _PromotionsManagePageState extends State<PromotionsManagePage> {
       final displayId = await AdminPromotionService.uploadImage(_pickedImage!, widget.token);
 
       final isoDate = _expireCtl.text; // expect ISO format from user or implement picker
-      await AdminPromotionService.createBanner(
+      final promotionType = _promotionTypeCtl.text.trim().isEmpty
+          ? 'Customizable Promo'
+          : _promotionTypeCtl.text.trim();
+      await AdminPromotionService.createPromotion(
         token: widget.token,
         title: _titleCtl.text,
-        promotionType: _promotionType,
+        promotionType: promotionType,
         link: _linkCtl.text,
         displayId: displayId,
         expireDateIso: isoDate,
@@ -63,6 +66,15 @@ class _PromotionsManagePageState extends State<PromotionsManagePage> {
   }
 
   @override
+  void dispose() {
+    _titleCtl.dispose();
+    _linkCtl.dispose();
+    _expireCtl.dispose();
+    _promotionTypeCtl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Manage Promotions')),
@@ -76,15 +88,13 @@ class _PromotionsManagePageState extends State<PromotionsManagePage> {
               const SizedBox(height: 8),
               TextFormField(controller: _linkCtl, decoration: const InputDecoration(labelText: 'Link (https://...)')),
               const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                value: _promotionType,
-                items: const [
-                  DropdownMenuItem(value: 'fresh_arrivals', child: Text('Fresh Arrivals')),
-                  DropdownMenuItem(value: 'monthend_specials', child: Text('Monthend Specials')),
-                  DropdownMenuItem(value: 'customizable', child: Text('Customizable')),
-                ],
-                onChanged: (v) => setState(() => _promotionType = v ?? 'customizable'),
-                decoration: const InputDecoration(labelText: 'Promotion Type'),
+              TextFormField(
+                controller: _promotionTypeCtl,
+                decoration: const InputDecoration(
+                  labelText: 'Promotion Type',
+                  helperText: 'Enter a custom promotion category or name',
+                ),
+                validator: (value) => value == null || value.trim().isEmpty ? 'Required' : null,
               ),
               const SizedBox(height: 8),
               TextFormField(controller: _expireCtl, decoration: const InputDecoration(labelText: 'Expire date (ISO e.g. 2026-12-31T23:59:59Z)')),

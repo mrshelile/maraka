@@ -239,10 +239,10 @@ class _PromotionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: promotion.backgroundColor,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: promotion.accentColor.withOpacity(0.28)),
+        border: Border.all(color: promotion.accentColor.withOpacity( 0.28)),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.18),
+            color: Colors.grey.withOpacity( 0.18),
             blurRadius: 5,
             offset: const Offset(0, 3),
           ),
@@ -279,7 +279,7 @@ class _PromotionCard extends StatelessWidget {
                       onPressed: onClose,
                       icon: Icon(
                         Icons.close,
-                        color: MyColors.brown3.withOpacity(0.72),
+                        color: MyColors.brown3.withOpacity( 0.72),
                         size: getProportionateScreenWidth(18, context),
                       ),
                     ),
@@ -311,9 +311,9 @@ class _PromotionDateBadge extends StatelessWidget {
         vertical: getProportionateScreenHeight(5, context),
       ),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.94),
+        color: Colors.white.withOpacity( 0.94),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: promotion.accentColor.withOpacity(0.16)),
+        border: Border.all(color: promotion.accentColor.withOpacity( 0.16)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -425,7 +425,7 @@ class _PromotionSectionHeader extends StatelessWidget {
           height: getProportionateScreenWidth(34, context),
           width: getProportionateScreenWidth(34, context),
           decoration: BoxDecoration(
-            color: MyColors.blue3.withOpacity(0.12),
+            color: MyColors.blue3.withOpacity( 0.12),
             borderRadius: BorderRadius.circular(9),
           ),
           child: Icon(
@@ -477,7 +477,7 @@ IconData _promotionSectionIcon(PromotionSection section) {
 void showPromotionDetailsDialog(BuildContext context, Promotion promotion) {
   showDialog<void>(
     context: context,
-    barrierColor: Colors.black.withOpacity(0.62),
+    barrierColor: Colors.black.withOpacity( 0.62),
     builder: (context) => PromotionDetailsDialog(promotion: promotion),
   );
 }
@@ -531,7 +531,7 @@ class PromotionDetailsDialog extends StatelessWidget {
                   right: getProportionateScreenWidth(8, context),
                   top: getProportionateScreenWidth(8, context),
                   child: Material(
-                    color: Colors.white.withOpacity(0.94),
+                    color: Colors.white.withOpacity( 0.94),
                     shape: const CircleBorder(),
                     child: IconButton(
                       constraints: BoxConstraints.tightFor(
@@ -570,11 +570,11 @@ class _PromotionDatePanel extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(getProportionateScreenWidth(12, context)),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.95),
+        color: Colors.white.withOpacity( 0.95),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.16),
+            color: Colors.black.withOpacity( 0.16),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -593,7 +593,7 @@ class _PromotionDatePanel extends StatelessWidget {
             margin: EdgeInsets.symmetric(
               horizontal: getProportionateScreenWidth(12, context),
             ),
-            color: MyColors.brown3.withOpacity(0.14),
+            color: MyColors.brown3.withOpacity( 0.14),
           ),
           _PromotionDateItem(
             label: 'Ends',
@@ -765,7 +765,7 @@ class _UploadedPromotionFlyer extends StatelessWidget {
         }
 
         return Container(
-          color: promotion.accentColor.withOpacity(0.08),
+          color: promotion.accentColor.withOpacity( 0.08),
           alignment: Alignment.center,
           child: SizedBox(
             height: getProportionateScreenWidth(compact ? 20 : 30, context),
@@ -797,7 +797,7 @@ class _PromotionImageFallback extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: promotion.accentColor.withOpacity(0.12),
+      color: promotion.accentColor.withOpacity( 0.12),
       child: Icon(
         promotion.icon,
         color: promotion.accentColor,
@@ -846,7 +846,7 @@ class _StoreFlyer extends StatelessWidget {
                   height: height * 0.52,
                   width: height * 0.52,
                   decoration: BoxDecoration(
-                    color: secondaryColor.withOpacity(0.42),
+                    color: secondaryColor.withOpacity( 0.42),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -900,7 +900,7 @@ class _StoreFlyer extends StatelessWidget {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.86),
+                                    color: Colors.white.withOpacity( 0.86),
                                     fontSize: 11 * scale,
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -972,7 +972,7 @@ class _StoreFlyer extends StatelessWidget {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  color: MyColors.brown3.withOpacity(0.64),
+                                  color: MyColors.brown3.withOpacity( 0.64),
                                   fontSize: 10 * scale,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -1026,10 +1026,10 @@ class PromotionDetailsPage extends StatelessWidget {
                   color: promotion.backgroundColor,
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(
-                      color: promotion.accentColor.withOpacity(0.28)),
+                      color: promotion.accentColor.withOpacity( 0.28)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.18),
+                      color: Colors.grey.withOpacity( 0.18),
                       blurRadius: 5,
                       offset: const Offset(0, 3),
                     ),
@@ -1042,7 +1042,7 @@ class PromotionDetailsPage extends StatelessWidget {
                       height: getProportionateScreenWidth(58, context),
                       width: getProportionateScreenWidth(58, context),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.82),
+                        color: Colors.white.withOpacity( 0.82),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Icon(
@@ -1074,7 +1074,7 @@ class PromotionDetailsPage extends StatelessWidget {
                     Text(
                       promotion.description,
                       style: TextStyle(
-                        color: MyColors.brown3.withOpacity(0.72),
+                        color: MyColors.brown3.withOpacity( 0.72),
                         fontSize: getProportionateScreenWidth(14, context),
                         height: 1.35,
                       ),
@@ -1119,7 +1119,7 @@ class _PromotionInfoRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.18),
+            color: Colors.grey.withOpacity( 0.18),
             blurRadius: 5,
             offset: const Offset(0, 3),
           ),
@@ -1139,7 +1139,7 @@ class _PromotionInfoRow extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  color: MyColors.brown3.withOpacity(0.58),
+                  color: MyColors.brown3.withOpacity( 0.58),
                   fontSize: getProportionateScreenWidth(12, context),
                   fontWeight: FontWeight.bold,
                 ),

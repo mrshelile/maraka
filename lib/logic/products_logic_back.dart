@@ -196,7 +196,7 @@ class ProductLogic {
     var data = {"veiwer_hash": digest.toString(), "product": product};
     var res = await http
         .get(Uri.parse("$server$_productViewer?search=${digest.toString()}"));
-    var response;
+    http.Response response;
 
     if (res.statusCode == 200) {
       if ((jsonDecode(res.body) as List).isEmpty) {
@@ -264,7 +264,7 @@ class ProductLogic {
         var category = item['category'];
         var description = item['description'];
         var price = item['price'];
-        var expire_date = item['expire_date'];
+        var expireDate = item['expire_date'];
         var owner = item['owner'];
         Seller seller = Seller(url: owner);
 
@@ -276,7 +276,7 @@ class ProductLogic {
 
         int viewers = item['viewers'].length;
 
-        if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
+        if (DateTime.now().isBefore(DateTime.parse(expireDate))) {
           products.add(Product(
               views: viewers,
               id1: id1,
@@ -287,7 +287,7 @@ class ProductLogic {
               images: images,
               price: price,
               car: item['car'],
-              expiryDate: DateTime.parse(expire_date),
+              expiryDate: DateTime.parse(expireDate),
               createdAt: DateTime.parse(createAt),
               description: description));
         }
@@ -348,7 +348,7 @@ class ProductLogic {
         var category = item['category'];
         var description = item['description'];
         var price = item['price'];
-        var expire_date = item['expire_date'];
+        var expireDate = item['expire_date'];
         // var owner = item['owner'];
         Seller seller = Seller(
             fullNames: owner.name,
@@ -377,7 +377,7 @@ class ProductLogic {
         for (var element in imagesJson) {
           images.add(ImageStrapi(url: element['image']));
         }
-        if (DateTime.now().isBefore(DateTime.parse(expire_date))) {
+        if (DateTime.now().isBefore(DateTime.parse(expireDate))) {
           myAds.add(Product(
               views: viewers,
               id1: id1,
@@ -389,7 +389,7 @@ class ProductLogic {
               images: images,
               price: price,
               car: item['car'],
-              expiryDate: DateTime.parse(expire_date),
+              expiryDate: DateTime.parse(expireDate),
               description: description));
         }
       }

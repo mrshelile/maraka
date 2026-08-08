@@ -2,6 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class Categories extends StatelessWidget {
+  const Categories({super.key});
+
   @override
   Widget build(BuildContext context) {
       return ListView.builder(itemBuilder: (ctx, index) {
@@ -11,16 +13,16 @@ class Categories extends StatelessWidget {
             options: CarouselOptions(
               aspectRatio: 2.0,
               enlargeCenterPage: true,
-              pageViewKey: PageStorageKey<String>('carousel_slider'),
+              pageViewKey: const PageStorageKey<String>('carousel_slider'),
             ),
             items: imageSliders,
           ));
         } else {
           return Container(
-            margin: EdgeInsets.symmetric(vertical: 20),
+            margin: const EdgeInsets.symmetric(vertical: 20),
             color: Colors.blue,
             height: 200,
-            child: Center(
+            child: const Center(
               child: Text('other content'),
             ),
           );
@@ -32,9 +34,9 @@ class Categories extends StatelessWidget {
 final List<Widget> imageSliders = imgList
     .map((item) => Container(
           child: Container(
-            margin: EdgeInsets.all(5.0),
+            margin: const EdgeInsets.all(5.0),
             child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                 child: Stack(
                   children: <Widget>[
                     Image.network(item, fit: BoxFit.cover, width: 1000.0),
@@ -43,7 +45,7 @@ final List<Widget> imageSliders = imgList
                       left: 0.0,
                       right: 0.0,
                       child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
                               Color.fromARGB(200, 0, 0, 0),
@@ -53,11 +55,11 @@ final List<Widget> imageSliders = imgList
                             end: Alignment.topCenter,
                           ),
                         ),
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 20.0),
                         child: Text(
                           'No. ${imgList.indexOf(item)} image',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,

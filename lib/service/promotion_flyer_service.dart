@@ -1,5 +1,6 @@
-import 'package:http/http.dart' as http;
+import 'dart:async';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/models/promotion_flyer.dart';
 import 'package:maraka/service/promotion_management_service.dart';
@@ -137,8 +138,11 @@ class PromotionFlyerService {
   }
 
   /// Fetch flyers for a specific owner
-  static Future<List<PromotionFlyer>> fetchFlyersByOwner(String owner) async {
-    final flyers = await fetchPromotionFlyers();
+  static Future<List<PromotionFlyer>> fetchFlyersByOwner(
+    String owner, {
+    bool forceRefresh = false,
+  }) async {
+    final flyers = await fetchPromotionFlyers(forceRefresh: forceRefresh);
     return flyers
         .where((flyer) => flyer.owner.toLowerCase() == owner.toLowerCase())
         .toList();
@@ -148,6 +152,18 @@ class PromotionFlyerService {
   static void clearCache() {
     _cachedFlyers = null;
     _cacheTime = null;
+  }
+
+  static final StreamController<void> _promotionRefreshController =
+      StreamController<void>.broadcast();
+
+  static Stream<void> get promotionUpdates => _promotionRefreshController.stream;
+
+  static void notifyPromotionUpdated() {
+    clearCache();
+    if (!_promotionRefreshController.isClosed) {
+      _promotionRefreshController.add(null);
+    }
   }
 
   static void clearMockPromotions() {

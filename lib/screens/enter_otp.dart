@@ -12,8 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class OTP extends StatefulWidget {
   User user;
   bool isRegister;
-  OTP({Key? key, required this.user, required this.isRegister})
-      : super(key: key);
+  OTP({super.key, required this.user, required this.isRegister});
 
   @override
   State<OTP> createState() => _OTPState();
@@ -120,7 +119,7 @@ class _OTPState extends State<OTP> {
                             color: MyColors.blue3,
                             boxShadow: [
                               BoxShadow(
-                                  color: Colors.grey.withOpacity(0.6),
+                                  color: Colors.grey.withOpacity( 0.6),
                                   spreadRadius: 2,
                                   blurRadius: 5,
                                   offset: const Offset(0, 5))
@@ -202,7 +201,7 @@ class _OTPState extends State<OTP> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Login()));
+                                      builder: (context) => const Login()));
                             },
                           ),
                         )

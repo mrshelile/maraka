@@ -14,7 +14,6 @@ class BackgroundDesign extends CustomPainter {
         begin: Alignment.topLeft,
         end: Alignment.centerRight,
         colors: [MyColors.blue2, MyColors.blue3]).createShader(rect);
-    ;
     path.moveTo(size.width * 0.0, 0);
     path.quadraticBezierTo(
         size.width, size.height * 0.2, size.width, size.height);

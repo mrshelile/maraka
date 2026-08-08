@@ -11,15 +11,11 @@ class FeacturedAds extends StatelessWidget {
   });
   List<dynamic> banners = [];
 
-  Future getFeatureAds() async {
-    // Visitor visitor = Visitor();
-    // await visitor.createVisitor();
+  Future<List<dynamic>> getFeatureAds() async {
     BannerLogic logic = BannerLogic();
-    var res = await logic.getBottomBanner();
-    for (var element in logic.bannersBottom) {
-      banners.add(element);
-    }
-    return res;
+    await logic.getBottomBanner();
+    banners = List<dynamic>.from(logic.bannersBottom);
+    return banners;
   }
 
   @override
@@ -34,26 +30,44 @@ class FeacturedAds extends StatelessWidget {
           ),
         ),
         SizedBox(height: getProportionateScreenWidth(20, context)),
-        SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: FutureBuilder(
-                future: getFeatureAds(),
-                builder: ((context, snapshot) {
-                  return Row(
-                    children: [
-                      for (var item in banners)
-                        SpecialOfferCard(
-                          image: item.imgUrl,
-                          name: item.owner,
-                          press: () async {
-                            // html.window.open("http://${item.url}", 'new_tab');
-                            await launchUrl(Uri.parse("http://" + item.url));
-                          },
-                        ),
-                      SizedBox(width: getProportionateScreenWidth(20, context)),
-                    ],
-                  );
-                }))),
+        FutureBuilder<List<dynamic>>(
+          future: getFeatureAds(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting && banners.isEmpty) {
+              return SizedBox(
+                height: getProportionateScreenWidth(80, context),
+                child: const Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            if (!snapshot.hasData || banners.isEmpty) {
+              return const SizedBox.shrink();
+            }
+
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (var item in banners)
+                    SpecialOfferCard(
+                      image: item.imgUrl,
+                      name: item.owner,
+                      press: () async {
+                        final url = item.url?.toString() ?? '';
+                        if (url.isNotEmpty) {
+                          final parsedUrl = Uri.tryParse(url.startsWith('http') ? url : 'http://$url');
+                          if (parsedUrl != null) {
+                            await launchUrl(parsedUrl);
+                          }
+                        }
+                      },
+                    ),
+                  SizedBox(width: getProportionateScreenWidth(20, context)),
+                ],
+              ),
+            );
+          },
+        ),
       ],
     );
   }
@@ -61,11 +75,11 @@ class FeacturedAds extends StatelessWidget {
 
 class SpecialOfferCard extends StatelessWidget {
   const SpecialOfferCard({
-    Key? key,
+    super.key,
     required this.name,
     required this.image,
     required this.press,
-  }) : super(key: key);
+  });
 
   final String name, image;
 
@@ -98,8 +112,8 @@ class SpecialOfferCard extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        const Color(0xFF343434).withOpacity(0.4),
-                        const Color(0xFF343434).withOpacity(0.15),
+                        const Color(0xFF343434).withOpacity( 0.4),
+                        const Color(0xFF343434).withOpacity( 0.15),
                       ],
                     ),
                   ),
