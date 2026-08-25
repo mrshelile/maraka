@@ -15,7 +15,8 @@ Map<String, dynamic> _extractPayload(Map<String, dynamic> payload) {
   return payload;
 }
 
-Map<String, dynamic> buildLoginPayload(String loginIdentifier, String? password) {
+Map<String, dynamic> buildLoginPayload(
+    String loginIdentifier, String? password) {
   final normalizedIdentifier = loginIdentifier.trim();
   return <String, dynamic>{
     'username': normalizedIdentifier,
@@ -24,7 +25,8 @@ Map<String, dynamic> buildLoginPayload(String loginIdentifier, String? password)
   };
 }
 
-Map<String, dynamic> buildLocalPartLoginPayload(String loginIdentifier, String? password) {
+Map<String, dynamic> buildLocalPartLoginPayload(
+    String loginIdentifier, String? password) {
   final normalizedIdentifier = loginIdentifier.trim();
   if (!normalizedIdentifier.contains('@')) {
     return buildLoginPayload(normalizedIdentifier, password);
@@ -44,7 +46,11 @@ class UserController extends GetxController {
   bool get isAuthenticated {
     final emailValue = _user?.email?.trim();
     final jwtValue = _user?.jwt?.toString().trim();
-    return _user != null && emailValue != null && emailValue.isNotEmpty && jwtValue != null && jwtValue.isNotEmpty;
+    return _user != null &&
+        emailValue != null &&
+        emailValue.isNotEmpty &&
+        jwtValue != null &&
+        jwtValue.isNotEmpty;
   }
 
   User? get user => _user;
@@ -76,7 +82,10 @@ class User extends GetxController {
   bool get isAuthenticated {
     final emailValue = email?.trim();
     final jwtValue = jwt?.toString().trim();
-    return emailValue != null && emailValue.isNotEmpty && jwtValue != null && jwtValue.isNotEmpty;
+    return emailValue != null &&
+        emailValue.isNotEmpty &&
+        jwtValue != null &&
+        jwtValue.isNotEmpty;
   }
 
   User(
@@ -106,7 +115,12 @@ class User extends GetxController {
   Future removeAll() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+    name = null;
     email = null;
+    phone1 = null;
+    phone2 = null;
+    subscription = null;
+    id = 0;
     jwt = null;
     isSuperuser = false;
     isConfirmed = false;
@@ -122,11 +136,28 @@ class User extends GetxController {
     final storedEmail = prefs.getString('email');
     final storedJwt = prefs.getString('jwt');
 
-    if (storedEmail != null && storedEmail.trim().isNotEmpty && storedJwt != null && storedJwt.trim().isNotEmpty) {
+    if (storedEmail != null &&
+        storedEmail.trim().isNotEmpty &&
+        storedJwt != null &&
+        storedJwt.trim().isNotEmpty) {
+      name = prefs.getString('name');
       email = storedEmail;
+      phone1 = prefs.getInt('phone1');
+      phone2 = prefs.getInt('phone2');
+      id = prefs.getInt('id') ?? 0;
       jwt = storedJwt;
+
+      final storedSubscription = prefs.getString('subscription');
+      subscription = storedSubscription != null
+          ? DateTime.tryParse(storedSubscription)
+          : null;
     } else {
+      name = null;
       email = null;
+      phone1 = null;
+      phone2 = null;
+      subscription = null;
+      id = 0;
       jwt = null;
     }
   }
@@ -136,8 +167,21 @@ class User extends GetxController {
     await prefs.setBool('is_superuser', isSuperuser);
     await prefs.setBool('is_confirmed', isConfirmed);
     await prefs.setBool('is_blocked', isBlocked);
+    await prefs.setInt('id', id);
+    if (name != null) {
+      await prefs.setString('name', name!);
+    }
     if (email != null) {
       await prefs.setString('email', email!);
+    }
+    if (phone1 != null) {
+      await prefs.setInt('phone1', phone1!);
+    }
+    if (phone2 != null) {
+      await prefs.setInt('phone2', phone2!);
+    }
+    if (subscription != null) {
+      await prefs.setString('subscription', subscription!.toIso8601String());
     }
     if (jwt != null) {
       await prefs.setString('jwt', jwt.toString());
@@ -231,7 +275,9 @@ class User extends GetxController {
   Future login() async {
     final loginIdentifier = email?.trim() ?? '';
     const bool debugLogin = true;
-    final headers = <String, String>{'Content-Type': 'application/json; charset=UTF-8'};
+    final headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8'
+    };
 
     var data = buildLoginPayload(loginIdentifier, password);
 
@@ -246,7 +292,8 @@ class User extends GetxController {
 
     if (debugLogin && kDebugMode) {
       try {
-        print('DEBUG: Login response: status=${response.statusCode} body=${response.body}');
+        print(
+            'DEBUG: Login response: status=${response.statusCode} body=${response.body}');
       } catch (e) {
         print('DEBUG: Login response - could not read body: $e');
       }
@@ -263,7 +310,8 @@ class User extends GetxController {
           encoding: Encoding.getByName("utf-8"));
       if (debugLogin && kDebugMode) {
         try {
-          print('DEBUG: Fallback login response: status=${response.statusCode} body=${response.body}');
+          print(
+              'DEBUG: Fallback login response: status=${response.statusCode} body=${response.body}');
         } catch (e) {
           print('DEBUG: Fallback login response - could not read body: $e');
         }
@@ -366,15 +414,6 @@ Future<Map<String, String>> authenticatedHeaders({bool json = true}) async {
     if (token != null && token.isNotEmpty) 'Authorization': 'Token $token',
   };
 }
-
-
-
-
-
-
-
-
-
 
 /// Older version
 
@@ -536,7 +575,7 @@ Future<Map<String, String>> authenticatedHeaders({bool json = true}) async {
 //       await _storeToken(jwt);
 //       await _storeEmail(email.toString());
 //     }
-  
+
 //     return response;
 //     //  if(response.staus)
 //     //
