@@ -61,7 +61,7 @@ class PromotionFlyerService {
     }
 
     try {
-      final url = Uri.parse('$promotionServer$promotionEndpoint');
+      final url = Uri.parse('$adminContentServer$promotionEndpoint');
       final response = await http.get(url).timeout(
         const Duration(seconds: 10),
         onTimeout: () {
@@ -150,5 +150,5 @@ class PromotionFlyerService {
   }
 
   /// Get full API endpoint URL
-  static String getFullApiUrl() => '$promotionServer$promotionEndpoint';
+  static String getFullApiUrl() => '$adminContentServer$promotionEndpoint';
 }

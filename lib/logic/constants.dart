@@ -19,8 +19,8 @@ List<Map<String, dynamic>> categories = [
 ];
 int pageSize = 50;
 var server = "https://api.maraka.co.ls/buyandsellDjango-apis";
-const promotionServer = String.fromEnvironment(
-  'PROMOTION_API_SERVER',
+const adminContentServer = String.fromEnvironment(
+  'ADMIN_CONTENT_API_SERVER',
   defaultValue: 'http://192.168.1.144:8001/buyandsellDjango-apis',
 );
 // var server = "http://10.4.5.220:8000/buyandsellDjango-apis";

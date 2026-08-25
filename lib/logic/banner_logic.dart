@@ -22,6 +22,7 @@ class BannerLogic {
 
     return '';
   }
+
   // ignore: prefer_typing_uninitialized_variables
   var response;
   List<Banner> bannersSplashScreen = [];
@@ -145,7 +146,7 @@ class BannerLogic {
 // this banner is not displayed on UI
   Future getBottomBanner() async {
     response = await http.get(
-      Uri.parse("$server$_bannerBottom"),
+      Uri.parse("$adminContentServer$_bannerBottom"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

@@ -22,7 +22,7 @@ class PromotionManagementService {
   static Future<int> _uploadImage(File image) async {
     final request = http.MultipartRequest(
       'POST',
-      Uri.parse('$promotionServer/multi-image'),
+      Uri.parse('$adminContentServer/multi-image'),
     );
     request.headers.addAll(await authenticatedHeaders(json: false));
     request.files.add(
@@ -85,7 +85,7 @@ class PromotionManagementService {
       final imageId = await _uploadImage(image);
       final response = await http
           .post(
-            Uri.parse('$promotionServer/promotions-create'),
+            Uri.parse('$adminContentServer/promotions-create'),
             headers: await authenticatedHeaders(),
             body: jsonEncode({
               'title': title,
