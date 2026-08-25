@@ -72,7 +72,8 @@ class _RealPromotionsBannerState extends State<RealPromotionsBanner>
 
   void _refreshFlyers() {
     setState(() {
-      _flyersFuture = PromotionFlyerService.fetchHomePageFlyers(forceRefresh: true);
+      _flyersFuture =
+          PromotionFlyerService.fetchHomePageFlyers(forceRefresh: true);
     });
   }
 
@@ -98,13 +99,13 @@ class _RealPromotionsBannerState extends State<RealPromotionsBanner>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         gradient: LinearGradient(
-          colors: [MyColors.blue3.withOpacity( 0.9), MyColors.mintcream],
+          colors: [MyColors.blue3.withOpacity(0.9), MyColors.mintcream],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity( 0.18),
+            color: Colors.grey.withOpacity(0.18),
             blurRadius: 5,
             offset: const Offset(0, 3),
           ),
@@ -127,7 +128,7 @@ class _RealPromotionsBannerState extends State<RealPromotionsBanner>
                 vertical: getProportionateScreenHeight(6, context),
               ),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity( 0.9),
+                color: Colors.white.withOpacity(0.9),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -278,7 +279,7 @@ class _PromotionCarouselState extends State<_PromotionCarousel> {
                   decoration: BoxDecoration(
                     color: _currentPage == index
                         ? MyColors.blue3
-                        : MyColors.blue3.withOpacity( 0.3),
+                        : MyColors.blue3.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -337,7 +338,7 @@ class HomePromotionCard extends StatelessWidget {
                         imageUrl: flyer.imageUrl,
                         fit: BoxFit.cover,
                         placeholder: (context, url) => Container(
-                          color: MyColors.blue3.withOpacity( 0.1),
+                          color: MyColors.blue3.withOpacity(0.1),
                           child: const Center(
                             child: SizedBox(
                               height: 24,
@@ -350,7 +351,7 @@ class HomePromotionCard extends StatelessWidget {
                           ),
                         ),
                         errorWidget: (context, url, error) => Container(
-                          color: MyColors.blue3.withOpacity( 0.08),
+                          color: MyColors.blue3.withOpacity(0.08),
                           child: const Icon(
                             Icons.image_not_supported_outlined,
                             color: MyColors.blue3,
@@ -367,7 +368,7 @@ class HomePromotionCard extends StatelessWidget {
                           vertical: getProportionateScreenHeight(4, context),
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity( 0.95),
+                          color: Colors.white.withOpacity(0.95),
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Text(
@@ -393,7 +394,7 @@ class HomePromotionCard extends StatelessWidget {
                         onPressed: onClose,
                         icon: Icon(
                           Icons.close_rounded,
-                          color: Colors.white.withOpacity( 0.92),
+                          color: Colors.white.withOpacity(0.92),
                           size: getProportionateScreenWidth(18, context),
                         ),
                       ),
@@ -403,14 +404,15 @@ class HomePromotionCard extends StatelessWidget {
                       right: 0,
                       bottom: 0,
                       child: Container(
-                        padding: EdgeInsets.all(getProportionateScreenWidth(12, context)),
+                        padding: EdgeInsets.all(
+                            getProportionateScreenWidth(12, context)),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
                               Colors.transparent,
-                              Colors.black.withOpacity( 0.75),
+                              Colors.black.withOpacity(0.75),
                             ],
                           ),
                         ),
@@ -423,18 +425,22 @@ class HomePromotionCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: getProportionateScreenWidth(13, context),
+                                fontSize:
+                                    getProportionateScreenWidth(13, context),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: getProportionateScreenHeight(4, context)),
+                            SizedBox(
+                                height:
+                                    getProportionateScreenHeight(4, context)),
                             Text(
                               subtitle,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Colors.white.withOpacity( 0.9),
-                                fontSize: getProportionateScreenWidth(11, context),
+                                color: Colors.white.withOpacity(0.9),
+                                fontSize:
+                                    getProportionateScreenWidth(11, context),
                               ),
                             ),
                           ],
@@ -478,7 +484,7 @@ class HomePromotionCard extends StatelessWidget {
                         vertical: getProportionateScreenHeight(5, context),
                       ),
                       decoration: BoxDecoration(
-                        color: MyColors.blue3.withOpacity( 0.12),
+                        color: MyColors.blue3.withOpacity(0.12),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Row(
@@ -487,11 +493,13 @@ class HomePromotionCard extends StatelessWidget {
                             'Open',
                             style: TextStyle(
                               color: MyColors.blue3,
-                              fontSize: getProportionateScreenWidth(11, context),
+                              fontSize:
+                                  getProportionateScreenWidth(11, context),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(width: getProportionateScreenWidth(4, context)),
+                          SizedBox(
+                              width: getProportionateScreenWidth(4, context)),
                           Icon(
                             Icons.arrow_forward_ios_rounded,
                             size: getProportionateScreenWidth(11, context),
@@ -542,7 +550,7 @@ class RealPromotionsPage extends StatefulWidget {
 class _RealPromotionsPageState extends State<RealPromotionsPage>
     with WidgetsBindingObserver {
   late Future<List<PromotionFlyer>> _flyersFuture;
-  bool _isGridView = true;
+  bool _isGridView = false;
   StreamSubscription<void>? _promotionSubscription;
 
   @override
@@ -569,7 +577,8 @@ class _RealPromotionsPageState extends State<RealPromotionsPage>
   }
 
   void _loadFlyers() {
-    _flyersFuture = PromotionFlyerService.fetchPromotionFlyers(forceRefresh: true);
+    _flyersFuture =
+        PromotionFlyerService.fetchPromotionFlyers(forceRefresh: true);
     setState(() {});
   }
 
@@ -605,7 +614,7 @@ class _RealPromotionsPageState extends State<RealPromotionsPage>
                           Icon(
                             Icons.error_outline,
                             size: 48,
-                            color: Colors.red.withOpacity( 0.6),
+                            color: Colors.red.withOpacity(0.6),
                           ),
                           SizedBox(
                             height: getProportionateScreenHeight(16, context),
@@ -628,7 +637,7 @@ class _RealPromotionsPageState extends State<RealPromotionsPage>
                             snapshot.error.toString(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: MyColors.brown3.withOpacity( 0.7),
+                              color: MyColors.brown3.withOpacity(0.7),
                               fontSize: getProportionateScreenWidth(
                                 14,
                                 context,
@@ -661,7 +670,7 @@ class _RealPromotionsPageState extends State<RealPromotionsPage>
                         Icon(
                           Icons.local_offer_outlined,
                           size: 48,
-                          color: MyColors.blue3.withOpacity( 0.6),
+                          color: MyColors.blue3.withOpacity(0.6),
                         ),
                         SizedBox(
                           height: getProportionateScreenHeight(16, context),
@@ -680,7 +689,7 @@ class _RealPromotionsPageState extends State<RealPromotionsPage>
                         Text(
                           'Check back soon for new offers!',
                           style: TextStyle(
-                            color: MyColors.brown3.withOpacity( 0.7),
+                            color: MyColors.brown3.withOpacity(0.7),
                             fontSize: getProportionateScreenWidth(14, context),
                           ),
                         ),
@@ -702,7 +711,8 @@ class _RealPromotionsPageState extends State<RealPromotionsPage>
                   final normalizedOwner = flyer.owner.toLowerCase();
                   final haystack = '$normalizedTitle $normalizedOwner';
 
-                  if (haystack.contains('weekend') || haystack.contains('deal')) {
+                  if (haystack.contains('weekend') ||
+                      haystack.contains('deal')) {
                     groupedFlyers['Weekend Deals']!.add(flyer);
                   } else if (haystack.contains('black friday') ||
                       haystack.contains('blackfriday')) {
@@ -738,12 +748,13 @@ class _RealPromotionsPageState extends State<RealPromotionsPage>
                         Text(
                           'View',
                           style: TextStyle(
-                            color: MyColors.brown3.withOpacity( 0.8),
+                            color: MyColors.brown3.withOpacity(0.8),
                             fontSize: getProportionateScreenWidth(12, context),
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(width: getProportionateScreenWidth(6, context)),
+                        SizedBox(
+                            width: getProportionateScreenWidth(6, context)),
                         IconButton(
                           tooltip: 'Grid view',
                           onPressed: () => setState(() => _isGridView = true),
@@ -751,7 +762,7 @@ class _RealPromotionsPageState extends State<RealPromotionsPage>
                             Icons.grid_view_rounded,
                             color: _isGridView
                                 ? MyColors.blue3
-                                : MyColors.brown3.withOpacity( 0.5),
+                                : MyColors.brown3.withOpacity(0.5),
                           ),
                         ),
                         IconButton(
@@ -760,7 +771,7 @@ class _RealPromotionsPageState extends State<RealPromotionsPage>
                           icon: Icon(
                             Icons.view_list_rounded,
                             color: _isGridView
-                                ? MyColors.brown3.withOpacity( 0.5)
+                                ? MyColors.brown3.withOpacity(0.5)
                                 : MyColors.blue3,
                           ),
                         ),
@@ -769,20 +780,24 @@ class _RealPromotionsPageState extends State<RealPromotionsPage>
                     SizedBox(height: getProportionateScreenHeight(6, context)),
                     for (final entry in sections) ...[
                       _PromotionSectionHeader(title: entry.key),
-                      SizedBox(height: getProportionateScreenHeight(10, context)),
+                      SizedBox(
+                          height: getProportionateScreenHeight(10, context)),
                       if (_isGridView)
                         GridView.count(
                           crossAxisCount: 2,
-                          crossAxisSpacing: getProportionateScreenWidth(10, context),
-                          mainAxisSpacing: getProportionateScreenHeight(10, context),
+                          crossAxisSpacing:
+                              getProportionateScreenWidth(10, context),
+                          mainAxisSpacing:
+                              getProportionateScreenHeight(10, context),
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          childAspectRatio: 0.78,
+                          childAspectRatio: 0.62,
                           children: [
                             for (final flyer in entry.value)
                               _PromotionGridTile(
                                 flyer: flyer,
-                                onTap: () => showPromotionDetailsDialog(context, flyer),
+                                onTap: () =>
+                                    showPromotionDetailsDialog(context, flyer),
                               ),
                           ],
                         )
@@ -792,11 +807,13 @@ class _RealPromotionsPageState extends State<RealPromotionsPage>
                             for (final flyer in entry.value)
                               _PromotionListTile(
                                 flyer: flyer,
-                                onTap: () => showPromotionDetailsDialog(context, flyer),
+                                onTap: () =>
+                                    showPromotionDetailsDialog(context, flyer),
                               ),
                           ],
                         ),
-                      SizedBox(height: getProportionateScreenHeight(16, context)),
+                      SizedBox(
+                          height: getProportionateScreenHeight(16, context)),
                     ],
                   ],
                 );
@@ -822,7 +839,7 @@ class _PromotionSectionHeader extends StatelessWidget {
           height: getProportionateScreenWidth(34, context),
           width: getProportionateScreenWidth(34, context),
           decoration: BoxDecoration(
-            color: MyColors.blue3.withOpacity( 0.12),
+            color: MyColors.blue3.withOpacity(0.12),
             borderRadius: BorderRadius.circular(9),
           ),
           child: Icon(
@@ -880,30 +897,32 @@ class _PromotionListTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: MyColors.blue3.withOpacity( 0.12)),
+        border: Border.all(color: MyColors.blue3.withOpacity(0.12)),
       ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: EdgeInsets.all(getProportionateScreenWidth(10, context)),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+              child: Container(
+                height: getProportionateScreenHeight(260, context),
+                width: double.infinity,
+                color: Colors.white,
                 child: CachedNetworkImage(
                   imageUrl: flyer.imageUrl,
-                  width: getProportionateScreenWidth(70, context),
-                  height: getProportionateScreenWidth(70, context),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                   placeholder: (context, url) => Container(
-                    width: getProportionateScreenWidth(70, context),
-                    height: getProportionateScreenWidth(70, context),
-                    color: MyColors.blue3.withOpacity( 0.1),
+                    color: MyColors.blue3.withOpacity(0.1),
                     child: const Center(
                       child: SizedBox(
-                        height: 18,
-                        width: 18,
+                        height: 22,
+                        width: 22,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           color: MyColors.blue3,
@@ -912,56 +931,54 @@ class _PromotionListTile extends StatelessWidget {
                     ),
                   ),
                   errorWidget: (context, url, error) => Container(
-                    width: getProportionateScreenWidth(70, context),
-                    height: getProportionateScreenWidth(70, context),
-                    color: MyColors.blue3.withOpacity( 0.08),
+                    color: MyColors.blue3.withOpacity(0.08),
                     child: const Icon(Icons.image_not_supported_outlined),
                   ),
                 ),
               ),
-              SizedBox(width: getProportionateScreenWidth(10, context)),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      flyer.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: MyColors.brown3,
-                        fontSize: getProportionateScreenWidth(13, context),
-                        fontWeight: FontWeight.bold,
-                      ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(getProportionateScreenWidth(12, context)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    flyer.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: MyColors.brown3,
+                      fontSize: getProportionateScreenWidth(14, context),
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(height: getProportionateScreenHeight(4, context)),
-                    Text(
-                      'by ${flyer.owner}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: MyColors.brown3.withOpacity( 0.6),
-                        fontSize: getProportionateScreenWidth(11, context),
-                      ),
+                  ),
+                  SizedBox(height: getProportionateScreenHeight(4, context)),
+                  Text(
+                    'by ${flyer.owner}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: MyColors.brown3.withOpacity(0.6),
+                      fontSize: getProportionateScreenWidth(11, context),
                     ),
-                    SizedBox(height: getProportionateScreenHeight(6, context)),
-                    Text(
-                      flyer.daysUntilExpiry > 0
-                          ? '${flyer.daysUntilExpiry}d left'
-                          : 'Expired',
-                      style: TextStyle(
-                        color: flyer.daysUntilExpiry <= 2
-                            ? Colors.red
-                            : MyColors.blue3,
-                        fontSize: getProportionateScreenWidth(10, context),
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  SizedBox(height: getProportionateScreenHeight(6, context)),
+                  Text(
+                    flyer.daysUntilExpiry > 0
+                        ? '${flyer.daysUntilExpiry}d left'
+                        : 'Expired',
+                    style: TextStyle(
+                      color: flyer.daysUntilExpiry <= 2
+                          ? Colors.red
+                          : MyColors.blue3,
+                      fontSize: getProportionateScreenWidth(10, context),
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -982,7 +999,7 @@ class _PromotionGridTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity( 0.1),
+            color: Colors.grey.withOpacity(0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -999,29 +1016,30 @@ class _PromotionGridTile extends StatelessWidget {
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
               ),
-              child: CachedNetworkImage(
-                imageUrl: flyer.imageUrl,
-                height: getProportionateScreenHeight(95, context),
+              child: Container(
+                height: getProportionateScreenHeight(150, context),
                 width: double.infinity,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  height: getProportionateScreenHeight(95, context),
-                  color: MyColors.blue3.withOpacity( 0.1),
-                  child: const Center(
-                    child: SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: MyColors.blue3,
+                color: Colors.white,
+                child: CachedNetworkImage(
+                  imageUrl: flyer.imageUrl,
+                  fit: BoxFit.contain,
+                  placeholder: (context, url) => Container(
+                    color: MyColors.blue3.withOpacity(0.1),
+                    child: const Center(
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: MyColors.blue3,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                errorWidget: (context, url, error) => Container(
-                  height: getProportionateScreenHeight(95, context),
-                  color: MyColors.blue3.withOpacity( 0.08),
-                  child: const Icon(Icons.image_not_supported_outlined),
+                  errorWidget: (context, url, error) => Container(
+                    color: MyColors.blue3.withOpacity(0.08),
+                    child: const Icon(Icons.image_not_supported_outlined),
+                  ),
                 ),
               ),
             ),
@@ -1046,7 +1064,7 @@ class _PromotionGridTile extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: MyColors.brown3.withOpacity( 0.6),
+                      color: MyColors.brown3.withOpacity(0.6),
                       fontSize: getProportionateScreenWidth(10, context),
                     ),
                   ),
@@ -1058,8 +1076,8 @@ class _PromotionGridTile extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: flyer.daysUntilExpiry <= 2
-                          ? Colors.red.withOpacity( 0.1)
-                          : MyColors.blue3.withOpacity( 0.1),
+                          ? Colors.red.withOpacity(0.1)
+                          : MyColors.blue3.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
@@ -1088,7 +1106,7 @@ class _PromotionGridTile extends StatelessWidget {
 void showPromotionDetailsDialog(BuildContext context, PromotionFlyer flyer) {
   showDialog<void>(
     context: context,
-    barrierColor: Colors.black.withOpacity( 0.62),
+    barrierColor: Colors.black.withOpacity(0.62),
     builder: (context) => PromotionDetailsDialog(flyer: flyer),
   );
 }
@@ -1132,7 +1150,7 @@ class PromotionDetailsDialog extends StatelessWidget {
                         imageUrl: flyer.imageUrl,
                         fit: BoxFit.contain,
                         placeholder: (context, url) => Container(
-                          color: MyColors.blue3.withOpacity( 0.1),
+                          color: MyColors.blue3.withOpacity(0.1),
                           child: const Center(
                             child: CircularProgressIndicator(
                               color: MyColors.blue3,
@@ -1140,7 +1158,7 @@ class PromotionDetailsDialog extends StatelessWidget {
                           ),
                         ),
                         errorWidget: (context, url, error) => Container(
-                          color: MyColors.blue3.withOpacity( 0.08),
+                          color: MyColors.blue3.withOpacity(0.08),
                           child: const Icon(Icons.image_not_supported_outlined),
                         ),
                       ),
@@ -1169,7 +1187,7 @@ class PromotionDetailsDialog extends StatelessWidget {
                           Text(
                             'By ${flyer.owner}',
                             style: TextStyle(
-                              color: MyColors.brown3.withOpacity( 0.7),
+                              color: MyColors.brown3.withOpacity(0.7),
                               fontSize: getProportionateScreenWidth(
                                 13,
                                 context,
@@ -1185,7 +1203,7 @@ class PromotionDetailsDialog extends StatelessWidget {
                                 getProportionateScreenWidth(10, context),
                               ),
                               decoration: BoxDecoration(
-                                color: MyColors.blue3.withOpacity( 0.08),
+                                color: MyColors.blue3.withOpacity(0.08),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Row(
@@ -1255,7 +1273,7 @@ class PromotionDetailsDialog extends StatelessWidget {
                   right: getProportionateScreenWidth(8, context),
                   top: getProportionateScreenWidth(8, context),
                   child: Material(
-                    color: Colors.white.withOpacity( 0.94),
+                    color: Colors.white.withOpacity(0.94),
                     shape: const CircleBorder(),
                     child: IconButton(
                       constraints: BoxConstraints.tightFor(

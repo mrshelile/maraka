@@ -21,7 +21,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver {
+class _SplashScreenState extends State<SplashScreen>
+    with WidgetsBindingObserver {
   User user = User();
   final store = Get.find<StoreController>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -51,7 +52,11 @@ class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver
   }
 
   Future<void> _initializeApp() async {
-    await store.loadProducts();
+    await Future.wait([
+      store.loadProducts(),
+      _bannerFuture,
+      Future<void>.delayed(const Duration(seconds: 4)),
+    ]);
 
     if (!mounted) return;
 
@@ -79,7 +84,8 @@ class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver
 
   Future<String> makeBanners() async {
     try {
-      final flyers = await PromotionFlyerService.fetchSplashScreenFlyers(forceRefresh: true);
+      final flyers = await PromotionFlyerService.fetchSplashScreenFlyers(
+          forceRefresh: true);
 
       if (flyers.isNotEmpty) {
         imageCarousel = AnotherCarousel(
@@ -93,17 +99,20 @@ class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver
                     if (link.isNotEmpty) {
                       final uri = Uri.tryParse(link);
                       if (uri != null && await canLaunchUrl(uri)) {
-                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                        await launchUrl(uri,
+                            mode: LaunchMode.externalApplication);
                       }
                     }
                   },
                   child: SizedBox(
-                    height: MediaQuery.of(context).copyWith().size.height * 0.35,
+                    height:
+                        MediaQuery.of(context).copyWith().size.height * 0.35,
                     child: CachedNetworkImage(
                       placeholder: (context, url) => const SpinKitThreeInOut(
                         color: Color.fromARGB(255, 12, 131, 125),
                       ),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                       imageUrl: flyer.imageUrl,
                     ),
                   ),
