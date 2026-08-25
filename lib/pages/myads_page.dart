@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:maraka/logic/store.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/pages/create_ad.dart';
-import 'package:maraka/pages/promotions_dashboard.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/componets/widget/products_item.dart';
 import 'package:maraka/themes/color.dart';
@@ -38,7 +37,8 @@ class _MyAdsState extends State<MyAds> {
           Column(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: height * 0.0, right: width * 0.65),
+                padding:
+                    EdgeInsets.only(top: height * 0.0, right: width * 0.65),
                 child: SizedBox(
                   height: height * 0.2,
                   width: width * 0.2,
@@ -64,7 +64,7 @@ class _MyAdsState extends State<MyAds> {
                               child: Text(
                                 'No ads found. Create one to manage it here.',
                                 style: TextStyle(
-                                  color: MyColors.brown3.withOpacity( 0.8),
+                                  color: MyColors.brown3.withOpacity(0.8),
                                   fontSize: 16,
                                 ),
                                 textAlign: TextAlign.center,
@@ -102,27 +102,13 @@ class _MyAdsState extends State<MyAds> {
           ),
         ],
       ),
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FloatingActionButton.small(
-            heroTag: 'promotions-dashboard',
-            onPressed: () => Get.to(() => const PromotionsDashboardPage()),
-            tooltip: 'Promotions dashboard',
-            backgroundColor: MyColors.gold,
-            foregroundColor: MyColors.brown3,
-            child: const Icon(Icons.local_offer_outlined),
-          ),
-          const SizedBox(height: 12),
-          FloatingActionButton(
-            heroTag: 'create-ad',
-            onPressed: () => Get.to(() => CreateAd(owner: owner)),
-            tooltip: "Create Ad",
-            backgroundColor: MyColors.blue3,
-            foregroundColor: MyColors.brown3,
-            child: const Icon(Icons.create, color: Colors.white),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'create-ad',
+        onPressed: () => Get.to(() => CreateAd(owner: owner)),
+        tooltip: "Create Ad",
+        backgroundColor: MyColors.blue3,
+        foregroundColor: MyColors.brown3,
+        child: const Icon(Icons.create, color: Colors.white),
       ),
     );
   }

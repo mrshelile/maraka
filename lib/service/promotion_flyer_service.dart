@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:maraka/logic/constants.dart';
 import 'package:maraka/models/promotion_flyer.dart';
-import 'package:maraka/service/promotion_management_service.dart';
 
 /// Service for fetching promotion flyers from the Django backend
 class PromotionFlyerService {
@@ -61,63 +60,42 @@ class PromotionFlyerService {
       }
     }
 
-    final mockPromotions = PromotionManagementService.mockPromotions;
-    if (mockPromotions.isNotEmpty && !forceRefresh) {
-      final combined = <PromotionFlyer>[...mockPromotions];
-      _cachedFlyers = combined;
-      _cacheTime = DateTime.now();
-      return combined;
-    }
-
     try {
-      final url = Uri.parse('$server$promotionEndpoint');
-      final response = await http
-          .get(url)
-          .timeout(
-            const Duration(seconds: 10),
-            onTimeout: () {
-              throw Exception(
-                'Request timeout: Backend took too long to respond',
-              );
-            },
+      final url = Uri.parse('$promotionServer$promotionEndpoint');
+      final response = await http.get(url).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw Exception(
+            'Request timeout: Backend took too long to respond',
           );
+        },
+      );
 
       if (response.statusCode == 200) {
         final decoded = jsonDecode(response.body);
         final flyers = parseFlyers(decoded);
-        final combinedFlyers = <PromotionFlyer>[...mockPromotions];
-
-        for (final flyer in flyers) {
-          final alreadyExists = combinedFlyers.any(
-            (existing) => existing.id == flyer.id && existing.title == flyer.title,
-          );
-          if (!alreadyExists) {
-            combinedFlyers.add(flyer);
-          }
-        }
 
         // Sort by expire date (soonest first)
-        combinedFlyers.sort((a, b) {
+        flyers.sort((a, b) {
           if (a.expireDate == null) return 1;
           if (b.expireDate == null) return -1;
           return a.expireDate!.compareTo(b.expireDate!);
         });
 
         // Update cache
-        _cachedFlyers = combinedFlyers;
+        _cachedFlyers = flyers;
         _cacheTime = DateTime.now();
 
-        return combinedFlyers;
+        return flyers;
       } else {
         throw Exception(
           'Failed to fetch promotions: ${response.statusCode} ${response.reasonPhrase}',
         );
       }
     } catch (e) {
-      final fallbackFlyers = mockPromotions.isNotEmpty ? [...mockPromotions] : <PromotionFlyer>[];
-      _cachedFlyers = fallbackFlyers;
+      _cachedFlyers = <PromotionFlyer>[];
       _cacheTime = DateTime.now();
-      return fallbackFlyers;
+      return <PromotionFlyer>[];
     }
   }
 
@@ -157,7 +135,8 @@ class PromotionFlyerService {
   static final StreamController<void> _promotionRefreshController =
       StreamController<void>.broadcast();
 
-  static Stream<void> get promotionUpdates => _promotionRefreshController.stream;
+  static Stream<void> get promotionUpdates =>
+      _promotionRefreshController.stream;
 
   static void notifyPromotionUpdated() {
     clearCache();
@@ -167,10 +146,9 @@ class PromotionFlyerService {
   }
 
   static void clearMockPromotions() {
-    PromotionManagementService.clearMockPromotions();
     clearCache();
   }
 
   /// Get full API endpoint URL
-  static String getFullApiUrl() => '$server$promotionEndpoint';
+  static String getFullApiUrl() => '$promotionServer$promotionEndpoint';
 }

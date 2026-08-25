@@ -18,10 +18,11 @@ class PromotionManagementService {
   static void clearMockPromotions() {
     _mockPromotions.clear();
   }
+
   static Future<int> _uploadImage(File image) async {
     final request = http.MultipartRequest(
       'POST',
-      Uri.parse('$server/multi-image'),
+      Uri.parse('$promotionServer/multi-image'),
     );
     request.headers.addAll(await authenticatedHeaders(json: false));
     request.files.add(
@@ -33,9 +34,9 @@ class PromotionManagementService {
     );
 
     final streamedResponse = await request.send().timeout(
-      const Duration(seconds: 8),
-      onTimeout: () => throw TimeoutException('Image upload timed out'),
-    );
+          const Duration(seconds: 8),
+          onTimeout: () => throw TimeoutException('Image upload timed out'),
+        );
     final response = await http.Response.fromStream(streamedResponse);
     if (response.statusCode != 201) {
       throw Exception('Image upload failed: ${response.statusCode}');
@@ -58,10 +59,8 @@ class PromotionManagementService {
     bool splashscreen = false,
     String? owner,
   }) async {
-    final fallbackOwner = owner ??
-        Get.find<User>().name ??
-        Get.find<User>().email ??
-        'Mock user';
+    final fallbackOwner =
+        owner ?? Get.find<User>().name ?? Get.find<User>().email ?? 'Mock user';
 
     if (Platform.environment.containsKey('FLUTTER_TEST')) {
       _mockPromotions.add(
@@ -84,22 +83,25 @@ class PromotionManagementService {
 
     try {
       final imageId = await _uploadImage(image);
-      final response = await http.post(
-        Uri.parse('$server/promotions-create'),
-        headers: await authenticatedHeaders(),
-        body: jsonEncode({
-          'title': title,
-          'promotion_type': promotionType,
-          'link': link,
-          'display': imageId,
-          'expire_date': expireDate.toUtc().toIso8601String(),
-          'home': home,
-          'splashscreen': splashscreen,
-        }),
-      ).timeout(
-        const Duration(seconds: 8),
-        onTimeout: () => throw TimeoutException('Promotion creation timed out'),
-      );
+      final response = await http
+          .post(
+            Uri.parse('$promotionServer/promotions-create'),
+            headers: await authenticatedHeaders(),
+            body: jsonEncode({
+              'title': title,
+              'promotion_type': promotionType,
+              'link': link,
+              'display': imageId,
+              'expire_date': expireDate.toUtc().toIso8601String(),
+              'home': home,
+              'splashscreen': splashscreen,
+            }),
+          )
+          .timeout(
+            const Duration(seconds: 8),
+            onTimeout: () =>
+                throw TimeoutException('Promotion creation timed out'),
+          );
 
       if (response.statusCode != 201) {
         throw Exception('Promotion creation failed: ${response.statusCode}');

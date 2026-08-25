@@ -6,10 +6,11 @@ import 'package:maraka/logic/constants.dart';
 class AdminPromotionService {
   /// Upload an image to the backend. Returns the created MultiImage id.
   static Future<int> uploadImage(File imageFile, String token) async {
-    final uri = Uri.parse('$server/multi-image');
+    final uri = Uri.parse('$promotionServer/multi-image');
     final request = http.MultipartRequest('POST', uri);
     request.headers['Authorization'] = 'Token $token';
-    request.files.add(await http.MultipartFile.fromPath('image', imageFile.path));
+    request.files
+        .add(await http.MultipartFile.fromPath('image', imageFile.path));
 
     final streamed = await request.send();
     final resp = await http.Response.fromStream(streamed);
@@ -31,7 +32,7 @@ class AdminPromotionService {
     required bool splashscreen,
     required bool home,
   }) async {
-    final uri = Uri.parse('$server/promotions-create');
+    final uri = Uri.parse('$promotionServer/promotions-create');
     final body = {
       'title': title,
       'promotion_type': promotionType,
