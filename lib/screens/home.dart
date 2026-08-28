@@ -99,9 +99,12 @@ class _HomeState extends State<Home> {
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
-            icon: const Icon(Icons.local_offer_outlined),
-            title: const Text('Promotions'),
-            activeColor: MyColors.blue3,
+            icon: const _PromotionsNavIcon(),
+            title: const Text(
+              'Promotions',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+            activeColor: MyColors.gold,
             textAlign: TextAlign.center,
           ),
           // BottomNavyBarItem(
@@ -123,6 +126,95 @@ class _HomeState extends State<Home> {
             textAlign: TextAlign.center,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _PromotionsNavIcon extends StatefulWidget {
+  const _PromotionsNavIcon();
+
+  @override
+  State<_PromotionsNavIcon> createState() => _PromotionsNavIconState();
+}
+
+class _PromotionsNavIconState extends State<_PromotionsNavIcon>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _pulse;
+  bool _isResting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 650),
+    );
+    _pulse = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+    _playAttentionLoop();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _playAttentionLoop() async {
+    while (mounted) {
+      setState(() => _isResting = false);
+
+      for (var i = 0; i < 3 && mounted; i++) {
+        await _controller.forward(from: 0);
+        if (!mounted) return;
+        await _controller.reverse();
+      }
+
+      if (!mounted) return;
+      setState(() => _isResting = true);
+      await Future<void>.delayed(const Duration(seconds: 4));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _pulse,
+      builder: (context, child) {
+        final value = _pulse.value;
+
+        return Transform.rotate(
+          angle: _isResting ? 0 : -0.08 + (value * 0.16),
+          child: Transform.scale(
+            scale: _isResting ? 1 : 1 + (value * 0.12),
+            child: Container(
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: MyColors.gold.withOpacity(
+                  _isResting ? 0.12 : 0.12 + (value * 0.1),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: MyColors.gold.withOpacity(
+                      _isResting ? 0.2 : 0.2 + (value * 0.18),
+                    ),
+                    blurRadius: _isResting ? 7 : 7 + (value * 7),
+                    spreadRadius: _isResting ? 0 : value * 1.5,
+                  ),
+                ],
+              ),
+              child: child,
+            ),
+          ),
+        );
+      },
+      child: const Icon(
+        Icons.local_offer_rounded,
+        color: MyColors.gold,
+        size: 24,
       ),
     );
   }
