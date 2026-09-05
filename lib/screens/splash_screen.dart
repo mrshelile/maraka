@@ -1,15 +1,14 @@
 import 'dart:async';
 
-import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/service/promotion_flyer_service.dart';
+import 'package:maraka/models/promotion_flyer.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../logic/store.dart';
@@ -27,6 +26,11 @@ class _SplashScreenState extends State<SplashScreen>
   final store = Get.find<StoreController>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late Future<String> _bannerFuture;
+  final PageController _promotionController = PageController();
+  final Completer<void> _promotionClosedCompleter = Completer<void>();
+  List<PromotionFlyer> _splashFlyers = <PromotionFlyer>[];
+  int _promotionPage = 0;
+  bool _promotionClosed = false;
 
   @override
   void initState() {
@@ -38,6 +42,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
+    _promotionController.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -55,8 +60,11 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.wait([
       store.loadProducts(),
       _bannerFuture,
-      Future<void>.delayed(const Duration(seconds: 4)),
     ]);
+
+    if (_splashFlyers.isNotEmpty && !_promotionClosed) {
+      await _promotionClosedCompleter.future;
+    }
 
     if (!mounted) return;
 
@@ -70,62 +78,39 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 
-  Widget imageCarousel = AnotherCarousel(
-    boxFit: BoxFit.fill,
-    dotBgColor: Colors.transparent,
-    dotSize: 0,
-    images: [
-      SvgPicture.asset("assets/undraw_empty_cart_co35.svg"),
-    ],
-    // options: CarouselOptions(),
-  );
-
-  bool isFinished = false;
-
   Future<String> makeBanners() async {
     try {
       final flyers = await PromotionFlyerService.fetchSplashScreenFlyers(
           forceRefresh: true);
 
       if (flyers.isNotEmpty) {
-        imageCarousel = AnotherCarousel(
-          dotBgColor: Colors.transparent,
-          dotSize: 0,
-          images: flyers
-              .map(
-                (flyer) => GestureDetector(
-                  onTap: () async {
-                    final link = flyer.link.trim();
-                    if (link.isNotEmpty) {
-                      final uri = Uri.tryParse(link);
-                      if (uri != null && await canLaunchUrl(uri)) {
-                        await launchUrl(uri,
-                            mode: LaunchMode.externalApplication);
-                      }
-                    }
-                  },
-                  child: SizedBox(
-                    height:
-                        MediaQuery.of(context).copyWith().size.height * 0.35,
-                    child: CachedNetworkImage(
-                      placeholder: (context, url) => const SpinKitThreeInOut(
-                        color: Color.fromARGB(255, 12, 131, 125),
-                      ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      imageUrl: flyer.imageUrl,
-                    ),
-                  ),
-                ),
-              )
-              .toList(),
-        );
+        _splashFlyers = flyers;
       }
 
       return flyers.isNotEmpty ? 'loaded' : '';
     } catch (e) {
       debugPrint('Error loading splash promotions: $e');
       return '';
+    }
+  }
+
+  Future<void> _openPromotion(PromotionFlyer flyer) async {
+    final link = flyer.link.trim();
+    if (link.isEmpty) return;
+
+    final uri = Uri.tryParse(link);
+    if (uri != null && await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  void _closePromotion() {
+    if (!_promotionClosedCompleter.isCompleted) {
+      _promotionClosedCompleter.complete();
+    }
+
+    if (mounted) {
+      setState(() => _promotionClosed = true);
     }
   }
 
@@ -221,14 +206,176 @@ class _SplashScreenState extends State<SplashScreen>
                           );
                         } else if (snapshot.hasError) {
                           return const SizedBox();
+                        } else if (_promotionClosed || _splashFlyers.isEmpty) {
+                          return const SizedBox.shrink();
                         } else {
-                          return imageCarousel;
+                          return _SplashPromotionViewer(
+                            flyers: _splashFlyers,
+                            controller: _promotionController,
+                            currentPage: _promotionPage,
+                            onPageChanged: (page) =>
+                                setState(() => _promotionPage = page),
+                            onClose: _closePromotion,
+                            onTap: _openPromotion,
+                          );
                         }
                       },
                     )),
               ],
             ),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class _SplashPromotionViewer extends StatelessWidget {
+  const _SplashPromotionViewer({
+    required this.flyers,
+    required this.controller,
+    required this.currentPage,
+    required this.onPageChanged,
+    required this.onClose,
+    required this.onTap,
+  });
+
+  final List<PromotionFlyer> flyers;
+  final PageController controller;
+  final int currentPage;
+  final ValueChanged<int> onPageChanged;
+  final VoidCallback onClose;
+  final ValueChanged<PromotionFlyer> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final imageHeight = MediaQuery.of(context).size.height * 0.35;
+
+    return Column(
+      children: [
+        SizedBox(
+          height: imageHeight,
+          child: Stack(
+            children: [
+              PageView.builder(
+                controller: controller,
+                itemCount: flyers.length,
+                onPageChanged: onPageChanged,
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () => onTap(flyers[index]),
+                  child: CachedNetworkImage(
+                    width: double.infinity,
+                    imageUrl: flyers[index].imageUrl,
+                    fit: BoxFit.contain,
+                    placeholder: (context, url) => const SpinKitThreeInOut(
+                      color: Color.fromARGB(255, 12, 131, 125),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Material(
+                  color: Colors.white.withOpacity(0.94),
+                  borderRadius: BorderRadius.circular(24),
+                  child: InkWell(
+                    onTap: onClose,
+                    borderRadius: BorderRadius.circular(24),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 10,
+                      ),
+                      child: Text(
+                        'Close',
+                        style: TextStyle(
+                          color: Color(0xff313131),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (flyers.length > 1)
+          _SplashPromotionPageControls(
+            currentPage: currentPage,
+            pageCount: flyers.length,
+            controller: controller,
+          ),
+      ],
+    );
+  }
+}
+
+class _SplashPromotionPageControls extends StatelessWidget {
+  const _SplashPromotionPageControls({
+    required this.currentPage,
+    required this.pageCount,
+    required this.controller,
+  });
+
+  final int currentPage;
+  final int pageCount;
+  final PageController controller;
+
+  void _goToPage(int page) {
+    if (page < 0 || page >= pageCount) return;
+    controller.animateToPage(
+      page,
+      duration: const Duration(milliseconds: 260),
+      curve: Curves.easeOut,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            tooltip: 'Previous promotion page',
+            onPressed: currentPage > 0 ? () => _goToPage(currentPage - 1) : null,
+            icon: const Icon(Icons.chevron_left_rounded, size: 28),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 9),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black.withOpacity(0.18)),
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Page ${currentPage + 1}',
+                  style: const TextStyle(
+                    color: Color(0xff313131),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Icon(Icons.keyboard_arrow_down_rounded, size: 20),
+              ],
+            ),
+          ),
+          IconButton(
+            tooltip: 'Next promotion page',
+            onPressed: currentPage < pageCount - 1
+                ? () => _goToPage(currentPage + 1)
+                : null,
+            icon: const Icon(Icons.chevron_right_rounded, size: 28),
+          ),
         ],
       ),
     );

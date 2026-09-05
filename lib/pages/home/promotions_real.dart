@@ -263,30 +263,110 @@ class _PromotionCarouselState extends State<_PromotionCarousel> {
           ),
         ),
         if (widget.flyers.length > 1)
-          Padding(
-            padding: EdgeInsets.only(
-              top: getProportionateScreenHeight(8, context),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                widget.flyers.length,
-                (index) => AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  height: 8,
-                  width: _currentPage == index ? 24 : 8,
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    color: _currentPage == index
-                        ? MyColors.blue3
-                        : MyColors.blue3.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              ),
-            ),
+          _PromotionPageControls(
+            currentPage: _currentPage,
+            pageCount: widget.flyers.length,
+            controller: _pageController,
           ),
       ],
+    );
+  }
+}
+
+class _PromotionPageControls extends StatelessWidget {
+  const _PromotionPageControls({
+    required this.currentPage,
+    required this.pageCount,
+    required this.controller,
+  });
+
+  final int currentPage;
+  final int pageCount;
+  final PageController controller;
+
+  void _goToPage(int page) {
+    if (page < 0 || page >= pageCount) return;
+    controller.animateToPage(
+      page,
+      duration: const Duration(milliseconds: 260),
+      curve: Curves.easeOut,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: getProportionateScreenHeight(8, context)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _PromotionNavButton(
+            icon: Icons.chevron_left_rounded,
+            enabled: currentPage > 0,
+            onPressed: () => _goToPage(currentPage - 1),
+          ),
+          SizedBox(width: getProportionateScreenWidth(8, context)),
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: getProportionateScreenWidth(20, context),
+              vertical: getProportionateScreenHeight(9, context),
+            ),
+            decoration: BoxDecoration(
+              border: Border.all(color: MyColors.brown3.withOpacity(0.22)),
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Page ${currentPage + 1}',
+                  style: TextStyle(
+                    color: MyColors.brown3,
+                    fontSize: getProportionateScreenWidth(13, context),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(width: getProportionateScreenWidth(12, context)),
+                Icon(Icons.keyboard_arrow_down_rounded,
+                    color: MyColors.brown3, size: 20),
+              ],
+            ),
+          ),
+          SizedBox(width: getProportionateScreenWidth(8, context)),
+          _PromotionNavButton(
+            icon: Icons.chevron_right_rounded,
+            enabled: currentPage < pageCount - 1,
+            onPressed: () => _goToPage(currentPage + 1),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PromotionNavButton extends StatelessWidget {
+  const _PromotionNavButton({
+    required this.icon,
+    required this.enabled,
+    required this.onPressed,
+  });
+
+  final IconData icon;
+  final bool enabled;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      tooltip: enabled ? 'Change promotion page' : 'No more promotion pages',
+      onPressed: enabled ? onPressed : null,
+      icon: Icon(icon, size: 28),
+      color: MyColors.brown3,
+      disabledColor: MyColors.brown3.withOpacity(0.25),
+      style: IconButton.styleFrom(
+        side: BorderSide(color: MyColors.brown3.withOpacity(0.18)),
+        shape: const CircleBorder(),
+      ),
     );
   }
 }
