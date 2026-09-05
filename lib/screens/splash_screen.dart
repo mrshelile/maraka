@@ -130,31 +130,65 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
           if (!_promotionClosed)
-            Center(
-              child: FutureBuilder<String>(
-                future: _bannerFuture,
-                builder: (context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SpinKitThreeInOut(
-                      color: Color.fromARGB(255, 12, 131, 125),
-                    );
-                  }
-                  if (snapshot.hasError || _splashFlyers.isEmpty) {
-                    return const SizedBox.shrink();
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: _SplashPromotionViewer(
-                      flyers: _splashFlyers,
-                      controller: _promotionController,
-                      currentPage: _promotionPage,
-                      onPageChanged: (page) =>
-                          setState(() => _promotionPage = page),
-                      onClose: _closePromotion,
-                      onTap: _openPromotion,
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.38,
+                  ),
+                  child: FutureBuilder<String>(
+                    future: _bannerFuture,
+                    builder: (context, AsyncSnapshot<String> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SpinKitThreeInOut(
+                          color: Color.fromARGB(255, 12, 131, 125),
+                        );
+                      }
+                      if (snapshot.hasError || _splashFlyers.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: _SplashPromotionViewer(
+                          flyers: _splashFlyers,
+                          controller: _promotionController,
+                          currentPage: _promotionPage,
+                          onPageChanged: (page) =>
+                              setState(() => _promotionPage = page),
+                          onTap: _openPromotion,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          if (!_promotionClosed)
+            Positioned(
+              top: MediaQuery.of(context).padding.top + 16,
+              right: 20,
+              child: Material(
+                color: Colors.white.withOpacity(0.94),
+                borderRadius: BorderRadius.circular(24),
+                child: InkWell(
+                  onTap: _closePromotion,
+                  borderRadius: BorderRadius.circular(24),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 10,
                     ),
-                  );
-                },
+                    child: Text(
+                      'Close',
+                      style: TextStyle(
+                        color: Color(0xff313131),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
         ],
@@ -169,7 +203,6 @@ class _SplashPromotionViewer extends StatelessWidget {
     required this.controller,
     required this.currentPage,
     required this.onPageChanged,
-    required this.onClose,
     required this.onTap,
   });
 
@@ -177,7 +210,6 @@ class _SplashPromotionViewer extends StatelessWidget {
   final PageController controller;
   final int currentPage;
   final ValueChanged<int> onPageChanged;
-  final VoidCallback onClose;
   final ValueChanged<PromotionFlyer> onTap;
 
   @override
@@ -186,34 +218,6 @@ class _SplashPromotionViewer extends StatelessWidget {
 
     return Column(
       children: [
-        SizedBox(
-          height: 48,
-          child: Align(
-            alignment: Alignment.topRight,
-            child: Material(
-              color: Colors.white.withOpacity(0.94),
-              borderRadius: BorderRadius.circular(24),
-              child: InkWell(
-                onTap: onClose,
-                borderRadius: BorderRadius.circular(24),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 10,
-                  ),
-                  child: Text(
-                    'Close',
-                    style: TextStyle(
-                      color: Color(0xff313131),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
         SizedBox(
           height: imageHeight,
           child: PageView.builder(
