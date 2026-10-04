@@ -30,12 +30,13 @@ void main() {
     expect(find.text('Feature Ads'), findsOneWidget);
   });
 
-  testWidgets('Created home promotion appears on the top banner', (tester) async {
+  testWidgets('Created home promotion appears on the top banner',
+      (tester) async {
     Get.put(StoreController(), permanent: true);
     Get.put(User(), permanent: true);
 
     await PromotionManagementService.createPromotion(
-      image: File('test/assets/test_image.png'),
+      images: [File('test/assets/test_image.png')],
       title: 'Spring Launch',
       promotionType: 'discount',
       link: 'https://example.com',

@@ -41,6 +41,40 @@ void main() {
       expect(flyers.first.owner, 'Shop');
     });
 
+    test('parses multiple images and keeps legacy image URL compatibility', () {
+      final flyers = PromotionFlyerService.parseFlyers([
+        {
+          'id': 3,
+          'title': 'Multi-page sale',
+          'images': [
+            {'image_url': 'https://example.com/page-1.jpg'},
+            {'image_url': 'https://example.com/page-2.jpg'},
+          ],
+          'image_url': 'https://example.com/page-1.jpg',
+          'expire_date': '2099-01-01T00:00:00Z',
+        },
+      ]);
+
+      expect(flyers, hasLength(1));
+      expect(
+        flyers.first.imageUrls,
+        [
+          'https://example.com/page-1.jpg',
+          'https://example.com/page-2.jpg',
+        ],
+      );
+      expect(flyers.first.imageUrl, 'https://example.com/page-1.jpg');
+
+      final legacyFlyer = PromotionFlyerService.parseFlyers([
+        {
+          'id': 4,
+          'image_url': 'https://example.com/legacy.jpg',
+          'expire_date': '2099-01-01T00:00:00Z',
+        },
+      ]).single;
+      expect(legacyFlyer.imageUrls, ['https://example.com/legacy.jpg']);
+    });
+
     test('returns an empty list for invalid payloads', () {
       final flyers = PromotionFlyerService.parseFlyers({'unexpected': 'shape'});
 

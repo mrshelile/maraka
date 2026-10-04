@@ -5,7 +5,7 @@ import 'package:maraka/themes/background.dart';
 import 'package:maraka/screens/login.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:maraka/widgets/compat_loading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:email_validator/email_validator.dart';
 

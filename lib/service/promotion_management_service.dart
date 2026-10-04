@@ -50,7 +50,7 @@ class PromotionManagementService {
   }
 
   static Future<void> createPromotion({
-    required File image,
+    required List<File> images,
     required String title,
     required String promotionType,
     required String link,
@@ -59,10 +59,15 @@ class PromotionManagementService {
     bool splashscreen = false,
     String? owner,
   }) async {
+    if (images.isEmpty) {
+      throw ArgumentError.value(images, 'images', 'At least one image is required');
+    }
+
     final fallbackOwner =
         owner ?? Get.find<User>().name ?? Get.find<User>().email ?? 'Mock user';
 
     if (Platform.environment.containsKey('FLUTTER_TEST')) {
+      final imageUrls = images.map((image) => image.path).toList();
       _mockPromotions.add(
         PromotionFlyer(
           id: DateTime.now().millisecondsSinceEpoch,
@@ -70,7 +75,8 @@ class PromotionManagementService {
           title: title,
           promotionType: promotionType,
           link: link,
-          imageUrl: image.path,
+          imageUrl: imageUrls.first,
+          imageUrls: imageUrls,
           splashscreen: splashscreen,
           home: home,
           owner: fallbackOwner,
@@ -81,48 +87,36 @@ class PromotionManagementService {
       return;
     }
 
-    try {
-      final imageId = await _uploadImage(image);
-      final response = await http
-          .post(
-            Uri.parse('$adminContentServer/promotions-create'),
-            headers: await authenticatedHeaders(),
-            body: jsonEncode({
-              'title': title,
-              'promotion_type': promotionType,
-              'link': link,
-              'display': imageId,
-              'expire_date': expireDate.toUtc().toIso8601String(),
-              'home': home,
-              'splashscreen': splashscreen,
-            }),
-          )
-          .timeout(
-            const Duration(seconds: 8),
-            onTimeout: () =>
-                throw TimeoutException('Promotion creation timed out'),
-          );
-
-      if (response.statusCode != 201) {
-        throw Exception('Promotion creation failed: ${response.statusCode}');
-      }
-      PromotionFlyerService.notifyPromotionUpdated();
-    } catch (_) {
-      _mockPromotions.add(
-        PromotionFlyer(
-          id: DateTime.now().millisecondsSinceEpoch,
-          type: 'promotion',
-          title: title,
-          promotionType: promotionType,
-          link: link,
-          imageUrl: image.path,
-          splashscreen: splashscreen,
-          home: home,
-          owner: fallbackOwner,
-          expireDate: expireDate,
-        ),
-      );
-      PromotionFlyerService.notifyPromotionUpdated();
+    final imageIds = <int>[];
+    for (final image in images) {
+      imageIds.add(await _uploadImage(image));
     }
+
+    final response = await http
+        .post(
+          Uri.parse('$adminContentServer/promotions-create'),
+          headers: await authenticatedHeaders(),
+          body: jsonEncode({
+            'title': title,
+            'promotion_type': promotionType,
+            'link': link,
+            'images': imageIds,
+            'expire_date': expireDate.toUtc().toIso8601String(),
+            'home': home,
+            'splashscreen': splashscreen,
+          }),
+        )
+        .timeout(
+          const Duration(seconds: 8),
+          onTimeout: () =>
+              throw TimeoutException('Promotion creation timed out'),
+        );
+
+    if (response.statusCode != 201) {
+      throw Exception(
+        'Promotion creation failed: ${response.statusCode} ${response.reasonPhrase}',
+      );
+    }
+    PromotionFlyerService.notifyPromotionUpdated();
   }
 }

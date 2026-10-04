@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:maraka/widgets/compat_loading.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/service/promotion_flyer_service.dart';
@@ -9,7 +9,7 @@ import 'package:maraka/models/promotion_flyer.dart';
 import 'package:maraka/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:maraka/widgets/promotion_image_carousel.dart';
 import '../logic/store.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -215,6 +215,11 @@ class _SplashPromotionViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final imageHeight = MediaQuery.of(context).size.height * 0.35;
+    final pages = <_SplashFlyerPage>[
+      for (final flyer in flyers)
+        for (final imageUrl in flyer.imageUrls)
+          _SplashFlyerPage(flyer: flyer, imageUrl: imageUrl),
+    ];
 
     return Column(
       children: [
@@ -222,18 +227,18 @@ class _SplashPromotionViewer extends StatelessWidget {
           height: imageHeight,
           child: PageView.builder(
             controller: controller,
-            itemCount: flyers.length,
+            itemCount: pages.length,
             onPageChanged: onPageChanged,
             itemBuilder: (context, index) => _SplashPromotionImage(
-              flyer: flyers[index],
-              onTap: () => onTap(flyers[index]),
+              page: pages[index],
+              onTap: () => onTap(pages[index].flyer),
             ),
           ),
         ),
-        if (flyers.length > 1)
+        if (pages.length > 1)
           _SplashPromotionPageControls(
             currentPage: currentPage,
-            pageCount: flyers.length,
+            pageCount: pages.length,
             controller: controller,
           ),
       ],
@@ -241,13 +246,20 @@ class _SplashPromotionViewer extends StatelessWidget {
   }
 }
 
+class _SplashFlyerPage {
+  const _SplashFlyerPage({required this.flyer, required this.imageUrl});
+
+  final PromotionFlyer flyer;
+  final String imageUrl;
+}
+
 class _SplashPromotionImage extends StatelessWidget {
   const _SplashPromotionImage({
-    required this.flyer,
+    required this.page,
     required this.onTap,
   });
 
-  final PromotionFlyer flyer;
+  final _SplashFlyerPage page;
   final VoidCallback onTap;
 
   @override
@@ -259,13 +271,9 @@ class _SplashPromotionImage extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            CachedNetworkImage(
-              imageUrl: flyer.imageUrl,
+            PromotionImageCarousel(
+              imageUrls: <String>[page.imageUrl],
               fit: BoxFit.contain,
-              placeholder: (context, url) => const SpinKitThreeInOut(
-                color: Color.fromARGB(255, 12, 131, 125),
-              ),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ],
         ),

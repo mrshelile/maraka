@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:maraka/models/promotion_flyer.dart';
 import 'package:maraka/service/promotion_flyer_service.dart';
+import 'package:maraka/widgets/promotion_image_carousel.dart';
 import '../../size_config.dart';
 import '../../themes/background.dart';
 import '../../themes/color.dart';
@@ -414,29 +414,10 @@ class HomePromotionCard extends StatelessWidget {
                 child: Stack(
                   children: [
                     Positioned.fill(
-                      child: CachedNetworkImage(
-                        imageUrl: flyer.imageUrl,
+                      child: PromotionImageCarousel(
+                        imageUrls: flyer.imageUrls,
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          color: MyColors.blue3.withOpacity(0.1),
-                          child: const Center(
-                            child: SizedBox(
-                              height: 24,
-                              width: 24,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: MyColors.blue3,
-                              ),
-                            ),
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          color: MyColors.blue3.withOpacity(0.08),
-                          child: const Icon(
-                            Icons.image_not_supported_outlined,
-                            color: MyColors.blue3,
-                          ),
-                        ),
+                        indicatorColor: Colors.white,
                       ),
                     ),
                     Positioned(
@@ -994,26 +975,10 @@ class _PromotionListTile extends StatelessWidget {
                 height: getProportionateScreenHeight(260, context),
                 width: double.infinity,
                 color: Colors.white,
-                child: CachedNetworkImage(
-                  imageUrl: flyer.imageUrl,
+                child: PromotionImageCarousel(
+                  imageUrls: flyer.imageUrls,
                   fit: BoxFit.contain,
-                  placeholder: (context, url) => Container(
-                    color: MyColors.blue3.withOpacity(0.1),
-                    child: const Center(
-                      child: SizedBox(
-                        height: 22,
-                        width: 22,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: MyColors.blue3,
-                        ),
-                      ),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => Container(
-                    color: MyColors.blue3.withOpacity(0.08),
-                    child: const Icon(Icons.image_not_supported_outlined),
-                  ),
+                  indicatorColor: MyColors.blue3,
                 ),
               ),
             ),
@@ -1100,26 +1065,10 @@ class _PromotionGridTile extends StatelessWidget {
                 height: getProportionateScreenHeight(150, context),
                 width: double.infinity,
                 color: Colors.white,
-                child: CachedNetworkImage(
-                  imageUrl: flyer.imageUrl,
+                child: PromotionImageCarousel(
+                  imageUrls: flyer.imageUrls,
                   fit: BoxFit.contain,
-                  placeholder: (context, url) => Container(
-                    color: MyColors.blue3.withOpacity(0.1),
-                    child: const Center(
-                      child: SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: MyColors.blue3,
-                        ),
-                      ),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => Container(
-                    color: MyColors.blue3.withOpacity(0.08),
-                    child: const Icon(Icons.image_not_supported_outlined),
-                  ),
+                  indicatorColor: MyColors.blue3,
                 ),
               ),
             ),
@@ -1226,21 +1175,10 @@ class PromotionDetailsDialog extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: screenSize.height * 0.7,
-                      child: CachedNetworkImage(
-                        imageUrl: flyer.imageUrl,
+                      child: PromotionImageCarousel(
+                        imageUrls: flyer.imageUrls,
                         fit: BoxFit.contain,
-                        placeholder: (context, url) => Container(
-                          color: MyColors.blue3.withOpacity(0.1),
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              color: MyColors.blue3,
-                            ),
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          color: MyColors.blue3.withOpacity(0.08),
-                          child: const Icon(Icons.image_not_supported_outlined),
-                        ),
+                        indicatorColor: MyColors.blue3,
                       ),
                     ),
                     Padding(

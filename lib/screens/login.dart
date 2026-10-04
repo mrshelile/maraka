@@ -8,7 +8,7 @@ import 'package:maraka/screens/forgot_password.dart';
 import 'package:maraka/screens/home.dart';
 import 'package:maraka/themes/color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:maraka/widgets/compat_loading.dart';
 
 import 'enter_otp.dart';
 

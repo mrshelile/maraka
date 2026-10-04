@@ -1,5 +1,5 @@
 // import 'package:carousel_pro/carousel_pro.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:maraka/widgets/compat_loading.dart';
 import 'package:maraka/logic/banner_logic.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/themes/background.dart';

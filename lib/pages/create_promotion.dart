@@ -20,7 +20,7 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
   final _titleController = TextEditingController();
   final _linkController = TextEditingController();
   final _promotionTypeController = TextEditingController();
-  File? _image;
+  List<File> _images = <File>[];
   DateTime? _expireDate;
   bool _home = true;
   bool _splashscreen = false;
@@ -36,9 +36,18 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
   }
 
   Future<void> _chooseImage() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.image);
-    if (result?.files.single.path != null) {
-      setState(() => _image = File(result!.files.single.path!));
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: true,
+    );
+    if (result != null) {
+      final images = result.files
+          .where((file) => file.path != null)
+          .map((file) => File(file.path!))
+          .toList();
+      if (images.isNotEmpty) {
+        setState(() => _images = images);
+      }
     }
   }
 
@@ -63,8 +72,8 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
-    if (_image == null || _expireDate == null) {
-      setState(() => _error = 'Choose an image and expiry date.');
+    if (_images.isEmpty || _expireDate == null) {
+      setState(() => _error = 'Choose at least one image and an expiry date.');
       return;
     }
 
@@ -82,7 +91,7 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
           ? 'Customizable Promo'
           : _promotionTypeController.text.trim();
       await PromotionManagementService.createPromotion(
-        image: _image!,
+        images: _images,
         title: _titleController.text.trim(),
         promotionType: promotionType,
         link: _linkController.text.trim(),
@@ -96,7 +105,7 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
         Get.snackbar('Promotion created', 'It is now available in the app.');
       }
     } catch (error) {
-      setState(() => _error = 'Could not create promotion.');
+      setState(() => _error = 'Could not create promotion: $error');
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -160,7 +169,9 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                           onPressed: _chooseImage,
                           icon: const Icon(Icons.image_outlined),
                           label: Text(
-                            _image == null ? 'Choose flyer image' : 'Image selected',
+                            _images.isEmpty
+                                ? 'Choose flyer images'
+                                : '${_images.length} images selected',
                           ),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: MyColors.blue3,
@@ -171,6 +182,43 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                             ),
                           ),
                         ),
+                        if (_images.isNotEmpty) ...[
+                          const SizedBox(height: 12),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              for (var index = 0; index < _images.length; index++)
+                                Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.file(
+                                        _images[index],
+                                        width: 72,
+                                        height: 72,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: IconButton(
+                                        tooltip: 'Remove image',
+                                        onPressed: () => setState(
+                                          () => _images.removeAt(index),
+                                        ),
+                                        icon: const Icon(
+                                          Icons.cancel,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ],
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: _titleController,

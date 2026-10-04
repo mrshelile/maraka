@@ -9,12 +9,14 @@ import 'package:maraka/pages/create_promotion.dart';
 import 'package:maraka/pages/home/promotions_real.dart';
 import 'package:maraka/themes/background.dart';
 import 'package:maraka/themes/color.dart';
+import 'package:maraka/widgets/promotion_image_carousel.dart';
 
 class PromotionsDashboardPage extends StatefulWidget {
   const PromotionsDashboardPage({super.key});
 
   @override
-  State<PromotionsDashboardPage> createState() => _PromotionsDashboardPageState();
+  State<PromotionsDashboardPage> createState() =>
+      _PromotionsDashboardPageState();
 }
 
 class _PromotionsDashboardPageState extends State<PromotionsDashboardPage>
@@ -74,7 +76,7 @@ class _PromotionsDashboardPageState extends State<PromotionsDashboardPage>
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity( 0.06),
+              color: Colors.black.withOpacity(0.06),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -88,7 +90,7 @@ class _PromotionsDashboardPageState extends State<PromotionsDashboardPage>
             Text(
               label,
               style: TextStyle(
-                color: MyColors.brown3.withOpacity( 0.8),
+                color: MyColors.brown3.withOpacity(0.8),
                 fontSize: 12,
               ),
             ),
@@ -141,7 +143,7 @@ class _PromotionsDashboardPageState extends State<PromotionsDashboardPage>
                             Icon(
                               Icons.error_outline,
                               size: 52,
-                              color: MyColors.blue3.withOpacity( 0.75),
+                              color: MyColors.blue3.withOpacity(0.75),
                             ),
                             const SizedBox(height: 18),
                             const Text(
@@ -158,7 +160,7 @@ class _PromotionsDashboardPageState extends State<PromotionsDashboardPage>
                               snapshot.error.toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: MyColors.brown3.withOpacity( 0.72),
+                                color: MyColors.brown3.withOpacity(0.72),
                                 fontSize: 14,
                               ),
                             ),
@@ -181,7 +183,8 @@ class _PromotionsDashboardPageState extends State<PromotionsDashboardPage>
                   final activeCount = promotions.length;
                   final homeCount = promotions.where((p) => p.home).length;
                   final expiringCount = promotions
-                      .where((p) => p.daysUntilExpiry > 0 && p.daysUntilExpiry <= 3)
+                      .where((p) =>
+                          p.daysUntilExpiry > 0 && p.daysUntilExpiry <= 3)
                       .length;
 
                   return ListView(
@@ -199,20 +202,23 @@ class _PromotionsDashboardPageState extends State<PromotionsDashboardPage>
                       Text(
                         'Track all active promotions and create new ones here.',
                         style: TextStyle(
-                          color: MyColors.brown3.withOpacity( 0.72),
+                          color: MyColors.brown3.withOpacity(0.72),
                           fontSize: 14,
                         ),
                       ),
                       const SizedBox(height: 20),
                       Row(
                         children: [
-                          _buildSummaryCard('Active', '$activeCount', Icons.local_offer_outlined, MyColors.blue3),
+                          _buildSummaryCard('Active', '$activeCount',
+                              Icons.local_offer_outlined, MyColors.blue3),
                           const SizedBox(width: 12),
-                          _buildSummaryCard('Home', '$homeCount', Icons.home_outlined, MyColors.green3),
+                          _buildSummaryCard('Home', '$homeCount',
+                              Icons.home_outlined, MyColors.green3),
                         ],
                       ),
                       const SizedBox(height: 12),
-                      _buildSummaryCard('Expiring soon', '$expiringCount', Icons.schedule_outlined, MyColors.gold),
+                      _buildSummaryCard('Expiring soon', '$expiringCount',
+                          Icons.schedule_outlined, MyColors.gold),
                       const SizedBox(height: 24),
                       if (promotions.isEmpty) ...[
                         Container(
@@ -222,7 +228,7 @@ class _PromotionsDashboardPageState extends State<PromotionsDashboardPage>
                             borderRadius: BorderRadius.circular(18),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity( 0.05),
+                                color: Colors.black.withOpacity(0.05),
                                 blurRadius: 12,
                                 offset: const Offset(0, 6),
                               ),
@@ -243,14 +249,15 @@ class _PromotionsDashboardPageState extends State<PromotionsDashboardPage>
                               Text(
                                 'Create your first promotion and it will appear here immediately.',
                                 style: TextStyle(
-                                  color: MyColors.brown3.withOpacity( 0.7),
+                                  color: MyColors.brown3.withOpacity(0.7),
                                   fontSize: 14,
                                 ),
                               ),
                               const SizedBox(height: 18),
                               FilledButton.icon(
                                 onPressed: () async {
-                                  await Get.to(() => const CreatePromotionPage());
+                                  await Get.to(
+                                      () => const CreatePromotionPage());
                                   _loadPromotions();
                                 },
                                 icon: const Icon(Icons.add),
@@ -258,7 +265,8 @@ class _PromotionsDashboardPageState extends State<PromotionsDashboardPage>
                                 style: FilledButton.styleFrom(
                                   backgroundColor: MyColors.blue3,
                                   foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 14),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -271,7 +279,8 @@ class _PromotionsDashboardPageState extends State<PromotionsDashboardPage>
                         for (final flyer in promotions)
                           _PromotionDashboardTile(
                             flyer: flyer,
-                            onTap: () => showPromotionDetailsDialog(context, flyer),
+                            onTap: () =>
+                                showPromotionDetailsDialog(context, flyer),
                           ),
                       ],
                     ],
@@ -310,7 +319,7 @@ class _PromotionDashboardTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity( 0.04),
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -318,28 +327,19 @@ class _PromotionDashboardTile extends StatelessWidget {
       ),
       child: ListTile(
         onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(14),
-          child: flyer.imageUrl.isNotEmpty
-              ? Image.network(
-                  flyer.imageUrl,
-                  width: 64,
-                  height: 64,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    width: 64,
-                    height: 64,
-                    color: MyColors.blue3.withOpacity( 0.1),
-                    child: const Icon(Icons.broken_image, size: 24),
-                  ),
-                )
-              : Container(
-                  width: 64,
-                  height: 64,
-                  color: MyColors.blue3.withOpacity( 0.1),
-                  child: const Icon(Icons.local_offer_outlined, size: 24),
-                ),
+          child: SizedBox(
+            width: 64,
+            height: 64,
+            child: PromotionImageCarousel(
+              imageUrls: flyer.imageUrls,
+              fit: BoxFit.cover,
+              indicatorColor: Colors.white,
+            ),
+          ),
         ),
         title: Text(
           flyer.title,
@@ -353,7 +353,7 @@ class _PromotionDashboardTile extends StatelessWidget {
         subtitle: Text(
           '${flyer.daysUntilExpiry > 0 ? '${flyer.daysUntilExpiry}d left' : 'Expired'} · ${flyer.home ? 'Home' : 'Hidden'}',
           style: TextStyle(
-            color: MyColors.brown3.withOpacity( 0.7),
+            color: MyColors.brown3.withOpacity(0.7),
           ),
         ),
         trailing: const Icon(Icons.chevron_right, color: MyColors.blue3),

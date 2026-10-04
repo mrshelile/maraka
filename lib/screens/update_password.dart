@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:maraka/widgets/compat_loading.dart';
 import 'package:get/get.dart';
 import 'package:maraka/logic/user_logic.dart';
 import 'package:maraka/themes/background.dart';

@@ -48,8 +48,8 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "com.maraka.maraka"
     // compileSdkVersion flutter.compileSdkVersion
-    compileSdkVersion 34
-    ndkVersion flutter.ndkVersion
+    compileSdkVersion 35
+    ndkVersion "28.2.13676358"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

@@ -93,6 +93,10 @@ lib/
     "type": "promotion",
     "title": "Maraka",
     "link": "https://maraka.co.ls",
+    "images": [
+      {"image_url": "https://example.com/uploads/maraka_flyer_page_1.jpg"},
+      {"image_url": "https://example.com/uploads/maraka_flyer_page_2.jpg"}
+    ],
     "image_url": "http://192.168.1.59:8000/uploads/maraka_flyer.jpg",
     "splashscreen": true,
     "home": true,
@@ -101,6 +105,25 @@ lib/
   }
 ]
 ```
+
+The Flutter client uploads every selected image to `/multi-image`, then sends
+the returned IDs as an `images` array when creating a promotion:
+
+```json
+{
+  "title": "Maraka",
+  "promotion_type": "customizable",
+  "link": "https://maraka.co.ls",
+  "images": [12, 13],
+  "expire_date": "2026-12-31T23:59:59Z",
+  "home": true,
+  "splashscreen": true
+}
+```
+
+The backend must persist and serialize this image list for the `images` response
+field. The client still reads the legacy single-image `image_url` field for
+existing promotions.
 
 ## 🎯 Key Features
 
