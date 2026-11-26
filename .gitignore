@@ -47,3 +47,9 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+# Android release signing credentials
+android/key.properties
+*.jks
+*.keystore
+*.p12
+*.pfx
