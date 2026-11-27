@@ -357,9 +357,16 @@ class _CreateAdState extends State<CreateAd> {
                                   .timeout(const Duration(minutes: 1),
                                       onTimeout: () => throw TimeoutException(
                                           'Can\'t upload image'));
-                              if (res.statusCode == 201) {
-                                imageIds.add(jsonDecode(res.body)['id']);
+                              if (res.statusCode != 201) {
+                                throw Exception(
+                                    'Image upload failed (${res.statusCode})');
                               }
+                              final imageId = jsonDecode(res.body)['id'];
+                              if (imageId is! int) {
+                                throw const FormatException(
+                                    'Image upload returned an invalid ID');
+                              }
+                              imageIds.add(imageId);
                             }
                             i++;
                           }
@@ -433,7 +440,8 @@ class _CreateAdState extends State<CreateAd> {
                               //             )));
                               // Navigator.pop(context);
                             } else {
-                              throw Exception("product not created");
+                              throw Exception(
+                                  'Ad creation failed (${response.statusCode})');
                             }
                           }
                         } on UnauthorizedException {
@@ -450,7 +458,8 @@ class _CreateAdState extends State<CreateAd> {
                           if (mounted) {
                             setState(() {
                               _loading = false;
-                              _error = 'failed';
+                              _error =
+                                  e.toString().replaceFirst('Exception: ', '');
                               isBtnDisabled = false;
                               countBtnDisable = 0;
                             });
@@ -637,7 +646,7 @@ class _CreateAdState extends State<CreateAd> {
             Container(
               width: width,
               height: height,
-              decoration: BoxDecoration(color: Colors.white.withOpacity( 0.8)),
+              decoration: BoxDecoration(color: Colors.white.withOpacity(0.8)),
               child: Center(child: _loader),
             )
         ],

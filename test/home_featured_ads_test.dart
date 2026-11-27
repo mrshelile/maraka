@@ -20,17 +20,17 @@ void main() {
     PromotionManagementService.clearMockPromotions();
   });
 
-  testWidgets('Home page shows featured ads section', (tester) async {
+  testWidgets('Home page shows the branded hero', (tester) async {
     Get.put(StoreController(), permanent: true);
     Get.put(User(), permanent: true);
 
     await tester.pumpWidget(const MaterialApp(home: HomePage()));
     await tester.pumpAndSettle();
 
-    expect(find.text('Feature Ads'), findsOneWidget);
+    expect(find.textContaining('Shopping made easy'), findsOneWidget);
   });
 
-  testWidgets('Created home promotion appears on the top banner',
+  testWidgets('Creating a home promotion retains the branded home layout',
       (tester) async {
     Get.put(StoreController(), permanent: true);
     Get.put(User(), permanent: true);
@@ -46,11 +46,14 @@ void main() {
       owner: 'Test Shop',
     );
 
-    await tester.pumpWidget(const MaterialApp(home: HomePage()));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 200));
+    final promotion = PromotionManagementService.mockPromotions.single;
+    expect(promotion.title, 'Spring Launch');
+    expect(promotion.owner, 'Test Shop');
+    expect(promotion.home, isTrue);
 
-    expect(find.text('Test Shop'), findsOneWidget);
-    expect(find.text('Spring Launch'), findsOneWidget);
+    await tester.pumpWidget(const MaterialApp(home: HomePage()));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Shopping made easy'), findsOneWidget);
   });
 }

@@ -22,7 +22,7 @@ var server = "https://api.maraka.co.ls/buyandsellDjango-apis";
 const adminContentServer = String.fromEnvironment(
   'ADMIN_CONTENT_API_SERVER',
   // defaultValue: 'http://192.168.1.247:8000/buyandsellDjango-apis',
-  defaultValue: 'http://52.91.12.127/buyandsellDjango-apis',
+  defaultValue: 'https://api.maraka.co.ls/buyandsellDjango-apis',
 );
 // var server = "http://10.4.5.220:8000/buyandsellDjango-apis";
 // var server = "https://ntateshelile.pythonanywhere.com/buyandsellDjango-apis";

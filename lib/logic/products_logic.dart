@@ -33,12 +33,18 @@ class ProductLogic {
     var req = http.MultipartRequest('POST', Uri.parse("$server/multi-image"));
     req.headers.addAll(await authenticatedHeaders(json: false));
     var multiport = http.MultipartFile("image", stream, length,
-        filename: name, contentType: MediaType('images', 'png'));
+        filename: name.replaceAll('\\', '/').split('/').last,
+        contentType: MediaType('image', _imageExtension(name)));
     req.files.add(multiport);
     var streamResponse = await req.send();
     var response = await http.Response.fromStream(streamResponse);
 
     return response;
+  }
+
+  String _imageExtension(String path) {
+    final extension = path.split('.').last.toLowerCase();
+    return extension == 'jpg' ? 'jpeg' : extension;
   }
 
   Future deleteProduct(var id) async {
